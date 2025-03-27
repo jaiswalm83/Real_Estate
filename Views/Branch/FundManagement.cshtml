@@ -1,0 +1,95 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Branchtabs.Single(b => b.BranchCode == User.Identity.Name);
+    ViewBag.Title = "FundManagement";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+}
+
+
+<div class="container shado mt-5">
+    @*Heading*@
+
+    <div class="w-100  card-heading">
+        <h3 class="text-center  text-white pt-1 pb-1">Fund Management</h3>
+    </div>
+
+
+    @*Cards Section*@
+    <div class="row cardStyle g-3 justify-content-center">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DailyClosing" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/closed.png" class="imageSize img-fluid" alt="Daily Closing" />
+                    <h6 class="card-title mt-1 mb-0 ">Daily Closing</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/ChequeRegis" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/cheque.png" class="imageSize img-fluid" alt="Cheque Register" />
+                    <h6 class="card-title mt-1 mb-0">Cheque Register</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BankRegis" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/transaction.png" class="imageSize img-fluid" alt="Bank Transaction Register" />
+                    <h6 class="card-title mt-1 mb-0">Bank Transaction Register</h6>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Welcome @br.BranchName</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+        </div>
+
+        <div class="widget stacked">
+
+            <div class="widget-header">
+                <i class="icon-plus"></i>
+                <h3>Fund Management</h3>
+            </div>
+            <!-- /widget-header -->
+
+            <div class="widget-content">
+
+                <div class="shortcuts">
+                    <a href="~/Branch/DailyClosing" class="shortcut">
+                        <img alt="" src="~/Images/icon/closing.jpg" style="height:100px;width:100px;" />
+                        <span class="shortcut-label">Daily Closing</span>
+                        <br />
+                    </a>
+                    <a href="~/Branch/ChequeRegis" class="shortcut">
+                        <img alt="" src="~/Images/icon/Cheque.png" style="height:100px;width:100px;" />
+                        <span class="shortcut-label">Cheque Register</span>
+                        <br />
+                    </a>
+                    <a href="~/Branch/BankRegis" class="shortcut">
+                        <img alt="" src="~/Images/icon/banktr.png" style="height:100px;width:100px;" />
+                        <span class="shortcut-label">Bank Transaction Register</span>
+                    </a>
+                </div>
+                <!-- /shortcuts -->
+
+            </div>
+            <!-- /widget-content -->
+
+        </div>
+    </div>
+
+</div>

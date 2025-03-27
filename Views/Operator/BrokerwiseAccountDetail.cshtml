@@ -1,0 +1,248 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerwiseAccount>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "BrokerwiseAccountDetail";
+        UsersContext db = new UsersContext();
+        var pr = db.Operators.Single(o => o.OperatorId == User.Identity.Name);
+        var br = db.Branchtabs.Single(o => o.BranchCode == pr.BranchCode);
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+    }
+
+
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newagentid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Operator/AutoCompleteOperatorAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+   
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">@mr.agentname Wise Account Details</h2>
+        @using (Html.BeginForm())
+        {
+
+
+            <div id="branchForm" class="form-container">
+
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Select @mr.agentname Id</label>
+                    <input type="text" class="form-control " id="newagentid" name="newagentid" placeholder="Enter Id" required>
+                </div>
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" name="sdate" placeholder="Enter Date" required>
+                </div>
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">End Date</label>
+                    <input type="date" class="form-control" name="edate" placeholder="Enter Date" required>
+                </div>
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn"><i class="fa fa-search"></i>Search</button>
+                </div>
+
+            </div>
+
+
+
+        }
+
+
+
+        <div class="index_body">
+            <div class="table-container">
+
+                <table>
+
+
+                    @foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                            <thead>
+                                <tr>
+                                    <th colspan="4" style="background-color:#ff5722; color:white">@mr.branchname Name:@br.BranchName</th>
+
+                                    <th colspan="4" style="background-color:#ff5722; color:white"><b>  @mr.agentname Account Details</b></th>
+                                    <th colspan="4" style="background-color:#ff5722; color:white"><b>Dated:@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy") </b></th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th colspan="4" style="background-color:#ff5722; color:white">@mr.agentname Id:@item.newintroducerid</th>
+                                    <th colspan="4" style="background-color:#ff5722; color:white">@mr.agentname Name:@item.intname</th>
+                                    <th colspan="4" style="background-color:#ff5722; color:white"><b> Duration:@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy") -@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="newid"><b>@mr.custname Id</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="introducerid"><b>Date</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="spilid"><b>@mr.custname Name</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="position"><b>@mr.planname Name</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label><b>Term </b></label>
+                                    </th>
+                                    <th>
+                                        <label id="email"><b>Mode</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label><b>Maturity Date</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label><b>No. Of Ins</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label><b>Next ins no.</b></label>
+                                    </th>
+
+
+                                    <th>
+                                        <label><b>Ins Amt</b></label>
+                                    </th>
+
+
+                                    <th>
+                                        <label><b>Next Date</b></label>
+                                    </th>
+
+
+                                </tr>
+                            </thead>
+                        }
+                        a = a + 1;
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @a
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.newbondid)
+                                </td>
+
+                                <td>
+                                    @Convert.ToDateTime(item.issuedate).ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.planname)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.term)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mode)
+                                </td>
+                                <td>
+                                    @Convert.ToDateTime(item.maturitydate).ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.totalinstall)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.nextinstall)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.amount)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.nextdate)
+                                </td>
+
+
+
+                            </tr>
+                        </tbody>
+
+                    }
+
+
+
+
+
+                </table>
+
+
+
+
+
+
+                @if (a > 0)
+                {
+
+                    <!-- Create Button -->
+                    <div class="text-center d-grid gap-2">
+
+                        <a href="@Url.Action("PrintBrokerwiseAccountReport")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                    </div>
+                   
+                }
+
+            </div>
+
+        </div>
+
+
+
+

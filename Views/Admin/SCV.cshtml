@@ -1,0 +1,374 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "SCV";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script type="text/javascript">
+    function detail(chkid) {
+        var chk = $("#" + chkid).val();
+        if (chk == "Cheque") {
+            $("#detail").show();
+            $("#dd1").hide();
+            $("#trdetail").hide();
+            $("#cashdetail").hide();
+            //$(':input[type="submit"]').prop('disabled', true);
+        }
+        else if (chk == "DD") {
+            $("#dd1").show();
+            $("#detail").hide();
+            $("#trdetail").hide();
+            $("#cashdetail").hide();
+            //$(':input[type="submit"]').prop('disabled', true);
+        }
+        else if (chk == "banktransaction") {
+            $("#cashdetail").hide();
+            $("#dd1").hide();
+            $("#detail").hide();
+            $("#trdetail").show();
+            //$(':input[type="submit"]').prop('disabled', true);
+        }
+        else {
+            $("#cashdetail").show();
+            $("#detail").hide();
+            $("#dd1").hide();
+            $("#trdetail").hide();
+            //$(':input[type="submit"]').prop('disabled', true);
+        }
+       
+    }
+  </script>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        $(':input[type="submit"]').prop('disabled', true);
+        $('input[type="text"]').keyup(function () {
+            debugger;
+            var pmth = $("input[name='paymethod']:checked").val();
+           
+            var ele=""
+            if(pmth=="DD")
+            {
+             ele = document.getElementsByClassName('ddenbl');
+            }
+            else if(pmth == "Cheque")
+            {
+                ele = document.getElementsByClassName('chenbl');
+            }
+            else if (pmth == "Cash") {
+                ele = document.getElementsByClassName('caenbl');
+            }
+            else if (pmth == "banktransaction") {
+                ele = document.getElementsByClassName('bnenbl');
+            }
+            var count = ele.length;
+            for (i = 0; i < ele.length; i++) {
+                if (ele[i].type == 'text' && ele[i].value == '') {
+                    $(':input[type="submit"]').prop('disabled', true);        // DISABLE THE BUTTON.
+                    return false;
+                }
+                else {
+                    $(':input[type="submit"]').prop('disabled', false);      // ENABLE THE BUTTON.
+                }
+            }
+        });
+    });
+</script>*@
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+      @using (Html.BeginForm("SCV", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+                   
+            <div class="row" style="width: 100%">
+                <div class="col-md-6" style="width: 100%">
+
+                    <div class="block" style="width: 100%">
+                  <div class="block-content controls">
+                        
+                        <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group" >
+                                        <span class="input-group-addon">
+                                            <label class="width">Agent Id. </label>
+                                        </span>
+                                        <input type="text" value="@ViewData["agenid"]" id="newagentid" name="newagentid" class="form-control" readonly="true"/>
+                                          <input type="hidden" value="@ViewData["newbondid"]" id="newbondid" name="newbondid" class="form-control"/>
+                                          <input type="hidden" value="@ViewData["sdate"]" id="date" name="date" class="form-control"/>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        <div class="row-form">
+
+                            <div class="col-md-9">
+                                <div class="input-group" id="rates">
+                                    <span class="input-group-addon">
+                                        <label class="width">Payment Mode </label>
+                                    </span>
+
+                                    <input type="radio" id="paymethod" name="paymethod" value="Cash" checked onclick="detail(this.id)">
+                                    Cash   
+                                             <input type="radio" id="paymethod2" name="paymethod" value="DD" onclick="detail(this.id)">
+                                    DD  
+                                          <input type="radio" id="paymethod3" name="paymethod" value="Cheque" onclick="detail(this.id)">
+                                    Cheque  
+                                            <input type="radio" id="paymethod4" name="paymethod" value="banktransaction" onclick="detail(this.id)">
+                                    Bank Transaction
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-form" id="cashdetail">
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Cash Amount </label>
+                                        </span>
+                                        <input type="text" value="@ViewData["commission"]" id="cashamount" name="cashamount" class="form-control caenbl" readonly="true" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row-form" id="dd1" style="display: none;">
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">DD No. </label>
+                                        </span>
+                                        <input type="text" id="ddno" name="ddno" class="form-control ddenbl" />
+                                    </div>
+                                </div>
+
+                            </div>
+                           
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Amount </label>
+                                        </span>
+                                        <input type="text" value="@ViewData["commission"]" id="ddamount" name="ddamount" class="form-control ddenbl" readonly="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-form" id="detail" style="display: none;">
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Bank Name </label>
+                                        </span>
+                                        <input type="text" id="bank" name="bank" class="form-control chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">A/C No. </label>
+                                        </span>
+                                        <input type="text" id="ACNO" name="Account" class="form-control chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Cheque No. </label>
+                                        </span>
+                                        <input type="text" id="chequeno" name="chequeno" class="form-control chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">A/C Holder Name </label>
+                                        </span>
+                                        <input type="text" id="ACname" name="ACholdername" class="form-control chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Branch Name </label>
+                                        </span>
+                                        <input type="text" id="barnch" name="Branch" class="form-control chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">IFSC </label>
+                                        </span>
+                                        <input type="text" id="IFSCcode" name="IFSCCode" class="form-control chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Amount </label>
+                                        </span>
+                                        <input type="text" value="@ViewData["commission"]" id="Amount" name="ChequeAmount" class="form-control chenbl" readonly="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Cheque Date </label>
+                                        </span>
+                                        <input type="text" id="Date" name="Chequedate" value="" class="form-control date chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Cheque Image </label>
+                                        </span>
+                                        <input type="file" id="Chequeimage" name="Chequeimage" class="form-control chenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="trdetail" style="display: none;">
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Bank Name </label>
+                                        </span>
+                                        <select id="trbank" name="trbank" class="form-control">
+                                            <option>select</option>
+                                            @foreach (var blist in db.BankDetail_Tabs.ToList())
+                                            {
+                                        
+                                                <option value="@blist.bankname">@blist.bankname</option>
+                                         
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Transaction Id </label>
+                                        </span>
+                                        <input type="text" id="transactionid" name="transactionid" class="form-control bnenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Transaction Date </label>
+                                        </span>
+                                        <input type="date" id="transactiondate" name="transactiondate" class="form-control bnenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Amount </label>
+                                        </span>
+                                        <input type="text" value="@ViewData["commission"]" id="tramount" name="tramount" class="form-control bnenbl" readonly="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Pay Method </label>
+                                        </span>
+
+                                        <input type="radio" id="trpmethod1" name="transactiontype" value="NEFT" class="bnenbl" checked>
+                                        NEFT
+                                            <input type="radio" id="trpmethod2" name="transactiontype" value="IMPS" class="bnenbl"/>
+                                        IMPS
+                                            <input type="radio" id="trpmethod3" name="transactiontype" value="RTGS" class="bnenbl" />
+                                        RTGS
+                                            <input type="radio" id="trpmethod4" name="transactiontype" value="UPI" class="bnenbl" />
+                                        UPI
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">A/C Holder's A/C No. </label>
+                                        </span>
+                                        <input type="text" id="holderacno" name="holderacno" class="form-control bnenbl" />
+                                    </div>
+                                </div>
+                            </div>
+                             
+                        </div>
+                        <div class="row">
+                               <div class="col-md-10"></div>
+                                   <div class="col-md-2">
+                                   <div class="widget-info widget-from">
+                                       <button id="submit"  value="Submit" type="submit" name="command" class="btn btn-primary" onclick="return confirm('Are you sure to pay Commission ?')">Submit</button>
+                                   </div>
+                                       </div>
+                   </div>
+                    </div>
+                        
+
+                    </div>
+                </div>
+
+            </div>  
+        }
+
+        
+    </div>
+
+</div>
+
+

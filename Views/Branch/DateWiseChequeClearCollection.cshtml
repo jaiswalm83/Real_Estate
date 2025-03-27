@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Chequecollection>
+@using ODHDEVELOPERS.Models
+@{
+    ViewBag.Title = "DateWiseChequeClearCollection";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+}
+
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+<script>
+    $(function () {
+        $('#sdate').datepick();
+        $('#edate').datepick();
+        
+    });
+
+</script>
+
+
+
+<div class="page-content">
+
+    <div class="container" id="divid1">
+        <div class="page-toolbar" id="2">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Clear Cheque Collection</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            <div class="row" id="hide">
+                <div class="col-md-6" style="width: 98%">
+
+                    <div class="block">
+
+                        <div class="block-content controls">
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Start Date</label></span>
+                                    <input type="text" id="sdate" class="form-control " required name="sdate" value="@ViewData["sdate"]" />
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">End Date</label></span>
+                                    <input type="text" id="edate" class="form-control" required name="edate" value="@ViewData["edate"]" />
+
+                                </div>
+                            </div>
+                            <div class="row-form" style="width: 98%">
+                                <div class="col-md-9">
+                                    <button id="submit" value="Search" onclick="target='_blank'" class="btn btn-primary pull-right" type="submit">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

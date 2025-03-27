@@ -1,0 +1,253 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.PaidVoucher>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "UnpaidvoucherBranch";
+        var a = 0;
+        var bsum = 0.0;
+        var comsum = 0.0;
+        var tdsum = 0.0;
+        var netsum = 0.0;
+        var netadvamount = 0.0;
+    }
+
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#bcode").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteBrachcode",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.BranchName, value: item.BranchCode };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+
+        <div id="divid">
+
+       
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">Paid Voucher</h2>
+
+                @using (@Html.BeginForm())
+                {
+
+
+
+
+                    <div id="branchForm" class="form-container">
+
+                        <!-- Collection Point Name -->
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">Enter @mr.branchname Name Or Code</label>
+                            <input type="text" class="form-control" name="bcode" id="bcode" placeholder="Enter Branch Code or Name" required>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">Select Month</label>
+                            <select class="form-control" id="month" name="month" required>
+                                <option selected>Select </option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+
+
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">Select Year</label>
+                            <select class="form-control" id="year" name="year" required>
+                                <option selected>Select </option>
+                                <option>2013 </option>
+                                <option>2014 </option>
+                                <option>2015 </option>
+                                <option>2016 </option>
+                                <option>2017 </option>
+                                <option>2018 </option>
+                                <option>2019 </option>
+                                <option>2020 </option>
+                                <option>2021 </option>
+                                <option>2022 </option>
+
+
+
+                            </select>
+                        </div>
+
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+                            <button type="submit" class="btn create-btn" id="submit" name="command" value="Search">Search</button>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+                }
+
+                <div class="index_body">
+                    <div class="table-container">
+
+
+                        <table>
+
+                            @foreach (var item in Model)
+                            {
+                                if (a == 0)
+                                {
+                                    <thead>
+                                        <tr style="background-color:#ff5722; color:white"><td colspan="3" style="width:25%;text-align:left;font-size:medium;height:50px;"> <label id="dddd"><b>Branch Name: @ViewData["Branch"] </b></label></td><td colspan="3" style="width:75%;text-align:center;font-size:medium;height:50px;"><b>Unpaid Voucher Report</b></td><td colspan="3" style="width:75%;text-align:center;font-size:medium;height:50px;"><b>Month: @ViewData["Month"] </b></td></tr>
+
+                                    </thead>
+
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%;text-align:center;">
+                                                <label id="sn"><b>S.N.</b></label>
+                                            </th>
+                                            <th style="width:10%;text-align:center;">
+                                                <label id="OperatorId"><b>@mr.agentname Id</b></label>
+                                            </th>
+
+                                            <th style="width:15%;text-align:center;">
+                                                <label><b>@mr.agentname Name</b></label>
+                                            </th>
+                                            <th style="width:10%;text-align:center;">
+                                                <label><b>PAN No</b></label>
+                                            </th>
+                                            <th style="width:10%;text-align:center;">
+                                                <label><b>Business</b></label>
+                                            </th>
+
+                                            <th style="width:10%;text-align:center;">
+                                                <label><b>BDP</b></label>
+                                            </th>
+
+                                            <th style="width:10%;text-align:center;">
+                                                <label><b>TDS</b></label>
+                                            </th>
+                                            <th style="width:10%;text-align:center;">
+                                                <label><b>Advance Amt.</b></label>
+                                            </th>
+                                            <th style="width:10%;text-align:center;">
+                                                <label><b>Net Amount</b></label>
+                                            </th>
+
+
+
+                                        </tr>
+                                    </thead>
+                                }
+
+                                a = a + 1;
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @a
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Brokercode)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.BrokerName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.panno)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.bussiness)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.commission)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tds)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.advamount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.netamount)
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+
+                                bsum = bsum + Convert.ToDouble(item.bussiness);
+                                comsum = comsum + Convert.ToDouble(item.commission);
+                                tdsum = tdsum + Convert.ToDouble(item.tds);
+                                netsum = netsum + Convert.ToDouble(item.netamount);
+                                netadvamount = netadvamount + Convert.ToDouble(item.advamount);
+
+                            }
+                            @if (a > 0)
+                            {
+                                <thead>
+                                    <tr style="text-align:center"><td colspan="4"></td><td>@bsum</td><td>@comsum</td><td>@tdsum</td><td>@netadvamount</td><td>@netsum</td></tr>
+                                </thead>
+                            }
+
+                        </table>
+
+                        @if (a > 0)
+                        {
+                            <div class="text-center d-grid gap-2">
+                                <a href="@Url.Action("PrintunpaidvoucherBranch")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                            </div>
+                
+                        }
+
+
+                    </div>
+
+
+                </div>
+
+
+
+

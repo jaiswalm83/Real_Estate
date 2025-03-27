@@ -1,0 +1,94 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewBag.Title = "Index";
+
+    UsersContext db = new UsersContext();
+    var br = db.appltabs.Single(brw => brw.newbondid == User.Identity.Name);
+    var mr = db.Members.Single(c => c.Id == 1);
+    Double payrenew = (from ab in db.Installmenttabs where ab.newbondid == User.Identity.Name && ab.payamount != 0 && ab.installmentno != 1 select ab.payamount).DefaultIfEmpty(0).Sum();
+
+    int renewcount = (from ab in db.Installmenttabs where ab.newbondid == User.Identity.Name && ab.payamount != 0 select ab.payamount).Count();
+
+    int norenewcount = (from ab in db.Installmenttabs where ab.newbondid == User.Identity.Name && ab.payamount == 0  select ab.payamount).Count();
+}
+
+
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Welcome @br.name</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                      
+
+                    </div>
+
+                    <div class="widget stacked" >
+					
+				<div class="widget-header" >
+					<i class="icon-home"></i>
+					<h3><b>Home</b></h3>
+				</div> <!-- /widget-header -->
+			
+				<div class="widget-content">
+					
+					<div class="shortcuts">
+                       <div class="widget-header" >
+					
+					<h3><b>Bond Details</b></h3>
+				</div>
+                            	
+                        <a href="#" class="shortcut" style="width:300px; padding:0px; margin:0px; text-align:left;">
+							    	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>@mr.custname Amount</b></h3>
+				</div>
+                          
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>Paid Renewal Amount</b></h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>No. Of Paid Renewal</b></h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>No. Of UnPaid Renewal </b></h3>
+				</div> 
+                                	
+						</a>
+						
+						 <a href="#" class="shortcut" style="width:400px; padding:0px; margin:0px;">
+							  	<div class="widget-header" >
+					<h3><b>@br.payment</b></h3>
+				</div> 
+                            
+                                	<div class="widget-header" >
+					<h3>@payrenew</h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@renewcount</h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@norenewcount</h3>
+				</div> 
+                                	
+							
+						</a>
+
+					
+							
+                        
+                      
+					</div> <!-- /shortcuts -->	
+				
+				</div> <!-- /widget-content -->
+       
+			</div>
+                     </div>
+
+     </div>

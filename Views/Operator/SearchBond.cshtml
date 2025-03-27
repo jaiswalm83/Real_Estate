@@ -1,0 +1,589 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.appltab>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "SearchBond";
+    var a = 0;
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#NewBondId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Operator/AutoCompleteBondid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.newbondid };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+
+
+
+<div class="page-content">
+        
+                <div class="container" id="divid1">
+                
+                    
+                    
+                        <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Search @mr.custname</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                     
+                    </div>
+ 
+  @using (@Html.BeginForm())
+  {
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon">Enter @mr.custname Id</span>
+                    <input type="text" id="NewBondId" class="form-control" required name="NewBondId">
+                         
+                </div>   </div>
+                   <div class="row-form" style="width:100%">
+      <div class="col-md-9">
+          <button id="submit" name="command" value="Search" class="btn btn-primary pull-right" type="submit" ><i class="fa fa-search"></i>Search</button>
+     </div>
+              </div>
+
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+  }
+                            
+                     <div class="row" style="margin-bottom:30px;">
+                          @using(Html.BeginForm())
+      {
+       foreach (var item in Model)
+       {
+           
+      <div class="col-md-6" style="width: 100%">
+
+          <div class="block">
+
+              <div class="block-content controls">
+
+
+                  <div class="page-toolbar-block pull-right">
+                      <div class="widget-info widget-from">
+
+                          <button type="submit" name="command" value="PDF" class="btn btn-primary" onclick="target='_blank'">Download PDF</button>
+
+
+
+                      </div>
+                  </div>
+                  <p>@ViewBag.msg</p>
+              </div>
+
+          </div>
+      </div>
+           
+
+             <div class="col-md-6">
+                            
+                            <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Personal Details</strong></h2>
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                       <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            
+                                            <div class="input-group">
+                                       
+                                                <img alt="" src="@Url.Content(item.photo)" style="height:200px; width:150px;"/>
+                                               </div>
+                                              <input type="hidden" value="@item.newbondid" name="newbondid" id="newbondid">
+                                        </div>
+                                    </div>
+                         <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                         
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Customer Id </label></span>  
+                                        <input type="text" id="customer" style="color:#2f9fe0;" class="form-control" readonly="true" value="@item.newbondid" name="branchcode" required /></div>
+                         
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                         
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">@mr.branchname Code </label></span>  
+                                            <input type="text" id="branchcode" class="form-control" readonly="true" value="@item.branchcode" name="branchcode" required /></div>
+                         
+                                        
+                                        </div>
+                                    </div>
+                                                 
+                                    <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Form Fee</label></span>
+                                             <input type="text" class="form-control" id="applicationcharge" required name="applicationcharge" value="@item.applicationcharge" readonly="true"/>
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+                                     <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Name of Applicant </label></span>  
+                                               
+                                            <input type="text" class="form-control" id="name" name="name" value="@item.name" readonly="true" required /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group" style="float:left;">
+                        <span class="input-group-addon"><label class="width">Father/Husband Name </label></span>
+                                            
+                                                 <div style="float:left;width:100%;">
+                                            <input type="text" class="form-control" id="fathername" name="fathername" value="@item.fathername" readonly="true" required/>
+                                                     </div>
+                                                </div>
+                                          
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Address </label></span>  
+                                            <input type="text" class="form-control" id="add" name="fathername" value="@item.addr" readonly="true" required/></div>
+                                            </div>
+                                    </div>
+
+
+                                    <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Mobile No </label></span>  
+                                            <input type="text" id="mobileno" name="mobileno" maxlength="10" class="form-control" readonly="true" value="@item.mobileno" required/></div>
+                                            </div>
+                                    </div>
+
+
+                               
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Introducer Code </label></span>  
+                                         <input type="text" class="form-control"   id="IntroducerCode" name="newintroducerid" readonly="true" value="@item.newintroducerid" required /></div>
+                                            </div>
+                                    </div>
+                                 
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                          <span class="input-group-addon"><label class="width">Date of Agreement </label></span>
+                                      <input type="date" class="form-control" id="formdate" name="formdate" value="@item.formdate" readonly="true" required >
+                                                    </div>
+                                            
+                                              </div>
+                                    </div>
+                                     
+                                     <div class="row-form">
+
+                                        <div class="col-md-9">
+
+                                        <div class="input-group">
+       <span class="input-group-addon"><label class="width">Date of Birth </label></span>  
+                                         <input type="date" id="dob" name="dob" class="form-control" value="@item.dob" readonly="true" required/>
+                                         </div>
+                                            </div>
+
+                                        </div>
+
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Nationality </label></span>  
+                                            <input type="text" id="nationality" name="nationality" readonly="true" class="form-control" value="@item.nationality"/></div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+
+            
+
+
+
+                  <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Guardian Details</strong></h2>
+                                    
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian Name </label></span>  
+                                            <input type="text" id="guardianname" name="guardianname" class="form-control" readonly="true" value="@item.guardianname"/></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian's Age </label></span>  
+                                            <input type="text" id="gurage" name="gurage" class="form-control" readonly="true" value="@item.gurage"/></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Relationship</label></span>  
+                                            <input type="text" class="form-control" id="gurrel" name="gurrel" readonly="true" value="@item.gurrel"/></div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian Address</label></span>  
+                                            <input type="text" id="guraddr" name="guraddr" class="form-control" readonly="true" value="@item.guraddr"></div>
+                                            </div>
+                                    </div>
+                                 
+                                   
+                                
+                         
+                                </div>
+                                
+                            </div>
+
+
+                 <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Bank Details</strong></h2>
+                                    
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">PAN No </label></span>  
+                                            <input type="text" id="panno" name="panno" class="form-control" value="@item.panno" readonly="true" /></div>
+                                            </div>
+                                    </div>
+                                  
+                                  
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Bank Name </label></span>  
+                                            <input type="text" id="bankname" name="bankname" class="form-control" value="@item.bankname" readonly="true"/></div>
+                                            </div>
+                                    </div>
+                                   
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Bank A/C No </label></span>  
+                                            <input type="text" id="accountno" name="accountno" class="form-control" value="@item.accountno" readonly="true"/></div>
+                                            </div>
+                                    </div>
+                                   
+                                   
+                         
+                                </div>
+                                
+                            </div>
+
+                          </div> 
+
+
+                    <div class="col-md-6">
+                            
+                            <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>@mr.planname Details</strong> </h2>
+                                   
+                                </div>
+                                <div class="block-content controls">
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9"> 
+                                            <div class="input-group">
+                                                   
+       <span class="input-group-addon"><label class="width">@mr.planname Type</label></span>  
+                   
+                                            <input type="text" id="type" name="accountno" readonly="true" class="form-control" value="@item.type"/></div>
+                                                                                       
+                                         </div>
+                                    </div>
+                                        
+
+                                    <div class="row-form">
+                                        
+                                        <div class="col-md-9"> 
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">@mr.planname Name </label></span>  
+                                        <input type="text" id="pname" name="accountno" class="form-control" readonly="true" value="@item.planname"/>
+                                            </div>
+                                    </div>
+                                         </div>
+                                    <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Term(Yr.) </label></span>  
+                                            <input type="text" class="form-control" name="Term" id="term" readonly="true" value="@item.term" required/></div>
+                                            </div>
+                                    </div>
+                                    
+
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9"> 
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">@mr.planname Mode </label></span>  
+                                                  <input type="text" class="form-control" name="Term" id="mode" readonly="true" value="@item.mode" required/>
+                                            </div>
+                                    </div>
+                                        </div>
+                                    
+                                     
+                                     
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Payment(Rs.) </label></span>  
+                                                  <input type="text" class="form-control" name="Term" id="payment" readonly="true" value="@item.payment" required/>
+                                             
+                                            </div>
+                                    </div>
+                                        </div>
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Land Units</label></span>  
+                                            <input id="nolandunit" name="nolandunit" type="text" class="form-control" readonly="true" value="@item.nolandunit" required/></div>
+                                    </div>
+                                         </div>
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Total Consideration(Rs.) </label></span>  
+                                            <input type="text" class="form-control" id="Totalamount" name="totalcon" value="@item.totalcon" readonly="true" required /></div>
+                                    </div>
+                                         </div>
+                               
+                                    <div class="row-form">
+           <div class="col-md-9">
+             <div class="input-group">
+       <span class="input-group-addon"><label class="width">Maturity Amount(Rs.)</label></span>  
+             <input type="text" class="form-control" id="maturityamt" name="expectedraisablevalue" value="@item.expectedraisablevalue" readonly="true" required/>
+                
+                  </div>
+                 
+           </div>
+                                    </div>
+
+                                     
+                                     
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                 <span class="input-group-addon"><label class="width">Expiry Date</label></span>
+                                  <input type="text" class="form-control" id="expirydate" name="expirydate" value="@item.expirydate" readonly="true" required/>
+                                        </div>
+                                            
+                                            
+                                           </div>
+                                    </div>
+                             
+                                     
+                                     </div>
+
+                                </div>
+                           
+
+                         <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Nominee Details</strong> </h2>
+                                   
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Nominee Name </label></span>  
+                                            <input type="text" id="nomineename" name="nomineename" class="form-control" value="@item.nomineename" readonly="true"/ required></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Nominee Age </label></span>  
+                                            <input type="text" id="nomage" name="nomage" class="form-control" value="@item.nomage" readonly="true" required/></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Relationship </label></span>  
+                                            <input type="text" class="form-control" id="nomrel" name="nomrel" value="@item.RelationOf" readonly="true" required/></div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Nominee Address </label></span>  
+                                            <input type="text" id="nomaddr" name="nomaddr" class="form-control" value="@item.nomaddr" readonly="true" required /></div>
+                                            </div>
+                                    </div>
+                                 
+                                </div>
+                            </div>
+
+                     <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Payment Details</strong> </h2>
+                                   
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9"><div class="input-group">
+       <span class="input-group-addon"><label class="width">Payment Mode </label></span>  
+                                            
+                                             <input type="text" name="paymethod" class="form-control" readonly="true" value="@item.mode" >   
+
+
+                                        </div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                    <span class="input-group-addon"><label class="width">Payment Date</label></span>
+                                   <input type="date" id="pdate" name="pdate" class="form-control" readonly="true" value="@item.pdate" required />
+                                            </div>
+
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Cheque/ DD No. </label></span>  
+                                           <input type="text" id="checkorddno" name="checkorddno" readonly="true" class="form-control" value="@item.checkorddno"/></div>
+                                    </div>
+                                         </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Draw No. </label></span>  
+                                            <input type="text" id="drawno" name="drawno" readonly="true" class="form-control" value="@item.drawno" /></div>
+                                    </div>
+                                         </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Branch Payable At </label></span>  
+                                         <input type="text" id="branchpay" name="branchpay" readonly="true" class="form-control" value="@item.branchpay"/></div>
+                                    </div>
+                                         </div>
+                                     
+                                      
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">  
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Amount In Words </label></span>  
+                                            <input type="text" name="amountword" readonly="true"  class="form-control" id="amountinword" readonly="true" value="@item.amountword" required/></div>
+                                    </div>
+                                 </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+       }
+       }
+
+  </div>    
+                                                                     
+      
+         
+
+                    </div>
+    </div>

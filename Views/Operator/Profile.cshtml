@@ -1,0 +1,133 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Collection Point>
+@{
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "Profile";
+    var grid = new WebGrid(Model);
+    var a = 0;
+}
+
+<script type="text/javascript" >
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var OperatorId = tr.find("#OperatorId").html();
+            var OperatorName = tr.find("#OperatorName").val();
+            var OperatorAddress = tr.find("#OperatorAddress").val();
+            var Operator_Mail = tr.find("#Operator_Mail").val();
+            var OperatorMobile = tr.find("#OperatorMobile").val();
+
+
+            tr.find("#lblOperatorName").text(OperatorName);
+            tr.find("#lblOperatorAddress").text(OperatorAddress);
+            tr.find("#lblOperator_Mail").text(Operator_Mail);
+            tr.find("#lblOperatorMobile").text(OperatorMobile);
+
+            tr.find('.edit-mode, .display-mode').toggle();
+            var Plan =
+            {
+                "OperatorId": OperatorId,
+                "OperatorName": OperatorName,
+                "OperatorAddress": OperatorAddress,
+                "Operator_Mail": Operator_Mail,
+                "OperatorMobile": OperatorMobile,
+
+            };
+            $.ajax({
+                url: '/Collection Point/EditOperator/',
+                data: JSON.stringify(Plan),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    //alert(data);
+                }
+            });
+
+        });
+    })
+</script>  
+
+<style type="text/css">
+    .dd {
+        height:50px;
+        width:70%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+    .d {
+        height:50px;
+        width:30%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+
+</style>
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Your Profile</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                        
+                    </div> 
+
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls">  
+                    
+                                   
+                 @if (a == 0)
+                 {  
+                     <div id="comm">
+                         
+                           <div  id="gridContent" style="padding:20px;" >  
+@grid.GetHtml(
+        tableStyle: "webgrid-table",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "webgrid-row-style",
+        mode: WebGridPagerModes.All,
+        columns:
+             grid.Columns(
+             grid.Column("OperatorId", format: @<text> <span  class="display-mode" style="width:20px;text-align:center;">@item.OperatorId </span> <label id="OperatorId" class="edit-mode" style="width:100px;">@item.OperatorId</label> </text>, style: "col2Width"),
+             grid.Column("OperatorName", "Name", format: @<text> <span  class="display-mode" style="width:100px;"> <label id="lblOperatorName">@item.OperatorName</label> </span>  <input type="text" id="OperatorName" value="@item.OperatorName" class="edit-mode" style="width:100px;" /> </text>, style: "col2Width"),
+             grid.Column("OperatorAddress", "Address", format: @<text> <span  class="display-mode"> <label id="lblOperatorAddress">@item.OperatorAddress</label> </span>  <input type="text" id="OperatorAddress" value="@item.OperatorAddress" class="edit-mode" style="width:100px;" /> </text>, style: "col2Width"),
+             grid.Column("Operator_Mail", "EmailId", format: @<text> <span  class="display-mode"> <label id="lblOperator_Mail">@item.Operator_Mail</label> </span>  <input type="text" id="Operator_Mail" value="@item.Operator_Mail" class="edit-mode" style="width:100px;" /> </text>, style: "col2Width"),
+             grid.Column("OperatorMobile", "Mobile No", format: @<text> <span  class="display-mode"> <label id="lblOperatorMobile">@item.OperatorMobile</label> </span>  <input type="text" id="OperatorMobile" value="@item.OperatorMobile" class="edit-mode" style="width:100px;" /> </text>, style: "col2Width"),
+             grid.Column("Action", format: @<text>  
+                                <button class="edit-user display-mode" >Edit</button>  
+                                <button class="save-user edit-mode"  >Save</button>  
+                                <button class="cancel-user edit-mode" >Cancel</button>  
+                            </text>, style: "col3Width", canSort: false)
+           ))  
+
+                                    
+                                </div>
+                                </div>
+                 }
+                                             
+                                    </div>
+                            </div>
+                                        
+                   </div> </div> </div>
+    </div>

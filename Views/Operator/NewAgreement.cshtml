@@ -1,0 +1,2099 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Member_tab>
+@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "NewAgreement";
+
+    var branch = string.Empty;
+    UsersContext db = new UsersContext();
+    var row = db.Operators.Single(ci => ci.OperatorId == User.Identity.Name);
+    branch = row.BranchCode;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var plist = db.Plans.Where(p => p.status == 1).ToList();
+    //int plotsize = 100;
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+    var a = 0;
+    string todate = DateTime.Now.ToShortDateString();
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == row.BranchCode).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == row.BranchCode);
+        if (fd.status == 2)
+        {
+            dt = fd.formdate;
+        }
+    }
+}
+
+<style type="text/css">
+    #picset img {
+        height: 90px;
+        width: 160px;
+    }
+
+    [data-id="direction"] label {
+        font-size: 11px;
+    }
+
+    [data-id="direction"] [class*="col-"] {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    input.form-control[disabled] {
+        color: #555;
+    }
+</style>
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+<script>
+    $(document).ready(function () {
+        {
+            $("#plot").addClass("hide");
+            $("#blok").addClass("hide");
+            $("#phasediv").addClass("hide");
+        }
+    });
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#chk').change(function () {
+
+            var adr = $("#addr").val();
+            if (this.checked == true) {
+                $("#guraddr").val(adr);
+            }
+            else if (this.checked == false) {
+                $("#guraddr").val('');
+            }
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#memberid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompletememberid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.MemberName, value: item.NewMemberId };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#IntroducerCode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteAgentId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#nomrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#gurrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+<script>
+    function checkid(check_id) {
+
+        var intro = $("#" + check_id).val();
+        var url = '@Url.Action("SelectIntroName", "Branch")';
+            $.get(url, { intro: intro }, function data(name1) {
+                $('#introducername').val(name1)
+            });
+
+
+        }
+</script>
+
+<script type="text/javascript">
+    function check(check_id) {
+
+        $("#" + check_id).click(function () {
+            $('.plantype').prop('checked', false);
+        });
+
+    }
+    ///Selecting Plan Name Start here ////
+    function rply_click(clicked_id) {
+
+        var fno = $("#" + clicked_id).val();
+
+
+        var url = '@Url.Action("SelectPlan", "Branch")';
+            $.get(url, { fno: fno }, function data(d) {
+                var select = $("#PlanName");
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].Plancode + '">' + d[i].Planname + '</option>');
+                }
+            });
+
+        }
+        ///////Select Term Start Here
+        function selectterm(plan_id) {
+
+            var term = $("#term");
+            var cpplan = $("#" + plan_id).val();
+
+            var url = '@Url.Action("selectterm", "Branch")';
+            if (cpplan != '') {
+                $.get(url, { cpplan: cpplan }, function data(t) {
+
+                    term.html('');
+                    term.append('<option value="">Select</option>');
+                    for (var i = 0; i < t.length; i++) {
+                        term.append('<option value="' + t[i].term + '">' + t[i].term + '</option>');
+
+                    }
+                    term.removeAttr('disabled');
+
+                });
+            } else {
+                term.attr('disabled', '');
+            }
+        //$('[name="PYN"').click();
+
+        //reset here
+            $('#payment,#totalcon,#bookingamount,#plccost').val(0)//.click();
+            $('#amountinword').val('Zero Rupees Only');
+            $('#blk,#plotno').empty();
+            $('#radio2').prop('checked', true).click();
+            $('#mode,#nolandunit,#term').val('');
+        }
+        ///Selecting Plan Mode Start here ////
+
+
+
+        $(function () {
+
+            ///Selecting Payment Start here ////
+            $('#mode').on('click', function selectpayment() {
+                var ptype = $('#paymenttype').val();
+                debugger;
+                if (ptype == 'EMI') {
+
+                    var mode = $("#mode").val();
+                    var term = $("#term").val();
+                    var bookingamount = $("#bookingamount").val();
+                    var discountper = $("#discountper").val();
+                    var projectid = $("#PlanName").val();
+                    var plotsize = $("#nolandunit").val();
+                    var plccost = $('[name="plccost"]').val();
+
+                    var url = '@Url.Action("selectpayment", "Branch")';
+                $.get(url, { term: term, bookingamount: bookingamount, discountper: discountper, projectid: projectid, plotsize: plotsize, mode: mode, plccost: plccost }, function data(t) {
+                    for (var i = 0; i < t.length; i++) {
+
+                        $("#totalcon").val(t[i].totalcon);
+                        $("#maturityamt").val(t[i].maturityamount);
+                        $("#payment").val(t[i].payment);
+                        $("#amountinword").val(t[i].amountinwords);
+                    }
+                });
+            } else {
+                var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val(), discountper1 = $('#discountper').val();
+                fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+                var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+                $('#totalcon').val(tv1);
+                var v1 = '';
+                if (ptype == 'FULL') { v1 = $("#totalcon").val(); } else { v1 = $("#bookingamount").val(); }
+                //amount in word
+
+
+                if (v1 > 0) {
+                    var url = '@Url.Action("SetAmountinword", "Branch")';
+                    $.get(url, { payment: v1 }, function data(t) {
+                        for (var i = 0; i < t.length; i++) {
+                            $("#amountinword").val(t[i].amountword);
+                        }
+                    });
+
+                }
+            }
+        });
+
+    });
+    $(function () {
+        //discount
+        ///checkig validity of amount Start here ////
+        $('#discountper').on('click',
+        function checkplan() {
+            var c3 = $('#discountper'), ptype = $('#paymenttype').val();
+            var discountper1 = c3.val();
+            if (ptype == 'EMI') {
+                var term = $("#term").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                var plccost = $("#plccost").val();
+
+                var url = '@Url.Action("checkplan", "Branch")';
+                $.get(url, { projectid: projectid, plotsize: plotsize, term: term, discountper: discountper1, plccost: plccost }, function data(t) {
+                    for (var i = 0; i < t.length; i++) {
+
+                        $("#totalcon").val(t[i].totalcon)//.attr('data-v', t[i].totalcon);
+                        $("#maturityamt").val(t[i].maturityamount);
+                    }
+                });
+            }
+            else {
+                //var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val();
+                //fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+                //var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+                //$('#totalcon').val(tv1);                
+            }
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+
+        //get block
+
+        $('[name="PYN"]').on('click', function () {
+
+            var c1 = $('[name="PYN"]:checked'), cv = c1.val();
+            if (c1.is(':checked') && cv != "N") {
+                debugger;
+                $("#plot").removeClass("hide");
+                $("#blok").removeClass("hide");
+                $("#phasediv").removeClass("hide");
+
+            }
+            else if (c1.is(':checked') && cv == "N") {
+
+                $("#plot").addClass("hide");
+                $("#blok").addClass("hide");
+                $("#phasediv").addClass("hide");
+
+                var block = $('#blk').html('');
+                block.children().remove();
+                block.append('<option value="NA">Select</option>');
+
+                var plot = $('#plotno').html('');
+                plot.children().remove();
+                plot.append('<option value="0">Select</option>');
+            }
+
+        });
+    });
+
+    function getblock(clicked_id) {
+
+        var c = $('[name="PYN"]:checked'), cv = c.val();
+        var plotstatus = cv;
+        var projectid = $("#PlanName").val();
+        var phaseid = $("#phaseid").val();
+        var url = '@Url.Action("GetBlockList", "Branch")';
+        $.get(url, { plotstatus: cv, projectid: projectid, phaseid: phaseid }, function data(d) {
+            debugger;
+            var block = $('#blk').html('');
+            block.children().remove();
+            block.append('<option value="NA">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                debugger;
+                block.append('<option value="' + d[i].block + '">' + d[i].block + '</option>');
+            }
+        });
+    }
+
+    function getplot(clicked_id) {
+        $("#plot").removeClass("hide");
+        var block = $("#" + clicked_id).val();
+        var phaseid = $("#phaseid").val();
+        var projectid = $("#PlanName").val();
+        var introid = $("#IntroducerCode").val();
+        var url = '@Url.Action("GetPlotList", "Branch")';
+        $.get(url, { block: block, projectid: projectid, introid: introid, phaseid: phaseid }, function data(d) {
+            var select = $('#plotno').html('');
+            select.children().remove();
+            select.append('<option value="0">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].plotno + '">' + d[i].plotno + '</option>');
+            }
+
+        });
+    }
+
+</script>
+
+
+
+<script>
+    function detail(chkid) {
+        var chk = $("#" + chkid).val();
+        if (chk == "Cheque") {
+            $("#detail").show();
+            $("#dd").hide();
+            $("#trdetail").hide();
+        }
+        else if (chk == "DD") {
+            $("#dd").show();
+            $("#detail").hide();
+            $("#trdetail").hide();
+        }
+        else if (chk == "banktransaction") {
+            $("#dd").hide();
+            $("#detail").hide();
+            $("#trdetail").show();
+        }
+        else {
+            $("#detail").hide();
+            $("#dd").hide();
+            $("#trdetail").hide();
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    function selectphase(bid) {
+
+        var phaseid = $("#phaseid");
+        var projectid = $("#" + bid).val();
+
+        var url = '@Url.Action("selectphase", "Branch")';
+        if (projectid > 0) {
+            $.get(url, { projectid: projectid }, function data(t) {
+
+                phaseid.html('');
+                phaseid.append('<option value="">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    phaseid.append('<option value="' + t[i].Id + '">' + t[i].Phase + '</option>');
+                }
+            });
+        }
+
+    }
+</script>
+
+<style type="text/css">
+    .hide {
+        display: none;
+    }
+</style>
+<div class="page-content">
+
+                <div class="container">
+
+                    <div class="page-toolbar">
+
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">@mr.custname Form</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="row" >
+               <form method="post">
+               
+                   
+                   <div class="col-md-6" style="width: 100%">
+
+                       <div class="block">
+
+                           <div class="block-content controls">
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Enter Member id</label></span>
+                                           <input type="text" class="form-control" name="memberid" id="memberid"><span class="input-group-addon"><label class="width" style="width:15px;"><span class="fa fa-search"></span></label></span> 
+                                       </div>
+
+                                   </div>
+                               </div>
+
+
+                               <div class="page-toolbar-block pull-right">
+                                   <div class="widget-info widget-from">
+
+                                       <button value="Search" type="submit" name="command" class="btn btn-primary"><i class="fa fa-search"></i>Search</button>
+
+                                   </div>
+                               </div>
+
+
+                               <div style="float: left;">
+                                   <p style="color: maroon;"><b>@ViewBag.msg</b></p>                                   
+                                   @if (Convert.ToString(ViewData["paymethod"]) == "Cheque")
+                                   {
+                                       @Html.ActionLink("Print Receipt", "PrintReceipt", new { newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })                                      
+                                   }
+                                   else if (Convert.ToString(ViewData["paymethod"]) == "Cash" || Convert.ToString(ViewData["paymethod"]) == "DD")
+                                   {
+                                       @Html.ActionLink("Print " + mr.custname, "PrintBond", new { newbondid = ViewData["newbondid"], discount = ViewData["discount"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })
+                                   }
+                               </div>
+                           </div>
+
+
+                       </div>
+                   </div>
+                   
+                   </form>
+                    <form enctype="multipart/form-data" method="post" id="_submit">
+                                   @foreach (var item in Model)
+                                   {
+                                       if (a == 0)
+                                       {
+                    
+     
+              
+           
+
+             <div class="col-md-6">
+                            
+                 <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Personal Details</strong></h2>
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">@mr.branchname Code </label></span>  
+                                            <input type="text" id="branchcode" class="form-control" readonly="true" value="@branch" name="branchcode" required /></div>
+                                            </div>
+                                    </div>
+                                    <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Form Fee</label></span>
+                                             <input type="text" class="form-control" id="applicationcharge" required name="applicationcharge" value="@tr.applicationfee" readonly="true"/>
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+                                    
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Member Id </label></span>  
+                                               
+    <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.NewMemberId)" id="newmemberid" name="newmemberid" required /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Name of Applicant </label></span>  
+                                               
+     <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.MemberName)" id="name" name="name" required /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+
+                                      <div class="col-md-9">
+
+                                                <div style="float:left; width:100%">
+                      
+                                                     <div style="float:left;width:40%; background-color:#eee">
+                                    <input type="text" style="background-color:#eee" readonly="true" value="@Html.DisplayFor(modelItem => item.Relationof)" class="form-control" required name="RelationOf" id="RelationOf" />
+
+                                                        </div> 
+                                                  
+                                                 <div style="float:left;width:60%;">
+                                 <input type="text" value="@Html.DisplayFor(modelItem => item.Father)" readonly="true" class="form-control" required name="fathername" id="fathername" />
+                                                     </div>
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                                                   <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Category</label>
+                                           </span>
+                                           <select class="form-control" id="category" name="category">
+                                                            <option>@Html.DisplayFor(modelItem => item.category)</option>
+                                           </select>
+                                       </div>
+                                   </div>
+                               </div>
+                                    <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Income Group</label>
+                                           </span>
+                                           <select class="form-control" id="incomegroup" name="incomegroup">
+                                               <option value="Lower Income Group">Lower Income Group</option>
+                                               <option value="Middle Income Group">Middle Income Group</option>
+                                               <option value="Upper Income Group">Upper Income Group</option>                                              
+                                           </select>
+                                       </div>
+                                   </div>
+                               </div>
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <label class="width">Address </label>
+                                                </span>
+                                                <input type="text" id="addr"  readonly="true" value=" @Html.DisplayFor(modelItem => item.Address)" name="addr"  class="form-control" required />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <label class="width">Mobile No </label>
+                                                </span>
+                                                <input type="text" id="mobileno" name="mobileno" maxlength="10" readonly="true" value=" @Html.DisplayFor(modelItem => item.Mobile)" class="form-control" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                               
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Introducer Code </label></span>  
+                                         <input type="text" class="form-control"  onchange="checkid(this.id)" onclick="checkid(this.id)" id="IntroducerCode" name="newintroducerid" required />
+                                                <span class="input-group-addon"><label class="width" style="width:15px;"><span class="fa fa-search"></span></label></span>
+                                            </div>
+                                     </div>
+                                   </div>
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Introducer Name </label></span>  
+                                            <input type="text" class="form-control"/ id="introducername" readonly="true"></div>
+                                            </div>
+                                    </div>
+                                   
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                          <span class="input-group-addon"><label class="width">Date of Agreement </label></span>
+                                      <input type="text" class="form-control date" id="formdate" name="formdate" value="@dt" readonly="true" required >
+                                                    </div>
+                                            
+                                              </div>
+                                    </div>
+                                          
+                                     <div class="row-form">
+
+                                        <div class="col-md-9">
+
+                                        <div class="input-group">
+       <span class="input-group-addon"><label class="width">Date of Birth </label></span>  
+                                         <input type="text" id="dob" readonly="true" value=" @Html.DisplayFor(modelItem => item.DOB)" name="dob" class="form-control" required/>
+                                         </div>
+                                            </div>
+
+                                        </div>
+
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Nationality </label></span>  
+     <input type="text" id="nationality" name="nationality" readonly="true" class="form-control"  value="Indian"/></div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+
+                 <div class="block">
+                     <div class="block-content">
+                         <h2><strong>Guardian Details</strong></h2>
+
+                     </div>
+                     <div class="block-content controls">
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Guardian Name </label>
+                                     </span>
+                                     <input type="text" id="guardianname" name="guardianname" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Guardian's Age </label>
+                                     </span>
+                                     <input type="text" id="gurage" name="gurage" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Relationship</label></span>
+                                     <input type="text" class="form-control" id="gurrel" name="gurrel" />
+                                 </div>
+                             </div>
+                         </div>
+
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 &nbsp;&nbsp; 
+                                 <input id="chk" type="checkbox" name="chk" />&nbsp;Same As Contributor
+                             </div>
+                         </div>
+
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Guardian Address</label></span>
+                                     <textarea id="guraddr" name="guraddr" class="form-control"></textarea>
+                                 </div>
+                             </div>
+                         </div>
+
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+
+
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Upload Image</label></span>
+                                     <input class="form-control" id="File1" name="photo" type="file" />
+                                 </div>
+
+                             </div>
+                         </div>
+
+                     </div>
+
+                 </div>
+
+                 <div class="block">
+                     <div class="block-content">
+                         <h2><strong>Bank Details</strong></h2>
+
+                     </div>
+                     <div class="block-content controls">
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">PAN No </label>
+                                     </span>
+                                     <input type="text" id="panno" name="panno"  value=" @Html.DisplayFor(modelItem => item.panno)" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Bank Name </label>
+                                     </span>
+                                     <input type="text" id="bankname" name="bankname" value=" @Html.DisplayFor(modelItem => item.bankname)" class="form-control"/>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Bank A/C No </label>
+                                     </span>
+                                     <input type="text" id="accountno" name="accountno" value=" @Html.DisplayFor(modelItem => item.accountno)" class="form-control"/>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">IFSC Code </label>
+                                     </span>
+                                     <input type="text" id="IFSC"  value=" @Html.DisplayFor(modelItem => item.IFSC)" name="IFSC" class="form-control"/>
+                                 </div>
+                             </div>
+                         </div>
+
+
+
+
+                     </div>
+
+                 </div>
+
+                 <div class="block">
+                     <div class="block-content">
+                         <h2>
+                             <label class="checkbox-inline">
+                                 <input type="checkbox" value="" id="lsecondform" />Second Applicant Form</label></h2>
+                     </div>
+                     <div class="block-content controls" style="display: none;" id="secondform">
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Applicant Name </label>
+                                     </span>
+                                     <input type="text" name="sapplicantname" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Father's/Husband's Name </label>
+                                     </span>
+                                     <input type="text" name="sfathername" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Mother's Name </label>
+                                     </span>
+                                     <input type="text" name="smothername" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Category</label>
+                                     </span>
+                                     <select class="form-control" id="scategory" name="scategory">
+                                         <option value="General">General</option>
+                                         <option value="OBC">OBC</option>
+                                         <option value="SC">SC</option>
+                                         <option value="ST">ST</option>
+                                         <option value="Other">Other</option>
+                                     </select>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Correspondence Address </label>
+                                     </span>
+                                     <input type="text" name="scorraddress" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">City</label>
+                                     </span>
+                                     <input type="text" name="scity" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">State </label>
+                                     </span>
+                                     <input type="text" name="sstate" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Pin Code </label>
+                                     </span>
+                                     <input type="text" name="spincode" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                                              <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                    <h3>
+                             <label class="checkbox-inline">
+                                 <input type="checkbox" value="" id="sameasabove">Same As Above</label></h3>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                            <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Permanent Address </label>
+                                     </span>
+                                     <input type="text" name="spermanentaddress" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+ 
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">City</label>
+                                     </span>
+                                     <input type="text" name="pcity" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">State </label>
+                                     </span>
+                                     <input type="text" name="pstate" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Pin Code </label>
+                                     </span>
+                                     <input type="text" name="ppincode" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Nationality </label>
+                                     </span>
+                                     <input type="text" name="snationality" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Educational Qualification</label>
+                                     </span>
+                                     <input type="text" name="squalification" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Mobile No </label>
+                                     </span>
+                                     <input type="text" name="smobileno" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Alternate Mobile No </label>
+                                     </span>
+                                     <input type="text" name="salternatemobileno" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Pan No. </label>
+                                     </span>
+                                     <input type="text" name="spanno" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Email Id </label>
+                                     </span>
+                                     <input type="text" name="semailid" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Date Of Birth </label>
+                                     </span>
+                                     <input type="text" name="sdob" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Aadhar No. </label>
+                                     </span>
+                                     <input type="text" name="saadharno" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+
+
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Martial Status </label>
+                                     </span>
+                                    <div class="radio">
+                                         <label class="radio-inline"><input type="radio" name="smaritialstatus" style="margin-top:5px;" value="UnMarried">UnMarried</label>
+                                         <label class="radio-inline"><input type="radio" name="smaritialstatus" style="margin-top:5px;" value="Married">Married</label>
+                                    </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Anniversary Date </label>
+                                     </span>
+                                     <input type="text" name="sanniversarydate" class="form-control"  />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Occupation </label>
+                                     </span>
+                                     <input type="text" name="soccupation" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Passport No. </label>
+                                     </span>
+                                     <input type="text" name="spassport" class="form-control" />
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form">
+
+                             <div class="col-md-9">
+                                 <div class="input-group">
+                                     <span class="input-group-addon">
+                                         <label class="width">Residential Status </label>
+                                     </span>
+                                     <div class="radio">
+                                         <label class="radio-inline"><input type="radio" name="sresidentialstatus" style="margin-top:5px;" value="Resident">Resident</label>
+                                         <label class="radio-inline"><input type="radio" name="sresidentialstatus" style="margin-top:5px;" value="Non-Resident">Non-Resident</label>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row-form" id="picset">
+
+                             <div class="col-md-4">
+                                 <p>Customer Pic</p>
+                                 <img src="/Content/reg/img/u.png" id="imgsphoto" alt="/Content/reg/img/u.png" />
+                                 <input type="file" name="sphoto" id="sphoto" class="form-control" />
+                             </div>
+                             <div class="col-md-4">
+                                 <p>Aadhar Pic</p>
+                                 <img src="/Content/reg/img/adhar.jpg" id="imgsaadharphoto" alt="/Content/reg/img/adhar.jpg" />
+                                 <input type="file" name="saadharphoto" id="saadharphoto" class="form-control" />
+                             </div>
+                             <div class="col-md-4">
+                                 <p>Pan Pic</p>
+                                 <img src="/Content/reg/img/pan.jpg" id="imgspanphoto" alt="/Content/reg/img/pan.jpg"  />
+                                 <input type="file" name="spanphoto" id="spanphoto" class="form-control" />
+                             </div>
+                         </div>
+                     </div>
+
+                 </div>
+
+             </div> 
+
+
+                   <div class="col-md-6">
+
+                       <div class="block">
+                           <div class="block-content">
+                               <h2><strong>@mr.planname Details</strong> </h2>
+
+                           </div>
+                           <div class="block-content controls">
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Property Type</label>
+                                           </span>
+                                           <select class="form-control" id="propertytype" name="propertytype">
+                                               <option value="Residential">Residential</option>                                             
+                                                   <option value="Commercial">Commercial</option>                                              
+                                           </select>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Payment Type </label>
+                                           </span>
+                                           <select class="form-control" id="paymenttype" name="paymenttype" required>
+                                               <option value="EMI" selected="">EMI</option>
+                                               <option value="FULL">FULL</option>
+                                               <option value="PART">PART</option>
+                                           </select>
+
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">@mr.planname Name </label>
+                                           </span>
+
+                                           <select class="form-control" onchange="selectterm(this.id),selectphase(this.id)" id="PlanName" name="projectid" required>
+                                               <option value="">Select </option>
+                                               @foreach (var p in plist)
+                                               {
+                                                   <option value="@p.Plancode">@p.Planname </option>
+                                               }
+                                           </select>
+                                       </div>
+                                   </div>
+                               </div>
+                               
+                               
+                               
+                               
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Plot Size(SqFt)</label></span>
+                                           <select class="form-control" id="nolandunit" name="nolandunit" required>
+                                               <option value="">Select</option>                                               
+                                               <option value="450">450</option>                                               
+                                               <option value="900">900</option>                                               
+                                               <option value="1800">1800</option>                                               
+                                                                             
+                                           </select>
+
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form" id="termDiv">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Term(Yr.) </label>
+                                           </span>
+                                           <select class="form-control" id="term" name="term" required="" disabled="">
+                                               <option value="">Select </option>
+
+                                           </select>
+
+                                       </div>
+                                   </div>
+                               </div>
+
+                               
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Assign Plot</label>
+                                           </span>
+                                           <input type="radio" id="radio" name="PYN" class="PYN" value="Y" />
+                                           Yes   
+                                           <input type="radio" id="radio2" name="PYN" class="PYN" value="N" checked>
+                                           No  
+                                       </div>
+                                   </div>
+                               </div>
+                               
+                               <div id="phasediv" class="row-form" >
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Select Phase</label>
+                                           </span>
+                                           <select class="form-control" id="phaseid" name="phaseid" onchange="getblock(this.id)"  required>
+                                               <option value="">Select </option>
+
+                                           </select>
+
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div id="blok" class="row-form" style="padding-bottom:15px;">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Select Block</label>
+                                           </span>
+                                           <select class="form-control" id="blk" name="block" onchange="getplot(this.id)" required>
+                                                <option value="NA" selected>Select</option>
+                                           </select>
+
+                                       </div>
+                                   </div>
+                                   <br />
+                                   <div class="col-md-9" style="padding-top:15px;">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Property Address</label>
+                                           </span>
+                                           <textarea name="propertyaddress" class="form-control" style="resize:vertical;"></textarea>
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div id="plot" class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Select Plot No </label>
+                                           </span>
+                                           <select class="form-control" id="plotno" name="plotno" required>
+                                                <option value="0" selected>Select</option>
+                                           </select>
+
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form" id="bookingamountDiv">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Booking Amount</label></span>
+                                           <input id="fullAmount" name="fullAmount" type="text" class="form-control" value="0" readonly="" required style="display: none;" />
+                                           <input id="bookingamount" name="bookingamount" type="text" class="form-control" value="0" required=""  />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+                                   <div class="col-md-9">
+
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Discount(%)</label></span>
+                                           <input type="text" class="form-control" id="discountper" required name="discountper" value="0"  />
+                                       </div>
+
+                                   </div>
+
+                               </div>
+
+                               
+                                         <div class="col-md-9" style="padding-bottom: 15px;">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Property Preference</label>
+                                           </span>
+                                           <select name="propertypreference" class="form-control" id="propertypreference">
+                                               <option value="Normal">Normal</option>
+                                               <option value="Corner">Corner</option>
+                                               <option value="Park facing">Park Facing</option>
+                                               <option value="30ft Road">30Ft Road</option>
+                                           </select>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-9"  style="padding-bottom: 15px;" id="plccostDiv">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">PLC Cost (In %)</label>
+                                           </span>
+                                           <input type="number" name="plccost" id="plccost" min="0" class="form-control" value="0"  />
+                                       </div>
+                                   </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">@mr.planname Plot Cost(Rs.) </label>
+                                           </span>
+                                            <input type="text" class="form-control" id="totalcon" name="totalcon" disabled="" value="0" required data-v="0" />
+                                           
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">@mr.planname Mode </label>
+                                           </span>
+                                           <select class="form-control" id="mode" name="mode" required>
+                                               <option value="">Select </option>
+                                               <option value="Monthly">Monthly</option>
+                                               <option value="Quarterly">Quarterly</option>
+                                               <option value="Halfyearly">Halfyearly</option>
+                                               <option value="Yearly">Yearly</option>
+                                           </select>
+                                       </div>
+                                   </div>
+                          </div>
+
+                               <div class="row-form" id="paymentDiv">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">EMI(Rs.) </label>
+                                           </span>
+                                           <input type="text" class="form-control" id="payment" name="payment" readonly="true" required value="0" />
+
+                                       </div>
+                                   </div>
+                               </div>
+                               
+
+                               <div class="row-form hide" id="maturityamtDiv">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Maturity Amount(Rs.)</label></span>
+                                           <input type="hidden" class="form-control" id="maturityamt" name="expectedraisablevalue" value="0" />
+
+                                       </div>
+
+                                   </div>
+                               </div>
+
+
+
+                               <div class="row-form hide" id="expirydateDiv">
+
+                                   <div class="col-md-9">
+
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Expiry Date</label></span>
+                                           <input type="hidden" class="form-control" id="expirydate" name="expirydate"/>
+                                       </div>
+
+
+                                   </div>
+                               </div>
+
+
+
+
+                           </div>
+                       </div>
+
+                       <div class="block" id="nomineeDiv">
+                           <div class="block-content">
+                               <h2><strong>Nominee Details</strong> </h2>
+
+                           </div>
+                           <div class="block-content controls">
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Nominee Name </label>
+                                           </span>
+                                           <input type="text" id="nomineename" name="nomineename" value=" @Html.DisplayFor(modelItem => item.NomineeName)" class="form-control" />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Nominee Age </label>
+                                           </span>
+                                           <input type="text" id="nomage" name="nomage" value=" @Html.DisplayFor(modelItem => item.NomineeAge)" class="form-control"  />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Relationship </label>
+                                           </span>
+                                           <input type="text" class="form-control" id="nomrel" name="nomrel" value=" @Html.DisplayFor(modelItem => item.NomineeRel)"  />
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Nominee Address </label>
+                                           </span>
+                                           <input type="text" id="nomaddr" name="nomaddr" value=" @Html.DisplayFor(modelItem => item.Nomineeaddr)" class="form-control"  />
+                                       </div>
+                                   </div>
+                               </div>
+
+                           </div>
+                       </div>
+
+                       <div class="block">
+                           <div class="block-content">
+                               <h2><strong>Payment Details</strong> </h2>
+
+                           </div>
+                           <div class="block-content controls">
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Payment Mode </label>
+                                           </span>
+
+                                           <input type="radio" id="paymethod" name="paymethod" value="Cash" checked onclick="detail(this.id)">
+                                           Cash   
+                                             <input type="radio" id="paymethod2" name="paymethod" value="DD" onclick="detail(this.id)">
+                                           DD  
+                                          <input type="radio" id="paymethod3" name="paymethod" value="Cheque" onclick="detail(this.id)">
+                                           Cheque  
+                                            <input type="radio" id="paymethod4" name="paymethod" value="banktransaction" onclick="detail(this.id)">
+                                           Bank Transaction
+
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Payment Date</label></span>
+                                           <input type="text" id="pdate" name="pdate" class="form-control" value="@dt" readonly="true" required />
+                                       </div>
+
+                                   </div>
+                               </div>
+                               <div class="row-form" id="dd" style="display: none;">
+                                   <div class="row-form">
+
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">DD No. </label>
+                                               </span>
+                                               <input type="text" id="checkorddno" name="checkorddno" class="form-control" />
+                                           </div>
+                                       </div>
+
+                                   </div>
+                                   <div class="row-form">
+
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Draw No. </label>
+                                               </span>
+                                               <input type="text" id="drawno" name="drawno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+
+
+                               <div class="row-form" id="detail" style="display: none; margin-bottom: 10%;">
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Bank Name </label>
+                                               </span>
+                                               <input type="text" id="bank" name="bank" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">A/C No. </label>
+                                               </span>
+                                               <input type="text" id="ACNO" name="Account" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Cheque No. </label>
+                                               </span>
+                                               <input type="text" id="chequeno" name="chequeno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">A/C Holder Name </label>
+                                               </span>
+                                               <input type="text" id="ACname" name="ACholdername" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Branch Name </label>
+                                               </span>
+                                               <input type="text" id="barnch" name="Branch" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">IFSC </label>
+                                               </span>
+                                               <input type="text" id="IFSCcode" name="IFSCCode" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Amount </label>
+                                               </span>
+                                               <input type="text" id="Amount" name="ChequeAmount" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Cheque Date </label>
+                                               </span>
+                                               <input type="text" id="Date" name="Chequedate" value="@dt" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Cheque Image </label>
+                                               </span>
+                                               <input type="file" id="Chequeimage" name="Chequeimage" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form" id="trdetail" style="display: none; margin-bottom: 10%;">
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Bank Name </label>
+                                               </span>
+                                               <select id="trbank" name="trbank" class="form-control">
+                                                   <option>select</option>
+                                                   @foreach (var blist in db.BankDetail_Tabs.ToList())
+                                                   {
+                                          
+                                                       <option value="@blist.bankname">@blist.bankname</option>
+                                          
+                                                   }
+                                               </select>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Transaction Id </label>
+                                               </span>
+                                               <input type="text" id="transactionid" name="transactionid" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Transaction Date </label>
+                                               </span>
+                                               <input type="date" id="transactiondate" name="transactiondate" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Amount </label>
+                                               </span>
+                                               <input type="text" id="tramount" name="tramount" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Pay Method </label>
+                                               </span>
+
+                                               <input type="radio" id="trpmethod1" name="transactiontype" value="NEFT" checked>
+                                               NEFT
+                                            <input type="radio" id="trpmethod2" name="transactiontype" value="IMPS" />
+                                               IMPS
+                                            <input type="radio" id="trpmethod3" name="transactiontype" value="RTGS" />
+                                               RTGS
+                                            <input type="radio" id="trpmethod4" name="transactiontype" value="UPI" />
+                                               UPI
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">A/C Holder's A/C No. </label>
+                                               </span>
+                                               <input type="text" id="holderacno" name="holderacno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Branch Payable At </label>
+                                           </span>
+                                           <input type="text" id="branchpay" name="branchpay" class="form-control" />
+                                       </div>
+                                   </div>
+                               </div>
+
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Amount In Words </label>
+                                           </span>
+                                           <input type="text" name="amountword" class="form-control" id="amountinword" readonly="true" required />
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="block" id="plotdetail">
+                                               <div class="block-content">
+                                                   <h2><strong>Plot Detail</strong></h2>
+
+                                               </div>
+                                               <div class="block-content controls">
+
+                                                   <div class="row-form">
+
+                                                       <div class="col-md-9">
+                                                           <div class="input-group">
+                                                               <span class="input-group-addon">
+                                                                   <label class="width">Plot Description </label>
+                                                               </span>
+                                                               <textarea name="plotdesp" class="form-control" style="resize: vertical;"></textarea>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+
+
+
+                                                   <div class="row-form" data-id="direction">
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rnortheast" id="rnortheast" />
+                                                           <label for="rnortheast">East-NorthEast</label>
+                                                       </div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="northeast" class="form-control" disabled="" /></div>
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rnortheast" id="rnortheast1" />
+                                                           <label for="rnortheast1">North-NorthEast</label></div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="northeast" class="form-control" disabled="" /></div>
+                                                   </div>
+                                                   <div class="row-form" data-id="direction">
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rsoutheast" id="rsoutheast" />
+                                                           <label for="rsoutheast">East-SouthEast</label>
+                                                       </div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="southeast" class="form-control" disabled="" /></div>
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rsoutheast" id="rsoutheast1" />
+                                                           <label for="rsoutheast1">South-SouthEast</label></div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="southeast" class="form-control" disabled="" /></div>
+                                                   </div>
+                                                 <div class="row-form" data-id="direction">
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rnorthwest" id="rnorthwest" />
+                                                           <label for="rnorthwest">West-NorthWest</label>
+                                                       </div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="northwest" class="form-control" disabled="" /></div>
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rnorthwest" id="rnorthwest1" />
+                                                           <label for="rnorthwest1">North-NorthWest</label></div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="northwest" class="form-control" disabled="" /></div>
+                                                   </div>
+                                                   <div class="row-form" data-id="direction">
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rsouthwest" id="rsouthwest" />
+                                                           <label for="rsouthwest">West-SouthWest</label>
+                                                       </div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="southwest" class="form-control" disabled="" /></div>
+                                                       <div class="col-md-3">
+                                                           <input type="radio" name="rsouthwest" id="rsouthwest1" />
+                                                           <label for="rsouthwest1">South-SouthWest</label></div>
+                                                       <div class="col-md-3">
+                                                           <input type="text" name="southwest" class="form-control" disabled="" /></div>
+                                                   </div>
+
+                                               </div>
+                                           </div>
+                   
+                   </div>
+                                                 
+                                       }
+
+                   <div class="col-md-6" style="width: 100%">
+                       <div class="block">
+                           <div class="block-content controls">
+                               <div style="margin-left: 46%;">
+                                   <div class="widget-info widget-from">
+                                       <button id="submit"  value="Submit" type="submit" name="command" class="btn btn-primary" onclick="return confirm('Are you sure to create @mr.custname?')">Submit</button>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+              
+          
+                                   }
+
+                                   
+               </form>
+               
+ </div>
+          
+                    </div>
+    </div>
+
+<script type="text/javascript">
+    $(function () {
+       
+
+        $('#lsecondform').click(function () {
+            if ($(this).is(':checked')) {
+                $('#secondform').slideDown();
+            } else {
+                if (confirm('Are you sure you want to clear second applicant form..')) {
+                    $('#secondform input[type="text"],#secondform select,#secondform input[type="file"]').val('');
+                    $('#secondform input[type="radio"]').prop('checked', false);
+                    $('#picset img').each(function () {
+                        $(this).attr('src', $(this).attr('alt'));
+                    });
+                    $('#secondform').slideUp();
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        $('#picset input[type="file"]').change(function () {
+            var input = $(this)[0], im = $('#img' + input.id);
+
+            if (input.files && input.files[0]) {
+                if (input.files[0].size <= 972800) {
+                    $('#sb').removeAttr('disabled');
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        im
+                        .attr('src', e.target.result)
+                            .animate({ height: 100 });
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    im.attr('src', im.attr('alt')).height(90);
+                    $(input).val('');
+                    $('#sb').attr('disabled', '');
+                    alert('Please select file less than or equal to 950KB');
+                }
+            } else {
+                im.attr('src', im.attr('alt')).animate({ height: 90 });
+            }
+        });
+
+        $('[id$="date"]:not([readonly])').datepicker();
+
+        $('[data-id="direction"] input[type="radio"]').click(function () {
+            debugger;
+            var c = $(this), id = c.attr('id'), tid = '[name="' + id.replace('r', '').replace('1', '') + '"]';
+            if (c.is(':checked')) {
+                if (id.indexOf('1') > -1) {
+                    $($(tid)[1]).removeAttr('disabled');
+                    $($(tid)[0]).attr('disabled', '').val('');
+                } else {
+                    $($(tid)[0]).removeAttr('disabled');
+                    $($(tid)[1]).attr('disabled', '').val('');
+                }
+            } else {
+                if (id.indexOf('1') > -1) {
+                    $($(tid)[0]).removeAttr('disabled');
+                    $($(tid)[1]).attr('disabled', '').val('');
+                } else {
+                    $($(tid)[1]).removeAttr('disabled');
+                    $($(tid)[0]).attr('disabled', '').val('');
+                }
+            }
+
+        });
+        //form submission
+        $('#_submit').submit(function (event) {
+            //debugger;
+            $("#totalcon").removeAttr('disabled').attr('readonly', '');
+            $('[name="plccost"]').change();
+            $('#loading').modal('show');
+            $('[data-id="direction"] label[for]').each(function () {
+                var c = $(this), f = c.attr('for'), s = '[name="' + f.replace('r', '').replace('1', '') + '"]';
+
+                if (f.indexOf('1') > -1) {
+                    var t = $($(s)[1]), v = t.val();
+                    t.val(c.text() + '              ' + v);
+                } else {
+                    var t = $($(s)[0]), v = t.val();
+                    t.val(c.text() + '              ' + v);
+                }
+
+            });
+            var ptype = $('#paymenttype').val();
+            if (ptype == 'FULL') {
+                $('#_submit').append('<input type="hidden" id="bookingamountd" name="bookingamount" value="' + $('#totalcon').val() + '" />');
+            } else {
+                $('#bookingamountd').remove();
+            }
+        });
+        ////corner cost
+        //$('#plccost').on('click', function () {
+        //    var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val(), discountper1 = $('#discountper1').val();
+        //    fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+        //    var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+        //    $('#totalcon').val(tv1);
+        //});
+
+
+        $('#propertypreference').on('click', function () {
+            debugger;
+            var m = $('#propertypreference').val();
+            if (m != 'Normal') {
+                $('#plccost').removeAttr('readonly');
+            } else {
+                $('#plccost').val(0).attr('readonly', '');
+            }
+
+        });
+
+        //plot cost
+        $('#nolandunit').on('click',
+            function selectexpiry() {
+                debugger;
+                var term = $("#term").val();
+                var formdate = $("#formdate").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                if (term == '') { term = 0; }
+                if (plotsize != '') {
+                    var url = '@Url.Action("selectexpiry", "Branch")';
+                    $.get(url, { projectid: projectid, plotsize: plotsize, term: term, formdate: formdate }, function data(t) {
+                        debugger;
+                        for (var i = 0; i < t.length; i++) {
+
+                            $("#totalcon").val(t[i].totalcon);
+                            $("#fullAmount").val(t[i].totalcon);
+                            $("#maturityamt").val(t[i].maturityamount);
+
+                            var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                            var day = ('0' + date.getDate()).slice(-2);
+                            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                            var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                            $('#expirydate').val(parsedDate);
+
+                        }
+
+                    });
+
+                }
+            });
+
+        //set paymenttype
+        $('#paymenttype').on('click change', function () {
+            //debugger;
+            var c = $(this), v = c.val();
+            if (v != 'EMI') {
+                var paymentType = $('#paymenttype').val();
+                $("#mode option:nth-child(6)").remove();
+                $("#mode option").attr('disabled', '');
+                $("#mode").append('<option value="' + paymentType + '" selected="">' + paymentType + '</option>');
+                $("#nomineeDiv,#termDiv,#paymentDiv,#expirydateDiv").slideUp();
+
+
+                if (paymentType == 'FULL') {
+                    $('#fullAmount').slideDown().val(0);
+                    $('#bookingamount').slideUp().val(0);
+                    $('#bookingamountDiv label.width').text('Full Amount(Rs.)');
+                } else {
+                    $('#bookingamount').slideDown().val(0);
+                    $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+                    $('#fullAmount').slideUp().val(0);
+                }
+                $('#term').removeAttr('required');
+                $('#expirydate').val($('#formdate').val());
+            } else {
+                $("#nomineeDiv,#termDiv,#paymentDiv,#expirydateDiv").slideDown();
+                $("#mode option").removeAttr('disabled');
+                $("#mode option:nth-child(6)").remove();
+                $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+                $('#fullAmount').slideUp().val(0);
+                $('#bookingamount').slideDown().val(0);
+                $('#term').attr('required', '');
+                $('#expirydate').val('');
+            }
+        });
+        function gs(name) { return '[name="' + name + '"]'; }
+        //second applicant form address event
+        $('#sameasabove').click(function () {
+            var sa = $('#sameasabove');
+            if (sa.is(':checked')) {
+                $(gs('spermanentaddress')).val($(gs('scorraddress')).val());
+                $(gs('pcity')).val($(gs('scity')).val());
+                $(gs('pstate')).val($(gs('sstate')).val());
+                $(gs('ppincode')).val($(gs('spincode')).val());
+            } else {
+                $(gs('spermanentaddress')).val('');
+                $(gs('pcity')).val('');
+                $(gs('pstate')).val('');
+                $(gs('ppincode')).val('');
+            }
+
+        });
+    });
+</script>
+

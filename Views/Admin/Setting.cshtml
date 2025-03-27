@@ -1,0 +1,237 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.CompanyInfos.Single(b => b.AdminId == User.Identity.Name);
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+
+    logo = r.CompanyLogo;
+    companyname = r.CompanyName;
+    incometype = r.IncomeType;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Setting";
+}
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+<!-- Section 1: Final Report -->
+<div class="section">
+   
+
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2">Seetings</h3>
+    </div>
+
+    <div class="row g-3">
+        <!-- Main Container -->
+        <div class="container mt-5">
+            <!-- First Row -->
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ApproveDisapproveLeave" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/leave.png" />
+                            <h6 class="card-title mt-3">Employee leave Request</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/Loginouttime" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/login.png" />
+                            <h6 class="card-title mt-3">Set Log in-out time</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ChangeMacAddress" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Images/logo/Setting_logo/mac-address.png" />
+
+                            <h6 class="card-title mt-3">Change MacAddress</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/Approvewebsite" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/computer.png" />
+                            <h6 class="card-title mt-3">Assign Pc</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/AllowRenewal" class="custom-card text-center h-100">
+                        <div class="card-body">
+
+                            <img class="imageSize" src="~/images/logo/Setting_logo/authorization.png" />
+                            <h6 class="card-title mt-3">Permission of Renewal</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/Renewalsms" class="custom-card text-center h-100">
+                        <div class="card-body">
+
+
+                            <img class="imageSize" src="~/images/logo/Setting_logo/sms.png" />
+                            <h6 class="card-title mt-3">Send Renewal sms</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="row g-3 mt-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/VoucherFormat" class="custom-card text-center h-100">
+                        <div class="card-body">
+
+                            <img class="imageSize" src="~/images/logo/Setting_logo/coupon.png" />
+
+                            <h6 class="card-title mt-3">Active Voucher Format</h6>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ActiveDeactivePlan" class="custom-card text-center h-100">
+                        <div class="card-body">
+
+                            <img class="imageSize" src="~/images/logo/Setting_logo/power.png" />
+                            <h6 class="card-title mt-3">Active-Deactive @mr.planname</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/BlockUnblockBranch" class="custom-card text-center h-100">
+                        <div class="card-body">
+
+                            <img class="imageSize" src="~/images/logo/Setting_logo/unlock (3).png" />
+
+                            <h6 class="card-title mt-3">Block-Unblock @mr.branchname</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/BlockUnblockOperator" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/unlock.png" />
+
+                            <h6 class="card-title mt-3">Block-unblock Collection Point</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/BlockUnblockHR" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/unlock (1).png" />
+
+                            <h6 class="card-title mt-3">Block-Unblock Hr</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/BlockUnblockBroker" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/unlock (2).png" />
+
+                            <h6 class="card-title mt-3">Block-Unblock @mr.agentname</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- Third Row -->
+            <div class="row g-3 mt-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/BlockUnblockCustomer" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/unlock (4).png" />
+
+                            <h6 class="card-title mt-3">Block-Unblock @mr.custname</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/DeactiveList" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/fake.png" />
+
+                            <h6 class="card-title mt-3">Deactive EMI Payment @mr.custname List</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ResetBranch" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/reset-password.png" />
+
+                            <h6 class="card-title mt-3">Reset Panelwise Password</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ResetAll" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/folder.png" />
+
+                            <h6 class="card-title mt-3">Reset All Password</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/AgentPrmote" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/shopping-online.png" />
+
+                            <h6 class="card-title mt-3">Promote</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/Approvecheque" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/cheque (1).png" />
+
+                            <h6 class="card-title mt-3">Approve cheque print</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Fourth Row -->
+            <div class="row g-3 mt-3 justify-content-center">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/Updateformdate" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/calendar.png" />
+
+                            <h6 class="card-title mt-3">Set Bussiness Date</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ReceptionList" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/reception.png" />
+
+                            <h6 class="card-title mt-3">Receptionist List</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/EmiManualDate" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/Setting_logo/medical-history.png" />
+
+                            <h6 class="card-title mt-3">Emi Mannual Date</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>

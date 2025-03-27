@@ -1,0 +1,89 @@
+﻿
+
+@using ODHDEVELOPERS.Models;
+@using System;
+@{
+    ViewBag.Title = "AgentWelcomeLetter";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script>
+    $(function () {
+        $('[name=Userid]').autocomplete({
+            source: function (request, response) {
+                debugger;
+                $.ajax({
+                    url: "/Branch/DealSheetReportbyuserid",
+                    type: "Get",
+                    datatype: "JSON",
+                    data: { Userid: request.term, Recogniser: "Print" },
+                    success: function (data) {
+                        debugger;
+                        response($.map(data, function (item) {
+                            return { value: item.userid, label: item.customername }
+                        }));
+                    }
+                });
+            }
+        });
+
+        $("#btn").on("click", function (e) {
+
+            // window.open("");
+
+        });
+
+    });
+
+</script>
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 create-title">
+
+        Deal Sheet Report
+    </h2>
+    <form id="paymentForm" class="form-container" action="/Admin/DealSheetReportbyuserid" method="post" target="_blank">
+
+        <!-- Associate ID -->
+        <div class="form-group">
+            <label for="associateId" class="form-label"> Enter Deal ID :</label>
+            <input type="text" class="form-control"  name="Userid"  id="associateId" placeholder="Enter ID" required>
+        </div>
+
+
+
+        <!-- Submit Button -->
+        <div class="text-center d-grid gap-2">
+            <button type="submit" class="btn create-btn">Print Deal Sheet</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

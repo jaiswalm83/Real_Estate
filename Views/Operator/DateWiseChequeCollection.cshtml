@@ -1,0 +1,67 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Chequecollection>
+    @using ODHDEVELOPERS.Models
+    @{
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "DateWiseChequeCollection";
+    }
+
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+
+        });
+
+    </script>
+
+
+
+   
+
+        <div  id="divid1">
+            <div  id="2">
+
+             
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">Datewise Cheque Collection</h2>
+
+                @using (Html.BeginForm())
+                {
+                    <div id="hide">
+
+                        <div id="branchForm" class="form-container">
+
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">Select Start Date</label>
+                                <input type="text" id="sdate" class="form-control datepicker" required name="sdate">
+                            </div>
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">Select End Date</label>
+                                <input type="text" id="edate" class="form-control datepicker" required name="edate">
+                            </div>
+
+
+                            <!-- Create Button -->
+                            <div class="text-center d-grid gap-2">
+                                <button type="submit" class="btn create-btn" onclick="target='_blank'" id="submit" name="command" value="Search">View</button>
+                            </div>
+
+                        </div>
+                        </div>
+                      
+                }
+            </div>
+        </div>
+
+

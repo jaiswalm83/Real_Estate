@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "TempPage";
+    Layout = null;
+}
+
+<h2>TempPage</h2>
+
+<h2>Host Name: <b>@Request.Url.Host</b></h2>
+<h2>Host UserHostName: <b>@Request.UserHostName</b></h2>
+<h2>@DateTime.Now.AddMonths(-9).ToString("MMMMMMMMMM")</h2>
+
+@{
+    string localIP = "";
+    foreach (System.Net.NetworkInformation.NetworkInterface nic in System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces())
+    {
+        if (nic.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up)
+        {
+            localIP += nic.GetPhysicalAddress().ToString();
+            break;
+        }
+    }
+    @localIP
+    }
+

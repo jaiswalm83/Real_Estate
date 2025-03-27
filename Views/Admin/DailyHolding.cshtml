@@ -1,0 +1,151 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.HoldingPlot>
+@using ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "DailyHolding";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+  
+}
+
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#date').datepick();
+
+    });
+</script>
+
+
+<div class="page-content">
+      
+                <div class="container" id="divid">
+                  
+<div class="page-toolbar" >
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Today Holding Plots</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div> 
+    </div> 
+    
+       
+ 
+<table border="1" style="margin-left:1%; margin-right:1px; margin-bottom:30px;width:98%;">
+    
+    @using (Html.BeginForm())
+    {
+        foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+                            
+                            <tr>
+
+              <th colspan="10">                   
+         <label>&nbsp; Current Date: @DateTime.Now.ToString("dd-MMM-yyyy")</label>
+        </th>
+
+
+                            </tr>
+                            
+                              <tr >
+                                
+                                <th colspan="4" style="text-align:center;"><b></b></th>
+                                <th colspan="4"style="text-align:center;" ><b></b></th>
+                            </tr>
+    <tr>
+        <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:20%;text-align:center;">
+           <label id="newid"><b>@mr.agentname Name</b></label>
+            </th>
+        
+        <th style="width:20%;text-align:center;">
+           <label id="name"><b>Introducer Code</b></label>
+        </th>
+            
+            
+            
+        <th style="width:10%;text-align:center;">
+           <label id="position"><b>Project  </b></label>
+        </th>
+             
+       
+     
+         <th style="width:10%;text-align:center;">
+         <label id="Amount"><b>Block</b></label>
+        </th>
+
+             <th style="width:10%;text-align:center;">
+           <label id="doj"><b>PLot No.</b></label>
+        </th>
+      
+    </tr>
+            }
+            
+            a = a + 1;
+
+
+    <tr style="text-align:left;">
+        <td>
+            @a
+        </td>
+
+        @{
+            var advisiordetail = db.AgentDetails.FirstOrDefault(g => g.NewAgentId == @item.holdby);
+            var projectname = db.Plans.Single(d => d.Plancode == @item.holdprojectid);
+            var blockname = db.BlockTabs.Single(d => d.Id == @item.holdblock);
+        }
+
+        <td>
+            @advisiordetail.IntroName
+        </td>
+
+        <td>
+            @item.holdby
+        </td>
+        
+        
+        <td>
+            @projectname.Planname
+        </td>
+       
+       
+        
+        <td>
+            @blockname.block
+        </td>
+         
+       <td>
+            @item.holdplotno
+        </td>
+             
+    </tr>
+                   
+    }
+
+    }
+    
+    
+   
+</table>
+
+        
+                    </div>
+
+    </div>
+
+
+
+
+
+

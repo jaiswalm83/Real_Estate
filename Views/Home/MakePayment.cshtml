@@ -1,0 +1,305 @@
+﻿@using  ODHDEVELOPERS.Models;
+
+@{
+    ViewBag.Title = "MakePayment";
+}
+@*<script id="context" type="text/javascript" src="https://sandbox-payments.open.money/layer"></script>*@
+<script id="context" type="text/javascript"
+src="https://payments.open.money/layer"></script>
+<br />
+<br />
+<br />
+<script type="text/javascript">
+
+    function check_exist() {
+        
+        var _mobile = $("#mobile").val();
+        if (_mobile.length >= 10) {
+            debugger;
+            $.ajax({
+                "url": "/home/check_exist",
+                "data": { "mobile": $("#mobile").val() },
+                "method": "post",
+                "success": function (data) {
+                    debugger;
+                    if (data.status == 1) {
+                        $("#name").val(data.name);
+                        $("#email").val(data.email);
+
+                    } else {
+                        $("#name").val("");
+                        $("#email").val("");
+                    }
+                }
+            });
+        }
+    }
+
+    function retry_fun()
+    {
+        $("#make_payment_form").find("input,button").removeAttr("disabled");
+        $(".payment-error").hide();
+
+    }
+
+    function cancel_payment() {
+        $("#make_payment_form").find("input,button").removeAttr("disabled");
+        $("#make_payment_form")[0].reset();
+    }
+</script>
+
+<div class="container">
+    <div class="row">
+        <form method="post" id="make_payment_form" onsubmit="funforpayment(event)">
+            <div class="col-sm-3"></div>
+            <div class="col-12 pt-5 col-sm-6" style="border: 5px solid #23ba41; border-radius: 50px; padding: 30px;">
+                <div class="text-center ">
+                    <h1 class="bg-success">Make Payment</h1>
+                    <p class=" bg-danger badge" id="validation_msg">Please enter your name</p>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="pwd">Mobile:</label>
+                    <input type="text" class="form-control" id="mobile" placeholder="Enter your mobile" name="mobile" value="" required="" onkeyup="check_exist()">
+                </div>
+                <div class="form-group">
+                    <label for="email">Name:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name" name="name" value="" required="">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" value="" required="">
+                </div>
+
+                <div class="form-group">
+                    <label for="pwd">Amount:</label>
+                    <input type="text" class="form-control" id="amount" placeholder="Enter amount" name="amount" value="" required="">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Remark:</label>
+                    <input type="text" class="form-control" id="payment_remark" placeholder="Enter remark" name="payment_remark" value="">
+                </div>
+                                <div class="payment-loader text-center" style="padding-bottom:10px;display:none;">
+                    <img src="~/Content/img/805.gif" />
+                    <br />
+                    <h4>Processing, Please wait...</h4>
+                        
+
+                </div>  
+                <div class="payment-error text-center" style="padding-bottom:10px;display:none;">
+                    <img src="~/Content/img/errors.png" />
+                    <br />
+                    <h4 class="text-danger">Something went wrong</h4>
+                        <b class="text-info" onclick="retry_fun()" style="cursor:pointer;">Retry</b>
+                </div>
+                <div class="text-center">
+
+                    <button type="button" class="btn btn-info" id="btn-cancel" onclick="cancel_payment()">Cancel Payment</button>
+                    <button type="submit" class="btn btn-danger" id="btn-submit">Make Payment</button>
+                </div>
+
+                <input type="hidden" value="Hidden Element" name="hidden">
+                <br />
+
+            </div>
+            <div class="col-sm-3"></div>
+
+        </form>
+
+    </div>
+</div>
+
+<br />
+<br />
+
+
+ <input id="accesskey" type="hidden" value="@payment_gateway.api_key" />
+
+   
+
+        <script>
+            function funforpayment(event) {
+                event.preventDefault();
+                $("#make_payment_form").find("input,button").attr("disabled", "");
+                $(".payment-loader").show();
+                debugger;
+                var name = $("#name").val();//+".00";
+                var amount = $("#amount").val();//+".00";
+                var email = $("#email").val();
+                var mobile = $("#mobile").val();
+                var mtx = "MTX" + new Date().getTime();
+                var scope_timestamp = Math.round((new Date()).getTime() / 1000);
+                var secret = "@payment_gateway.secret_key"; // Your API secret
+
+                var method = "POST";
+                var data = '{"amount":"' + amount + '","contact_number":"' + mobile + '","email_id":"' + email + '","currency":"INR","mtx":"' + mtx + '"}'
+
+                //This order is important
+
+                var pre_hash_string = scope_timestamp + method + data;
+                // var oo=scope_timestamp+"GET";
+                // var pre_hash_string_ready2 = oo.replace(/\s/g,'');
+                //Removing space and newlines
+
+                var pre_hash_string_ready = pre_hash_string.replace(/\s/g, '');
+                //var sasasas=CryptoJS.HmacSHA256(pre_hash_string_ready2, secret);
+                var scope_hash = CryptoJS.HmacSHA256(pre_hash_string_ready, secret);
+                var ss = "Bearer @payment_gateway.api_key:" + scope_hash;
+                var formData = new FormData();
+                formData.append("payment_remark", $("#payment_remark").val());
+                formData.append("name", name); 
+                formData.append("amount", amount);
+                formData.append("email", email);
+                formData.append("contact", mobile);
+                formData.append("mtx", mtx);
+                formData.append("shacode", ss);
+                formData.append("timestamp", scope_timestamp);
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/getorderid",
+                    contentType: "application/json; charset=utf-8",
+                    contentType: false,
+                    processData: false,
+                    dataType: "Json",
+                    data: formData,
+                    success: function (responsedata) {
+                        debugger;
+                        var _status = responsedata[0].status;
+                        if (parseInt(_status) == 1) {
+                            var scope_ReturnString = JSON.parse(responsedata[0].response);
+                            Layer.checkout(
+
+                {
+
+                    token: scope_ReturnString.id,
+
+                    accesskey: $("#accesskey").val()
+
+                },
+
+                function (response) {
+
+                    debugger;
+
+                    var payment_id = response.payment_id;
+
+                    var payment_token_id = response.payment_token_id;
+                    checkOrderStatus(response);
+                },
+
+                function (err) {
+                    debugger;
+
+                    //integration errors
+
+                    $scope.message = err.message;
+
+                    $scope.code = err.code;
+                    $(".payment-loader").hide();
+                    $(".payment-error").show();
+                   // checkOrderStatus(err);
+                }
+
+                );
+                        } else {
+                            $(".payment-loader").hide();
+                            $(".payment-error").show();
+
+                        }
+
+                    },
+                    error: function (respnsedata) {
+                        debugger;
+                        //alert(data);
+                        $(".payment-loader").hide();
+                        //$(".payment-error").html(respnsedata.responseText).show();
+                        $(".payment-error").show();
+
+                    }
+
+                });
+            }
+
+
+            function checkOrderStatus(response) {
+                var perror = $(".payment-error")
+                var formData = new FormData();
+                formData.append("mobile", $("#mobile").val());
+                formData.append("status", response.status);
+                formData.append("payment_id", response.payment_id);
+                formData.append("payment_token_id", response.payment_token_id);
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/getOrderStatus",
+                    contentType: "application/json; charset=utf-8",
+                    contentType: false,
+                    processData: false,
+                    dataType: "Json",
+                    data: formData,
+                    success: function (responsedata) {
+                        debugger;
+                        if (response.status == "cancelled") {
+                            $(".payment-loader").hide();
+                            perror.find("b").show();
+                            perror.find("img").attr("src", "/Content/img/errors.png");
+                            perror.find("h4").attr("class", "text-danger").text("Payment cancelled by user.");
+                            perror.show();
+                            
+                        }
+                        else if (response.status == "captured") {
+                            $(".payment-loader").hide();
+                            perror.find("b").hide();
+                            perror.find("img").attr("src", "/Content/img/success.png");
+                            perror.find("h4").attr("class", "text-success").text("Dear " + $("#name").val() + ", your payment is done.");
+                            cancel_payment();
+                            perror.show();
+                        }
+                        else {
+                            $(".payment-loader").hide();
+                            perror.find("b").show();
+                            perror.find("img").attr("src", "/Content/img/errors.png");
+                            perror.find("h4").attr("class", "text-primary").text("Your payment status is " + response.status);
+                            perror.show();
+                        }
+                    }
+                    , error: function () {
+                        debugger;
+                        if (response.status == "cancelled") {
+                            $(".payment-loader").hide();
+                            perror.find("b").show();
+                            perror.find("img").attr("src", "/Content/img/errors.png");
+                            perror.find("h4").attr("class", "text-danger").text("Payment cancelled by user.");
+                            perror.show();
+                        }
+                        else if (response.status == "captured") {
+                            $(".payment-loader").hide();
+                            perror.find("b").hide();
+                            perror.find("img").attr("src", "/Content/img/success.png");
+                            perror.find("h4").attr("class", "text-success").text("Dear " + $("#name").val() + ", your payment is done.");
+                            perror.show();
+                            cancel_payment();
+                        }
+                        else {
+                            $(".payment-loader").hide();
+                            perror.find("b").show();
+                            perror.find("img").attr("src", "/Content/img/errors.png");
+                            perror.find("h4").attr("class", "text-primary").text("Your payment status is " + response.status);
+                            perror.show();
+                        }
+                    }
+                });
+            }
+
+        </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+<script type="text/javascript">
+
+    $(add_payment_response);
+    function add_payment_response() {
+        //$("#make_payment_form").submit(function (event) {
+
+        //});
+    }
+
+</script>

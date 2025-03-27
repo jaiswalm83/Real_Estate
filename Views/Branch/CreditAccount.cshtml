@@ -1,0 +1,378 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.SavingAccountInfo>
+@using ODHDEVELOPERS.Models;
+
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "CreditAccount";
+
+    var a = 0;
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#accno").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteAccountno",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.acholdername, value: item.accountno };
+
+
+                        }));
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#nomrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }));
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+<style>
+
+#picture {width:30px; height: 30px; background-color:#ffffff;}
+#picture a.small, #picture a.small:visited { display:block; width:30px; height:30px; text-decoration:none; background:#ffffff; top:0; left:0; border:0;}
+#picture a img {border:0;}
+#picture a.small:hover {text-decoration:none; background-color:#000000; color:#000000;}
+#picture a .large {display:block; position:relative; width:0; height:0; border:0; top:0; left:0;}
+#picture a.small:hover .large {display:normal; position:fixed; top: 100px; left:250px; width:600px; height:630px;z-index:30 }
+
+</style>
+<div class="page-content">
+
+                <div class="container">
+
+                    <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Deposit Account</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                        
+                              
+                        
+                    </div>  
+
+                    @using (Html.BeginForm("CreditAccount", "Branch"))
+                    {
+                           <div class="row" >
+                    
+                                <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block">
+                            
+                                <div class="block-content controls">
+
+                                            <div class="row-form">  
+                                         
+    <div class="col-md-9">
+        <div class="input-group">
+       <span class="input-group-addon"><label class="width">Enter Account No</label></span>  
+        <input type="text" class="form-control"  name="accno" id="accno" />
+
+        </div>
+                                   
+   </div>
+</div> 
+                                  
+                                     
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                                          
+                                <button value="Search" type="submit" name="command" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>                            
+                               
+                            </div>
+                        </div>  
+
+
+                                    <p>@ViewBag.msg</p> 
+                                    @if (ViewData["ok"] == "OK")
+                                    {
+                                     @Html.ActionLink("Print Receipt", "PrintCreditAccount","target='_blank'")
+                                    }
+                                </div>
+                     
+                                
+                            </div>
+                            </div>
+
+   @foreach (var item in Model)
+   {
+       if (a == 0)
+       {
+           var creditsum = (from df in db.TransactionTabs where df.accountno == item.accountno select df.credit).DefaultIfEmpty(0).Sum();
+           var debitsum = (from df in db.TransactionTabs where df.accountno == item.accountno select df.debit).DefaultIfEmpty(0).Sum();
+           var balance = (creditsum - debitsum);
+
+             <div class="col-md-6">
+                            
+                            <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Account-Details</strong></h2>
+                                  
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                                <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">@mr.branchname Code </label></span>
+                                              <input type="text" class="form-control " id="BranchCode" value="@User.Identity.Name" name="BranchCode" readonly="true"/>
+                                                </div>
+                                         
+                                        </div>
+                                    </div>
+
+                                     <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">A/C Type </label></span>  
+                                               
+          <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.actype)" id="actype"  name="actype" required />
+
+                                            </div>
+                                            </div>
+                                    </div>
+
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">A/C No </label></span>  
+                                               
+          <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.accountno)" id="accountno"  name="accountno" required />
+
+                                            </div>
+                                            </div>
+                                    </div>
+
+                                     <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Account Holder Name</label></span>
+                                             <input type="text" value=" @Html.DisplayFor(modelItem => item.acholdername)" class="form-control" id="acholdername" required name="acholdername" readonly="true"  />
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+                             <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Account Balance(Rs.)</label></span>
+                                             <input type="text" value="@balance" class="form-control" id="balance" required name="balance" readonly="true"  />
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+                                        <div class="row-form">
+                                            <div class="col-md-9">
+                                          <div class="input-group" id="picture">
+                                            <span class="input-group-addon"><label class="width">Signature</label></span>
+                                            <a class="small">  <img  src="@Url.Content(item.sign)" height="20" width="30">
+                                            <img class="large" src="@Url.Content(item.sign)"  />
+                                            </a>
+                       
+                                                </div>
+                                                
+                                        </div>
+
+                                    </div>
+
+                         
+                                </div>
+                                
+                            </div>
+                 
+
+            
+                                
+                            </div>
+
+                         
+                               
+       <div class="col-md-6">
+                            
+                            <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Payment-Details</strong></h2>
+                                  
+                                </div>
+                                <div class="block-content controls">
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9"> 
+                                            <div class="input-group">
+                                                   
+                                        <span class="input-group-addon"><label class="width">Pay Method</label></span>  
+                   
+                                            <input type="radio" name="paymethod" class="paymethod" value="CASH" id="CASH"  />CASH  
+                                             <input type="radio" name="paymethod" class="paymethod" value="DD" id="DD"  />DD 
+                                             <input type="radio" name="paymethod" class="paymethod" value="CHEQUE" id="CHEQUE"  />CHEQUE 
+                                             
+                                          
+                                         </div>
+                                    </div>
+                                        </div>
+                                  <div class="row-form">
+                                            <div class="col-md-9">
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Payment Date</label></span>
+                           <input type="text" name="pdate" id="pdate" required class="form-control datepicker" value="@DateTime.Now.Date" />
+                                                </div>
+                                                
+                                        </div>
+
+                                    </div>
+                                     <div class="row-form">
+                                      
+
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Cheque/DD No</label></span>
+                                      <input type="text" class="form-control"  name="checkorddno" id="checkorddno" />
+                                                </div>
+                                                
+                                        </div>
+                                      
+
+
+                                        <div class="col-md-9"></div>
+                                    </div>
+
+                                    <div class="row-form">
+                                      
+
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Slip No</label></span>
+                                      <input type="text" class="form-control"  name="drawon" id="drawon" />
+                                                </div>
+                                                
+                                        </div>
+                                      
+
+
+                                        <div class="col-md-9"></div>
+                                    </div>
+
+                                    <div class="row-form">
+                                    
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Pay Amount(Rs.)</label></span>
+                                             <input type="number" step="any" class="form-control" id="credit" name="credit" required />
+                                                </div>
+                                                
+                                        </div>
+
+
+                                      
+                                    </div>
+
+                                     <div class="row-form">
+                                    
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Remark</label></span>
+                                             <input type="text" class="form-control" id="remark" name="remark"  />
+                                                </div>
+                                                
+                                        </div>
+
+
+                                      
+                                    </div>
+
+
+                                     
+                                     
+
+                                       
+                
+
+                         
+                                </div>
+                                
+                            </div>
+                 
+
+            
+                                
+                            </div>
+                    
+
+
+                    
+                                  <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls">
+                                  
+                                     
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                                          
+                                <button  value="Submit" type="submit" name="command" class="btn btn-primary" onclick="return confirm('Are you sure to credit A/c')"> Credit</button>   
+                                
+                                                       
+                               
+                            </div>
+                        </div>  
+                                  
+                                </div>
+                                
+                            </div>
+                            </div>
+       }
+   }
+                    </div>   
+       
+                    }
+                    </div>  
+                    
+                    </div>

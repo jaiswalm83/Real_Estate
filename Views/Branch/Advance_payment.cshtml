@@ -1,0 +1,348 @@
+﻿@model ODHDEVELOPERS.Models.Member_tab
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Advance_payment";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+
+
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+        if (fd.status == 2)
+        {
+            dt = fd.formdate;
+        }
+
+    }
+    var loginndetils = db.NewLogins.Single(x => x.UserName == User.Identity.Name);
+
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+@*@if (fd.status == 0)
+    {
+    <script>
+        $(function () {
+            $('#Doj').datepick();
+
+        });
+    </script>
+    }*@
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#nomrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#chk').change(function () {
+            var adr = $("#Address").val();
+            if (this.checked == true) {
+                $("#Nomineeaddr").val(adr);
+            }
+            else if (this.checked == false) {
+                $("#Nomineeaddr").val('');
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#state").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteState",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.state, value: item.state };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+    })
+</script>
+<script>
+    function checkdistrict(check_id) {
+
+        $("#" + check_id).mouseout(function () {
+            debugger;
+            var state = $("#state").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+        });
+
+    }
+</script>
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#date').datepick();
+        $('#Dob').datepick();
+    });
+</script>
+
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Advance Booking Form</h2>
+
+    <!-- Form Container -->
+    <form method="post">
+        <div class="row justify-content-between ml-0" style="width:100%;">
+            <!-- First Row: Personal Details & Customer Details -->
+            <div class="column mb-4 " style=" width:49%;">
+
+                <!-- Personal Details Section -->
+                <div id="branchForm" class="p-4 rounded formtag mb-4" style=" height: max-content">
+                    <h4 class="text-center mb-1">Customer Details</h4>
+
+                    <!-- Branch Code -->
+                    <div class="mb-3">
+                        <label for="branchCode" class="form-label formLabel">@mr.branchname Code:</label>
+                        @if (loginndetils.type == "Operator")
+                        {
+                            var branchname = db.Operators.Single(x => x.OperatorId == User.Identity.Name).BranchCode;
+                            <input type="text" class="form-control formInput" id="BranchCode" value="@branchname" name="BranchCode" readonly="true" />
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control formInput" id="BranchCodee" value="@User.Identity.Name" name="BranchCode" readonly="true" />
+                        }
+                    </div>
+
+                    <!-- Form Fee -->
+                    <div class="mb-3">
+                        <label for="formFee" class="form-label formLabel">Form Fee:</label>
+                        <input type="text" class="form-control formInput" id="formfee" required name="formfee" value="@tr.memberfee" readonly="true" />
+                    </div>
+
+                    <!-- hidden input -->
+                    <div class="mb-3 hide">
+                        <label for="formFee" class="form-label formLabel">No. of Share:</label>
+                        <input type="number" class="form-control formInput" id="Share" required name="Share" value="0" />
+                        <input type="hidden" class="form-control formInput" id="Type" name="Type" value="Member" />
+                        <input type="hidden" class="form-control formInput" id="Status" name="Status" value="1" />
+                    </div>
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label formLabel">Name:</label>
+                        <input type="text" class="form-control formInput" id="name" required name="MemberName" />
+                    </div>
+
+                    <!-- Relation -->
+                    <div class="mb-3">
+                        <label for="relation" class="form-label formLabel">Relation:</label>
+                        <div class="d-flex">
+                            <select class="form-control formInput" name="Relationof" style="width: 25%;">
+                                <option>S/O</option>
+                                <option>D/O</option>
+                                <option>W/O</option>
+                            </select>
+                            <input type="text" class="form-control formInput ms-2" name="Father" id="Father" placeholder="Enter Relation Name" style="width: 100%;" required>
+                        </div>
+                    </div>
+
+                    <!-- Mother Name -->
+                    <div class="mb-3">
+                        <label for="motherName" class="form-label formLabel">Mother Name:</label>
+                        <input type="text" class="form-control formInput" id="Mother" name="Mother" />
+                    </div>
+
+                    <!-- Mobile No -->
+                    <div class="mb-3">
+                        <label for="mobileNo" class="form-label formLabel">Mobile No:</label>
+                        <input type='tel' title="Invalid mobile format" pattern="[789][0-9]{9}" maxlength="10" name="Mobile" id="Mobile" required class="form-control formInput" />
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mb-3">
+                        <label for="category" class="form-label formLabel">Category:</label>
+                        <select class="form-control formInput" id="category" name="category">
+                            <option value="General">General</option>
+                            <option value="OBC">OBC</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Nationality -->
+                    <div class="mb-3">
+                        <label for="nationality" class="form-label formLabel">Nationality:</label>
+                        <input type="text" class="form-control formInput" id="Nationality" name="Nationality" readonly="readonly" value="Indian" />
+                    </div>
+
+                    <!-- Date Of Joining -->
+                    <div class="mb-3">
+                        <label for="joiningDate" class="form-label formLabel">Date Of Joining:</label>
+                        <input type="text" name="Cdate" id="Doj" value="@dt" readonly="true" required class="form-control date formInput" />
+                    </div>
+
+                    <!-- Date Of Birth -->
+                    <div class="mb-3">
+                        <label for="dob" class="form-label formLabel">Date Of Birth:</label>
+                        <input type="date" class="form-control formInput" name="DOB" required>
+                        <input type="text" id="Dob" name="DOB" required class="form-control">
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="mb-3">
+                        <label for="gender" class="form-label formLabel">Select Gender:</label>
+                        <select name="Gender" id="Gender" class="form-control formInput" required>
+                            <option selected>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="column mb-4 " style=" width:49%;">
+                <!-- Address Details Section -->
+                <div id="branchForm" class="p-4 rounded formtag mb-4" style=" height: max-content">
+                    <h4 class="text-center mb-1">Address</h4>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label for="address" class="form-label formLabel">Address:</label>
+                        <input type="text" id="Address" name="Address" required class="form-control formInput" />
+                    </div>
+
+                    <!-- State -->
+                    <div class="mb-3">
+                        <label for="state" class="form-label formLabel">State:</label>
+                        <input type="text" id="state" name="state" onmouseout="checkdistrict(this.id)"
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- District -->
+                    <div class="mb-3">
+                        <label for="district" class="form-label formLabel">District:</label>
+                        <select class="form-control formInput" id="District" name="District">
+                            <option disabled="disabled">Select </option>
+
+                        </select>
+                    </div>
+
+                    <!-- Pin Code -->
+                    <div class="mb-3">
+                        <label for="pinCode" class="form-label formLabel">Pin Code:</label>
+                        <input type="number" name="Pin" class="form-control formInput" />
+                    </div>
+                </div>
+
+
+                <!-- Second Row: Additional Customer Details -->
+
+                <div id="branchForm" class="p-4 rounded formtag mb-4" style=" height: max-content">
+                    <!-- Booking Amount -->
+                    <div class="mb-3">
+                        <label for="bookingAmount" class="form-label formLabel">Booking Amount:</label>
+                        <input type="text" name="booking_amt" id="booking_amt" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Payment Mode -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Payment Mode:</label>
+                        <div class="d-flex gap-3">
+                            <input type="radio" id="paymethod" name="paymethod" value="Cash" checked>
+                            Cash&nbsp;
+                            <input type="radio" id="paymethod2" name="paymethod" value="DD">
+                            DD&nbsp;
+                            <input type="radio" id="paymethod3" name="paymethod" value="Cheque">
+                            Cheque&nbsp;
+                            <input type="radio" id="paymethod4" name="paymethod" value="banktransaction">
+                            Bank Transaction
+                        </div>
+                    </div>
+
+                    <!-- Remark -->
+                    <div class="mb-3">
+                        <label for="remark" class="form-label formLabel">Remark:</label>
+                        <input type="text" id="remark" name="remark" required class="form-control formInput" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-lg formButtom"
+                    onclick="return confirm('Are you sure to create Advance Booking?')">
+                Submit
+            </button>
+        </div>
+        <p>@ViewBag.msg</p>
+        @if (TempData["aa"] != null)
+        {
+            <div>
+                @Html.ActionLink("Print Receipt", "PrintAdvance_BookingReport", new
+                {
+                    id = TempData["aa"]
+                }, new { onclick = "return confirm('Are you sure to Print?'), target='_blank'" })
+            </div>
+        }
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+

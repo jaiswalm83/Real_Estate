@@ -1,0 +1,2288 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Member_tab>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "Bond";
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        UsersContext db = new UsersContext();
+        DateTime Emidate = DateTime.Now.Date;
+        var list = db.EMISetDates.FirstOrDefault(x => x.opid == User.Identity.Name && x.status == 0);
+        if (list != null)
+        {
+            Emidate = list.formdate;
+        }
+
+
+        var mr = db.Members.Single(m => m.Id == 1);
+        var plist = db.Plans.Where(p => p.status == 1).ToList();
+        //int plotsize = 100;
+        var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+        var a = 0;
+        string todate = DateTime.Now.ToShortDateString();
+        DateTime dt = DateTime.Now.Date;
+        Formdate fd = new Formdate();
+        var row = db.Operators.Single(ci => ci.OperatorId == User.Identity.Name);
+        var code = User.Identity.Name;
+        var count = db.Formdates.Where(o => o.opid == code).Count();
+        if (count == 0)
+        {
+            count = db.Formdates.Where(o => o.opid == row.BranchCode).Count();
+            code = count > 0 ? row.BranchCode : code;
+        }
+        if (count > 0)
+        {
+            fd = db.Formdates.Single(o => o.opid == code);
+            if (fd.status == 2)
+            {
+                dt = fd.formdate;
+            }
+        }
+    }
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <script>
+    ///////Select Term Start Here
+    function selectterm(plan_id) {
+        debugger;
+        var term = $("#term");
+        var cpplan = $("#" + plan_id).val();
+
+        var url = '@Url.Action("selectterm", "Branch")';
+            if (cpplan != '') {
+                $.get(url, { cpplan: cpplan }, function data(t) {
+
+                    term.html('');
+                    term.append('<option value="">Select</option>');
+                    for (var i = 0; i < t.length; i++) {
+                        term.append('<option value="' + t[i].term + '">' + t[i].term + '</option>');
+
+                    }
+                    term.removeAttr('disabled');
+
+                });
+            } else {
+                term.attr('disabled', '');
+            }
+        //$('[name="PYN"').click();
+
+        //reset here
+            $('#payment,#totalcon,#bookingamount,#plccost').val(0)//.click();
+            $('#amountinword').val('Zero Rupees Only');
+            $('#blk,#plotno').empty();
+            $('#radio2').prop('checked', true).click();
+            $('#mode,#nolandunit,#term').val('');
+        }
+    </script>
+    <script>
+
+    ///Selecting Project Name Start here ////
+    function selectproject(p_type) {
+        debugger;
+        var PlanName = $("#PlanName");
+        var ptype = $("#" + p_type).val();
+        PlanName.children().remove();
+        var url = '@Url.Action("selectproject", "Branch")';
+
+        $.get(url, { ptype: ptype }, function data(t) {
+
+            PlanName.html('');
+            debugger;
+            PlanName.append('<option value="">Select</option>');
+            for (var i = 0; i < t.length; i++) {
+                PlanName.append('<option value="' + t[i].Plancode + '">' + t[i].Planname + '</option>');
+
+            }
+            //term.removeAttr('disabled');
+
+        });
+
+
+    }
+
+
+    </script>
+
+    <script>
+        ///Selecting PlotSize According to Project type Start here ////
+        function selectplotsize(p_type) {
+            debugger;
+            var nolandunit = $("#nolandunit");
+            var unitno = $("#" + p_type).val();
+            nolandunit.children().remove();
+
+
+            nolandunit.html('');
+            debugger;
+            nolandunit.append('<option value="">Select</option>');
+            if (unitno == 'Residential') {
+                nolandunit.append('<option value="450">450</option>');
+                nolandunit.append('<option value="900">900</option>');
+            }
+            else if (unitno == 'Commercial') {
+                nolandunit.append('<option value="1800">1800</option>');
+            }
+            //term.removeAttr('disabled');
+
+
+        }
+    </script>
+    <style type="text/css">
+        #picset img {
+            height: 90px;
+            width: 160px;
+        }
+
+        [data-id="direction"] label {
+            font-size: 11px;
+        }
+
+        [data-id="direction"] [class*="col-"] {
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+
+        input.form-control[disabled] {
+            color: #555;
+        }
+    </style>
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            {
+                $("#plot").addClass("hide");
+                $("#blok").addClass("hide");
+                $("#phasediv").addClass("hide");
+
+            }
+        });
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#chk').change(function () {
+
+                var adr = $("#addr").val();
+                if (this.checked == true) {
+                    $("#guraddr").val(adr);
+                }
+                else if (this.checked == false) {
+                    $("#guraddr").val('');
+                }
+            });
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#memberid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompletememberid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.MemberName, value: item.NewMemberId };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IntroducerCode").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteAgentId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#nomrel").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteRelations",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.relations, value: item.relations };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#gurrel").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteRelations",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.relations, value: item.relations };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+
+    <script>
+    function checkid(check_id) {
+
+            var intro = $("#" + check_id).val();
+            var url = '@Url.Action("SelectIntroName", "Branch")';
+            $.get(url, { intro: intro }, function data(name1) {
+                $('#introducername').val(name1)
+            });
+
+
+    }
+    </script>
+
+    <script type="text/javascript">
+    function check(check_id) {
+
+        $("#" + check_id).click(function () {
+            $('.plantype').prop('checked', false);
+        });
+
+    }
+    ///Selecting Plan Name Start here ////
+    function rply_click(clicked_id) {
+
+            var fno = $("#" + clicked_id).val();
+
+
+            var url = '@Url.Action("SelectPlan", "Branch")';
+            $.get(url, { fno: fno }, function data(d) {
+                var select = $("#PlanName");
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].Plancode + '">' + d[i].Planname + '</option>');
+                }
+            });
+
+    }
+
+
+
+
+    ///Selecting Plan Mode Start here ////
+
+
+
+    $(function () {
+
+        ///Selecting Payment Start here ////
+        $('#mode').on('click', function selectpayment() {
+            var ptype = $('#paymenttype').val();
+            debugger;
+            if (ptype == 'EMI') {
+
+                var mode = $("#mode").val();
+                var term = $("#term").val();
+                var bookingamount = $("#bookingamount").val();
+                var discountper = $("#discountper").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                var plccost = $("#plccost").val();
+                var Devcharge = $("#Devcharge").val();
+
+                var url = '@Url.Action("selectpayment", "Branch")';
+                $.get(url, { term: term, bookingamount: bookingamount, discountper: discountper, projectid: projectid, plotsize: plotsize, mode: mode, plccost: plccost, Devcharge: Devcharge }, function data(t) {
+                    for (var i = 0; i < t.length; i++) {
+
+                        $("#totalcon").val(t[i].totalcon);
+                        $("#maturityamt").val(t[i].maturityamount);
+                        $("#payment").val(t[i].payment);
+                        $("#amountinword").val(t[i].amountinwords);
+                    }
+                });
+            } else {
+                //var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val(), discountper1 = $('#discountper').val();
+                //fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+                //var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+                //$('#totalcon').val(tv1);
+                var v1 = '';
+                if (ptype == 'FULL') { v1 = $("#totalcon").val(); } else { v1 = $("#bookingamount").val(); }
+                //amount in word
+
+
+                if (v1 > 0) {
+                    var url = '@Url.Action("SetAmountinword", "Branch")';
+                    $.get(url, { payment: v1 }, function data(t) {
+                        for (var i = 0; i < t.length; i++) {
+                            $("#amountinword").val(t[i].amountword);
+                        }
+                    });
+
+                }
+            }
+        });
+
+    });
+
+    $(function () {
+        //discount
+        ///checkig validity of amount Start here ////
+        $('#discountper').on('click',
+        function checkplan() {
+            var c3 = $('#discountper'), ptype = $('#paymenttype').val();
+            var discountper1 = c3.val();
+            if (ptype == 'EMI') {
+                var term = $("#term").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                var plccost = $("#plccost").val();
+
+                var url = '@Url.Action("checkplan", "Branch")';
+                $.get(url, { projectid: projectid, plotsize: plotsize, term: term, discountper: discountper1, plccost: plccost }, function data(t) {
+                    for (var i = 0; i < t.length; i++) {
+
+                        $("#totalcon").val(t[i].totalcon)//.attr('data-v', t[i].totalcon);
+                        $("#maturityamt").val(t[i].maturityamount);
+                    }
+                });
+            }
+            else {
+                //var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val();
+                //fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+                //var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+                //$('#totalcon').val(tv1);
+            }
+        });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+    $(function () {
+
+        //get block
+
+        $('[name="PYN"]').on('click', function () {
+
+            var c1 = $('[name="PYN"]:checked'), cv = c1.val();
+            if (c1.is(':checked') && cv != "N") {
+                debugger;
+                $("#plot").removeClass("hide");
+                $("#blok").removeClass("hide");
+                $("#phasediv").removeClass("hide");
+
+            }
+            else if (c1.is(':checked') && cv == "N") {
+
+                $("#plot").addClass("hide");
+                $("#blok").addClass("hide");
+                $("#phasediv").addClass("hide");
+
+                var block = $('#blk').html('');
+                block.children().remove();
+                block.append('<option value="NA">Select</option>');
+
+                var plot = $('#plotno').html('');
+                plot.children().remove();
+                plot.append('<option value="0">Select</option>');
+            }
+
+        });
+    });
+
+    function getblock(clicked_id) {
+
+        var c = $('[name="PYN"]:checked'), cv = c.val();
+        var plotstatus = cv;
+        var projectid = $("#PlanName").val();
+        var phaseid = $("#phaseid").val();
+        var url = '@Url.Action("GetBlockList", "Branch")';
+        $.get(url, { plotstatus: cv, projectid: projectid, phaseid: phaseid }, function data(d) {
+            debugger;
+            var block = $('#blk').html('');
+            block.children().remove();
+            block.append('<option value="NA">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                debugger;
+                block.append('<option value="' + d[i].block + '">' + d[i].block + '</option>');
+            }
+        });
+    }
+
+    function getplot(clicked_id) {
+        $("#plot").removeClass("hide");
+        var block = $("#" + clicked_id).val();
+        var phaseid = $("#phaseid").val();
+        var projectid = $("#PlanName").val();
+        var introid = $("#IntroducerCode").val();
+        var url = '@Url.Action("GetPlotList", "Branch")';
+        $.get(url, { block: block, projectid: projectid, introid: introid, phaseid: phaseid }, function data(d) {
+            var select = $('#plotno').html('');
+            select.children().remove();
+            select.append('<option value="0">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].plotno + '">' + d[i].plotno + '</option>');
+            }
+
+        });
+    }
+
+    </script>
+
+
+
+    <script>
+        function detail(chkid) {
+            var chk = $("#" + chkid).val();
+            if (chk == "Cheque") {
+                $("#detail").show();
+                $("#dd").hide();
+                $("#trdetail").hide();
+            }
+            else if (chk == "DD") {
+                $("#dd").show();
+                $("#detail").hide();
+                $("#trdetail").hide();
+            }
+            else if (chk == "banktransaction") {
+                $("#dd").hide();
+                $("#detail").hide();
+                $("#trdetail").show();
+            }
+            else {
+                $("#detail").hide();
+                $("#dd").hide();
+                $("#trdetail").hide();
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+    function selectphase(bid) {
+
+        var phaseid = $("#phaseid");
+        var projectid = $("#" + bid).val();
+
+        var url = '@Url.Action("selectphase", "Branch")';
+        if (projectid > 0) {
+            $.get(url, { projectid: projectid }, function data(t) {
+
+                phaseid.html('');
+                phaseid.append('<option value="">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    phaseid.append('<option value="' + t[i].Id + '">' + t[i].Phase + '</option>');
+                }
+            });
+        }
+
+    }
+    </script>
+
+    <script type="text/javascript">
+
+    //----------------------------------------------
+    function getblock(clicked_id) {
+
+        var c = $('[name="PYN"]:checked'), cv = c.val();
+        var plotstatus = cv;
+        var projectid = $("#PlanName").val();
+        var phaseid = $("#phaseid").val();
+        var url = '@Url.Action("GetBlockList", "Branch")';
+        $.get(url, { plotstatus: cv, projectid: projectid, phaseid: phaseid }, function data(d) {
+            debugger;
+            var block = $('#blk').html('');
+            block.children().remove();
+            block.append('<option value="NA">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                debugger;
+                block.append('<option value="' + d[i].block + '">' + d[i].block + '</option>');
+            }
+        });
+    }
+
+    function getplot(clicked_id) {
+        $("#plot").removeClass("hide");
+        var block = $("#" + clicked_id).val();
+        var phaseid = $("#phaseid").val();
+        var projectid = $("#PlanName").val();
+        var introid = $("#IntroducerCode").val();
+        var url = '@Url.Action("GetPlotList", "Branch")';
+        $.get(url, { block: block, projectid: projectid, introid: introid, phaseid: phaseid }, function data(d) {
+            var select = $('#plotno').html('');
+            select.children().remove();
+            select.append('<option value="0">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].plotno + '">' + d[i].plotno + '</option>');
+            }
+
+        });
+    }
+
+    </script>
+
+    <script>
+    function selecttotolplot() {
+        var term = $("#term").val();
+        var formdate = $("#formdate").val();
+        var projectid = $("#PlanName").val();
+        var plotsize = $("#nolandunit").val();
+        var plccost = $("#plccost").val();
+        var Devcharge = $("#Devcharge").val();
+        var discountper = $("#discountper").val();
+
+
+        if (term == '') { term = 0; }
+        if (plotsize != '') {
+            var url = '@Url.Action("selectexpiry", "Branch")';
+            $.get(url, { projectid: projectid, plotsize: plotsize, term: term, plccost: plccost, Devcharge: Devcharge, discountper: discountper, formdate: formdate }, function data(t) {
+                debugger;
+                for (var i = 0; i < t.length; i++) {
+
+                    $("#totalcon").val(t[i].totalcon);
+                    $("#fullAmount").val(t[i].totalcon);
+                    $("#maturityamt").val(t[i].maturityamount);
+
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    if ($('#paymenttype').val() == 'FULL') {
+                        $('#expirydate').val($('#formdate').val());
+                    } else {
+                        $('#expirydate').val(parsedDate);
+                    }
+                    var gPaymentType = $('#paymenttype').val();
+                    if (gPaymentType == 'CLP' || gPaymentType == '50-50') {
+                        var bookPer = gPaymentType == 'CLP' ? 25 : 50;
+                        var floatTotalcon = parseFloat(t[i].totalcon), flotBookingamount = (floatTotalcon * bookPer) / 100;
+                        var oldBookingamount = $('#bookingamount').val();
+                        oldBookingamount = oldBookingamount == '' ? 0 : parseFloat(oldBookingamount);
+                        flotBookingamount = oldBookingamount >= flotBookingamount ? oldBookingamount : flotBookingamount;
+                        $('#bookingamount').val(flotBookingamount);
+                        checkNewPaymentType();
+                    }
+                }
+
+            });
+
+        }
+    }
+    </script>
+    <style type="text/css">
+        .hide {
+            display: none;
+        }
+    </style>
+   
+
+                <div class="container mt-5">
+                    <h2 class="text-center mb-4 create-title">Enter Member id</h2>
+                    <form method="post">
+
+
+
+                        <div id="branchForm" class="form-container">
+
+
+
+                            <!-- Collection Point Name -->
+                            <div class="form-group">
+                                <label for="collectionPointName" class="form-label">Enter Member Id</label>
+                                <input type="text" class="form-control " name="memberid" id="memberid" placeholder="Enter Id" required>
+                            </div>
+
+
+                            <!-- Create Button -->
+                            <div class="text-center d-grid gap-2">
+                                <button value="Search" type="submit" name="command" class="btn create-btn"><i class="fa fa-search"></i> Search</button>
+                            </div>
+
+
+
+
+
+                            <p style="color: maroon;">@ViewBag.msg</p>
+
+                        </div>
+
+
+
+
+                       
+
+                                   
+                                        @if (Convert.ToString(ViewData["paymethod"]) == "Cheque")
+                                        {
+                                            @Html.ActionLink("Print Receipt", "PrintReceipt", new { newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })
+                                        }
+                                        else if (Convert.ToString(ViewData["paymethod"]) == "Cash" || Convert.ToString(ViewData["paymethod"]) == "DD")
+                                        {
+                                            @Html.ActionLink("Print " + mr.custname, "PrintBond", new { newbondid = ViewData["newbondid"], discount = ViewData["discount"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })
+                                        }
+                                   
+                         
+
+                    </form>
+
+
+
+
+
+
+                    <form enctype="multipart/form-data" method="post" id="_submit">
+                        @foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+
+                                var brachdetail = db.Operators.Single(x => x.OperatorId == User.Identity.Name).BranchCode;
+
+
+                                <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                                    <h2 class="text-center mb-4 create-title">Personal Details</h2>
+
+
+
+
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">@mr.branchname Code </label>
+                                        <input type="text" id="branchcode" class="form-control" readonly="true" value="@brachdetail" name="branchcode" required />
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Form Fee</label>
+                                        <input type="text" class="form-control" id="applicationcharge" required name="applicationcharge" value="@tr.applicationfee" readonly="true" />
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+                                        <label class="form-label">Member Id </label>
+
+                                        <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.NewMemberId)" id="newmemberid" name="newmemberid" required />
+                                    </div>
+
+                                    <div class="form-group">
+
+
+                                        <label class="form-label">Name of Applicant </label>
+
+                                        <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.MemberName)" id="name" name="name" required />
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+                                        <div style="float:left; width:100%">
+
+                                            <div style="float:left;width:40%; background-color:#eee">
+                                                <input type="text" style="background-color:#eee" readonly="true" value="@Html.DisplayFor(modelItem => item.Relationof)" class="form-control" required name="RelationOf" id="RelationOf" />
+
+                                            </div>
+
+                                            <div style="float:left;width:60%;">
+                                                <input type="text" value="@Html.DisplayFor(modelItem => item.Father)" readonly="true" class="form-control" required name="fathername" id="fathername" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Category</label>
+
+                                        <select class="form-control" id="category" name="category">
+                                            <option>@Html.DisplayFor(modelItem => item.category)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Income Group</label>
+
+                                        <select class="form-control" id="incomegroup" name="incomegroup">
+                                            <option value="Lower Income Group">Lower Income Group</option>
+                                            <option value="Middle Income Group">Middle Income Group</option>
+                                            <option value="Upper Income Group">Upper Income Group</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Address </label>
+
+                                        <input type="text" id="addr" readonly="true" value=" @Html.DisplayFor(modelItem => item.Address)" name="addr" class="form-control" required />
+                                    </div>
+
+
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Mobile No </label>
+
+                                        <input type="text" id="mobileno" name="mobileno" maxlength="10" readonly="true" value=" @Html.DisplayFor(modelItem => item.Mobile)" class="form-control" required />
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Email </label>
+
+                                        <input type="email" id="email" name="email" value="" class="form-control" />
+                                    </div>
+
+
+
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Introducer Code </label>
+                                        <input type="text" class="form-control" onchange="checkid(this.id)" onclick="checkid(this.id)" id="IntroducerCode" name="newintroducerid" required />
+                                        <label class="form-label" style="width:15px;"><span class="fa fa-search"></label>
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Introducer Name </label>
+                                        <input type="text" class="form-control" / id="introducername" readonly="true">
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Date of Agreement </label>
+                                        <input type="text" class="form-control date" id="formdate" name="formdate" value="@dt" readonly="true" required>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Date of Birth </label>
+                                        <input type="text" id="dob" readonly="true" value=" @Html.DisplayFor(modelItem => item.DOB)" name="dob" class="form-control" required />
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+
+                                        <label class="form-label">Nationality </label>
+                                        <input type="text" id="nationality" name="nationality" readonly="true" class="form-control" value="Indian" />
+                                    </div>
+                                </div>
+
+
+                                <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+                                    <h2 class="text-center mb-4 create-title">Guardian Details</h2>
+
+
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Guardian Name </label>
+
+                                        <input type="text" id="guardianname" name="guardianname" class="form-control" />
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Guardian's Age </label>
+
+                                        <input type="text" id="gurage" name="gurage" class="form-control" />
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Relationship</label>
+
+                                        <input type="text" class="form-control" id="gurrel" name="gurrel" />
+                                    </div>
+
+
+
+                                    <div class="form-group">
+
+
+                                        &nbsp;&nbsp;
+                                        <input id="chk" type="checkbox" name="chk" />&nbsp;Same As Contributor
+
+
+
+                                        <div class="form-group">
+
+
+
+
+                                            <label class="form-label">Guardian Address</label>
+
+                                            <textarea id="guraddr" name="guraddr" class="form-control"></textarea>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+
+
+
+
+
+
+                                            <label class="form-label">Upload Image</label>
+
+                                            <input class="form-control" id="File1" name="photo" type="file" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+                                    <h2 class="text-center mb-4 create-title">Bank Details</h2>
+
+
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">PAN No </label>
+
+                                        <input type="text" id="panno" name="panno" value=" @Html.DisplayFor(modelItem => item.panno)" class="form-control" />
+                                    </div>
+
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Bank Name </label>
+
+                                        <input type="text" id="bankname" name="bankname" value=" @Html.DisplayFor(modelItem => item.bankname)" class="form-control" />
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Bank A/C No </label>
+
+                                        <input type="text" id="accountno" name="accountno" value=" @Html.DisplayFor(modelItem => item.accountno)" class="form-control" />
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">IFSC Code </label>
+
+                                        <input type="text" id="IFSC" value=" @Html.DisplayFor(modelItem => item.IFSC)" name="IFSC" class="form-control" />
+                                    </div>
+
+
+                                    </div>
+
+
+
+
+                                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+                                        <div class="block-content">
+                                            <h2 class="text-center mb-4 create-title">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" value="" id="lsecondform" />Second Applicant Form
+                                                </label>
+                                            </h2>
+                                        </div>
+                                        <div class="block-content controls" style="display: none;" id="secondform">
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Applicant Name </label>
+
+                                                <input type="text" name="sapplicantname" class="form-control" />
+                                            </div>
+
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Father's/Husband's Name </label>
+
+                                                <input type="text" name="sfathername" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Mother's Name </label>
+
+                                                <input type="text" name="smothername" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+                                                <label class="form-label">Category</label>
+
+                                                <select class="form-control" id="scategory" name="scategory">
+                                                    <option value="General">General</option>
+                                                    <option value="OBC">OBC</option>
+                                                    <option value="SC">SC</option>
+                                                    <option value="ST">ST</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Correspondence Address </label>
+
+                                                <input type="text" name="scorraddress" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">City</label>
+
+                                                <input type="text" name="scity" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">State </label>
+
+                                                <input type="text" name="sstate" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Pin Code </label>
+
+                                                <input type="text" name="spincode" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+                                                <h3>
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox" value="" id="sameasabove">Same As Above
+                                                    </label>
+                                                </h3>
+                                            </div>
+
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Permanent Address </label>
+
+                                                <input type="text" name="spermanentaddress" class="form-control" />
+                                            </div>
+
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">City</label>
+
+                                                <input type="text" name="pcity" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">State </label>
+
+                                                <input type="text" name="pstate" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Pin Code </label>
+
+                                                <input type="text" name="ppincode" class="form-control" />
+                                            </div>
+
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Nationality </label>
+
+                                                <input type="text" name="snationality" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Educational Qualification</label>
+
+                                                <input type="text" name="squalification" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Mobile No </label>
+
+                                                <input type="text" name="smobileno" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Alternate Mobile No </label>
+
+                                                <input type="text" name="salternatemobileno" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Pan No. </label>
+
+                                                <input type="text" name="spanno" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Email Id </label>
+
+                                                <input type="text" name="semailid" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Date Of Birth </label>
+
+                                                <input type="text" name="sdob" class="form-control date" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Aadhar No. </label>
+
+                                                <input type="text" name="saadharno" class="form-control" />
+                                            </div>
+
+
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Martial Status </label>
+
+                                                <div class="radio">
+                                                    <label class="radio-inline"><input type="radio" name="smaritialstatus" style="margin-top:5px;" value="UnMarried">UnMarried</label>
+                                                    <label class="radio-inline"><input type="radio" name="smaritialstatus" style="margin-top:5px;" value="Married">Married</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Anniversary Date </label>
+
+                                                <input type="text" name="sanniversarydate" class="form-control date" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Occupation </label>
+
+                                                <input type="text" name="soccupation" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Passport No. </label>
+
+                                                <input type="text" name="spassport" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+
+
+
+
+                                                <label class="form-label">Residential Status </label>
+
+                                                <div class="radio">
+                                                    <label class="radio-inline"><input type="radio" name="sresidentialstatus" style="margin-top:5px;" value="Resident">Resident</label>
+                                                    <label class="radio-inline"><input type="radio" name="sresidentialstatus" style="margin-top:5px;" value="Non-Resident">Non-Resident</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row-form" id="picset">
+
+                                                <div class="col-md-4">
+                                                    <p>Customer Pic</p>
+                                                    <img src="/Content/reg/img/u.png" id="imgsphoto" alt="/Content/reg/img/u.png" />
+                                                    <input type="file" name="sphoto" id="sphoto" class="form-control" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p>Aadhar Pic</p>
+                                                    <img src="/Content/reg/img/adhar.jpg" id="imgsaadharphoto" alt="/Content/reg/img/adhar.jpg" />
+                                                    <input type="file" name="saadharphoto" id="saadharphoto" class="form-control" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p>Pan Pic</p>
+                                                    <img src="/Content/reg/img/pan.jpg" id="imgspanphoto" alt="/Content/reg/img/pan.jpg" />
+                                                    <input type="file" name="spanphoto" id="spanphoto" class="form-control" />
+                                                </div>
+
+                                            </div>
+                                            </div>
+
+                                            <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                                                <h2 class="text-center mb-4 create-title">@mr.planname Details</h2>
+
+                                               
+
+                                                <div class="form-group">
+
+
+
+
+
+                                                    <label class="form-label">Property Type</label>
+
+                                                    <select class="form-control" id="propertytype" name="propertytype" onchange="selectproject(this.id),selectplotsize(this.id)" required>
+                                                        <option value="">Select </option>
+                                                        <option value="Residential">Residential</option>
+                                                        <option value="Commercial">Commercial</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label">Payment Type </label>
+
+
+                                                    <select class="form-control" id="paymenttype" name="paymenttype" required>
+                                                        <option value="EMI" selected="">EMI Payment Plan</option>
+                                                        <option value="FULL">FULL Payment Plan</option>
+                                                        <option value="PART">PART Payment Plan</option>
+                                                        <option value="CLP">CLP Payment Plan</option>
+                                                        <option value="50-50">50-50 Payment Plan</option>
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label">@mr.planname Name </label>
+
+
+                                                    <select class="form-control" onchange="selectterm(this.id),selectphase(this.id)" id="PlanName" name="projectid" required>
+                                                        @*  <option value="">Select </option>
+                    @foreach (var p in plist)
+                    {
+                        <option value="@p.Plancode">@p.Planname </option>
+                    }*@
+                                                    </select>
+                                                </div>
+
+
+
+
+
+
+                                                <div class="row-form" id="termDiv">
+
+
+
+
+                                                    <label class="form-label">Term(Yr.) </label>
+
+                                                    <select class="form-control" id="term" name="term" required="" disabled="">
+                                                        <option value="0">Select </option>
+
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label">Plot Size(SqFt)</label>
+
+                                                    <select class="form-control" id="nolandunit" name="nolandunit" required>
+                                                        @*     <option value="">Select</option>
+                    <option value="450">450</option>
+                    <option value="900">900</option>
+                    <option value="1800">1800</option>   *@
+
+                                                    </select>
+
+                                                </div>
+
+
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label">Assign Plot</label>
+
+                                                    <input type="radio" id="radio" name="PYN" class="PYN" value="Y" />
+                                                    Yes
+                                                    <input type="radio" id="radio2" name="PYN" class="PYN" value="N" checked>
+                                                    No
+                                                </div>
+
+
+                                                <div id="phasediv" class="row-form">
+
+
+
+                                                    <label class="form-label">Select Phase</label>
+
+                                                    <select class="form-control" id="phaseid" name="phaseid" onchange="getblock(this.id)">
+                                                        <option value="">Select </option>
+
+                                                    </select>
+
+                                                </div>
+
+
+                                                <div id="blok" class="row-form" style="padding-bottom:15px;">
+
+
+
+                                                    <label class="form-label">Select Block</label>
+
+                                                    <select class="form-control" id="blk" name="block" onchange="getplot(this.id)">
+                                                        <option value="NA" selected>Select</option>
+                                                    </select>
+
+                                                </div>
+
+
+                                                <div id="plot" class="row-form">
+
+
+
+                                                    <label class="form-label">Select Plot No </label>
+
+                                                    <select class="form-control" id="plotno" name="plotno">
+                                                        <option value="0" selected>Select</option>
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="row-form" id="bookingamountDiv">
+
+
+
+
+                                                    <label class="form-label">Booking Amount</label>
+
+                                                    <input id="fullAmount" name="fullAmount" type="text" class="form-control" value="0" readonly="" required style="display: none;" />
+                                                    <input id="bookingamount" name="bookingamount" type="text" class="form-control" value="0" required="" onclick="checkNewPaymentType()" onchange="checkNewPaymentType()" />
+                                                </div>
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label">Discount Amount</label>
+
+                                                    <input type="text" class="form-control" id="discountper" onkeyup="selecttotolplot()" onblur="selecttotolplot()" required name="discountper" value="0" />
+                                                </div>
+
+
+
+
+                                                <div class="col-md-9" style="padding-bottom: 15px;">
+
+
+                                                    <label class="form-label">Property Preference</label>
+
+                                                    <select name="propertypreference" class="form-control" id="propertypreference" onchange="selecttotolplot()">
+                                                        <option value="Normal">Normal</option>
+                                                        <option value="Corner">Corner</option>
+                                                        <option value="Park facing">Park Facing</option>
+                                                        <option value="30ft Road">30Ft Road</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-9" style="padding-bottom: 15px;" id="plccostDiv">
+
+
+                                                    <label class="form-label">PLC Cost (In %)</label>
+
+                                                    <input type="number" name="plccost" id="plccost" min="0" onkeyup="selecttotolplot()" onblur="selecttotolplot()" class="form-control" value="0" />
+                                                </div>
+
+
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label">Development Charge (per.sqrt)</label>
+
+                                                    <input type="number" name="Devcharge" id="Devcharge" min="0" onkeyup="selecttotolplot()" onblur="selecttotolplot()" class="form-control" value="0" />
+
+                                                </div>
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label"> Plot Cost(Rs.) </label>
+
+                                                    <input type="text" class="form-control" id="totalcon" name="totalcon" disabled="" value="0" required data-v="0" />
+
+                                                </div>
+
+                                                <div class="form-group">
+
+
+
+
+                                                    <label class="form-label">Payment Mode </label>
+
+                                                    <select class="form-control" id="mode" name="mode" required>
+                                                        <option value="">Select </option>
+                                                        <option value="Monthly">Monthly</option>
+                                                        <option value="Quarterly">Quarterly</option>
+                                                        <option value="Halfyearly">Halfyearly</option>
+                                                        <option value="Yearly">Yearly</option>
+                                                    </select>
+                                                </div>
+
+
+                                                <div class="row-form" id="paymentDiv">
+
+
+
+
+                                                    <label class="form-label">EMI(Rs.) </label>
+
+                                                    <input type="text" class="form-control" id="payment" name="payment" readonly="true" required value="0" />
+
+                                                </div>
+
+
+
+                                                <div class="row-form hide" id="maturityamtDiv">
+
+
+
+                                                    <label class="form-label">Maturity Amount(Rs.)</label>
+
+                                                    <input type="hidden" class="form-control" id="maturityamt" name="expectedraisablevalue" value="0" />
+
+                                                </div>
+
+
+
+
+                                                <div class="row-form hide" id="expirydateDiv">
+
+
+
+
+
+                                                    <label class="form-label">Expiry Date</label>
+
+                                                    <input type="hidden" class="form-control" id="expirydate" name="expirydate" />
+                                                </div>
+
+
+
+
+
+
+</div>
+                                            </div>
+                                     
+
+
+
+
+                                <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+                                    <h2 class="text-center mb-4 create-title">Nominee Details</h2>
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Nominee Name </label>
+
+                                        <input type="text" id="nomineename" name="nomineename" value=" @Html.DisplayFor(modelItem => item.NomineeName)" class="form-control" />
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Nominee Age </label>
+
+                                        <input type="text" id="nomage" name="nomage" value=" @Html.DisplayFor(modelItem => item.NomineeAge)" class="form-control" />
+                                    </div>
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Relationship </label>
+
+                                        <input type="text" class="form-control" id="nomrel" name="nomrel" value=" @Html.DisplayFor(modelItem => item.NomineeRel)" />
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Nominee Address </label>
+
+                                        <input type="text" id="nomaddr" name="nomaddr" value=" @Html.DisplayFor(modelItem => item.Nomineeaddr)" class="form-control" />
+                                    </div>
+
+
+                                </div>
+
+                                <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+                                    <h2 class="text-center mb-4 create-title">Payment Details</h2>
+
+
+
+
+                                    <div class="form-group">
+
+
+
+
+                                        <label class="form-label">Payment Mode </label>
+
+
+                                        <input type="radio" id="paymethod" name="paymethod" value="Cash" checked onclick="detail(this.id)">
+                                        Cash
+                                        <input type="radio" id="paymethod2" name="paymethod" value="DD" onclick="detail(this.id)">
+                                        DD
+                                        <input type="radio" id="paymethod3" name="paymethod" value="Cheque" onclick="detail(this.id)">
+                                        Cheque
+                                        <input type="radio" id="paymethod4" name="paymethod" value="banktransaction" onclick="detail(this.id)">
+                                        Bank Transaction
+
+                                    </div>
+
+
+                                    <div class="form-group">
+
+
+
+
+
+                                        <label class="form-label">Payment Date</label>
+
+                                        <input type="text" id="pdate" name="pdate" class="form-control" value="@Emidate.ToString("yyyy-MM-dd")" readonly="true" required />
+                                    </div>
+
+
+                                    <div class="row-form" id="dd" style="display: none;">
+                                        <div class="form-group">
+
+
+
+
+                                            <label class="form-label">DD No. </label>
+
+                                            <input type="text" id="checkorddno" name="checkorddno" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+
+                                            <label class="form-label">Draw No. </label>
+
+                                            <input type="text" id="drawno" name="drawno" class="form-control" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row-form" id="detail" style="display: none; margin-bottom: 10%;">
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Bank Name </label>
+
+                                            <input type="text" id="bank" name="bank" class="form-control" />
+
+                                        </div>
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">A/C No. </label>
+
+                                            <input type="text" id="ACNO" name="Account" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Cheque No. </label>
+
+                                            <input type="text" id="chequeno" name="chequeno" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">A/C Holder Name </label>
+
+                                            <input type="text" id="ACname" name="ACholdername" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Branch Name </label>
+
+                                            <input type="text" id="barnch" name="Branch" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">IFSC </label>
+
+                                            <input type="text" id="IFSCcode" name="IFSCCode" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Amount </label>
+
+                                            <input type="text" id="Amount" name="ChequeAmount" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Cheque Date </label>
+
+                                            <input type="text" id="Date" name="Chequedate" value="@dt" class="form-control date" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Cheque Image </label>
+
+                                            <input type="file" id="Chequeimage" name="Chequeimage" class="form-control" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row-form" id="trdetail" style="display: none; margin-bottom: 10%;">
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Bank Name </label>
+
+                                            <select id="trbank" name="trbank" class="form-control">
+                                                <option>select</option>
+                                                @foreach (var blist in db.BankDetail_Tabs.ToList())
+                                                {
+
+                                                    <option value="@blist.bankname">@blist.bankname</option>
+
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Transaction Id </label>
+
+                                            <input type="text" id="transactionid" name="transactionid" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Transaction Date </label>
+
+                                            <input type="date" id="transactiondate" name="transactiondate" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Amount </label>
+
+                                            <input type="text" id="tramount" name="tramount" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+                                            <label class="form-label">Pay Method </label>
+
+
+                                            <input type="radio" id="trpmethod1" name="transactiontype" value="NEFT" checked>
+                                            NEFT
+                                            <input type="radio" id="trpmethod2" name="transactiontype" value="IMPS" />
+                                            IMPS
+                                            <input type="radio" id="trpmethod3" name="transactiontype" value="RTGS" />
+                                            RTGS
+                                            <input type="radio" id="trpmethod4" name="transactiontype" value="UPI" />
+                                            UPI
+                                            <input type="radio" id="trpmethod5" name="transactiontype" value="NACH" />
+                                            NACH
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+
+                                            <label class="form-label">A/C Holder's A/C No. </label>
+
+                                            <input type="text" id="holderacno" name="holderacno" class="form-control" />
+                                        </div>
+
+                                        <div class="form-group">
+
+
+
+
+                                            <label class="form-label">Branch Payable At </label>
+
+                                            <input type="text" id="branchpay" name="branchpay" class="form-control" />
+                                        </div>
+
+
+
+                                        <div class="form-group">
+
+
+
+
+                                            <label class="form-label">Amount In Words </label>
+
+                                            <input type="text" name="amountword" class="form-control" id="amountinword" readonly="true" required />
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                                        <h2 class="text-center mb-4 create-title">Plot Detail</h2>
+
+
+
+
+                                        <div class="col-md-9" style="padding-bottom:15px;">
+
+
+                                            <label class="form-label">Property Address</label>
+
+                                            <textarea name="propertyaddress" class="form-control" style="resize:vertical;"></textarea>
+                                        </div>
+
+
+
+
+
+                                        <div class="form-group">
+
+
+
+
+                                            <label class="form-label">Plot Description </label>
+
+                                            <textarea name="plotdesp" class="form-control" style="resize: vertical;"></textarea>
+                                        </div>
+
+
+
+
+                                        <div class="row-form" data-id="direction">
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnortheast" id="rnortheast" />
+                                                <label for="rnortheast">East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northeast" class="form-control" disabled="" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnortheast" id="rnortheast1" />
+                                                <label for="rnortheast1">North-East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northeast" class="form-control" disabled="" />
+                                            </div>
+                                        </div>
+                                        <div class="row-form" data-id="direction">
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsoutheast" id="rsoutheast" />
+                                                <label for="rsoutheast">West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southeast" class="form-control" disabled="" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsoutheast" id="rsoutheast1" />
+                                                <label for="rsoutheast1">South-East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southeast" class="form-control" disabled="" />
+                                            </div>
+                                        </div>
+                                        <div class="row-form" data-id="direction">
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnorthwest" id="rnorthwest" />
+                                                <label for="rnorthwest">North</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northwest" class="form-control" disabled="" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnorthwest" id="rnorthwest1" />
+                                                <label for="rnorthwest1">North-West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northwest" class="form-control" disabled="" />
+                                            </div>
+                                        </div>
+                                        <div class="row-form" data-id="direction">
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsouthwest" id="rsouthwest" />
+                                                <label for="rsouthwest">South</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southwest" class="form-control" disabled="" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsouthwest" id="rsouthwest1" />
+                                                <label for="rsouthwest1">South-West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southwest" class="form-control" disabled="" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                               
+
+                            }
+
+                   
+
+
+                            <!-- Create Button -->
+                            <div class="text-center d-grid gap-2">
+                                <button id="submit" value="Submit" type="submit" name="command" class="btn create-btn" style="margin-top:12px" onsubmit="return confirm('Are you sure to create @mr.custname?')">Submit</button>
+                            </div>
+
+
+                        }
+
+
+                    </form>
+
+
+    
+
+    <script type="text/javascript">
+    $(function () {
+        //(function () {
+        //    //phase
+        //    for (var i = 1; i <= 10; i++) {
+        //        $('#phase').append('<option value="Phase ' + i + '">Phase ' + i + '</option>');
+        //    }
+        //    //plot size
+        //    /*for (var i = 50; i <= 1000; i += 50) {
+        //        $('#nolandunit').append('<option value="' + i + '">' + i + '</option>');
+        //    }*/
+        //})();
+
+        $('#lsecondform').click(function () {
+            if ($(this).is(':checked')) {
+                $('#secondform').slideDown();
+            } else {
+                if (confirm('Are you sure you want to clear second applicant form..')) {
+                    $('#secondform input[type="text"],#secondform select,#secondform input[type="file"]').val('');
+                    $('#secondform input[type="radio"]').prop('checked', false);
+                    $('#picset img').each(function () {
+                        $(this).attr('src', $(this).attr('alt'));
+                    });
+                    $('#secondform').slideUp();
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        $('#picset input[type="file"]').change(function () {
+            var input = $(this)[0], im = $('#img' + input.id);
+
+            if (input.files && input.files[0]) {
+                if (input.files[0].size <= 972800) {
+                    $('#sb').removeAttr('disabled');
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        im
+                        .attr('src', e.target.result)
+                            .animate({ height: 100 });
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    im.attr('src', im.attr('alt')).height(90);
+                    $(input).val('');
+                    $('#sb').attr('disabled', '');
+                    alert('Please select file less than or equal to 950KB');
+                }
+            } else {
+                im.attr('src', im.attr('alt')).animate({ height: 90 });
+            }
+        });
+
+        $('[id$="date"]:not([readonly])').datepicker();
+        $('[class$="date"]:not([readonly])').datepicker();
+        $('[data-id="direction"] input[type="radio"]').click(function () {
+            debugger;
+            var c = $(this), id = c.attr('id'), tid = '[name="' + id.replace('r', '').replace('1', '') + '"]';
+            if (c.is(':checked')) {
+                if (id.indexOf('1') > -1) {
+                    $($(tid)[1]).removeAttr('disabled');
+                    $($(tid)[0]).attr('disabled', '').val('');
+                } else {
+                    $($(tid)[0]).removeAttr('disabled');
+                    $($(tid)[1]).attr('disabled', '').val('');
+                }
+            } else {
+                if (id.indexOf('1') > -1) {
+                    $($(tid)[0]).removeAttr('disabled');
+                    $($(tid)[1]).attr('disabled', '').val('');
+                } else {
+                    $($(tid)[1]).removeAttr('disabled');
+                    $($(tid)[0]).attr('disabled', '').val('');
+                }
+            }
+
+        });
+        //form submission
+        $('#_submit').submit(function (event) {
+
+            var gMode = $('#mode').val(), gPayment = $('#payment').val(), gPlanname = $('#PlanName').val(),
+                        gPaymentType = $('#paymenttype').val(), gPaymethodLength = $('[name="paymethod"]:checked').length, msg = '';
+
+            msg = gPaymethodLength == 0 ? 'Please select payment method ...!' : msg;
+            msg = gPayment == '' || gPayment == 'Select' || gPayment == null || gPayment == 'NA' ? 'Please select payment ...!' : msg;
+            msg = gMode == '' || gMode == 'Select' || gMode == null || gMode == 'NA' ? 'Please select plan mode ...!' : msg;
+            msg = gPlanname == '' || gPlanname == 'Select' || gPlanname == null || gPlanname == 'NA' ? 'Please select planname ...!' : msg;
+            msg = gPaymentType == 'EMI' ? gMode == 'PART' || gMode == 'FULL' ? 'Please select valid plan mode' : msg : gMode != gPaymentType ? 'Please select valid plan mode' : msg;
+
+            if (parseInt(gPaymethodLength) == 1) {
+                var gPaymethod = $('[name="paymethod"]:checked').val();
+                if (gPaymethod == 'banktransaction') {
+                    var gTransactiontypeLength = $('[name="transactiontype"]:checked').length;
+                    msg = gTransactiontypeLength == 0 ? 'Please select trancaction type ...!' : msg;
+                }
+            }
+            var getPYN_Txt = $('[name="PYN"]:checked').val();
+            if (getPYN_Txt == 'Y') {
+                var getPhase_Txt = $('#phaseid').val(), getBlock_Txt = $('#blk').val(), getPlotno_Txt = $('#plotno').val();
+                msg = getPhase_Txt == '' || getPhase_Txt == 'Select' || getPhase_Txt == null || getPhase_Txt == 'NA' ? 'Please select phase ...!' : msg;
+                msg = getBlock_Txt == '' || getBlock_Txt == 'Select' || getBlock_Txt == null || getBlock_Txt == 'NA' ? 'Please select block ...!' : msg;
+                msg = getPlotno_Txt == 0 ? 'Please select plot no. ...!' : msg;
+            }
+            if (msg.length > 0) {
+                event.preventDefault();
+                alert(msg);
+            }
+            else {
+                $("#totalcon").removeAttr('disabled').attr('readonly', '');
+                $('[name="plccost"]').change();
+                $('#loading').modal('show');
+                $('[data-id="direction"] label[for]').each(function () {
+                    var c = $(this), f = c.attr('for'), s = '[name="' + f.replace('r', '').replace('1', '') + '"]';
+
+                    if (f.indexOf('1') > -1) {
+                        var t = $($(s)[1]), v = t.val();
+                        t.val(c.text() + '              ' + v);
+                    } else {
+                        var t = $($(s)[0]), v = t.val();
+                        t.val(c.text() + '              ' + v);
+                    }
+
+                });
+                var ptype = $('#paymenttype').val();
+                if (ptype == 'FULL') {
+                    $('#_submit').append('<input type="hidden" id="bookingamountd" name="bookingamount" value="' + $('#totalcon').val() + '" />');
+                } else {
+                    $('#bookingamountd').remove();
+                }
+            }
+        });
+        ////corner cost
+        //$('#plccost').on('click', function () {
+        //    var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val(), discountper1 = $('#discountper1').val();
+        //    fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+        //    var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+        //    $('#totalcon').val(tv1);
+        //});
+
+
+        $('#propertypreference').on('click', function () {
+            debugger;
+            var m = $('#propertypreference').val();
+            if (m != 'Normal') {
+                $('#plccost').removeAttr('readonly');
+            } else {
+                $('#plccost').val(0).attr('readonly', '');
+            }
+            selecttotolplot();
+        });
+
+        //plot cost
+        $('#nolandunit').on('click change',
+            function selectexpiry() {
+                debugger;
+                var term = $("#term").val();
+                var formdate = $("#formdate").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                var plccost = $("#plccost").val();
+                var Devcharge = $("#Devcharge").val();
+                var discountper = $("#discountper").val();
+
+
+                if (term == '') { term = 0; }
+                if (plotsize != '') {
+
+                    var url = '@Url.Action("selectexpiry", "Branch")';
+                    $.get(url, { projectid: projectid, plotsize: plotsize, term: term, plccost: plccost, Devcharge: Devcharge, discountper: discountper, formdate: formdate }, function data(t) {
+                        debugger;
+                        for (var i = 0; i < t.length; i++) {
+
+                            $("#totalcon").val(t[i].totalcon);
+                            $("#fullAmount").val(t[i].totalcon);
+                            $("#maturityamt").val(t[i].maturityamount);
+
+                            var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                            var day = ('0' + date.getDate()).slice(-2);
+                            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                            var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                            if ($('#paymenttype').val() == 'FULL') {
+                                $('#expirydate').val($('#formdate').val());
+                            } else {
+                                $('#expirydate').val(parsedDate);
+                            }
+
+                            var gPaymentType = $('#paymenttype').val();
+                            if (gPaymentType == 'CLP' || gPaymentType == '50-50') {
+                                var bookPer = gPaymentType == 'CLP' ? 25 : 50;
+                                var floatTotalcon = parseFloat(t[i].totalcon), flotBookingamount = (floatTotalcon * bookPer) / 100;
+                                var oldBookingamount = $('#bookingamount').val();
+                                oldBookingamount = oldBookingamount == '' ? 0 : parseFloat(oldBookingamount);
+                                flotBookingamount = oldBookingamount >= flotBookingamount ? oldBookingamount : flotBookingamount;
+                                $('#bookingamount').val(flotBookingamount);
+                                checkNewPaymentType();
+                            }
+                        }
+
+                    });
+
+                }
+            });
+
+        //set paymenttype
+        $('#paymenttype').on('click change', function () {
+            //debugger;
+            var c = $(this), v = c.val();
+            if (v != 'EMI') {
+                var paymentType = $('#paymenttype').val();
+                $("#mode option:nth-child(6)").remove();
+                $("#mode option").attr('disabled', '');
+                $("#mode").append('<option value="' + paymentType + '" selected="">' + paymentType + '</option>');
+                $("#nomineeDiv,#paymentDiv,#expirydateDiv").slideUp();
+
+
+                if (paymentType == 'FULL') {
+                    $('#fullAmount').slideDown().val(0);
+                    $('#bookingamount').slideUp().val(0);
+                    $('#bookingamountDiv label.width').text('Full Amount(Rs.)');
+                } else {
+                    $('#bookingamount').slideDown().val(0);
+                    $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+                    $('#fullAmount').slideUp().val(0);
+                }
+                $('#term').removeAttr('required');
+                $('#expirydate').val($('#formdate').val());
+            } else {
+                $("#nomineeDiv,#paymentDiv,#expirydateDiv").slideDown();
+                $("#mode option").removeAttr('disabled');
+                $("#mode option:nth-child(6)").remove();
+                $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+                $('#fullAmount').slideUp().val(0);
+                $('#bookingamount').slideDown().val(0);
+                $('#term').attr('required', '');
+                $('#expirydate').val('');
+            }
+        });
+        function gs(name) { return '[name="' + name + '"]';}
+        //second applicant form address event
+        $('#sameasabove').click(function () {
+            var sa = $('#sameasabove');
+            if (sa.is(':checked')) {
+                $(gs('spermanentaddress')).val($(gs('scorraddress')).val());
+                $(gs('pcity')).val($(gs('scity')).val());
+                $(gs('pstate')).val($(gs('sstate')).val());
+                $(gs('ppincode')).val($(gs('spincode')).val());
+            } else {
+                $(gs('spermanentaddress')).val('');
+                $(gs('pcity')).val('');
+                $(gs('pstate')).val('');
+                $(gs('ppincode')).val('');
+            }
+
+        });
+    });
+    </script>
+
+    <script>
+        function checkNewPaymentType() {
+            var gPaymentType = $('#paymenttype').val(),
+                floatTotalcon = parseFloat($('#totalcon').val()),
+                floatBookingamount = parseFloat($('#bookingamount').val()),
+                calcBookingamount = parseFloat(0), bookPer = parseFloat(0);
+
+            if (gPaymentType == 'CLP' || gPaymentType == '50-50') {
+                bookPer = gPaymentType == 'CLP' ? 25 : 50;
+                calcBookingamount = (floatTotalcon * bookPer) / 100;
+                if (floatBookingamount >= calcBookingamount) {
+                    $('#submit').removeAttr('disabled');
+                } else {
+                    $('#submit').attr('disabled', '');
+                    alert('Please enter booking amount greater than or equal to ' + calcBookingamount + ' ...!');
+                }
+            }
+
+        }
+    </script>

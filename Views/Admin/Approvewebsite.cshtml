@@ -1,0 +1,59 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var dd = db.PC_Tabs.OrderBy(p => p.PCId).ToList();
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Approvewebsite";
+    var a = 0;
+}
+
+<link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+
+
+<div class="index_body">
+    <div class="table-container">
+        <div class="header-row">Approve PC Login</div>
+        <table>
+            <thead>
+                @if (a == 0)
+                {
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>User Id</th>
+                        <th>User Name</th>
+                        <th>PC Id</th>
+                        <th>Date Time</th>
+                        <th style="margin-right:10px">Action</th>
+                        
+                    </tr>
+                }
+                </thead>
+            <tbody>
+                @foreach (var item in dd)
+                {
+                    a = a + 1;
+                    <tr id="row1">
+                        <td>1</td>
+                        <td>@item.userid</td>
+                        <td>@item.PCName</td>
+                        <td>@item.PCId</td>
+                        <td>@item.addate.ToString("dd/MM/yyyy hh:mm:ss")</td>
+                        @if (item.status == 0)
+                        {
+
+                            <td class="warning">@Html.ActionLink("Approve", "Approvewebsite", new { Id = item.Id, status = 1 })</td>
+                        }
+                        else
+                        {
+                            <td class="success">@Html.ActionLink("Block", "Approvewebsite", new { Id = item.Id, status = 0 })</td>
+                        }
+                        <td class="danger">@Html.ActionLink("Delete", "Approvewebsite", new { Id = item.Id, status = 2 })</td>
+
+                    </tr>
+                }
+                    <!-- Repeat for other rows -->
+                </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "AddBonus";
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Associate Bonus Form</h2>
+
+    <!-- Form -->
+
+
+    @using (Html.BeginForm())
+    {
+
+        <div id="associateBonusForm" class="form-container">
+
+            <!-- Enter Associate Id or Name -->
+            <div class="form-group">
+                <label for="associateIdName" class="form-label">Enter @mr.agentname Id or Name</label>
+                <input type="text" class="form-control" name="agentcode" id="newagentid" placeholder="Enter Associate Id or Name" required>
+            </div>
+
+            <!-- Select Month -->
+            <div class="form-group">
+                <label for="selectMonth" class="form-label">Select Month</label>
+                <input type="month" class="form-control" name="formonth" id="formonth" required>
+            </div>
+
+            <!-- Enter Type -->
+            <div class="form-group">
+                <label for="enterType" class="form-label">Enter Type</label>
+                <input type="text" class="form-control" name="type" id="type" placeholder="Enter Type" required>
+            </div>
+
+            <!-- Enter Bonus Amount -->
+            <div class="form-group">
+                <label for="bonusAmount" class="form-label">Enter Bonus Amount</label>
+                <input type="number" class="form-control" name="bonusamount" id="bonusamount" placeholder="Enter Bonus Amount" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn create-btn">Add</button>
+            </div>
+        </div>
+        <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+    }
+</div>
+
+<script>
+    const form = document.getElementById('associateBonusForm');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Gather data from form inputs
+        const associateIdName = document.getElementById('associateIdName').value;
+        const selectMonth = document.getElementById('selectMonth').value;
+        const enterType = document.getElementById('enterType').value;
+        const bonusAmount = document.getElementById('bonusAmount').value;
+
+        // Display or save the form data (placeholder action)
+        console.log({
+            associateIdName,
+            selectMonth,
+            enterType,
+            bonusAmount,
+        });
+
+        alert("Form submitted successfully!");
+
+        // Optionally, reset the form after submission
+        form.reset();
+    });
+</script>

@@ -1,0 +1,77 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "AllowRenewal";
+    var dt = db.RPTabs.Single(c => c.Id == 1);
+}
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Permission of Renewal to other Branch</h2>
+
+    @using (Html.BeginForm())
+    {
+        <!-- Form -->
+        <div id="renewalPermissionForm" class="form-container">
+            <!-- Action: Active/Deactive -->
+            @if (dt.status == 0)
+            {
+                <div class="form-group">
+                    <label class="form-label">Action</label>
+                    <div class="form-check-inline">
+                        <input type="radio" class="form-check-input" name="status" value="1" id="inactive" checked>
+                        <label class="form-check-label" for="active">Active</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input type="radio" class="form-check-input" name="status" value="0" id="active">
+                        <label class="form-check-label" for="deactive">Deactive</label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                @*<div class="text-center">
+                        <button type="submit" class="btn create-btn">Set Permission</button>
+                    </div>*@
+            }
+
+
+
+            @if (dt.status == 1)
+            {
+
+                <div class="form-group">
+                    <label class="form-label">Action</label>
+
+                    <div class="form-check-inline">
+                        <input type="radio" name="status" class="form-check-input" value="0" id="active1" style="margin-left:20px" />Deactive
+
+                        <input type="radio" name="status" class="form-check-input" value="1" id="inactive1" checked style="margin-left:20px" />Active
+                    </div>
+
+                </div>
+
+
+
+
+            }
+
+            
+                <div class="text-center">
+
+                    <button type="submit" class="btn create-btn" onclick="return confirm('Are you sure to change option? ');">Submit</button>
+
+                </div>
+           
+            <div>@ViewBag.msg</div>
+
+
+
+
+        </div>
+    }
+

@@ -1,0 +1,236 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Salary_em>
+    @{
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        ViewBag.Title = "DuplicateEmpSalary";
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#empid").autocomplete({
+                source: function (request, response) {
+                    debugger;
+                    $.ajax({
+                        url: "/HR/AutoCompleteEmpid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.empid, value: item.empid };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+
+    </script>
+
+
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $("#emp").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/HR/AutoCompleteEmp_sal_year",
+                            type: "POST",
+                            dataType: "json",
+                            data: { term: request.term },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.year, value: item.year };
+                                }))
+
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "", results: ""
+                    }
+                });
+            })
+
+        </script>*@
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#month").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/HR/AutoCompleteEmp_sal_month",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.month, value: item.month };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+
+    </script>
+
+    <style>
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+
+    @*chpt code*@
+    <script type="text/javascript">
+        function PrintMe(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+    @*chpt code*@
+    <div class="page-content">
+        <div>
+            <!-- Print Button -->
+            <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+                <button class="btn btn-primary px-4 py-2" onclick="PrintMe('divid')">
+                    <i class="fas fa-print"></i> Get PDF Report
+                </button>
+                <div>
+                </div>
+            </div>
+            <!-- Form Container -->
+            <div class="container mt-5 FormContainer" id="2">
+                <h2 class="text-center mb-4">Duplicate Pay Salary System</h2>
+
+                <!-- Form -->
+                @*@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "border p-4 rounded shadow formtag" }))
+                    {*@
+
+                <form id="#" method="post" class="border p-4 rounded shadow formtag">
+
+                    <!-- Employee ID -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Employee ID</label>
+                        <input type="text" id="empid" name="empid" class="form-control formInput" placeholder="" required>
+                    </div>
+
+                    <!-- Month -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Month</label>
+                        <input type="text" id="month" name="month" class="form-control formInput" placeholder="" required>
+                    </div>
+
+                    <!-- Year -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Year</label>
+                        <input type="text" name="year" class="form-control formInput" placeholder="" required>
+                    </div>
+
+                    <!-- View Button -->
+                    <div class="text-center d-grid gap-2">
+                        <button name="submitbtn" type="submit" class="btn btn-primary btn-lg formButtom">View</button>
+                    </div>
+
+                </form>
+                @*}*@
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <div class="container mt-5">
+        <div class="row">
+            @*<h2 class="text-center mb-4">agentname Chain Due Collection</h2>*@
+            <!-- First Table -->
+            <div class="col-md-4">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Alice</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bob</td>
+                            <td>28</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bob</td>
+                            <td>28</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bob</td>
+                            <td>28</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bob</td>
+                            <td>28</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bob</td>
+                            <td>28</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Second Table with Profile Image -->
+            <div class="col-md-4 text-center">
+                <img src="https://c8.alamy.com/comp/2PWERD5/student-avatar-illustration-simple-cartoon-user-portrait-user-profile-icon-youth-avatar-vector-illustration-2PWERD5.jpg" alt="Profile Image" class="profile-img mb-3">
+                <table class="table table-bordered">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Detail</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Position</td>
+                            <td>Manager</td>
+                        </tr>
+                        <tr>
+                            <td>Department</td>
+                            <td>Operations</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+

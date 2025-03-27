@@ -1,0 +1,461 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutNew1.cshtml";
+}
+
+@if (TempData["messg"] != null)
+{
+    <script>
+        alert('@TempData["messg"]');
+    </script>
+}
+
+<style>
+    .form {
+        position: relative;
+        z-index: 1;
+        background: #FFFFFF;
+        max-width: 95%;
+        margin: 0 auto;
+        padding: 35px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+
+        .form input {
+            font-family: "Roboto", sans-serif;
+            outline: 0;
+            background: #f2f2f2;
+            width: 100%;
+            border: 0;
+            margin: 0 0 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+    .others-section-area-inner .property-tab-section .nice-select {
+        width: 100%;
+        padding: 5px !important;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        background: #F0F1F1;
+        color: var(--ztc-text-text-2);
+        font-family: var(--ztc-family-font1);
+        font-size: var(--ztc-font-size-font-s16);
+        font-style: normal;
+        font-weight: var(--ztc-weight-medium);
+        line-height: 16px !important;
+        height: auto;
+    }
+
+    .form button {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #ce421c;
+        width: 100%;
+        border: 0;
+        padding: 15px;
+        color: #FFFFFF;
+        font-size: 14px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        cursor: pointer;
+    }
+
+        .form button:hover {
+            background: #610876 !important;
+        }
+
+    .form .message {
+        margin: 15px 0 0;
+        color: #b3b3b3;
+        font-size: 12px;
+    }
+
+        .form .message a {
+            color: #610876;
+            text-decoration: none;
+        }
+
+    .form .register-form {
+        display: none;
+    }
+</style>
+
+
+
+
+<!--===== HERO AREA STARTS =======-->
+<div class="hero-inner-section-area grid-area">
+    <img src="~/assetshome/img/all-images/hero/hero-img1.png" alt="housebox" class="hero-img1">
+    <div class="container">
+
+    </div>
+    <!--===== OTHERS AREA STARTS =======-->
+    <div class="others-section-area-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="theme-btn1 open-search-filter-form">
+                        <p class="open-text">
+                            Open Form
+                        </p>
+                        <p class="close-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"></path>
+                            </svg>
+                            Close
+                        </p>
+                    </div>
+
+                    <div class="property-tab-section search-filter-form">
+                        <div class="tab-header mb-2 " style=" display: flex;justify-content: center;background-color: transparent;">
+                            <button class="tab-btn active" data-tab="for-sale" style="width:200px;background-color: #ce421c;color:white;">Login</button>
+                            <button class="tab-btn" data-tab="for-rent" style="width:200px; background-color:#610876;color:white;">Register</button>
+                        </div>
+
+                        <div class="tab-content1" id="for-sale">
+                            <div class="filter">
+                                <div class="form" style="max-width: 430px;">
+                                    <form class="register-form">
+                                        <input type="text" placeholder="name" />
+                                        <input type="password" placeholder="password" />
+                                        <input type="text" placeholder="email address" />
+                                        <button>create</button>
+                                        <p class="message">Already registered? <a href="#">Sign In</a></p>
+                                    </form>
+                                    <form class="login-form" method="post" action="">
+                                        <input type="text" placeholder="username" name="UserName" id="memberid" autofocus value="" />
+                                        <input type="password" placeholder="password" name="Password" value="" placeholder="Password" />
+                                        <button>login</button>
+
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="tab-content1" id="for-rent" style="display: none;">
+                            <div class="filter">
+                                <div class="card form">
+
+                                    <div class="row g-0 filter">
+                                        <div class="col-lg-6">
+                                            <div class="form mb-3" style="height:70rem">
+                                                <h6>Personal Details</h6>
+                                                <form class="login-form" method="post" action="/Admin/UpdateAgentForm">
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Accociate Id</p>
+                                                    <input type="text" name="brokerid" placeholder="KDI-6816 AD1107" />
+
+
+
+
+
+
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Sales Office Code</p>
+                                                    <input type="text" name="AgencyCode" placeholder="6816" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Name of Applicant</p>
+                                                    <input type="text" name="name" placeholder="AlexADIL AHMAD" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">select Introducer Code</p>
+                                                    <input type="text" name="IntroducerCode" placeholder="KDI-6816" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Introducer Name</p>
+                                                    <input type="text" name="IntroName" placeholder="SHAZIYA BEGUM" />
+
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Faher Husband Name</p>
+                                                    <input type="text" name="Father" placeholder="ATIK AHMAD" />
+
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">MotherName</p>
+                                                    <input type="text" name="Mother" placeholder="" />
+
+
+                                                    <p style="text-align: left; font-size: 13px; color: gray;">Select Gender</p>
+                                                    <select name="Gender" required>
+                                                        <option value="">-- Select Gender --</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+
+                                                    @*wating*@
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Level of ABoted</p>
+                                                    <input type="text" placeholder="1" />
+
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Date of Joining</p>
+                                                    <input type="text" name="Doj" placeholder="6/25/2019" />
+
+
+                                                    @*<p style="text-align: left;font-size: 13px;color:gray;">Level of ABoted</p>
+        <input type="text" name="" placeholder="1" />
+
+
+        <p style="text-align: left;font-size: 13px;color:gray;">Date of Joining</p>
+        <input type="text" placeholder="6/25/2019" />*@
+
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Date of Birth</p>
+                                                    <input type="text" name="Dob" placeholder="6/25/2019" />
+
+                                                    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 5px; position: relative;">
+                                                        <p style="font-size: 13px; color: gray; margin-bottom: 5px;">Blood Group</p>
+                                                        <select name="BloodGroup" class="form-select" aria-label="Select Blood Group"
+                                                                style="height: 30px; width: 100%; position: absolute; z-index: 9999; background: white;">
+                                                            <option value="" selected>-- Select Blood Group --</option>
+                                                            <option value="A+">A+</option>
+                                                            <option value="A-">A-</option>
+                                                            <option value="B+">B+</option>
+                                                            <option value="B-">B-</option>
+                                                            <option value="O+">O+</option>
+                                                            <option value="O-">O-</option>
+                                                            <option value="AB+">AB+</option>
+                                                            <option value="AB-">AB-</option>
+                                                        </select>
+                                                    </div>
+
+
+
+
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Occupations</p>
+                                                    <input type="text" placeholder="" name="Occupation" />
+
+
+                                                    <p style="text-align: left; font-size: 13px; color: gray;">Qualifications</p>
+                                                    <select name="Qualification" class="form-select" aria-label="Select Qualification" style="height: 35px; z-index: 1 !important;" required>
+                                                        <option value="" selected>-- Select Qualification --</option>
+                                                        <option value="High School">High School</option>
+                                                        <option value="Intermediate">Intermediate</option>
+                                                        <option value="Diploma">Diploma</option>
+                                                        <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                                        <option value="Master's Degree">Master's Degree</option>
+                                                        <option value="PhD">PhD</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+
+
+
+
+
+                                                    @*</form>*@
+
+</div>
+                                        </div>
+                                        <div class="col-lg-6">
+
+                                            <div class="form mb-3">
+                                                <h6>Address Details</h6>
+                                                <div class="login-form">
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Address</p>
+                                                    <input type="text" name="Address" placeholder="137/A/01 VIJAY NAGAR COLONY " />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">State</p>
+                                                    <input type="text" placeholder="Utter Pradesh" name="State" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">New District</p>
+                                                    <input type="text" placeholder="" name="District" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Current District</p>
+                                                    <input type="text" placeholder="Kanpur" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Pin Code</p>
+                                                    <input type="text" placeholder="208011" name="PinCode" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">LandLine No</p>
+                                                    <input type="text" placeholder="" name="Landlineno" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Mobile No</p>
+                                                    <input type="text" placeholder="9912345656" name="Mobileno" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Email</p>
+                                                    <input type="text" placeholder="" name="Email" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Total Experience</p>
+                                                    <input type="text" placeholder="6/25/2019" name="Experience" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Contact No</p>
+                                                    <input type="text" placeholder="9912345656" name="Mobile" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Company Name</p>
+                                                    <input type="text" placeholder="" name="Company" />
+
+                                                    @*<p style="text-align: left;font-size: 13px;color:gray;">Contact No</p>
+                                                        <input type="text" placeholder="9912345656" />*@
+
+                                                    @*<p style="text-align: left;font-size: 13px;color:gray;">Total Experience</p>
+                                                        <input type="text" placeholder="" name="" />*@
+
+                                                    @*<p style="text-align: left;font-size: 13px;color:gray;">Contact No</p>
+                                                        <input type="text" placeholder="9912345656" />
+
+                                                        <p style="text-align: left;font-size: 13px;color:gray;">Company Address</p>
+                                                        <input type="text" placeholder="" />*@
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-0 filter">
+
+                                        <div class="col-lg-6">
+                                            <div class="form mb-3">
+                                                <h6>Bank Details</h6>
+                                                <div class="login-form">
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">PAN No.</p>
+                                                    <input type="text" placeholder="5948KBJKPA" name="Panno" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Passport No.</p>
+                                                    <input type="text" placeholder="" name="Passportno" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Driving Licence No.</p>
+                                                    <input type="text" placeholder="" name="Drivinglno" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Icard Number</p>
+                                                    <input type="text" placeholder="" name="Icardno" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Issue On:</p>
+                                                    <input type="text" placeholder="6/25/2019" name="Issueon" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Valid Upto:</p>
+                                                    <input type="text" placeholder="6/25/2025" name="Validupto" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Bank Name</p>
+                                                    <input type="text" placeholder="" name="BankName" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Branch Name</p>
+                                                    <input type="text" placeholder="N/A" name="BankBranchName" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Bank A/C No</p>
+                                                    <input type="text" placeholder="" name="BankAccountno" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">IFSC Code</p>
+                                                    <input type="text" placeholder="" name="IFCCode" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Bank Address</p>
+                                                    <input type="text" placeholder="" name="BankAddress" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Other Mobile</p>
+                                                    <input type="text" placeholder="" name="OtherMobile" />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form mb-3">
+                                                <h6>Nominee Details</h6>
+                                                <div class="login-form">
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Namine Name</p>
+                                                    <input type="text" placeholder="PARVEENBANO " name="NomineeName" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Nominee Age</p>
+                                                    <input type="text" placeholder="65" name="NomineeAge" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Relationship</p>
+                                                    <input type="text" placeholder="" name="Relationship" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Nominee Address</p>
+                                                    <input type="text" placeholder="137/A/01 VIJAY NAGAR COLLONY" name="NomineeAddress" />
+
+                                                    <h6>Experience Deatails</h6>
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Name of Organizations</p>
+                                                    <input type="text" placeholder="" name="Organization" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Area of Occupations</p>
+                                                    <input type="text" placeholder="" name="areaofoccupation" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Team Size</p>
+                                                    <input type="text" placeholder="" name="" />
+
+                                                    <p style="text-align: left;font-size: 13px;color:gray;">Upload Image</p>
+                                                    <input type="file" placeholder="" name="Photo" />
+
+                                                </div>
+
+
+
+
+                                            </div>
+                                            <button>Register</button>
+                                            </form>
+                                            @*<div class="btn-area t-5">
+
+                                                <a href="property-halfmap-grid.html" class="theme-btn1">
+                                                    Upload <span class="arrow1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                                            <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                                        </svg>
+                                                    </span><span class="arrow2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                                                             height="24" fill="currentColor">
+                                                            <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                                        </svg>
+                                                    </span>
+                                                </a>
+
+                                            </div>*@
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="space60"></div>
+<!--===== OTHERS AREA STARTS =======-->
+</div>
+<!--===== HERO AREA ENDS =======-->
+
+
+
+
+<script type="text/javascript">
+    function sendmesg() {
+        debugger;
+        var memberid = $("#memberid").val();
+        if (memberid != '') {
+            $.ajax({
+                url: "/Home/forgotpassword",
+                type: "GET",
+                dataType: "json",
+                data: { userid: memberid },
+                success: function (data) {
+                    debugger;
+                    for (var i = 0; i < data.length; i++) {
+                        alert(data[i].sms);
+                    }
+                }
+            })
+
+
+        }
+        else {
+            alert('please enter userid!!');
+        }
+    }
+
+</script>
+
+
+

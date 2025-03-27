@@ -1,0 +1,277 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BalanceReport>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db=new UsersContext();
+    var mr = db.Members.Single(id => id.Id == 1);
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "BranchClosingBalance";
+    var a = 0;
+   
+     
+}
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#sdate').datepick();
+        $('#edate').datepick();
+      
+    });
+</script>
+
+<div class="page-content">
+
+     
+                <div class="container" id="divid1">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">RP Statement Report</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div>           
+                     
+                    </div>
+  @using (@Html.BeginForm()){
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                          
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Select Start Date</label></span>
+                    <input type="text" id="sdate" class="form-control" required name="sdate">
+                         
+                </div>   </div>
+                                    <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Select End Date</label></span>
+                    <input type="text" id="edate" class="form-control" required name="edate">
+                         
+                </div>   </div>
+                                    
+
+                   <div class="row-form" style="width:100%">
+      <div class="col-md-9">
+          <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit" >View</button>
+     </div>
+              </div>
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+                    }
+  
+                 
+
+                  <div id="1">
+<table border="1" style="margin-left:1%; margin-right:1px; width:98%; margin-bottom:30px; ">
+    @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                        
+                        if (a == 0)
+                        {
+                         
+    <tr>
+        <th colspan="2" style="width:50%;text-align:center;">
+           <label id="sn" style="font-size:large;"><b>Income</b></label>
+            </th>
+        <th colspan="2" style="width:50%;text-align:center;">
+           <label id="date" style="font-size:large;"><b>Expense</b></label>
+            </th>
+        
+        
+      
+    </tr>
+    }
+                        a = a + 1;
+
+ <tr>
+    
+        <th colspan="4" style="width:50%;text-align:center;">
+           <label id="obc"><b>Opening Balance Collection:</b></label>
+            <label id="fffff"><b>@Html.DisplayFor(modelItem => item.openingbalance)</b></label>
+            </th>
+           
+    </tr>
+        <tr>
+     <th colspan="4" style="width:50%;text-align:center;">
+           <label id="ddd"><b>Duration:</b></label>
+            <label id="sss"><b>@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy")</b></label>-<label id="eee"><b>@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></label>
+            </th>
+</tr>
+        <tr  style="text-align:left;">
+              <td>
+             @plan1.Planname:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.fpo)
+        </td>
+             <td>
+            Expense:
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.expence)
+        </td>
+           
+    </tr>
+        <tr  style="text-align:left;">
+             <td>
+             @plan2.Planname:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.dpo)
+        </td>
+             <td>
+            Voucher:
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.voucher)
+        </td>
+           
+    </tr>
+       
+        <tr  style="text-align:left;">
+            <td>
+            Renewel:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.renewel)
+        </td>
+            <td>
+            Salary:
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.salary)
+        </td>
+           
+    </tr>
+        <tr  style="text-align:left;">
+            <td>
+            @mr.agentname Form Fee:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.bformfee)
+        </td>
+         <td>
+           
+        </td>
+            <td>
+           
+        </td>
+           
+    </tr>
+        <tr style="text-align:left;">
+            <td>
+           @mr.custname Form Fee:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.cformfee)
+        </td>
+         <td>
+           
+        </td>
+            <td>
+           
+        </td>
+           
+    </tr>
+                 <tr  style="text-align:left;">
+            <td>
+            Member Form Fee:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.mformfee)
+        </td>
+         <td>
+           
+        </td>
+            <td>
+           
+        </td>
+           
+    </tr>
+        <tr style="text-align:left;">
+            <td>
+           A/c Form Fee:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.acformfee)
+        </td>
+         <td>
+           
+        </td>
+            <td>
+           
+        </td>
+           
+    </tr>
+        <tr  style="text-align:left;">
+             <td>
+           Income Total:
+        </td>
+        <td>
+             @Html.DisplayFor(modelItem => item.intotal)
+        </td>
+             <td>
+           Expense Total:
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.extotal)
+        </td>
+           
+    </tr>
+        <tr style="text-align:center;">
+        <td colspan="2">
+             <b>Grand Total:</b>
+        </td>
+         <td colspan="2">
+            <b>@Html.DisplayFor(modelItem => item.grandtotal)</b>
+        </td>
+           
+    </tr>
+                        var cbc = item.openingbalance + item.grandtotal;
+               <tr>
+        <th colspan="4" style="width:50%;text-align:center;">
+           <label id="cbc"><b>Closing Balance Collection:</b></label>
+             <label id="vvvvvv"><b>@cbc</b></label>
+            </th>
+       
+          
+           
+        
+        
+      
+    </tr>             
+    }
+
+    
+    }
+    
+    
+   
+</table>
+                      @if (a > 0)
+                      {
+                           <a href="@Url.Action("PrintClosingBalance")" target="_blank">Get Report In PDF</a>
+                      }
+              </div> 
+                   
+                  
+                    </div>
+    </div>

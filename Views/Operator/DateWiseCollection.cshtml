@@ -1,0 +1,389 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.OpDatewisecollection>
+    @using ODHDEVELOPERS.Models
+    @{
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "DateWiseCollection";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+        var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+        var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+        var plan4 = db.Plans.Single(p2 => p2.Plancode == 4);
+        var pr = db.Operators.Single(o => o.OperatorId == User.Identity.Name);
+        var br = db.Branchtabs.Single(o => o.BranchCode == pr.BranchCode);
+        Double tsis = 0, tMISFresh = 0, tMIS1 = 0, tMIS2 = 0, tMIS3 = 0, tMIS4 = 0, tMIS5 = 0, tMIS6 = 0, tMIS7a = 0, expense = 0, total = 0, gtotal = 0, totalvoucher = 0, agfee = 0, appfee = 0, memberfee = 0, accfee = 0, overall = 0, deposit = 0, widthdraw = 0, pps = 0, lafefee = 0, rebate = 0;
+    }
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newagentid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+  
+
+        <div  id="divid1">
+            <div  id="2">
+
+             
+
+                <div class="container mt-5">
+                    <h2 class="text-center mb-4 create-title">Datewise Business Report</h2>
+
+                    @using (@Html.BeginForm())
+                    {
+                        <div id="hide">
+
+                            <div id="branchForm" class="form-container">
+
+                                <!-- Date -->
+                                <div class="form-group">
+                                    <label for="date" class="form-label">Select Start Date</label>
+                                    <input type="text" id="sdate" class="form-control datepicker" required name="sdate">
+                                </div>
+                                <!-- Date -->
+                                <div class="form-group">
+                                    <label for="date" class="form-label">Select End Date</label>
+                                    <input type="text" id="edate" class="form-control datepicker" required name="edate">
+                                </div>
+
+
+                                <!-- Create Button -->
+                                <div class="text-center d-grid gap-2">
+                                    <button type="submit" class="btn create-btn" id="submit" name="command" value="Search">View</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    }
+                    <div class="index_body">
+                        <div class="table-container">
+                            <div id="1">
+                                <table>
+                                    @using (Html.BeginForm())
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            if (a == 0)
+                                            {
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6" style="background-color:#ff5722; color:white">@mr.branchname:@item.branchname</th>
+                                                        <th colspan="7" style="background-color:#ff5722; color:white"><b>Datewise Collection Report</b></th>
+                                                        <th colspan="7" style="background-color:#ff5722; color:white"><b>Duration:@item.sdate.ToString("dd/MM/yyyy")-@item.edate.ToString("dd/MM/yyyy")</b></th>
+                                                    </tr>
+                                                </thead>
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <label id="sn"><b>S.N.</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="prevexpirydate"><b>Date</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="planname"><b>Booking Amount</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="mode"><b>1st Yr</b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label id="amount"><b>2nd Yr</b></label>
+                                                        </th>
+
+
+                                                        <th>
+                                                            <label id="latefine"><b>3rd Yr</b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label id="paymentdate"><b>4th Yr</b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label id="expirydate"><b>5th Yr</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="payamount1"><b>6th Yr</b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label id="payamount"><b>7th>=Yr  </b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label><b>M.Fee</b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label><b>B.Fee</b></label>
+                                                        </th>
+
+
+                                                        <th>
+                                                            <label><b>C.Fee</b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label><b>Spot Comm.</b></label>
+                                                        </th>
+
+                                                        <th>
+                                                            <label><b>Expense</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label><b>Voucher</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label><b>Advance Amt.</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="late"><b>Late Fee </b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="rebate"><b>Rebate </b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="payamount3"><b>Total</b></label>
+                                                        </th>
+
+
+                                                    </tr>
+                                                </thead>
+                                            }
+                                            a = a + 1;
+                                            total = (Convert.ToDouble(item.tsis) + Convert.ToDouble(item.tMISFresh) + Convert.ToDouble(item.tMIS1) + Convert.ToDouble(item.tMIS2) + Convert.ToDouble(item.tMIS3) + Convert.ToDouble(item.tMIS4) + Convert.ToDouble(item.tMIS5) + Convert.ToDouble(item.tMIS6) + Convert.ToDouble(item.tMIS7a) + Convert.ToDouble(item.Memberfee) + Convert.ToDouble(item.Agencyfee) + Convert.ToDouble(item.Appcharge) + Convert.ToDouble(item.deposit) - Convert.ToDouble(item.widthdraw) + Convert.ToDouble(item.late) - Convert.ToDouble(item.releaf) - Convert.ToDouble(item.Expense) - Convert.ToDouble(item.Voucher));
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        @a
+                                                    </td>
+                                                    <td>
+                                                        @item.date.ToString("dd/MM/yyyy")
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMISFresh)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMIS1)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMIS2)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMIS3)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMIS4)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMIS5)
+
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMIS6)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.tMIS7a)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Memberfee)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Agencyfee)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Appcharge)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.widthdraw)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Expense)
+
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Voucher)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.deposit)
+
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.late)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.releaf)
+                                                    </td>
+
+                                                    <td>@total</td>
+
+
+                                                </tr>
+                                            </tbody>
+                                            tsis = tsis + Convert.ToDouble(item.tsis);
+                                            tMISFresh = tMISFresh + Convert.ToDouble(item.tMISFresh);
+                                            tMIS1 = tMIS1 + Convert.ToDouble(item.tMIS1);
+                                            tMIS2 = tMIS2 + Convert.ToDouble(item.tMIS2);
+                                            tMIS3 = tMIS3 + Convert.ToDouble(item.tMIS3);
+                                            tMIS4 = tMIS4 + Convert.ToDouble(item.tMIS4);
+                                            tMIS5 = tMIS5 + Convert.ToDouble(item.tMIS5);
+                                            tMIS6 = tMIS6 + Convert.ToDouble(item.tMIS6);
+                                            tMIS7a = tMIS7a + Convert.ToDouble(item.tMIS7a);
+                                            pps = pps + Convert.ToDouble(item.pps);
+                                            totalvoucher = totalvoucher + Convert.ToDouble(item.Voucher);
+                                            expense = expense + Convert.ToDouble(item.Expense);
+                                            widthdraw = widthdraw + Convert.ToDouble(item.widthdraw);
+                                            rebate = rebate + Convert.ToDouble(item.releaf);
+                                            lafefee = lafefee + Convert.ToDouble(item.late);
+                                            appfee = appfee + Convert.ToDouble(item.Appcharge);
+                                            agfee = agfee + Convert.ToDouble(item.Agencyfee);
+                                            memberfee = memberfee + Convert.ToDouble(item.Memberfee);
+                                            accfee = accfee + Convert.ToDouble(item.Accountfee);
+                                            deposit = deposit + Convert.ToDouble(item.deposit);
+                                            gtotal = gtotal + total;
+
+
+                                        }
+                                        if (a > 0)
+                                        {
+                                            <tbody>
+                                                <tr>
+
+                                                    <td colspan="2">
+                                                        <b>GRAND TOTAL:</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>@tMISFresh</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>@tMIS1</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@tMIS2</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@tMIS3</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@tMIS4</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@tMIS5</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@tMIS6</b>
+
+                                                    </td>
+                                                    <td>
+                                                        <b>@tMIS7a</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>@memberfee</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@agfee</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@appfee</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@widthdraw</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@expense</b>
+                                                    </td>
+
+                                                    <td>
+                                                        <b>@totalvoucher</b>
+
+                                                    </td>
+                                                    <td>
+                                                        <b>@deposit</b>
+
+                                                    </td>
+                                                    <td>
+                                                        <b>@lafefee</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>@rebate</b>
+                                                    </td>
+                                                    <td>
+                                                        <b>@gtotal</b>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        }
+
+                                    }
+
+                                </table>
+                                @if (a > 0)
+                                {
+                                    <!-- Create Button -->
+                                    <div class="text-center d-grid gap-2">
+
+                                        <a href="@Url.Action("PrintDatewiseCollection")"  target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                                    </div>
+                                    
+                                }
+                            </div>
+
+
+                        </div>
+                    </div>
+

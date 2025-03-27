@@ -1,0 +1,203 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.CompanyInfos.Single(b => b.AdminId == User.Identity.Name);
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+
+    logo = r.CompanyLogo;
+    companyname = r.CompanyName;
+    incometype = r.IncomeType;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "BranchReport";
+}
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+<style>
+    .row {
+        padding-top: 30px;
+    }
+</style>
+
+<!-- Main Container -->
+<!-- Section 1: Final Report -->
+<div class="container mt-5">
+    <div class="section">
+        <div class="w-100 card-heading">
+            <h3 class="text-center text-white pt-2 pb-2">Field Report</h3>
+        </div>
+
+        <div class="row g-3">
+            <!-- Repeat 15 cards here (similar to the previous setup) -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerlistBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/person.png" />
+                        <h6 class="card-title mt-3">@mr.agentname List</h6>
+                    </div>
+                </a>
+            </div>
+            <!-- Repeat the above code for other cards as needed -->
+            <!-- Repeat the above code for other cards as needed -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DatewiseBrokerBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/calendar (1).png" />
+                        <h6 class="card-title mt-3">Datewise @mr.agentname List</h6>
+                    </div>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Main Container -->
+<div class="container mt-5">
+    <!-- Section 1: Final Report -->
+    <div class="section">
+        <div class="w-100 card-heading">
+            <h3 class="text-center text-white pt-2 pb-2">Official Report</h3>
+        </div>
+        <div class="row g-3">
+            <!-- Repeat 15 cards here (similar to the previous setup) -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/OperatorListBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/Create_logos/map.png" />
+
+                        <h6 class="card-title mt-3">Collection Point List</h6>
+                    </div>
+                </a>
+            </div>
+            <!-- Repeat the above code for other cards as needed -->
+            <!-- Repeat the above code for other cards as needed -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/CustomerReportBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/clipboard (1).png" />
+
+                        <h6 class="card-title mt-3">Customer List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DailyExpenseBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/budget (1).png" />
+
+                        <h6 class="card-title mt-3">Daily Expense Detail</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/ClosingBalanceBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/address.png" />
+
+                        <h6 class="card-title mt-3">RP Statement Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DailyCollectionBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/money (2).png" />
+
+                        <h6 class="card-title mt-3">Daily Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DuplicatePrintReportBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/printer.png" />
+
+                        <h6 class="card-title mt-3">Dublicate Print</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/CancelReceiptBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/receipt.png" />
+
+                        <h6 class="card-title mt-3">Cancel Recipt List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DateWiseCollectionBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/online-analytical.png" />
+                        <h6 class="card-title mt-3">Datewise Bussiness</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/CompleteDailyCollectionBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/money (2).png" />
+
+                        <h6 class="card-title mt-3">Datewise Collection Detail</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/CsswiseCollectionBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/meeting.png" />
+
+                        <h6 class="card-title mt-3">Csswise Business</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/FundMobilisationBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/emergency.png" />
+
+                        <h6 class="card-title mt-3">Fund Mobilization</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="MaturityPaidDetailsBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/paid.png" />
+                        <h6 class="card-title mt-3">Maturity Paid details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/PaidVoucherBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/voucher.png" />
+
+                        <h6 class="card-title mt-3">Paid Voucher</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/UnpaidvoucherBranch" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/paper-money.png" />
+
+                        <h6 class="card-title mt-3">Unpaid Voucher</h6>
+                    </div>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+</div>

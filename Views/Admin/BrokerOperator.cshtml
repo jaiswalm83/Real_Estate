@@ -1,0 +1,168 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AgentDetail>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "BrokerOperator";
+        var a = 0;
+
+    }
+
+                      <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#opid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteOpId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.OperatorName, value: item.OperatorId };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">@mr.agentname List</h2>
+
+
+
+
+
+        @using (@Html.BeginForm())
+        {
+
+
+            <div id="branchForm" class="form-container">
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Enter Collection Point or Name</label>
+                    <input type="text" class="form-control" name="opid" id="opid" placeholder="Enter Collection Point Name" required>
+                </div>
+
+
+
+
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button id="btnsearch" name="command" type="submit" class="btn create-btn" value="Search">Search</button>
+                </div>
+
+
+            </div>
+
+        }
+
+    </div>
+
+                <div id="1">
+                    <table>
+                        @using (Html.BeginForm())
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (a == 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3" style="background-color:#FF5722">@mr.branchname Name:@ViewData["Branch"] </th>
+                                            <th colspan="3" style="background-color:#FF5722"><b>@mr.agentname List</b></th>
+                                            <th colspan="3" style="background-color:#FF5722"><b> @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</b></th>
+                                        </tr>
+                                    </thead>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label id="sn"><b>S.N.</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="newid"><b>@mr.agentname Id</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="spilid"><b>@mr.agentname Name</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="email"><b>@mr.rankname </b></label>
+                                            </th>
+                                            <th>
+                                                <label id="introducerid"><b>Introducer Id</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label id="position"><b>Mobile</b></label>
+                                            </th>
+
+
+
+
+                                            <th>
+                                                <label id="doj"><b>Date of Joining</b></label>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                }
+                                a = a + 1;
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                @a
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NewAgentId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.name)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RankName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NewIntroducerId)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Mobile)
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(item.Doj).ToString("dd/MM/yyyy")
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+
+                            }
+
+                        }
+
+
+
+                    </table>
+                    @if (a > 0)
+                    {
+                        <a href="@Url.Action("PrintBrokerOperatorList")" target="_blank" class="btn-b-dark">Get Report In PDF</a>
+                    }
+                </div>
+           

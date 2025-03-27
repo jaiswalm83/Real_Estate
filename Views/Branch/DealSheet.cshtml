@@ -1,0 +1,508 @@
+﻿@model ODHDEVELOPERS.Models.Member_tab
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Advance_payment";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+    long i = 1;
+    foreach (byte b in Guid.NewGuid().ToByteArray())
+    {
+
+        i *= ((int)b + 1);
+    }
+
+
+    if (i < 0)
+    {
+        i = -i;
+    }
+    string s = i.ToString();
+    var dealid = "DEAL" + s.Substring(0, 6);   
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script type="text/javascript">
+    function checkid(check_id) {
+
+        var intro = $("#" + check_id).val();
+        var url = '@Url.Action("SelectIntroName", "Branch")';
+        $.get(url, { intro: intro }, function data(name1) {
+            $('#newagent').val(name1)
+        });
+
+
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newagent").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteAgentid1",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+<script type="text/javascript">
+   
+    function checkamount(c) {
+        if (c == "") {
+            return 0;
+        }
+        else {
+            return parseFloat(c);
+        }
+    }
+        function changevalue() {
+            debugger;
+            var unitarea = $("#unitarea").val();
+            var basicsaleprice = $("#basesaleprice").val();
+            var plotcost = $("#plotcost").val();
+            var preloccharge = $("#preloccharge").val();
+            var cmembershipcharge = $("#cmembershipcharge").val();
+            var pbackupcharge = $("#pbackupcharge").val();
+            var discount = $("#discount").val();
+            var totalplotcost = unitarea * basicsaleprice;
+            var charges = checkamount(preloccharge) + checkamount(cmembershipcharge) + checkamount(pbackupcharge) - checkamount(discount);
+            var totalcharge = totalplotcost + charges;
+            if (!isNaN(totalplotcost)) {
+                debugger;
+                $("#plotcost").val(totalplotcost);
+                $("#totalunitcost").val(totalcharge);
+            }
+        }
+
+   
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newagentid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { value: item.NewAgentId, label: item.name };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+@*@if (fd.status == 0)
+{
+<script>
+    $(function () {
+        $('#Doj').datepick();
+
+    });
+</script>
+}*@
+<script>
+    $(document).ready(function () {
+        $("#dealdays").on("click", function () {
+            debugger;
+            var getday = $("#dealdays").val();
+            var url = '@Url.Action("getdays", "Branch")';
+            $.get(url, { getday: getday }, function data(d) {
+                debugger;
+                $("#validdate").val(d);
+            }
+        );
+        });
+    })
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#nomrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#chk').change(function () {
+            var adr = $("#Address").val();
+            if (this.checked == true) {
+                $("#Nomineeaddr").val(adr);
+            }
+            else if (this.checked == false) {
+                $("#Nomineeaddr").val('');
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#state").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteState",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.state, value: item.state };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+    })
+</script>
+<script>
+    function checkdistrict(check_id) {
+
+        $("#" + check_id).mouseout(function () {
+            debugger;
+            var state = $("#state").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+        });
+
+    }
+</script>
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#date').datepick();
+        $('#Dob').datepick();
+    });
+</script>
+
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Deal Sheet</h2>
+
+    <!-- Form Container -->
+    <form method="post" action="/Branch/DealSheet" enctype="multipart/form-data">
+        <div class="row justify-content-between ml-0" style="width:100%;">
+            <!-- First Row: Personal Details & Customer Details -->
+            <div class="column mb-4 " style=" width:49%;">
+
+                <!-- Personal Details Section -->
+                <div id="branchForm" class="p-4 rounded formtag mb-4" style=" height: max-content">
+                    <h4 class="text-center mb-1">Personal Details</h4>
+
+                    <!-- Branch Code -->
+                    <div class="mb-3">
+                        <label for="branchCode" class="form-label formLabel">Deal Id:</label>
+                        <input type="text" class="form-control formInput" id="userid" required name="userid"
+                               value="@dealid" readonly />
+                    </div>
+
+                    <!-- Form Fee -->
+                    <div class="mb-3">
+                        <label for="formFee" class="form-label formLabel">Customer Name:</label>
+                        <input type="text" class="form-control formInput" id="name" required
+                               name="customername" />
+                    </div>
+
+                    <!-- hidden input -->
+                    <div class="mb-3 hide">
+                        <label for="formFee" class="form-label formLabel">Email-Id:</label>
+                        <input type="text" class="form-control formInput" id="email" name="email" />
+                    </div>
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label formLabel">Mobile No:</label>
+                        <input type='tel' title="Invalid mobile format" pattern="[6789][0-9]{9}"
+                               maxlength="10" name="mobile" id="mobile" required class="form-control formInput" />
+                    </div>
+
+                    <!-- Relation -->
+                    <div class="mb-3">
+                        <label for="relation" class="form-label formLabel">Alt. Mobile No:</label>
+                        <input type='tel' title="Invalid mobile format" pattern="[6789][0-9]{9}"
+                               maxlength="10" name="almobile" id="almobile" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Mother Name -->
+                    <div class="mb-3">
+                        <label for="motherName" class="form-label formLabel">Present Occupation:</label>
+                        <input type="text" class="form-control formInput" id="occupation" name="occupation" />
+                    </div>
+
+                    <!-- Mobile No -->
+                    <div class="mb-3">
+                        <label for="mobileNo" class="form-label formLabel">Introducer Id:</label>
+                        <input type="text" name="introducerid" onchange="checkid(this.id)"
+                               onclick="checkid(this.id)" id="newagentid" required class="form-control formInput" />
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mb-3">
+                        <label for="category" class="form-label formLabel">Introducer Name:</label>
+                        <input type="text" name="introname" readonly="true" id="newagent" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Nationality -->
+                    <div class="mb-3">
+                        <label for="nationality" class="form-label formLabel">Introducer Mobile No:</label>
+                        <input type="text" id="intromobile" name="intromobile" required
+                               class="form-control formInput">
+                    </div>
+
+                    <!-- Date Of Joining -->
+                    <div class="mb-3">
+                        <label for="joiningDate" class="form-label formLabel">Select Gender:</label>
+                        <select name="Gender" id="Gender" class="form-control formInput" required>
+                            <option selected>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Of Birth -->
+                    <div class="mb-3">
+                        <label for="dob" class="form-label formLabel">Customer Pic:</label>
+                        <input type="file" name="intropic" id="intropic" class="form-control formInput" />
+                    </div>
+                </div>
+                <!-- Address Details Section -->
+                <div id="branchForm" class="p-4 rounded formtag mb-4" style=" height: max-content">
+                    <h4 class="text-center mb-1">Address Details</h4>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label for="address" class="form-label formLabel">Address:</label>
+                        <input type="text" id="Address" name="Address" required class="form-control formInput" />
+                    </div>
+
+                    <!-- State -->
+                    <div class="mb-3">
+                        <label for="state" class="form-label formLabel">City:</label>
+                        <input type="text" required name="city" class="form-control formInput" />
+                    </div>
+
+                    <!-- District -->
+                    <div class="mb-3">
+                        <label for="district" class="form-label formLabel">State:</label>
+                        <input type="text" id="state" name="state" required class="form-control formInput" />
+                    </div>
+
+                    <!-- Pin Code -->
+                    <div class="mb-3">
+                        <label for="pinCode" class="form-label formLabel">District:</label>
+                        <input type="text" required name="district" class="form-control formInput" />
+                    </div>
+                    <!-- Pin Code -->
+                    <div class="mb-3">
+                        <label for="pinCode" class="form-label formLabel">Pin Code:</label>
+                        <input type="number" name="pincode" class="form-control formInput" />
+                    </div>
+                </div>
+            </div>
+            <!-- Second Row: Additional Customer Details -->
+            <div class="column mb-4 " style=" width:49%;">
+
+                <!-- Second Row: Additional Customer Details -->
+                <div class="p-4 rounded formtag mb-4" style=" height: max-content">
+                    <h4 class="text-center mb-1">Details of Pricing</h4>
+                    <!-- Booking Amount -->
+                    <div class="mb-3">
+                        <label for="bookingAmount" class="form-label formLabel">Unit No:</label>
+                        <input type="text" id="unitno" name="unitno" required class="form-control formInput" />
+                    </div>
+
+                    <!-- Payment Mode -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Phase No:</label>
+                        <input type="number" id="phaseno" name="phaseno" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Remark -->
+                    <div class="mb-3">
+                        <label for="remark" class="form-label formLabel">Block No:</label>
+                        <input type="text" id="blockno" name="blockno" required class="form-control formInput" />
+                    </div>
+                    <!-- Booking Amount -->
+                    <div class="mb-3">
+                        <label for="bookingAmount" class="form-label formLabel">Unit Area In Sq. Ft:</label>
+                        <input type="number" id="unitarea" name="unitarea" onkeyup="changevalue()"
+                               onmouseout="changevalue()" required class="form-control formInput" />
+                    </div>
+
+                    <!-- Payment Mode -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Unit Type:</label>
+                        <input type="radio" id="Residential" name="unittype" value="Residential"
+                               checked>
+                        Residential&nbsp;&nbsp;
+                        <input type="radio" id="commercial" name="unittype"
+                               value="Residential cum commercial">
+                        Residential cum commercial
+                    </div>
+
+                    <!-- Remark -->
+                    <div class="mb-3">
+                        <label for="remark" class="form-label formLabel">Unit Dimensions:</label>
+                        <input type="radio" id="Unit1" name="unitdimension" value="30*60" checked>
+                        30*60&nbsp;&nbsp;
+                        <input type="radio" id="Unit2" name="unitdimension" value="20*45">
+                        20*45
+                    </div>
+                    <!-- Booking Amount -->
+                    <div class="mb-3">
+                        <label for="bookingAmount" class="form-label formLabel">Preference of Unit:</label>
+                        <div>
+                            <input type="radio" id="Normal" name="preferenceofunit" value="Normal" checked>
+                            Normal&nbsp;&nbsp;
+                            <input type="radio" id="Corner" name="preferenceofunit" value="Corner">
+                            Corner&nbsp;&nbsp;
+                            <input type="radio" id="ParkFacing" name="preferenceofunit" value="Park Facing">
+                            Park Facing&nbsp;&nbsp;
+                            <input type="radio" id="wideRoad" name="preferenceofunit" value="30’ wide Road">
+                            30’ wide Road
+                        </div>    
+                    </div>
+
+                    <!-- Payment Mode -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Basic Sale Price in Rs:</label>
+                        <input type="number" id="basesaleprice" onkeyup="changevalue()"
+                               onmouseout="changevalue()" name="basesaleprice" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Remark -->
+                    <div class="mb-3">
+                        <label for="remark" class="form-label formLabel">Total Plot Cost:</label>
+                        <input type="number" id="plotcost" name="plotcost" readonly required
+                               class="form-control formInput" />
+                    </div>
+                    <!-- Booking Amount -->
+                    <div class="mb-3">
+                        <label for="bookingAmount" class="form-label formLabel">Preferential Location Charges:</label>
+                        <input type="number" id="preloccharge" onkeyup="changevalue()"
+                               onmouseout="changevalue()" name="preloccharge" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Payment Mode -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Club Membership Charges:</label>
+                        <input type="number" id="cmembershipcharge" onkeyup="changevalue()"
+                               onmouseout="changevalue()" name="cmembershipcharge" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Remark -->
+                    <div class="mb-3">
+                        <label for="remark" class="form-label formLabel">Power Backup Charges:</label>
+                        <input type="number" id="pbackupcharge" name="pbackupcharge"
+                               onkeyup="changevalue()" onmouseout="changevalue()" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Payment Mode -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Discount if any:</label>
+                        <input type="number" id="discount" name="discount" onkeyup="changevalue()"
+                               onmouseout="changevalue()" required class="form-control formInput" />
+                    </div>
+
+                    <!-- Remark -->
+                    <div class="mb-3">
+                        <label for="remark" class="form-label formLabel">Total Unit Cost Rs:</label>
+                        <input type="number" id="totalunitcost" name="totalunitcost" readonly required
+                               class="form-control formInput" />
+                    </div>
+                    <!-- Booking Amount -->
+                    <div class="mb-3">
+                        <label for="bookingAmount" class="form-label formLabel">Valid Days:</label>
+                        <input type="number" id="dealdays" name="dealdays" required
+                               class="form-control formInput" />
+                    </div>
+
+                    <!-- Payment Mode -->
+                    <div class="mb-3">
+                        <label class="form-label formLabel">Valid Date:</label>
+                        <input type="text" readonly="true" id="validdate" name="validdate" required
+                               class="form-control formInput" />                      
+                    </div>
+
+                    <!-- Remark -->
+                    <div class="mb-3">
+                        <label for="remark" class="form-label formLabel">Remark:</label>
+                        <input type="text" id="remark" name="extra2" required class="form-control formInput" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <input type="submit" class="btn btn-lg formButtom"
+                   value="Submit" />           
+        </div>
+    </form>
+</div>
+
+
+

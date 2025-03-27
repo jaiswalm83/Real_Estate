@@ -1,0 +1,184 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.TransactionTab>
+@using ODHDEVELOPERS.Models;
+@{
+    
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var bb = db.Branchtabs.Single(o => o.BranchCode == User.Identity.Name);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "DailySavingCollection";
+    var a = 0;
+    //Double appfee = 0, agencyfee = 0, totalexp = 0, totalvoucher = 0, sum = 0, late = 0, rebate = 0;
+    
+}
+
+<div class="page-content">
+        
+                    
+                <div class="container">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Daily Saving A/c Collection Report</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                     
+                    </div>
+ 
+  @using (@Html.BeginForm())
+  {
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                    
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width"> Select Date</label></span>
+                    <input type="text" id="date"  class="form-control datepicker" required name="sdate">
+                         
+                </div>   </div>
+
+                                    
+
+                   <div class="row-form" style="width:100%">
+      <div class="col-md-9" style="text-align:right">
+          <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit" >View</button>
+     </div>
+              </div>
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+  }
+                 
+                      
+
+<table border="1" style="margin-left:1%; margin-right:1px; width:98%; margin-bottom:30px; ">
+   
+        @foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+                            <tr style="font-size:13px;color:#2192d6;font-weight:100"><th colspan="3">@mr.branchname Name:@bb.BranchName</th>
+                                <th colspan="3" ><b>Daily Saving A/c Collection Report</b></th>
+                                <th colspan="3" ><b> Dated:@Convert.ToDateTime(ViewData["ondate"]).ToString("dd/MM/yyyy")</b></th>
+                                
+                            </tr>
+    <tr>
+        <th style="width:5%;text-align:center;">
+           <label><b>S.N.</b></label>
+            </th>
+         <th style="width:8%;text-align:center;">
+           <label><b>Account No.</b></label>
+        </th>
+        <th style="width:10%;text-align:center;">
+           <label ><b>Account Name.</b></label>
+            </th>
+         <th style="width:10%;text-align:center;">
+           <label ><b>Date</b></label>
+            </th>
+        
+        <th style="width:10%;text-align:center;">
+           <label id="term_plan"><b>Diposit Rs.</b></label>
+        </th>
+          
+         <th style="width:10%;text-align:center;">
+         <label><b>Widthdraw Rs.</b></label>
+        </th>
+
+        <th style="width:10%;text-align:center;">
+         <label ><b>Balance Amount</b></label>
+        </th>
+
+        
+
+        
+    </tr>
+            
+
+            }
+            a = a + 1;
+
+
+    <tr style="text-align:left;">
+        <td>
+            @a
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.accountno)
+        </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.acholdername)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.pdate)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.credit)
+        </td>
+       
+       
+         <td>
+            @Html.DisplayFor(modelItem => item.debit)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.balance)
+        </td>
+        
+        
+       
+    </tr>
+            //late = late + Convert.ToDouble(item.Late_Fee);
+            //rebate = rebate + Convert.ToDouble(item.Rebate);
+            //sum = sum + Convert.ToDouble(item.Amt_Deposit);
+            //appfee = Convert.ToDouble(item.appcharge);
+            //agencyfee = Convert.ToDouble(item.formfee);
+            //totalexp = Convert.ToDouble(item.totalexp);
+            //totalvoucher = Convert.ToDouble(item.Voucher);
+        }
+    @*@if(a>0)
+    {
+    <tr style="text-align:left;">
+         <td style="width:20%" colspan="5"></td><td><label><b>TOTAL:</b></label></td><td><label><b>@sum</b></label></td><td><label><b> @late</b></label></td><td><label><b>@rebate</b></label></td>
+                
+            </tr>
+        <tr style="text-align:left;">
+         <td style="width:20%" colspan="5"></td><td><label><b>Application Fee:</b></label></td><td><label><b>@appfee</b></label></td><td colspan="2"></td>
+            </tr>
+        <tr style="text-align:left;">
+         <td style="width:20%" colspan="5"></td><td><label><b>Agency Fee:</b></label></td><td><label><b>@agencyfee</b></label></td><td colspan="2"></td>
+            </tr>
+        <tr style="text-align:left;">
+         <td style="width:20%" colspan="5"></td><td><label><b>Total Expense:</b></label></td><td><label><b>@totalexp</b></label></td><td colspan="2"></td>
+            </tr>
+         <tr style="text-align:left;">
+         <td style="width:20%" colspan="5"></td><td><label><b>Total Voucher:</b></label></td><td><label><b>@totalvoucher</b></label></td><td colspan="2"></td>
+            </tr>
+         <tr style="text-align:left;">
+         <td style="width:20%" colspan="5"></td><td><label><b>GRAND TOTAL:</b></label></td><td><label><b>@(sum+appfee+agencyfee-totalexp-totalvoucher)</b></label></td><td colspan="2"></td>
+            </tr>
+    }*@
+    
+  
+</table>
+                      
+
+@if (a > 0)
+{
+    @*<a href="@Url.Action("PrintDailyCollectionReport")" target="_blank">Get Report In PDF</a>*@
+}
+             
+                   
+         
+          </div>
+    </div>

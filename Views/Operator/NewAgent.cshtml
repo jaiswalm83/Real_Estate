@@ -1,0 +1,1002 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Member_tab>
+    @using ODHDEVELOPERS.Models
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "NewAgent";
+        var ranklist = db.Ranktabs.Where(d => d.RankCode <= 3).ToList();
+
+        var branch = string.Empty;
+
+        var row = db.Operators.Single(ci => ci.OperatorId == User.Identity.Name);
+        var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+        branch = row.BranchCode;
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+
+        DateTime dt = DateTime.Now.Date;
+        Formdate fd = new Formdate();
+        var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+        if (count > 0)
+        {
+            fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+            if (fd.status == 2)
+            {
+                dt = fd.formdate;
+            }
+
+        }
+        var logdetail = db.NewLogins.Single(x => x.UserName == User.Identity.Name);
+
+    }
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    @*@if (fd.status == 0)
+        {
+        <script>
+            $(function () {
+                $('#Doj').datepick();
+
+            });
+        </script>
+        }*@
+
+    <script>
+        $(function () {
+            $('#Dob').datepick();
+
+        });
+    </script>
+    @*<script>
+            $(document).ready(function () {
+
+                var status = $("#status").val();
+                if (status == 0) {
+                    $('#Doj').attr('readOnly', 'readOnly');
+
+                }
+                else if (status == 1) {
+                    $('#Doj').removeAttr('readOnly');
+
+                }
+            });
+
+        </script>*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#memberid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Operator/AutoCompletememberid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.MemberName, value: item.NewMemberId };
+
+
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+
+
+        })
+    </script>
+
+    <script>
+    function checkintrank(check_id) {
+
+        $("#" + check_id).mouseout(function () {
+            var rank = $("#" + check_id).val();
+            var intcode = $("#NewIntroducerId").val();
+            var url = '@Url.Action("checkintrank", "Branch")';
+            $.get(url, { intcode: intcode, rank: rank }, function data(d) {
+                for (var i = 0; i < d.length; i++) {
+                    if (d[i].type == 0) {
+                        $("#msg").text(d[i].msg)
+                    }
+                    else if (d[i].type == 1) {
+                        $("#msg").text('')
+                    }
+                }
+
+
+            });
+        });
+
+    }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#State").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteState",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.state, value: item.state };
+
+
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    <script>
+    function checkdistrict(check_id) {
+        $("#" + check_id).mouseout(function () {
+            var state = $("#State").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+
+
+
+            });
+        });
+
+    }
+    </script>
+
+    <script>
+    function check(check_id) {
+
+        $("#" + check_id).mouseover(function () {
+            var intro = $("#" + check_id).val();
+            var url = '@Url.Action("SelectIntroName", "Operator")';
+            $.get(url, { intro: intro }, function data(name1) {
+                $('#IntroName').val(name1[0].name)
+            });
+        });
+
+    }
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#NewIntroducerId").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+
+
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $("#Rank").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Operator/AutoCompleteRank",
+                            type: "POST",
+                            dataType: "json",
+                            data: { term: request.term },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.RankName, value: item.RankCode };
+
+
+                                }))
+
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "", results: ""
+                    }
+                });
+            })
+        </script>*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#nomrel").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteRelations",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.relations, value: item.relations };
+
+
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+
+
+        })
+    </script>
+
+ 
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">@mr.agentname Form</h2>
+        @using (Html.BeginForm("NewAgent", "Operator", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div id="branchForm" class="form-container">
+
+
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Enter Member Id</label>
+                    <input type="text" class="form-control " name="memberid" id="memberid" placeholder="Enter Id" required>
+                </div>
+
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button value="Search" type="submit" name="command" class="btn create-btn"><i class="fa fa-search"></i> Search</button>
+                </div>
+
+
+
+
+
+                <p>@ViewBag.msg</p>
+
+            </div>
+
+
+
+        }
+
+
+        @foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+                var branchdetail = db.Operators.Single(x => x.OperatorId == User.Identity.Name).BranchCode;
+
+
+                using (Html.BeginForm("NewAgent", "Operator", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return confirm('Are you sure to create " + @mr.agentname + "?')" }))
+                {
+
+
+
+                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                        <h2 class="text-center mb-4 create-title">Personal Details</h2>
+
+
+
+                        <!-- Collection Point Name -->
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">@mr.branchname Code </label>
+                            <input type="text" class="form-control " id="BranchCode" value="@branchdetail" name="BranchCode" readonly="true">
+                        </div>
+
+                        <!-- Collection Point Name -->
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">Form Fee</label>
+                            <input type="text" class="form-control " id="formfee" required name="formfee" value="@tr.agencyformfee" readonly="true">
+                        </div>
+
+
+                        <!-- Collection Point Name -->
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">Member Id </label>
+                            <input type="text" class="form-control " readonly="true" value="@Html.DisplayFor(modelItem => item.NewMemberId)" id="newmemberid" name="newmemberid" required>
+                        </div>
+
+
+                        <!-- Collection Point Name -->
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">Name</label>
+                            <input type="text" class="form-control " readonly="true" value=" @Html.DisplayFor(modelItem => item.MemberName)" id="name" required name="name">
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+
+                            <label class="form-label">Father/Husband's Name</label>
+
+                            <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.Father)" required name="Father" id="Father" />
+                        </div>
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Mother's Name</label>
+
+                            <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.Mother)" id="Mother" name="Mother" />
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+
+                            <label class="form-label">Mobile No</label>
+
+                            <input type='tel' readonly="true" value="@Html.DisplayFor(modelItem => item.Mobile)" maxlength="10" name="Mobile" id="Mobile" required class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+
+                            <label class="form-label">Emergency No</label>
+
+                            <input type='tel' title="Invalid mobile format" pattern="[789][0-9]{9}" maxlength="10" name="Mobileno" id="Mobileno" required class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+
+                            <label class="form-label">Introducer Code</label>
+
+                            <input type="text" class="form-control" required onmouseover="check(this.id)" id="NewIntroducerId" name="NewIntroducerId" />
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Introducer Name</label>
+
+                            <input type="text" class="form-control" required id="IntroName" name="IntroName" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+                            <label class="form-label">Nationality</label>
+
+                            <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.Nationality)" id="Nationality" name="Nationality" readonly="readonly" value="Indian" />
+                        </div>
+
+
+                        <div class="form-group">
+
+
+
+                            <label class="form-label">Date Of Joining</label>
+
+                            <input type="text" name="Doj" id="Doj" value="@dt" readonly="true" required class="form-control date" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+                            <label class="form-label">DOB</label>
+
+                            <input type="text" readonly="true" value=" @Html.DisplayFor(modelItem => item.DOB)" id="Dob" name="Dob" required class="form-control">
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+                            <label class="form-label">Select Gender</label>
+
+
+                            <input type="text" readonly="true" value=" @Html.DisplayFor(modelItem => item.Gender)" id="Gender" name="Gender" required class="form-control">
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+                            <label class="form-label">Designation</label>
+
+                            <select name="RankCode" class="form-control">
+                                @foreach (var i in ranklist)
+                                {
+                                    <option value="@i.RankCode">@i.RankCode - @i.RankName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <label id="msg"></label>
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Select Blood Group</label>
+
+                            <select name="BloodGroup" id="BloodGroup" class="form-control">
+                                <option selected>Select</option>
+                                <option>O +ive</option>
+                                <option>O -ive</option>
+                                <option>A +ive</option>
+                                <option>A -ive</option>
+                                <option>B +ive</option>
+                                <option>B -ive</option>
+                                <option>AB +ive</option>
+                                <option>AB -ive</option>
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Occupation</label>
+
+                            <input type="text" id="Occupation" name="Occupation" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Select Qualification</label>
+
+                            <select name="Qualification" id="Qualification" class="form-control">
+                                <option selected>Select</option>
+                                <option>High School</option>
+                                <option>Intermediate</option>
+                                <option>Graduation</option>
+                                <option>Post Graduation</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                        <h2 class="text-center mb-4 create-title">Bank & Other Details</h2>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">PAN Number</label>
+
+                            <input type="text" id="Panno" name="Panno" class="form-control" value=" @Html.DisplayFor(modelItem => item.panno)" />
+                        </div>
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Passport Number</label>
+
+                            <input type="text" id="Passportno" name="Passportno" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Driving Licence No.</label>
+
+                            <input type="text" id="Drivinglno" name="Drivinglno" class="form-control" />
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">I-Card Number</label>
+
+                            <input type="text" id="Icardno" name="Icardno" class="form-control" />
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Bank Name</label>
+
+                            <input type="text" name="BankName" id="BankName" value=" @Html.DisplayFor(modelItem => item.bankname)" class="form-control" />
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Bank Code</label>
+
+                            <input type="text" id="BankCode" name="BankCode" class="form-control" />
+                        </div>
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Account No.</label>
+
+                            <input type="number" id="BankAccountno" name="BankAccountno" value=" @Html.DisplayFor(modelItem => item.accountno)" class="form-control" />
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">IFSC Code</label>
+
+                            <input type="text" id="IFCCode" name="IFCCode" value=" @Html.DisplayFor(modelItem => item.IFSC)" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Bank Address</label>
+
+                            <input type="text" id="BankAddress" name="BankAddress" class="form-control" />
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                        <h2 class="text-center mb-4 create-title">Address Details</h2>
+
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Address</label>
+
+                            <input type="text" id="Address" readonly="true" value=" @Html.DisplayFor(modelItem => item.Address)" name="Address" required class="form-control" />
+                        </div>
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">State</label>
+
+                            <input type="text" id="State" name="State" readonly="true" value=" @Html.DisplayFor(modelItem => item.state)" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">District</label>
+
+
+
+                            <input type="text" id="district" name="District" readonly="true" value=" @Html.DisplayFor(modelItem => item.District)" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+                            <label class="form-label">Pin Code</label>
+
+                            <input type="number" name="PinCode" readonly="true" value=" @Html.DisplayFor(modelItem => item.Pin)" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Land Line No</label>
+
+                            <input type="number" id="Landlineno" name="Landlineno" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Email</label>
+
+                            <input type="email" id="Email" name="Email" class="form-control" />
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                        <h2 class="text-center mb-4 create-title">Nominee Details</h2>
+
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+
+                            <label class="form-label">Nominee Name</label>
+
+                            <input type="text" id="NomineeName" name="NomineeName" value=" @Html.DisplayFor(modelItem => item.NomineeName)" required class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Nominee Age</label>
+
+                            <input type="text" id="NomineeAge" value=" @Html.DisplayFor(modelItem => item.NomineeAge)" name="NomineeAge" required class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Relationship</label>
+
+                            <input type="text" id="nomrel" name="Relationship" value=" @Html.DisplayFor(modelItem => item.NomineeRel)" required class="form-control" />
+                        </div>
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Address</label>
+
+                            <input type="text" id="NomineeAddress" name="NomineeAddress" value=" @Html.DisplayFor(modelItem => item.Nomineeaddr)" required class="form-control" />
+                        </div>
+
+                    </div>
+
+
+
+                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                        <h2 class="text-center mb-4 create-title">Experience Details</h2>
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Name of Organization</label>
+
+                            <input type="text" id="Organization" name="Organization" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Area of Occupation</label>
+
+                            <input type="text" id="areaofoccupation" class="form-control" name="areaofoccupation" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+                            <label class="form-label">Approximate No.</label>
+
+                            <input type="number" class="form-control" id="approximatenoofactive" name="approximatenoofactive" />
+                        </div>
+
+                    </div>
+
+
+                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                        <h2 class="text-center mb-4 create-title">Performance Details</h2>
+
+
+
+                        <div class="form-group">
+
+
+                            <input type="radio" name="Experience" value="Fresher" />
+                            Fresher
+                            <input type="radio" name="Experience" value="Experienced" />
+                            Experienced
+                        </div>
+
+                        <div class="form-group">
+
+
+
+
+                            <label class="form-label">Company Name</label>
+
+                            <input type="text" id="Company" name="Company" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Total Exp.(Yr.)</label>
+
+                            <input type="number" id="Yoe" name="Yoe" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+
+
+
+                            <label class="form-label">Company Address</label>
+
+                            <input type="text" id="cmpnyaddress" name="cmpnyaddress" class="form-control" />
+                        </div>
+
+
+                    </div>
+
+
+                    <div id="branchForm" class="form-container" style="margin-top: 40px;">
+
+
+
+
+
+
+                        <h2 class="text-center mb-4 create-title">Upload Photo</h2>
+
+
+
+                        <div class="form-group">
+
+
+
+                            <input type="file" id="Photo" name="Photo" class="form-control" />
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- Create Button -->
+                    <div class="text-center d-grid gap-2">
+                        <button value="Submit" type="submit" name="command" class="btn create-btn" style="margin-top:12px">Submit</button>
+                    </div>
+
+
+                  
+                                <p>@ViewBag.msg</p>
+                         
+                }
+            }
+        }
+    </div>
+
+
+

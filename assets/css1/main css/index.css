@@ -1,0 +1,127 @@
+﻿
+/*General Styles */
+/*.index_body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f9;
+    padding: 5px;
+}*/
+
+
+
+
+.index_body {
+    margin-top: 50px;
+    /*Table Container*/
+}
+    .table-container {
+    max-width: 1100px;
+    margin: auto;
+    overflow-x: auto;
+    Allows horizontal scrolling on small screens background: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/*Header Row*/
+.header-row {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #FF5722;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+/*Table Styling*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto; /*Ensures columns take up equal width */
+    min-width: 800px;
+    /*    Ensures table doesn't collapse on small screens*/
+}
+
+.tablermv {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto; /*Ensures columns take up equal width */
+    min-width: 800px;
+    /*    Ensures table doesn't collapse on small screens*/
+}
+
+thead th {
+    background-color: #f1f5f9;
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #d1d5db;
+    text-align: center;
+    padding: 10px;
+}
+
+tbody td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    color: #333;
+    /* white-space: normal; */
+}
+
+/*Zebra Striping*/
+tbody tr:nth-child(even) {
+    background-color: #fff3f5;
+}
+
+tbody tr:hover {
+    background-color: #eef2f6;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .table-container {
+        border: none;
+        box-shadow: none;
+        padding: 0 10px;
+    }
+
+    table {
+        font-size: 13px;
+        min-width: unset;
+    }
+
+    thead th, tbody td {
+        padding: 6px;
+    }
+
+    .header-row {
+        font-size: 1.2rem;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-container {
+        margin: 0 auto;
+        padding: 5px;
+    }
+
+    .header-row {
+        font-size: 1rem;
+        padding: 6px;
+    }
+
+    table {
+        border: 0;
+        font-size: 12px;
+    }
+
+    thead th, tbody td {
+        padding: 4px;
+    }
+}
+
+
+
+

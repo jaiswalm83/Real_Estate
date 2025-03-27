@@ -1,0 +1,127 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Advance_Payment_Tab>
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Advance_payment_listt";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var list = db.Advance_Payment_Tabs.OrderByDescending(x=>x.Cdate).ToList();
+    var a = 0;
+}
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Advance Booking List</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div>           
+                        
+                    </div> 
+
+
+                    <form method="post" action="../Branch/Advance_payment_listt">
+                          <div class="col-md-12">
+                            
+                                   
+                            <div class="col-md-3">
+                                <div class="control-group">
+                                    <label class="control-label">Start Date</label>
+                                     <div class="controls">
+                                        <input type="date" class="form-control" name="Sdate" style="width:80%" />
+                                            </div>
+                                </div>
+                            </div>
+                               
+                            <div class="col-md-3">
+                                <div class="control-group">
+                                    <label class="control-label">End Date</label>
+                                     <div class="controls">
+                                        <input type="date"  class="form-control" name="Edate"  style="width:80%" />
+                                            </div>
+                                
+                            </div>
+                                </div>
+                              <div class="col-md-3">
+                                  <label class="control-label">All List</label>
+                                  <br />
+                                <div class="control-group">
+                                    
+                                    
+                                    <select name="id" id="id" class="form-control">
+                                        <option value="">Select List</option>
+                                        <option value="1">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                              <div class="col-md-3">
+                                <div class="control-group">
+                                    <label class="control-label"></label>
+                                     <div class="controls">
+                                       <input type="submit" class="btn-primary" />
+                                            </div>
+                                
+                            </div>
+                                </div>
+                               
+                              </div>
+                    </form>
+                 <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls"></div>
+                                   <table  class="table-responsive table-bordered table" id="myTable" style="width:100%;">
+                                <thead>
+                                  
+                                    <tr >
+                                        <th >Sr No.</th>
+                                        <th>Transaction Id</th>
+                                        <th>Customer Name</th>
+                                        @*<th>Member Id</th>*@
+                                        <th>Mobile No.</th>
+                                        <th>Branch Code</th>
+                                        <th>Booking Date</th>
+                                        <th>Booking Amount</th>
+                                        <th>Pay Mode</th>
+                                        <td>Status</td>
+                                    </tr>
+                                </thead>
+                                       @foreach(var ii in Model)
+                                       {
+                                           a = a + 1;
+                                    <tr>
+                                    <td>@a</td>
+                                    <td>@ii.Recieptid</td>
+                                     <td>@ii.MemberName</td>
+                                        
+                                     @*<td>@ii.NewMemberId</td>*@
+                                     <td>@ii.Mobile</td>
+                                     <td>@ii.BranchCode</td>
+                                     <td>@ii.Cdate.ToString("dd-MM-yyyy")</td>
+                                     <td>@ii.booking_amt</td>
+                                     <td>@ii.paymethod</td>
+                                        @if(ii.paymethod == "Cheque")
+                                        {
+                                             <td style="color:red">Pending....</td>
+                                        }
+                                        else
+                                        {
+                                            
+                                            <td style="color:green">Active</td>
+                                        }
+                                    </tr>
+                                       }
+                            </table>   
+                                    </div>
+                            </div>
+                                        
+                   </div>
+
+</div> </div>
+

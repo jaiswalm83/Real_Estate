@@ -1,0 +1,128 @@
+﻿@using  ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "UploadDocument";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+}
+
+<script>
+    function checktype(check_id) {
+
+        $("#" + check_id).click(function () {
+           
+            var type = $("#type").val();
+            var url = '@Url.Action("selecttype", "Operator")';
+            var select = $("#memberid");
+            $.get(url, { type: type }, function data(d) {
+              
+                    select.children().remove();
+                    select.append('<option value="Select">Select</option>');
+                    for (var i = 0; i < d.length; i++) {
+                        select.append('<option value="' + d[i].UserName + '">' + d[i].UserName + '</option>');
+                    }
+                
+            });
+        });
+
+    }
+</script>
+
+<script type="text/javascript" src="~/Scripts/autosearch.js"></script> 
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Upload Document</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                        
+                    </div> 
+
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls">  
+
+                    
+                      
+                        
+     @using (Html.BeginForm("UploadDocument", "Collection Point", FormMethod.Post, new { enctype = "multipart/form-data" }))
+     {
+            
+                   <div class="row-form">
+                        
+                                        
+                                        <div class="col-md-9"> 
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Select Type </label></span>  
+                                             <select class="form-control" onclick="checktype(this.id)" id="type" name="type" required>
+                                            <option selected>Select </option>
+                                                 <option>Customer </option>
+                                                 
+                                                
+
+                                        </select></div>
+                                    </div>
+                                         </div>
+         
+                <div class="row-form">  
+                                         
+    <div class="col-md-9">
+        <div class="input-group">
+       <span class="input-group-addon"><label class="width">Select Member Id</label> </span>  
+                                     <select class="form-control"  id="memberid" name="memberid" >
+                                            <option disabled="disabled">Select </option>
+
+                                        </select></div>
+                                   
+   </div>
+                        
+         </div>
+         
+                <div class="row-form">  
+                                   
+    <div class="col-md-9">
+        
+            <input id="document" type="file" class="form-control"  name="document" required/>
+     
+                                   
+   </div>
+                        
+         </div>
+         
+                <div class="row-form">  
+                                         
+    <div class="col-md-9">
+        <div class="input-group">
+       <span class="input-group-addon"><label class="width">Information</label> </span>  
+        <input type="text" class="form-control"  name="information" id="information" required/></div>
+                                   
+   </div>
+                        
+         </div>
+         
+                <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                               <button type="submit" class="btn btn-primary" >Upload</button>  
+                                </div>
+                                             </div>
+         
+     <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+     }
+                                </div>
+                                
+                            
+                                         
+                                    </div>
+                            </div>
+                                        
+                   </div> </div> </div>

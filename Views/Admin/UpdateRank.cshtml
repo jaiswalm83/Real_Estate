@@ -1,0 +1,138 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Ranktab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "UpdateRank";
+        var pagesize = (from r in db.Ranktabs select r).Count();
+        var grid = new WebGrid(null,
+                 defaultSort: "",
+                 rowsPerPage: pagesize,
+                 selectionFieldName: "SearchString",
+                 ajaxUpdateContainerId: "agrid",
+                 sortFieldName: "SortColumn",
+                 sortDirectionFieldName: "SortOrder");
+        grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+        var mr = db.Members.Single(m => m.Id == 1);
+
+    }
+    <script type="text/javascript">
+        $(function () {
+            $('.edit-mode').hide();
+            $('.edit-user, .cancel-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+
+            $('.save-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+
+                var RankCode = tr.find("#lblRankCode").html();
+                var RankName = tr.find("#RankName").val();
+                var Rankshrtcut = tr.find("#Rankshrtcut").val();
+                var Selfquota = tr.find("#Selfquota").val();
+                var TeamQuota = tr.find("#TeamQuota").val();
+
+
+                tr.find("#lblRankName").text(RankName);
+                tr.find("#lblRankshrtcut").text(Rankshrtcut);
+                tr.find("#lblSelfquota").text(Selfquota);
+                tr.find("#lblTeamQuota").text(TeamQuota);
+
+
+                tr.find('.edit-mode, .display-mode').toggle();
+                var RankTab =
+                {
+                    "RankCode": RankCode,
+                    "RankName": RankName,
+                    "Rankshrtcut": Rankshrtcut,
+                    "Selfquota": Selfquota,
+                    "TeamQuota": TeamQuota
+
+                };
+                $.ajax({
+                    url: '/Admin/EditRank/',
+                    data: JSON.stringify(RankTab),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+
+                    }
+                });
+
+            });
+        })
+    </script>
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Update @mr.rankname</div>
+            @if (Convert.ToInt32(ViewData["count"]) > 0)
+            {
+                <div id="comm">
+                    <div id="gridContent">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>@mr.rankname Code</th>
+                                    <th>@mr.rankname Name</th>
+                                    <th>@mr.rankname Shortcut</th>
+                                    <th>SelfJoining</th>
+                                    <th>TeamQuota</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="display-mode">@item.RankCode</span>
+                                            <label id="lblRankCode" class="edit-mode">@item.RankCode</label>
+                                        </td>
+                                        <td>
+                                            <span class="display-mode">
+                                                <label id="lblRankName">@item.RankName</label>
+                                            </span>
+                                            <input type="text" id="RankName" value="@item.RankName" class="edit-mode" />
+                                        </td>
+                                        <td>
+                                            <span class="display-mode">
+                                                <label id="lblRankshrtcut">@item.Rankshrtcut</label>
+                                            </span>
+                                            <input type="text" id="Rankshrtcut" value="@item.Rankshrtcut" class="edit-mode" />
+                                        </td>
+                                        <td>
+                                            <span class="display-mode">
+                                                <label id="lblSelfquota">@item.Selfquota</label>
+                                            </span>
+                                            <input type="text" id="Selfquota" value="@item.Selfquota" class="edit-mode" />
+                                        </td>
+                                        <td>
+                                            <span class="display-mode">
+                                                <label id="lblTeamQuota">@item.TeamQuota</label>
+                                            </span>
+                                            <input type="text" id="TeamQuota" value="@item.TeamQuota" class="edit-mode" />
+                                        </td>
+                                        <td>
+                                            <button class="edit-user display-mode btn btn-primary">Edit</button>
+                                            <button class="save-user edit-mode btn btn-success">Save</button>
+                                            <button class="cancel-user edit-mode btn btn-danger">Cancel</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+

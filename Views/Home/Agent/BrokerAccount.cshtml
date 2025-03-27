@@ -1,0 +1,145 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerAccount>
+@using ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+    ViewBag.Title = "BrokerAccount";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+  
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newagent").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>  
+
+<div class="page-content">
+
+                <div class="container">
+                    <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">@mr.agentname Account Details</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                        
+                    </div>
+      
+    <div class="table-responsive">
+
+        <table class="table table-striped" border="2">                  
+
+   
+    @foreach(var item in Model){
+        if(a==0)
+        {
+             <tr style="text-align:center;"><th colspan="3" ></th>
+                
+                 <th colspan="3" ><b>  @mr.agentname Account Details</b></th>
+                  <th colspan="3" ><b>Dated:@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy") </b></th>
+               </tr>
+        <tr style="text-align:center;"><th colspan="4" >@mr.agentname Id:@item.newintroducerid</th>
+                <th colspan="5" >@mr.agentname Name:@item.name</th>
+                 
+               </tr>
+ <tr style="text-align:center;">
+        <th style="width:5%;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+            <th style="width:18%;">
+           <label id="customerid"><b>@mr.custname Id</b></label>
+        </th>
+        <th style="width:17%;">
+           <label id="Name"><b>Name</b></label>
+        </th>
+        <th style="width:10%;">
+           <label id="netamount"><b>Amount</b></label>
+        </th>
+     <th style="width:15%;">
+            <label id="planname" ><b>@mr.planname Name</b></label>
+        </th>
+        <th style="width:5%;">
+           <label id="Term"><b>Term</b></label>
+        </th>
+            <th style="width:10%;">
+           <label id="Mode"><b>Mode</b></label>
+        </th>
+        <th style="width:10%;">
+            <label id="expirydate" ><b>Maturity Date</b></label>
+        </th>
+      <th style="width:10%;">
+            <label id="formdate" ><b>Form Date</b></label>
+        </th>
+         
+    </tr>
+    }
+        a = a + 1;
+    <tr style="text-align:left;">
+        <td>
+            @a
+        </td>
+     
+       
+         <td>
+            @Html.DisplayFor(modelItem => item.newbondid)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.cname)
+        </td>
+             <td>
+            @Html.DisplayFor(modelItem => item.amount)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.planname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.term)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.mode)
+        </td>
+        <td>
+            @Convert.ToDateTime(item.expirydate).ToString("dd/MM/yyyy")
+        </td>
+        <td>
+            @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+        </td>
+
+            
+    </tr>
+    }
+
+</table>
+</div>
+         @if(a>0)
+        {
+         <a href="@Url.Action("PrintBrokerAccountReport")" target="_blank">Get Report In PDF</a>
+        }
+       
+                    </div>
+
+    </div>

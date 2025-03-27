@@ -1,0 +1,143 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AgentDetail>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var pr = db.Operators.Single(o => o.OperatorId == User.Identity.Name);
+        var br = db.Branchtabs.Single(o => o.BranchCode == pr.BranchCode);
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "Broker";
+        var a = 0;
+
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+
+    <div  id="divid1">
+        <div  id="2">
+
+
+
+
+
+            <div class="index_body">
+                <div class="table-container">
+                    <div class="header-row">@mr.agentname List</div>
+
+                    @using (@Html.BeginForm())
+                    {
+                        <div  id="hide">
+                            <div class="col-md-6" style="width:100%">
+
+
+                            </div>
+                        </div>
+                    }
+
+
+                    <div id="1">
+                        <table>
+                            @using (Html.BeginForm())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    if (a == 0)
+                                    {
+                                        <thead>
+                                            <tr>
+                                                <th colspan="3" style="background-color:#ff5722; color:white">@mr.branchname Name:@br.BranchName</th>
+                                                <th colspan="3" style="background-color:#ff5722; color:white"><b>@mr.agentname List</b></th>
+                                                <th colspan="3" style="background-color:#ff5722; color:white"><b> @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</b></th>
+                                            </tr>
+                                        </thead>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <label id="sn"><b>S.N.</b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="newid"><b>@mr.agentname Id</b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="spilid"><b>@mr.agentname Name</b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="email"><b>@mr.rankname </b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="introducerid"><b>Introducer Id</b></label>
+                                                </th>
+
+                                                <th>
+                                                    <label id="position"><b>Mobile</b></label>
+                                                </th>
+
+                                                <th>
+                                                    <label id="doj"><b>Date of Joining</b></label>
+                                                </th>
+
+                                                @* <th style="width:10%;text-align:center;">
+                                                       <label><b>Action</b></label>
+                                                    </th>*@
+
+                                            </tr>
+                                        </thead>
+                                    }
+                                    a = a + 1;
+
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                @a
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.NewAgentId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.name)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RankName)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.NewIntroducerId)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Mobile)
+                                            </td>
+                                            <td>
+                                                @Convert.ToDateTime(item.Doj).ToString("dd/MM/yyyy")
+                                            </td>
+                                            @* <td>
+                                                    @Html.ActionLink("View Detail", "Broker", new { brokerid = item.NewAgentId }, new { target = "_blank" });
+                                                </td>*@
+
+                                        </tr>
+                                    </tbody>
+
+                                }
+
+                            }
+
+
+
+                        </table>
+                        @if (a > 0)
+                        {
+                                <!-- Create Button -->
+                    <div class="text-center d-grid gap-2">
+                        <a href="@Url.Action("PrintBrokerList")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                    </div>
+                         
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

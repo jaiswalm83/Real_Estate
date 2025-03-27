@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.appltab>
+    @using ODHDEVELOPERS.Models
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "Approvecheque";
+
+        var a = 0;
+        var branch = string.Empty;
+        UsersContext db = new UsersContext();
+
+        var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+
+        var mr = db.Members.Single(m => m.Id == 1);
+
+    }
+
+ 
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newbondid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompletePPSBondId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.newbondid };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="container mt-5">
+        <!-- Title -->
+        <h2 class="text-center create-title">Update @mr.custname</h2>
+
+        @using (Html.BeginForm())
+        {
+            <!-- Form -->
+            <div id="updateCustomerForm" class="form-container">
+                <!-- Customer ID Input -->
+                <div class="form-group">
+                    <label for="customerId" class="form-label">Enter @mr.custname Id</label>
+                    <input type="text" class="form-control" name="newbondid" id="newbondid" placeholder="Enter Customer ID" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" value="Search" name="command" class="btn create-btn"><i class="fa fa-search"></i> Search</button>
+                </div>
+            </div>
+        }
+        </div>
+
+
+
+   

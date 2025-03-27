@@ -1,0 +1,134 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseDueCollection>
+@using ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+    ViewBag.Title = "Selfbusiness";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+  
+}
+
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#date').datepick();
+
+    });
+</script>
+
+
+<div class="page-content">
+    <div class="container" id="divid">
+        <div class="page-toolbar">
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Self Business Report</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+            <div class="page-toolbar-block pull-right">
+            </div>
+        </div>
+           <div class="table-responsive">
+
+        <table class="table table-striped" border="2">     
+            @using (Html.BeginForm())
+            {
+                foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+                            
+                <tr>
+                    <th colspan="9">
+                        <a href="@Url.Action("PrintSelfbusiness")" target="_blank">Get Report In PDF</a>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width: 5%; text-align: center;">
+                        <label id="sn"><b>S.N.</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="newid"><b>@mr.custname Id</b></label>
+                    </th>
+
+                    <th style="width: 15%; text-align: center;">
+                        <label id="name"><b>@mr.custname Name</b></label>
+                    </th>
+
+                    <th style="width: 12%; text-align: center;">
+                        <label id="introducerid"><b>Introducer Id</b></label>
+                    </th>
+                    <th style="width: 8%; text-align: center;">
+                        <label id="position"><b>Mobile No</b></label>
+                    </th>
+
+                    <th style="width: 6%; text-align: center;">
+                        <label id="doj"><b>DOJ</b></label>
+                    </th>
+
+                    <th style="width: 10%; text-align: center;">
+                        <label><b>Booking Amount</b></label>
+                    </th>
+
+                    <th style="width: 8%; text-align: center;">
+                        <label><b>EMI Amount</b></label>
+                    </th>
+                    <th style="width: 8%; text-align: center;">
+                        <label><b>Total Amount</b></label>
+                    </th>
+                   
+
+                </tr>
+                    }
+
+                    a = a + 1;
+                <tr style="text-align: center;">
+                    <td>
+                        @a
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newbondid)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newintroducerid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mobileno)
+                    </td>
+                    <td>
+                        @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.installamount)
+                    </td>
+                    <td>
+                        @(item.amount+item.installamount)
+                    </td>
+
+                </tr>
+                   
+                }
+            }
+        </table>
+
+</div>
+    </div>
+
+</div>
+
+
+
+
+

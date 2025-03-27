@@ -1,0 +1,66 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<section class="page-title" style="background-image: url(/assets/images/background/bg-page-title.jpg);">
+    <div class="auto-container">
+        <div class="row clearfix">
+            <!--Title -->
+            <div class="title-column col-md-7 col-sm-6 col-xs-12">
+                <h1>Enquiry</h1>
+            </div>
+            <!--Bread Crumb -->
+            <div class="breadcrumb-column col-md-5 col-sm-6 col-xs-12">
+                <ul class="bread-crumb clearfix">
+                    <li><a href="../Home/Index">Home</a></li>
+                    <li class="active">Enquiry</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Contact Section-->
+
+
+<section class="contact-section" style="background-image: url(~/assets/images/background/image-slider2.jpg);">
+    <div class="auto-container">
+        <div class="outer">
+            <div class="row clearfix">
+                <!--Form Column-->
+
+                <div class="col-md-6 col-sm-12 col-xs-12" style="margin-left: 300px">
+                    <div class="inner-box">
+                        <div class="default-form">
+                            <form method="post" action="/Home/inquery" id="#">
+                                <div class="row clearfix">
+                                    <div class="form-group col-md-6 col-xs-12">
+                                        <input type="text" name="name" value="" placeholder="Your Name" required>
+                                    </div>
+                                    <div class="form-group col-md-6 col-xs-12">
+                                        <input type="email" name="emailid" value="" placeholder="Your Email" required>
+                                    </div>
+                                    <div class="form-group col-md-12 col-xs-12">
+                                        <input type="text" name="mobile" value="" placeholder="Mobile no" required>
+                                    </div>
+
+                                    <div class="form-group col-md-12 col-xs-12">
+                                        <div class="form-group">
+                                            <textarea name="message" placeholder="Your Message"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-left">
+                                    <button type="submit" id="btn_submit" onclick="proceed();" class="theme-btn btn-style-one">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

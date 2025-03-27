@@ -1,0 +1,162 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Emp_leave>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "ApproveDisapproveLeave";
+        var a = 0;
+    }
+                      <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#BranchCode").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteBrachcode",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.BranchName, value: item.BranchCode };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+
+    <script src="~/Scripts/print.js" type="text/javascript"></script>
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="container mt-5">
+        <!-- Title -->
+        <h2 class="text-center create-title">Employee Leave Request</h2>
+
+        @using (@Html.BeginForm())
+        {
+
+            <!-- Form -->
+            <div id="leaveRequestForm" class="form-container">
+                <!-- Branch Code or Name -->
+                <div class="form-group">
+                    <label for="branchCode" class="form-label">Enter @mr.branchname Code or Name</label>
+                    <input type="text" class="form-control" placeholder="Enter Branch Code or Name" id="BranchCode" name="BranchCode" required>
+                </div>
+
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn">Search</button>
+                </div>
+            </div>
+        }
+
+
+        <div id="1">
+            <div class="index_body">
+                <div class="table-container">
+                    <table>
+                        @using (Html.BeginForm())
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (a == 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label id="sn"><b>S.N.</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="NewAgentId1"><b>Employee Id</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="type"><b>Leave Type</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="name"><b>Reason</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label id="NewIntroducerId"><b>From Date</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label id="IntroName"><b>Till Date</b></label>
+                                            </th>
+
+
+                                            <th>
+                                                <label id="IntroName1"><b>Action</b></label>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                }
+                                a = a + 1;
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                @a
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.empid)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.leavetype)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.reason)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sdate)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.edate)
+                            </td>
+                            @if (item.status == 0)
+                            {
+
+                                <td>
+                                    @Html.ActionLink("Approve", "ApproveDisapproveLeave", new { empid = item.empid, status = 0 }, new { onclick = "return confirm('Are you sure to Approve leave?');" })
+
+                                </td>
+                            }
+                            @if (item.status == 1)
+                            {
+
+                                <td>
+                                    @Html.ActionLink("DisApprove", "ApproveDisapproveLeave", new { empid = item.empid, status = 1 }, new { onclick = "return confirm('Are you sure to DisApprove leave?');" })
+                                </td>
+                            }
+
+
+                        </tr>
+                    </tbody>
+
+                            }
+
+                        }
+
+
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+

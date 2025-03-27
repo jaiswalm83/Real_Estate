@@ -1,0 +1,207 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Expense>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "DailyExpenseOpwise";
+        var a = 0;
+        Double sum = 0;
+
+        Double expense = Convert.ToDouble(ViewData["expense"]);
+
+    }
+
+
+    <script src="~/Scripts/print.js" type="text/javascript"></script>
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#opid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteOpId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.OperatorName, value: item.OperatorId };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+
+    <div class="container" id="divid1">
+
+
+
+        <div class="container mt-5">
+            <h2 class="text-center mb-4 create-title">Daily Expense Report</h2>
+
+            @using (@Html.BeginForm())
+            {
+                <div id="hide">
+
+
+
+                    <div id="branchForm" class="form-container">
+
+                        <!-- Collection Point Name -->
+                        <div class="form-group" id="branchForm">
+                            <label for="collectionPointName" class="form-label">Collection Point Id</label>
+                            <input type="text" class="form-control" name="opid" id="opid" placeholder="Enter Collection Point Name" required>
+                        </div>
+
+
+
+
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label for="date" class="form-label">Start Date</label>
+                            <input type="text" class="form-control" name="sdate" id="date" placeholder="Enter Date" required>
+                        </div>
+
+
+
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label for="date" class="form-label">End Date</label>
+                            <input type="text" class="form-control" name="edate" id="date" placeholder="Enter Date" required>
+                        </div>
+
+
+
+
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+                            <button type="submit" name="command" value="Search" class="btn create-btn">View</button>
+                        </div>
+
+                    </div>
+
+
+
+
+
+                </div>
+
+
+            }
+        </div>
+
+        @using (Html.BeginForm())
+        {
+
+            <div id="1">
+                <table border="1" style="margin-left:1%; margin-right:1px; width:98%; margin-bottom:30px; ">
+                    @using (Html.BeginForm())
+                    {
+                        foreach (var item in Model)
+                        {
+
+                            if (a == 0)
+                            {
+                                <tr><td colspan="2" style="width:25%;text-align:left;font-size:medium;height:50px;"> <label id="dddd"><b>Branch Name: @ViewData["Branch"]</b></label></td><td colspan="3" style="width:75%;text-align:center;font-size:medium;height:50px;"><b>Daily Expense Report </b></td><td colspan="2" style="width:75%;text-align:center;font-size:medium;height:50px;"><b>Printed: @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</b></td></tr>
+
+                                <tr>
+                                    <th style="width:10%;text-align:center;">
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th style="width:30%;text-align:center;">
+                                        <label id="date"><b>Date</b></label>
+                                    </th>
+                                    <th style="width:30%;text-align:center;">
+                                        <label id="Head"><b>Head</b></label>
+                                    </th>
+                                    <th style="width:30%;text-align:center;">
+                                        <label id="bn"><b>Remark</b></label>
+                                    </th>
+                                    <th style="width:30%;text-align:center;">
+                                        <label><b>Paymethod</b></label>
+                                    </th>
+
+                                    <th style="width:30%;text-align:center;">
+                                        <label id="Amount"><b>Amount</b></label>
+                                    </th>
+
+
+                                </tr>
+                            }
+                            a = a + 1;
+
+
+                            <tr style="text-align:center;">
+                                <td>
+                                    @a
+                                </td>
+                                <td>
+                                    @Convert.ToDateTime(item.date_time).ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.head)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.amount)
+                                </td>
+                                <td>@item.paymethod</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remark)
+                                </td>
+
+
+                            </tr>
+                            sum = sum + Convert.ToDouble(item.amount);
+                        }
+
+                        if (a > 0)
+                        {
+                            <tr><td colspan="4" style="width:80%;text-align:right;"> <label id="toatlction"><b>Grand Total:</b></label></td><td colspan="2" style="width:20%;text-align:center;"><b>@sum</b></td></tr>
+
+
+
+                        }
+                    }
+
+
+
+                </table>
+                @if (a > 0)
+                {
+                    <a href="@Url.Action("PrintExpanseOpwise")" target="_blank">Get Report In PDF</a>
+                }
+            </div>
+
+        }
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Initialize Flatpickr
+        flatpickr("#date", {
+            dateFormat: "Y-m-d", // Format stored in the input field (e.g., 2025-01-18)
+            altInput: true,      // Show an alternate date format in the input field
+            altFormat: "F j, Y", // Format shown to the user (e.g., January 18, 2025)
+            allowInput: false,   // Disable manual typing, allowing only calendar selection
+            inline: false        // Show dropdown calendar (not inline)
+        });
+    </script>
+
+

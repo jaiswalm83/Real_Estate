@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AppSettingTab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "SetPaymethod";
+        var a = 0;
+    }
+
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Active-Deactive Wallet</div>
+            <table>
+                <thead>
+                 
+                            <tr>
+                                <th>S.no</th>
+                                <th>Wallet</th>
+                                <th>Action</th>
+                            </tr>
+                    
+                        </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        a = a + 1;
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                            <td>@Html.DisplayFor(modelItem => item.type)</td>
+                            @if (item.status == 0)
+                            {
+                                <td>
+
+                                    @Html.ActionLink("Active", "SetPaymethod", new { Id = item.Id, status = 1 }, new { onclick = "return confirm('Are you sure to Active Wallet?');" })
+                                </td>
+                            }
+
+                            @if (item.status == 1)
+                            {
+                                <td>
+                                    @Html.ActionLink("Deactive", "SetPaymethod", new { Id = item.Id, status = 0 }, new { onclick = "return confirm('Are you sure to Deactive Wallet?');" })
+                                </td>
+                            }
+                        </tr>
+                    }
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    

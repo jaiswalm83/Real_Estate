@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Addbank";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<div class="container mt-5">
+    <h2 class="text-center create-title mb-4">Bank Details Form</h2>
+    @using (Html.BeginForm())
+    {
+
+        <div id="bankForm" class="form-container">
+
+            <div class="col-md-6">
+
+                <input type="hidden" class="form-control" id="bankName" value="1" name="status" placeholder="Enter Bank Name" required>
+            </div>
+            <!-- Row 1 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="bankName" class="form-label">Bank Name:</label>
+                    <input type="text" class="form-control" id="bankname" name="bankname" placeholder="Enter Bank Name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="accountType" class="form-label">Account Type:</label>
+                    <select id="accountType" class="form-control" id="accountype" name="accountype" required>
+                        <option selected>Select </option>
+                        <option value="Saving Account">Saving Account </option>
+                        <option value="Current Account">Current Account</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="accountNo" class="form-label">Account No:</label>
+                    <input type="text" class="form-control" id="accountno" name="accountno" placeholder="Enter Account Number" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="bankBranch" class="form-label">Bank Branch:</label>
+                    <input type="text" class="form-control" id="branchname" name="branchname" placeholder="Enter Bank Branch" required>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="ifscCode" class="form-label">IFSC Code:</label>
+                    <input type="text" class="form-control" id="ifsccode" name="ifsccode" placeholder="Enter IFSC Code" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="authorizedSignatory1" class="form-label">Authorized Signatory 1:</label>
+                    <input type="text" class="form-control" id="Authorisedsignatory1" name="Authorisedsignatory1" placeholder="Enter Name" required>
+                </div>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="authorizedSignatory2" class="form-label">Authorized Signatory 2:</label>
+                    <input type="text" class="form-control" id="Authorisedsignatory2" name="Authorisedsignatory2" placeholder="Enter Name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="contactNo1" class="form-label">Contact No 1:</label>
+                    <input type="text" class="form-control" id="contact1" name="contact1" placeholder="Enter Contact No 1" required>
+                </div>
+            </div>
+
+            <!-- Row 5 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="contactNo2" class="form-label">Contact No 2:</label>
+                    <input type="text" class="form-control" id="contact2" name="contact2" placeholder="Enter Contact No 2">
+                </div>
+                <div class="col-md-6">
+                    <label for="branchAddress" class="form-label">Branch Address:</label>
+                    <input type="text" class="form-control" id="branchaddress" name="branchaddress" placeholder="Enter Branch Address" required>
+                </div>
+            </div>
+
+            <!-- Row 6 -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="accountOpenDate" class="form-label">Account Open Date:</label>
+                    <input type="date" class="form-control" id="acopendate" name="acopendate" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="panNo1" class="form-label">Pan No 1:</label>
+                    <input type="text" class="form-control" id="panno1" name="panno1" placeholder="Enter Pan No 1" required>
+                </div>
+            </div>
+
+            <!-- Row for Pan No 2 and Company Name -->
+            <div class="row mb-3">
+                <!-- Pan No 2 -->
+                <div class="col-md-6">
+                    <label for="panNo2" class="form-label">Pan No 2:</label>
+                    <input type="text" class="form-control" id="panno2" name="panno2" placeholder="Enter Pan No 2" required>
+                </div>
+                <!-- Company Name -->
+                <div class="col-md-6">
+                    <label for="companyName" class="form-label">Company Name:</label>
+                    <input type="text" class="form-control" id="companyname" name="companyname" placeholder="Enter Company Name" required>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn create-btn">Add Bank</button>
+            </div>
+
+
+            <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+
+        </div>
+    }
+    </div>
+
+

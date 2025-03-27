@@ -1,0 +1,176 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Salary>
+@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(c => c.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "FillSalary";
+    var a = 0;
+ 
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#planname").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteplan",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Plancode, value: item.Planname };
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+<style type="text/css">
+    .dd {
+        height:50px;
+        width:70%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+    .d {
+        height:50px;
+        width:30%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+
+</style>
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Fill Salary</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                        
+                    </div> 
+
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls">  
+
+                    
+                      
+                        
+     @using (Html.BeginForm()) {
+    
+
+                                    
+                   <div class="row-form">  
+                                         
+    <div class="col-md-9">
+        <div class="input-group">
+       <span class="input-group-addon">Select @mr.planname </span>  
+        <input type="text" class="form-control"  name="planname" id="planname" required/></div>
+                                   
+   </div>
+                        
+         </div>
+         
+                 <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+         <button  type="submit" class="btn btn-primary pull-right"> Submit</button>   
+                                </div>
+                                             </div>
+         
+       
+     <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+     }
+
+
+                                   <div style="width:100%;">
+
+                                       <table  border="1" style="width:100%;">
+      @foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+    <tr>
+           <th style="width:15%;text-align:center;">
+           <label id="JoiningCollection"><b>@mr.rankname code</b></label>
+        </th>
+
+       
+        <th style="width:15%;text-align:center;">
+           <label id="bsalary"><b>Basic Salary</b></label>
+        </th>
+        <th style="width:15%;text-align:center;">
+           <label id="TopupCollection"><b>Bonus Percent</b></label>
+        </th>
+         <th style="width:15%;text-align:center;">
+           <label id="Total"><b>Insurance</b></label>
+        </th>
+          <th style="width:10%;text-align:center;">
+           <label id="edit"><b>Edit</b></label>
+        </th>
+      
+    </tr>
+    }
+                        a = a + 1;
+                       
+                         
+    <tr style="text-align:center;">
+       
+         <td >
+            @Html.DisplayFor(modelItem => item.rankcode)
+
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.BasicSalary)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bonuspercent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.insurance)
+        </td>
+
+        <td>
+       @Html.ActionLink("Edit", "Edit", new { id=item.rankcode })
+         </td>
+      
+    </tr>
+        
+                    }
+    
+
+
+    </table>
+        </div>
+
+                                </div>
+                                
+                            
+                                         
+                                    </div>
+                            </div>
+                                        
+                   </div> </div> </div>

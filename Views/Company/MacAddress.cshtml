@@ -1,0 +1,119 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.MacTab>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var sma = db.SetMacTabs.Single(m => m.Id == 1); 
+    Layout = "~/Views/Shared/_CompanyLayout.cshtml";
+    ViewBag.Title = "MacAddress";
+    var a = 0;
+}
+
+<div class="page-content">
+      
+                   
+                <div class="container" id="divid">
+                  
+<div class="page-toolbar" >
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Active-Deactive Mac Address</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                               <div class="page-toolbar-block pull-right">
+                            
+                        </div>    
+                        
+                    </div> 
+
+                    <table style="margin-left:1%; margin-right:1%; width:98%;">
+   
+    
+  <tr>
+        <td colspan="3" style="width:10%;text-align:center;"></td>
+          
+       
+    </tr>
+                        <tr>
+        <td style="width:40%;">
+           <label id="aaaa">Select MacAddress System Mode</label>
+            </td>
+        @if (sma.status == 1)
+        {
+         <td>
+                
+            @Html.ActionLink("Deactive", "MacAddress", new { status = 2 }, new { onclick = "return confirm('Are you sure to Deactive Macaddress System?');" })
+        </td>
+        }
+        @if (sma.status == 0)
+        {
+        <td>
+            @Html.ActionLink("Active", "MacAddress", new {status = 3}, new { onclick = "return confirm('Are you sure to Active Macaddress System?');" })
+        </td>
+        } 
+          
+    </tr>
+        
+
+</table>
+                   
+      <br />
+<table border="1" style="margin-left:1%; margin-right:1%; width:98%;">
+   
+    @foreach (var item in Model)
+    {
+        if (a == 0)
+        {
+  <tr>
+        <th style="width:10%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:40%;text-align:center;">
+           <label id="UserID"><b>User ID</b></label>
+            </th>
+        
+        <th style="width:40%;text-align:center;">
+           <label id="Type"><b>Type</b></label>
+            
+        
+          <th style="width:10%;text-align:center;">
+           <label id="Action"><b>Action</b></label>
+        </th>
+    </tr>
+        }
+
+        a = a + 1;
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.userid)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.type)
+        </td>
+        
+         @if (item.status == 1)
+         {
+         <td>
+                
+            @Html.ActionLink("Deactive", "MacAddress", new { userid = item.userid, status = 1 }, new { onclick = "return confirm('Are you sure to Deactive Macaddress for this?');" })
+        </td>
+         }
+        @if (item.status == 0)
+        {
+        <td>
+            @Html.ActionLink("Active", "MacAddress", new { userid = item.userid, status = 0 }, new { onclick = "return confirm('Are you sure to Active Macaddress for this?');" })
+        </td>
+        } 
+    </tr>
+    } 
+
+</table>
+      
+                    </div>
+
+
+    </div>
+

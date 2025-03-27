@@ -1,0 +1,75 @@
+﻿@using ODHDEVELOPERS.Models;
+@using System;
+@{
+    Layout="~/Views/Shared/_AdminLayout.cshtml";
+ }
+
+<script>
+    $(function () {
+        $('[name=AgentId]').autocomplete({            
+            source: function (request, response) {
+                debugger;
+                $.ajax({
+                    url: "/Admin/AgentWelcomeLetter",
+                    type: "Get",
+                    datatype: "JSON",
+                    data: { AgentId: request.term ,Recogniser:"Print"},
+                    success: function (data) {
+                        debugger;
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId }                           
+                        }));
+                    }
+                });
+            }
+        });
+
+        $("#btn").on("click", function (e) {
+           
+           // window.open("");
+
+        });
+
+    });
+        
+</script>
+
+ <div class="page-content">
+     <div class="clearfix"></div>
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Agent Welcome Letter</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <form action="/admin/AgentWelcomeLetter" method="post">
+         <div class="row " id="hide">
+        <div class="col-md-2"></div>
+       
+        <div class="col-md-4">
+            <label style="font-weight:bold">Enter the Agent Id :</label>
+            <input type="text" name="AgentId" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <br />
+            <button id="btn" type="submit" class="btn btn-primary btn-md" style="margin-top:2px;">Print Welcome Letter</button>
+        </div>
+    </div>
+            </form>
+        </div>
+     <div class="clearfix"></div>
+     </div>
+                          
+           
+
+

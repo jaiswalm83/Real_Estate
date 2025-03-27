@@ -1,0 +1,148 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "AgentPrmote";
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#intro").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#promoterank").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Operator/AutoCompleteRank",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.RankName, value: item.RankCode };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+
+<script>
+    function check(check_id) {
+
+        $("#" + check_id).mouseover(function () {
+            var intro = $("#" + check_id).val();
+            var url = '@Url.Action("SelectRankName", "Admin")';
+            $.get(url, { intro: intro }, function data(name1) {
+                $('#rank').val(name1[0].RankName)
+            });
+        });
+
+    }
+</script>
+
+
+
+<script>
+    function checkintrankadmin(check_id) {
+
+        $("#" + check_id).mouseover(function () {
+            var rank = $("#" + check_id).val();
+            var intcode = $("#intro").val();
+            var url = '@Url.Action("checkintrankadmin", "Admin")';
+            $.get(url, { intcode: intcode, rank: rank }, function data(d) {
+                for (var i = 0; i < d.length; i++) {
+
+
+                    if (d[i].type == 0) {
+                        $("#msg").text(d[i].msg)
+                    }
+                    else if (d[i].type == 1) {
+                        $("#msg").text('')
+                    }
+                }
+
+
+
+            });
+        });
+
+    }
+</script>
+
+
+@using (Html.BeginForm())
+{
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">Promote @mr.agentname</h2>
+        <div id="branchForm" class="form-container">
+
+
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Enter @mr.agentname Id</label>
+                <input type="text" class="form-control " onmouseover="check(this.id)" name="intro" id="intro" placeholder="Enter Name or Id" required>
+            </div>
+
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Current @mr.rankname</label>
+                <input type="text" class="form-control" id="rank" name="rank" placeholder="Enter Current Rank">
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">@mr.rankname To Promote</label>
+                <input type="text" class="form-control" id="promoterank" name="promoterank" onmouseover="checkintrankadmin(this.id)" placeholder="Enter New Rank" required>
+            </div>
+
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn create-btn">@mr.agentname Promote</button>
+            </div>
+
+
+          
+
+
+
+
+            </div>
+        </div>
+
+                    
+            }

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseDueCollection>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        ViewBag.Title = "Selfbusiness";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+        var br = db.Branchtabs.Single(o => o.BranchCode == User.Identity.Name);
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newagentid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    <div class="container mt-4 FormContainer">
+        <h2 class="text-center mb-4">@mr.agentname Business Details</h2>
+        <div class="border p-4 rounded shadow formtag">
+            @using (Html.BeginForm())
+            {
+                <!-- Project Year -->
+                <div class="mb-3">
+                    <label for="year" class="form-label formLabel">Select @mr.agentname Id:</label>
+                    <input type="text" id="newagentid" name="newintroducerid" class="form-control formInput" required>
+                </div>
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button class="btn btn-lg formButtom"><i class="fa fa-search"></i>Search</button>
+                </div>
+            }
+        </div>
+        <table class=" mt-3">
+            @using (Html.BeginForm())
+            {
+                foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+                        <thead>
+                            <tr style="">
+                                <th colspan="4" class="header-row" style="border-radius: 8px 0 0 0;;">@mr.agentname Id:@item.newintroducerid</th>
+                                <th colspan="4" class="header-row" style="border-radius: 0 8px 0 0;">@mr.agentname Name:@item.IntroName</th>
+                            </tr>
+                            <tr>
+                                <th><label id="sn"><b>S.N.</b></label></th>
+                                <th><label id="newid"><b>@mr.custname Id</b></label></th>
+                                <th><label id="name"><b>Name</b></label></th>
+                                <th><label id="introducerid"><b>Introducer Id</b></label></th>
+                                <th><label id="position"><b>@mr.branchname </b></label></th>
+                                <th><label id="Amount"><b>Amount</b></label></th>
+                                <th><label id="doj"><b>Date Of Joining </b></label></th>
+                            </tr>
+                        </thead>
+                    }
+                    a = a + 1;
+                    <tbody>
+                        <tr>
+                            <td>@a</td>
+                            <td>@Html.DisplayFor(modelItem => item.newbondid)</td>
+                            <td>@Html.DisplayFor(modelItem => item.name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.newintroducerid)</td>
+                            <td>@Html.DisplayFor(modelItem => item.branchname)</td>
+                            <td>@Html.DisplayFor(modelItem => item.amount)</td>
+                            <td>@Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    </tbody>
+                }
+            }
+        </table>
+        @if (a > 0)
+        {
+            <a href="@Url.Action("PrintSelfbusiness")" target="_blank">Get Report In PDF</a>
+        }
+
+    </div>
+
+   
+

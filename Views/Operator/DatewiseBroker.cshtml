@@ -1,0 +1,184 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerList>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "DatewiseBroker";
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        var a = 0;
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(c => c.Id == 1);
+
+    }
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+
+
+    <div id="divid">
+
+
+        <div class="container mt-5">
+
+            <h2 class="text-center mb-4 create-title">Datewise @mr.agentname</h2>
+            @using (Html.BeginForm())
+            {
+
+                <div id="branchForm" class="form-container">
+
+                    <!-- Date -->
+                    <div class="form-group">
+                        <label for="date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" name="sdate" placeholder="Enter Date" required>
+                    </div>
+
+
+                    <!-- Date -->
+                    <div class="form-group">
+                        <label for="date" class="form-label">End Date</label>
+                        <input type="date" class="form-control" name="edate" placeholder="Enter Date" required>
+                    </div>
+
+                    <!-- Create Button -->
+                    <div class="text-center d-grid gap-2">
+                        <button type="submit" class="btn create-btn"><i class="fa fa-cog"></i>Search</button>
+                    </div>
+
+                </div>
+
+            }
+
+
+
+
+            @*</div>
+
+                </div>
+                                </div>
+                            </div>
+                        </div>*@
+
+            <div class="index_body">
+                <div class="table-container">
+
+                    <table>
+
+                        @foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" style="background-color:#ff5722; color:white">@mr.branchname Name:@item.branchname</th>
+                                        <th colspan="2" style="background-color:#ff5722; color:white"><b> Duration:@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy") -@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></th>
+                                        <th colspan="3" style="background-color:#ff5722; color:white"><b> Datewise @mr.agentname List</b></th>
+
+                                    </tr>
+                                </thead>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label><b>S.N.</b></label>
+                                        </th>
+                                        <th>
+                                            <label><b>@mr.agentname Id</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label><b>Name</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label><b>@mr.rankname</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label><b>Introducer Id</b></label>
+                                        </th>
+
+
+                                        <th>
+                                            <label><b>Mobile No</b></label>
+                                        </th>
+
+
+                                        <th>
+                                            <label id="email"><b>Date of Joining</b></label>
+                                        </th>
+
+
+                                    </tr>
+                                </thead>
+                            }
+
+                            a = a + 1;
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.newagentid)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.rankname)
+                                    </td>
+
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.introducerid)
+                                    </td>
+
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.mobile)
+                                    </td>
+
+                                    <td>
+                                        @Convert.ToDateTime(item.doj).ToString("dd/MM/yyyy")
+                                    </td>
+
+
+
+
+
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+
+                    @if (a > 0)
+                    {
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+                            <a href="@Url.Action("PrintDatewiseBroker")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                        </div>
+
+                    }
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+

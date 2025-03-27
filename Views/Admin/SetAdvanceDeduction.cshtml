@@ -1,0 +1,202 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1); 
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "SetAdvanceDeduction";
+}
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+<script>
+    $(function () {
+        $('#date').datepick();
+    });
+
+</script>
+
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newagentid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+
+                    }
+                })
+            }
+        });
+    })
+</script>
+<script>
+    function checkbalance(id) {
+
+        // $("#" + id).mouseover(function () {
+            var newagentid = $("#newagentid").val();
+            var url = '@Url.Action("checkbalance", "Branch")';
+            $.get(url, { newagentid: newagentid}, function data(t) {
+                for (var i = 0; i < t.length; i++) {
+
+                    $("#advbalance").val(t[i].balanceamount);
+                }
+            });
+
+       //});
+
+    }
+
+    
+</script>
+<script>
+    function checkadv(checkid) {
+
+        var a = parseFloat($("#advbalance").val());
+        var b = parseFloat($("#" + checkid).val());
+        if (b > a) {
+            return alert('Deduction Amount should be less than Balance Amount..');
+        }
+
+      
+    }
+ </script>
+<div class="page-content">
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">@mr.agentname Advance Deduction</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+
+        <div class="row" style="width: 100%">
+            <div class="col-md-6" style="width: 100%">
+
+                <div class="block" style="width: 100%">
+                    <div class="block-content controls">
+
+                        @using (Html.BeginForm())
+                        {
+            
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Enter @mr.agentname Id</label></span>
+                                    <input type="text" id="newagentid" name="newagentid" onmouseover="checkbalance(this.id)" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Select Month</label></span>
+                                    <select class="form-control" id="month" name="month" required>
+                                        <option selected>Select </option>
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Select Year</label></span>
+                                    <select class="form-control" id="year" name="year" required>
+                                        <option selected>Select </option>
+                                        <option>2013 </option>
+                                        <option>2014 </option>
+                                        <option>2015 </option>
+                                        <option>2016 </option>
+                                        <option>2017 </option>
+                                        <option>2018 </option>
+                                        <option>2019 </option>
+                                        <option>2020 </option>
+                                        <option>2021 </option>
+                                        <option>2022 </option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Enter Amount</label>
+                                        </span>
+                                        <input type="number" step="any" class="form-control" name="amount" id="Amount" onclick="checkadv(this.id)" required />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Advance Balance Amount</label>
+                                        </span>
+                                        <input type="number" step="any" class="form-control" name="advbalance" id="advbalance" value="0" readonly="true" required />
+                                    </div>
+
+                                </div>
+
+                            </div>
+         
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Enter Remarks</label>
+                                        </span>
+                                        <input type="text" class="form-control" name="Remark" id="Remarks" required />
+                                    </div>
+
+                                </div>
+
+                            </div>
+         
+                            <div class="page-toolbar-block pull-right">
+                                <div class="widget-info widget-from">
+                                    <button type="submit" class="btn btn-primary pull-right" onclick="return confirm('Are you sure to Advance Deduction?')">Add</button>
+                                </div>
+                            </div>
+         
+                            <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+                        }
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

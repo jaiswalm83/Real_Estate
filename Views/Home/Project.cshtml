@@ -1,0 +1,170 @@
+﻿@*@using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var d = db.CompanyInfos.Single(ci => ci.Id == 1);
+        var cty = db.Plans.ToList();
+        var blk = db.BlockTabs.ToList();
+        ViewBag.Title = "Project1";
+        Layout = "~/Views/Shared/_Layout1.cshtml";
+    }*@
+
+
+
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutNew1.cshtml";
+    UsersContext db = new UsersContext();
+    var comp = db.commission_tabs.Where(x => x.Id == 1).ToList();
+    var countachive = db.Acheviers.Where(x => x.status == 1).Count();
+    var ban_img = db.banner_tabs.Where(x => x.status == 1).ToList();
+}
+
+
+
+<!--===== MOBILE HEADER STARTS =======-->
+<!--===== HERO AREA STARTS =======-->
+<div class="hero-inner-section-area-sidebar">
+    <img src="~/assetshome/img/all-images/hero/hero-img1.png" alt="housebox" class="hero-img1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hero-header-area text-center">
+                    <a href="index.html">
+                        Home <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z"></path>
+                        </svg> Projects
+                    </a>
+                    <div class="space24"></div>
+                    <h1>Projects</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===== HERO AREA ENDS =======-->
+<!--===== DASHBOARD AREA STARTS =======-->
+<div class="dashboard-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="space30"></div>
+                <div class="dashboad-all-details-section">
+                    <h3>New Listing</h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4 col-md-6">
+                            <h6 class="current mt-3">Project Name</h6>
+                            <div class="input-area" style="margin-top: 5px;">
+                                <div class="nice-select" tabindex="0">
+                                    <span class="current">--Select--</span>
+                                    <ul class="list">
+                                        <li data-value="1" class="option">Today</li>
+                                        <li data-value="2" class="option selected">Yesterday</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <h6 class="current mt-3">Choose Phase</h6>
+                            <div class="input-area" style="margin-top: 5px;">
+                                <div class="nice-select" tabindex="0">
+                                    <span class="current">--Select--</span>
+                                    <ul class="list">
+                                        <li data-value="1" class="option">Today</li>
+                                        <li data-value="2" class="option selected">Yesterday</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <h6 class="current mt-3">Enter Block</h6>
+                            <div class="input-area" style="margin-top: 5px;">
+                                <div class="nice-select" tabindex="0">
+                                    <span class="current">--Select--</span>
+                                    <ul class="list">
+                                        <li data-value="1" class="option">Today</li>
+                                        <li data-value="2" class="option selected">Yesterday</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row text-center " id="main" style="gap: 20px;margin-left: 8px !important;">
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">1</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">2</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">3</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">4</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">5</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">6</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">7</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">8</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">9</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">11</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">12</div>
+                        <div class="col-md-1 col-4" id="box"
+                             style="background-color: rgb(188, 38, 38); color:white; border-radius: 5px; height:90px; width:120px;">13</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===== DASHBOARD AREA ENDS =======-->
+<!--===== CTA AREA STARTS =======-->
+<div class="cta1-section-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="cta-bg-area"
+                     style="background-image: url(/assetshome/img/all-images/bg/background.png); background-position: center; background-repeat: no-repeat; background-size: cover;">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5">
+                            <div class="cta-header">
+                                <h2 class="text-anime-style-3">Step Into Your Dream Home with R.G.A</h2>
+                                <div class="space16"></div>
+                                <p data-aos="fade-left" data-aos-duration="1000">
+                                    At R.G.A, we believe your next home is more than just a
+                                    place – it’s where your future begins you’re buy.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-5" data-aos="zoom-in" data-aos-duration="1000">
+                            <div class="btn-area1 text-center">
+                                <a href="projects.html" class="theme-btn1">
+                                    Find Your Dream Home <span class="arrow1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                            <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                        </svg>
+                                    </span><span class="arrow2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                             width="24" height="24" fill="currentColor">
+                                            <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===== CTA AREA ENDS =======-->

@@ -1,0 +1,254 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Media_Centre";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var countachivers = db.Mediagallerys.ToList().Count();
+    var a = 0;
+}
+
+<script>
+    function readURL3(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#sasa')
+                    .attr('src', e.target.result)
+                    .width(200)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+
+        }
+    }
+    $(document).ready(function () {
+        $("#sasa").click(function () {
+            $("#pic").click();
+        });
+    });
+</script>
+
+<style>
+    #myTable th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    #myTable {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        #myTable th, td {
+            font-size: 9pt;
+        }
+
+    #myTable {
+        padding: 5pt;
+    }
+</style>
+<script>
+    function showmodel(chechid) {
+        debugger;
+        var _newid = chechid;
+        event.preventDefault();
+        if (confirm('Are you sure update achiver?')) {
+            $.ajax({
+                url: "/admin/medieagalleries/", type: "get", data: { newid: _newid },
+                success: function (d) {
+                    for (var i = 0; i < d.length; i++) {
+                        $("#imgachiver").attr("src", d[i].Image.replace('~', ''));
+                        $("#Slide2").val(d[i].Heading);
+                        $("#Slide3").val(d[i].Slide3);
+                        $("#Slide4").val(d[i].Slide4);
+                        $("#newid").val(d[i].Id);
+                    }
+                }
+            });
+        }
+        setTimeout(function () {
+            debugger;
+            $('[data-toggle="mypopover"]').attr("data-placement", "left").popover({ "trigger": "hover" });
+        }, 2000);
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgachiver')
+                    .attr('src', e.target.result)
+                    .width(102)
+                    .height(80);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+@if (TempData["msg"] != null)
+{
+    <script>
+        alert('@TempData["msg"]');
+    </script>
+
+}
+
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title"> Add Gallery</h2>
+
+    @using (Html.BeginForm("Media_Centre", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <!-- Form -->
+        <div id="galleryUploadForm" class="form-container" onsubmit="return handleGalleryUpload(event)">
+
+            <!-- Gallery Image Upload -->
+            <div class="form-group">
+                <label for="galleryImage" class="form-label">Gallery Image</label>
+                <input type="file" class="form-control" name="Image" class="form-control" onchange="readURL3(this)" id="pic" accept="image/*">
+                <small>File size should be between 500kb–5000kb,Please Upload  1080 pixels wide x 1920 pixels height.</small>
+                <p id="imageError" style="color: red; display: none;">Please upload a valid image within the specified size.</p>
+            </div>
+
+            <!-- Description Input -->
+            <div class="form-group">
+                <label for="imageDescription" class="form-label">Description</label>
+                <input type="text" class="form-control" id="imageDescription" name="Heading" placeholder="Enter Image Description" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" name="command" value="Upload" class="btn create-btn">Upload</button>
+            </div>
+            <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+        </div>
+    }
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Uploaded Gallery Images</div>
+            @if (countachivers != 0)
+            {
+                <table id="myTable">
+                    <thead>
+
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Image</th>
+                            <th>Description</th>
+                            <th>Upload Date</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in db.Mediagallerys.Where(x => x.Id >= 1 && x.status != 3).ToList())
+                        {
+                            a = a + 1;
+                            <tr>
+                                <td>@a</td>
+                                <td><img src="@Url.Content(item.Image)" style="height:100px;width:100px" class="img-responsive" /></td>
+                                <td>@item.Heading</td>
+                                <td>@item.Cdate.ToString("dd/MM/yyyy")</td>
+                                @if (@item.status == 0)
+                                {
+                                    <td style="text-align: center;"><a href="@Url.Action("mediastatus", "Admin", new { opid = @item.Id, status = item.status })" class="btn btn-primary">Active</a></td>
+                                }
+                                else
+                                {
+                                    <td style="text-align: center;"><a href="@Url.Action("mediastatus", "Admin", new { opid = @item.Id, status = item.status })" class="btn btn-danger">Block</a></td>
+                                }
+                                @if (item.status != 0)
+                                {
+                                    <td style="color:green;">Active</td>
+                                }
+                                else
+                                {
+                                    <td style="color:red;">Inactive</td>
+                                }
+                                <td>
+
+                                    <a href="#myModal" role="button" class="btn" data-toggle="modal" id="@item.Id" onclick="showmodel(this.id)">Update</a>|<a href="@Url.Action("mediadelete", "Admin", new { opid = item.Id , status=item.status })" role="button" class="btn">Delete</a>
+                                </td>
+
+                            </tr>
+
+
+
+                        }
+
+                    </tbody>
+                </table>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header text-center" style="background-color: #1e293b; color: white; width: 100%; padding: 15px; border-bottom: 3px solid #0d6efd;">
+                <h4 class="modal-title w-100 font-weight-bold">Update Gallery</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; font-size: 24px;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body" style="padding: 20px;">
+                <div class="row">
+                    @using (Html.BeginForm("Media_Centre", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <input type="hidden" id="newid" name="newid" />
+
+                        <div style="overflow-x: auto;">
+                            <table class="table table-striped" style="width:100%; max-width:488px; min-width:488px">
+                                <tr>
+                                    <td style="font-weight: 600; width: 30%;">Gallery Image</td>
+                                    <td>
+                                        <img src="" style="height: 80px; width: 102px; border-radius: 5px; object-fit: cover; border: 1px solid #ddd; padding: 5px;" id="imgachiver" />
+                                        <input type="file" onchange="readURL(this)" name="Image" class="form-control mt-2" style="border-radius: 5px; padding: 8px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600;">Description</td>
+                                    <td><input name="Heading" id="Slide2" type="text" class="form-control" style="border-radius: 5px; padding: 8px;"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td class="text-right">
+                                        <button type="submit" class="btn btn-primary" name="command" value="Update" style="padding: 10px 20px; border-radius: 5px; font-weight: 600;">Update</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,183 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.HeadwiseExpense>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "HeadWiseExpense";
+        var a = 0;
+        Double sum = 0;
+        Double expense = Convert.ToDouble(ViewData["expense"]);
+        var headlist = (from h in db.Expenses select new { h.head }).Distinct();
+
+    }
+
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+
+    <div class="page-content">
+
+
+        <div class="container" id="divid1">
+            <div class="page-toolbar" id="2">
+
+                <div class="page-toolbar-block">
+                    <div class="page-toolbar-title">Head Wise Expense Report</div>
+                    <div class="page-toolbar-subtitle"></div>
+                </div>
+
+                <div class="page-toolbar-block pull-right">
+
+                </div>
+
+            </div>
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">Head Wise Expense Reportre1`</h2>
+
+                @using (@Html.BeginForm())
+                {
+                    <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+
+                            <div class="block">
+
+                                <div class="block-content controls">
+                                    <div class="row-form">
+
+
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><label class="width">Select Head </label></span>
+                                                <select class="form-control" id="head" name="head" required>
+                                                    <option selected>Select </option>
+                                                    @foreach (var head in headlist)
+                                                    {
+                                                        <option>@head.head </option>
+                                                    }
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row-form">
+                                        <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                                            <span class="input-group-addon"><label class="width">Select Start Date</label></span>
+                                            <input type="text" id="sdate" class="form-control datepicker" required name="sdate">
+
+                                        </div>
+                                    </div>
+                                    <div class="row-form">
+                                        <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                                            <span class="input-group-addon"><label class="width">Select End Date</label></span>
+                                            <input type="text" id="edate" class="form-control datepicker" required name="edate">
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row-form" style="width:100%">
+                                        <div class="col-md-9">
+                                            <button id="submit" name="command" value="Search" class="btn btn-primary pull-right" type="submit">View</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @using (Html.BeginForm())
+                {
+
+                    <div id="1">
+                        <table border="1" style="margin-left:1%; margin-right:1px; width:98%; margin-bottom:30px; ">
+                            @using (Html.BeginForm())
+                            {
+                                foreach (var item in Model)
+                                {
+
+                                    if (a == 0)
+                                    {
+                                        <tr><td colspan="2" style="width:25%;text-align:left;font-size:medium;height:50px;"> <label id="dddd"><b></b></label></td><td colspan="4" style="width:75%;text-align:center;font-size:medium;height:50px;"><b>Head Wise Expense Report </b></td><td colspan="2" style="width:75%;text-align:center;font-size:medium;height:50px;"><b>Printed: @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</b></td></tr>
+
+                                        <tr>
+                                            <th style="width:10%;text-align:center;">
+                                                <label id="sn"><b>S.N.</b></label>
+                                            </th>
+                                            <th style="width:30%;text-align:center;">
+                                                <label id="date"><b>Date</b></label>
+                                            </th>
+                                            <th style="width:20%;text-align:center;">
+                                                <label id="Head"><b>Head</b></label>
+                                            </th>
+
+                                            <th style="width:30%;text-align:center;">
+                                                <label><b>Remark</b></label>
+                                            </th>
+                                            <th style="width:30%;text-align:center;">
+                                                <label><b>Opid</b></label>
+                                            </th>
+                                            <th style="width: 20%; text-align: center;">
+                                                <label><b>Paymethod</b></label>
+                                            </th>
+                                            <th style="width:30%;text-align:center;">
+                                                <label id="Amount"><b>Amount</b></label>
+                                            </th>
+
+
+                                        </tr>
+                                    }
+                                    a = a + 1;
+
+
+                                    <tr style="text-align:center;">
+                                        <td>
+                                            @a
+                                        </td>
+                                        <td>
+                                            @Convert.ToDateTime(item.date).ToString("dd/MM/yyyy")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.head)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.remark)
+                                        </td>
+                                        <td>@item.opid</td>
+                                        <td>@item.paymethod</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.amount)
+                                        </td>
+
+
+                                    </tr>
+                                    sum = sum + Convert.ToDouble(item.amount);
+                                }
+
+                                if (a > 0)
+                                {
+                                    <tr><td colspan="3" style="width:80%;text-align:right;"> <label id="toatlction"><b>Grand Total:</b></label></td><td colspan="4" style="width:20%;text-align:right;padding-right:38px"><b>@sum</b></td></tr>
+
+
+
+                                }
+                            }
+
+
+
+                        </table>
+                        @if (a > 0)
+                        {
+                            <a href="@Url.Action("PrintHeadWiseExpense")" target="_blank">Get Report In PDF</a>
+                        }
+                    </div>
+
+                }
+            </div>
+        </div>
+

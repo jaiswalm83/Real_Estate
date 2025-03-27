@@ -1,0 +1,69 @@
+﻿
+@model IEnumerable<ODHDEVELOPERS.Models.VFormatTab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+        var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+        var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "VoucherFormat";
+        var a = 0;
+    }
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Active-Deactive Voucher Format</div>
+            <table>
+                @foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+                        <thead>
+
+
+
+
+                            <tr>
+                                <th>S.no</th>
+                                <th>Format</th>
+                                <th>Action</th>
+                            </tr>
+
+
+                        </thead>
+                    }
+
+                    a = a + 1;
+                        <tbody>
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                                <td>  @Html.DisplayFor(modelItem => item.type)</td>
+                                @if (item.status == 0)
+                                {
+                                    <td>
+
+                                        @Html.ActionLink("Active", "VoucherFormat", new { Id = item.Id, status = 1 }, new { onclick = "return confirm('Are you sure to Active this Format?');" })
+                                    </td>
+                                }
+                                @if (item.status == 1)
+                                {
+                                    <td>
+                                        @Html.ActionLink("Deactive", "VoucherFormat", new { Id = item.Id, status = 0 }, new { onclick = "return confirm('Are you sure to Deactive this Format?');" })
+                                    </td>
+                                }
+
+
+
+                            </tr>
+
+
+                        </tbody>
+                    }
+                
+            </table>
+                  
+        </div>
+    </div>
+   

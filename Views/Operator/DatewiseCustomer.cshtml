@@ -1,0 +1,204 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseCustomerList>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "DatewiseCustomer";
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        var a = 0;
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(c => c.Id == 1);
+        var pr = db.Operators.Single(b => b.OperatorId == User.Identity.Name);
+        var br = db.Branchtabs.Single(b => b.BranchCode == pr.BranchCode);
+    }
+
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+
+
+        <div  id="divid">
+
+         
+            <div class="container mt-5">
+
+                <h2 class="text-center mb-4 create-title">Datewise @mr.custname</h2>
+                @using (Html.BeginForm())
+                {
+
+                    <div id="branchForm" class="form-container">
+
+
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label for="date" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" name="sdate" placeholder="Enter Date" required>
+                        </div>
+
+
+
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label for="date" class="form-label">End Date</label>
+                            <input type="date" class="form-control" name="edate" placeholder="Enter Date" required>
+                        </div>
+
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+                            <button type="submit" class="btn create-btn"><i class="fa fa-cog"></i>Search</button>
+                        </div>
+
+
+                    </div>
+
+
+                }
+
+
+
+
+                <div class="index_body">
+                    <div class="table-container">
+                        <table>
+
+                            @using (Html.BeginForm())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    if (a == 0)
+                                    {
+                                        <thead>
+                                            <tr>
+                                                <th colspan="4" style="background-color:#ff5722; color:white">@mr.branchname Name:@br.BranchName</th>
+                                                <th colspan="4" style="background-color:#ff5722; color:white"><b>@mr.custname List</b></th>
+                                                <th colspan="4" style="background-color:#ff5722; color:white"><b>Dated:@DateTime.Now.Date.ToString("dd/MM/yyyy")</b></th>
+                                            </tr>
+                                        </thead>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <label id="sn"><b>S.N.</b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="newid"><b>@mr.custname Id</b></label>
+                                                </th>
+
+                                                <th>
+                                                    <label id="introducerid"><b>Name</b></label>
+                                                </th>
+
+                                                <th>
+                                                    <label id="spilid"><b>Introducer Id</b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="position"><b>@mr.planname Name</b></label>
+                                                </th>
+                                                <th>
+                                                    <label><b>Booking Amount</b></label>
+                                                </th>
+                                                <th>
+                                                    <label><b>Adv.Payment</b></label>
+                                                </th>
+                                                <th>
+                                                    <label><b>Plot Size</b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="doj"><b>Payment </b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="Mode"><b>Mode</b></label>
+                                                </th>
+                                                <th>
+                                                    <label id="email"><b>Mobile No</b></label>
+                                                </th>
+
+                                                <th>
+                                                    <label id="dojh"><b>Date of Joining</b></label>
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                    }
+                                    a = a + 1;
+
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                @a
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.newbondid)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.name)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.newintroducerid)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.planname)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.bookingamount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.downpayment)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.plotsize)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.payment)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.mode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Mobile)
+                                            </td>
+                                            <td>
+                                                @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+
+                                }
+
+                            }
+
+
+
+                        </table>
+
+                        @if (a > 0)
+                        {
+                           
+                            <!-- Create Button -->
+                            <div class="text-center d-grid gap-2">
+
+                                <a  href="@Url.Action("PrintDatewiseCustomer")"  target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                            </div>
+                        }
+
+
+
+
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+

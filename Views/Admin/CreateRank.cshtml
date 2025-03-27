@@ -1,0 +1,50 @@
+﻿@model ODHDEVELOPERS.Models.Ranktab
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "CreateRank";
+}
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Create New Level</h2>
+
+    @using (Html.BeginForm())
+    {
+        <!-- Form -->
+        <div id="levelForm" class="form-container">
+            <!-- Level Name -->
+            <div class="form-group">
+                <label for="levelName" class="form-label">@mr.rankname Name</label>
+                <input type="text" class="form-control" name="RankName" id="rankname" placeholder="Enter Level Name" required>
+            </div>
+
+            <!-- Level Shortcut -->
+            <div class="form-group">
+                <label for="levelShortcut" class="form-label">@mr.rankname Shortcut</label>
+                <input type="text" class="form-control" name="Rankshrtcut" id="rankshortcut" placeholder="Enter Level Shortcut" required>
+            </div>
+
+            <!-- Self Joining -->
+            <div class="form-group">
+                <label for="selfJoining" class="form-label">Self Joining</label>
+                <input type="text" class="form-control" name="Selfquota" id="selfquota" placeholder="Enter Self Joining" required>
+            </div>
+
+            <!-- Team Quota -->
+            <div class="form-group">
+                <label for="teamQuota" class="form-label">Team Quota</label>
+                <input type="text" class="form-control" name="TeamQuota" id="teamquota" placeholder="Enter Team Quota" required>
+            </div>
+
+            <!-- Create Button -->
+            <div class="text-center">
+                <button type="submit" class="btn create-btn">Create @mr.rankname</button>
+            </div>
+        </div>
+        <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+    }
+</div>

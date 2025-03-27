@@ -1,0 +1,303 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BalanceReport>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(id => id.Id == 1);
+        var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+        var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+        var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+        var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "RPStatementReport";
+        var a = 0;
+
+
+    }
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+
+        });
+    </script>
+   
+
+
+        <div  id="divid1">
+            <div  id="2">
+
+              
+
+                <div class="container mt-5">
+                    <h2 class="text-center mb-4 create-title">RP Statement Report</h2>
+                    @using (@Html.BeginForm())
+                    {
+                        <div id="hide">
+
+                            <div id="branchForm" class="form-container">
+
+                                <!-- Date -->
+                                <div class="form-group">
+                                    <label for="date" class="form-label">Select Start Date</label>
+                                    <input type="text" id="sdate" class="form-control datepicker" required name="sdate">
+                                </div>
+                                <!-- Date -->
+                                <div class="form-group">
+                                    <label for="date" class="form-label">Select End Date</label>
+                                    <input type="text" id="edate" class="form-control datepicker" required name="edate">
+                                </div>
+
+
+                                <!-- Create Button -->
+                                <div class="text-center d-grid gap-2">
+                                    <button type="submit" class="btn create-btn" id="submit" name="command" value="Search">View</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    }
+
+                    <div class="index_body">
+                        <div class="table-container">
+
+                            <div id="1">
+                                <table>
+                                    @using (Html.BeginForm())
+                                    {
+                                        foreach (var item in Model)
+                                        {
+
+                                            if (a == 0)
+                                            {
+
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="2" style="background-color:#ff5722; color:white">
+                                                            <label id="sn" style="font-size: large;"><b>Income</b></label>
+                                                        </th>
+                                                        <th colspan="2" style="background-color:#ff5722; color:white">
+                                                            <label id="date" style="font-size: large;"><b>Expense</b></label>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            }
+                                            a = a + 1;
+
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="4" style="background-color:#ff5722; color:white">
+                                                        <label id="obc"><b>Opening Balance Collection:</b></label>
+                                                        <label id="fffff"><b>@Html.DisplayFor(modelItem => item.openingbalance)</b></label>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="4">
+                                                        <label id="ddd"><b>Duration:</b></label>
+                                                        <label id="sss"><b>@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy")</b></label>-<label id="eee"><b>@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></label>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        Booking Amount:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.bookingamount)
+                                                    </td>
+                                                    <td>
+                                                        Expense:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.expence)
+                                                    </td>
+                                                </tr>
+
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        Renewel:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.renewel)
+                                                    </td>
+                                                    <td>
+                                                        Voucher:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.voucher)
+                                                    </td>
+
+                                                </tr>
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        A/c Deposit :
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.deposit)
+                                                    </td>
+                                                    <td>
+                                                        Advance Payment:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.advpayment)
+                                                    </td>
+
+                                                </tr>
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        @mr.agentname Form Fee:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.bformfee)
+                                                    </td>
+                                                    <td>
+                                                        Maturity:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.maturity)
+                                                    </td>
+
+                                                </tr>
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        @mr.custname Form Fee:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.cformfee)
+                                                    </td>
+                                                    <td>
+                                                        Salary:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.salary)
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        Member Form Fee:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.mformfee)
+                                                    </td>
+                                                    <td>
+                                                        A/c Withdraw :
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.withdraw)
+                                                    </td>
+
+                                                </tr>
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        A/c Form Fee:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.acformfee)
+                                                    </td>
+                                                    <td>
+                                                        Maturity:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.maturity)
+                                                    </td>
+
+                                                </tr>
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        Late Fine:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.latefee)
+                                                    </td>
+                                                    <td>
+                                                        Spot Commission:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.spotcomm)
+                                                    </td>
+
+                                                </tr>
+
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        Down Payment:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.downpayment)
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <tr style="text-align: left;">
+                                                    <td>
+                                                        Income Total:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.intotal)
+                                                    </td>
+                                                    <td>
+                                                        Expense Total:
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.extotal)
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                            <tbody>
+                                                <tr style="text-align: center;">
+                                                    <td colspan="2">
+                                                        <b>Grand Total:</b>
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <b>@Html.DisplayFor(modelItem => item.grandtotal)</b>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                            var cbc = item.openingbalance + item.grandtotal;
+                                            <tbody>
+                                                <tr>
+                                                    <th colspan="4" style="width: 50%; text-align: center;">
+                                                        <label id="cbc"><b>Closing Balance Collection:</b></label>
+                                                        <label id="vvvvvv"><b>@cbc</b></label>
+                                                    </th>
+
+                                                </tr>
+                                            </tbody>
+
+                                        }
+
+                                    }
+
+                                </table>
+                                @if (a > 0)
+                                {
+
+                                    <!-- Create Button -->
+                                    <div class="text-center d-grid gap-2">
+
+                                        <a href="@Url.Action("PrintClosingBalance")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                                    </div>
+                                   
+                                }
+                            </div>
+
+
+                        </div>
+                    </div>
+
+

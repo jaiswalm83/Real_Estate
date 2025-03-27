@@ -1,0 +1,155 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Appltab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "BlockUnblockCustomer";
+        var a = 0;
+        DateTime dt = DateTime.Now.Date;
+
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+
+    @*<div class="page-toolbar-block">
+            <div class="page-toolbar-title">Block-Unblock @mr.custname</div>
+            <div class="page-toolbar-subtitle"></div>
+        </div>*@
+
+    <div style="margin-left: 79rem; margin-top: 20px; margin-bottom:-3rem">
+        <label>@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</label>
+    </div>
+
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Block-Unblock @mr.custname</div>
+            <table>
+
+                @foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label id="sn"><b>S.N.</b></label>
+                                </th>
+                                <th>
+                                    <label id="newid"><b>@mr.custname Id</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="introducerid"><b>@mr.custname Name</b></label>
+                                </th>
+
+                                <th style="width: 10%; text-align: center;">
+                                    <label id="spilid"><b>Introducer Id</b></label>
+                                </th>
+
+
+
+                                <th>
+                                    <label id="position"><b>@mr.planname Name</b></label>
+                                </th>
+                                <th>
+                                    <label id="mode"><b>Mode</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="Payment"><b>Payment </b></label>
+                                </th>
+                                <th>
+                                    <label id="email"><b>Mobile No</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="doj"><b>Date of Joining</b></label>
+                                </th>
+                                <th>
+                                    <label id="damt"><b>Due Amount</b></label>
+                                </th>
+                                <th>
+                                    <label id="dinsta"><b>Due installment</b></label>
+                                </th>
+                                <th>
+                                    <label id="status"><b>Status</b></label>
+                                </th>
+                                <th>
+                                    <label id="Action"><b>Action</b></label>
+                                </th>
+                            </tr>
+                        </thead>
+                    }
+
+                    a = a + 1;
+            <tbody>
+
+                <tr>
+                    <td>
+                        @a
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newbondid)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newintroducerid)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.planname)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.payment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mobileno)
+                    </td>
+                    <td>
+                        @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @item.dueamount
+                    </td>
+                    <td>
+                        @item.dueinstall
+                    </td>
+                    @if (item.status == 1)
+                    {
+                        <td class="text-success" style="font-weight:bold;">Active</td>
+                        <td>
+
+                            @Html.ActionLink("Block", "BlockUnblockCustomer", new { newbondid = item.newbondid, status = 1 }, new { onclick = "return confirm('Are you sure to Block this " + mr.custname + "?');" })
+                        </td>
+                    }
+                    @if (item.status == 0)
+                    {
+                        <td class="text-danger" style="font-weight:bold;">Blocked</td>
+
+                        <td>
+                            @Html.ActionLink("UnBlock", "BlockUnblockCustomer", new { newbondid = item.newbondid, status = 0 }, new { onclick = "return confirm('Are you sure to Unblock this " + mr.custname + "?');" })
+                        </td>
+                    }
+                </tr>
+            </tbody>
+                }
+
+            </table>
+
+        </div>
+    </div>
+
+
+    </div>
+

@@ -1,0 +1,371 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "RecentVisitorDetail";
+    Layout = "~/Views/Shared/_LayoutVisitor.cshtml";
+    var date = DateTime.Now.Date;
+    var model = db.DailyVisitorDetails.ToList();
+    var a = 1;
+    var date1=DateTime.Now.AddDays(7);
+    var d = (from n in db.DailyVisitorDetails where n.TodaysDate<=date1 orderby n.TodaysDate descending select n.TodaysDate).ToList().Distinct();
+    
+}
+<style>
+    #snackbar {
+    width:25%;
+    margin-left:70px;
+
+   
+    background-color: #428bca; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 10px; /* Padding */
+   
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+
+    @@keyframes scale {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    /*sign up form*/
+
+    .modal-content {
+        visibility: visible;
+        -webkit-animation: scale 0.8s;
+        animation: scale 0.5s;
+    }
+
+    #myModal {
+        background-color: rgba(0,0,0,0.2);
+        border: none;
+    }
+
+    thead > tr > th {
+        text-align: center;
+    }
+
+    tbody > tr > td {
+        text-align: center;
+    }
+</style>
+<script>
+    var global;
+    $(function () {
+
+        $(".feedback").on("click", function () {
+            debugger;
+            var id = $(this).attr("id"); idplit = id.split("+"); vid = idplit[0]; vname = idplit[1];
+            global = vid;
+            $("#vid").val(vid)
+            $("#vname").val(vname)
+            $("#myModal").modal();
+        });
+
+        //next function
+        $('#sub').click(function () {
+            $.get("/Operator/JsonFunction", { VisitorId: $("#vid").val(), Remark: $("#remark").val(), Recogniser: "Remark" }, function (d) {
+                debugger;
+                if (d != null) {
+                    $('#myModal').modal('hide');
+                    global = null;
+                    location.reload(true);
+                }
+
+            });
+
+        });
+
+
+
+
+    });
+
+</script>
+<div class="page-content">
+
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Recent Visitors</div>
+                <div class="page-toolbar-subtitle">
+                    <span style="color: #808080"><i class="	fa fa-hand-o-right" style="font-size: 17px; color: red;"></i>&nbsp;&nbsp;You can call to customer for the feedback,Hit <kbd style="font-size: 15px; background-color: #8eb252">&nbsp;Green button&nbsp;</kbd> to get full detail and <kbd style="font-size: 15px; background-color: #2f9fe0">&nbsp;blue button&nbsp;</kbd> to write feedback.</span>
+                </div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+                <!-- <span style="color: #C21148; font-size: 15px">Today's Total Visitor</span> &nbsp;<span class="badge">totalvisitor</span>
+                &nbsp;&nbsp;<span style="color: #C21148; font-size: 15px">Check In</span>&nbsp;<span class="badge">checkin</span>
+                &nbsp;&nbsp;<span style="color: #C21148; font-size: 15px">Check Out</span> &nbsp;<span class="badge">checkout</span>
+                <span style="visibility: hidden" class="badge">5</span>-->
+            </div>
+
+        </div>
+        @if(model.Count()>0)
+        {
+
+        <div class="row" style="width: 100%">
+
+            <div class="col-md-6" style="width: 100%">
+
+                <div class="block" style="width: 100%">
+
+                    <div class="block-content controls">
+                       
+                         @foreach (var dates in d)                                
+                         {
+                             //if(dates.DayOfWeek.ToString()=="Sunday")
+                             //{ break; }
+                            
+                           <div class="row">
+                            <div class="col-md-offset-4">
+                              <div id="snackbar">@dates.DayOfWeek</div>
+                            </div>
+                         </div>                           
+                           
+                        <div class="row">
+
+                            <div class="row-form table-responsive" style="overflow: auto">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>Visitor Id</th>
+                                            <th>Visitor Name</th>
+                                            <th>Meet To Whom</th>
+                                            <th>Purpose</th>
+                                            <th>Type</th>
+                                            <th>In Time</th>
+                                            <th>Out Time</th>
+                                            <th>Mobile No</th>
+
+
+                                            <th>Address</th>
+                                            <th>FeedBack</th>
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        @foreach (var item in db.DailyVisitorDetails.Where(o => o.TodaysDate == dates))
+                                        {
+                                            
+                                            
+                                            <tr>
+                                                <td><span style="background-color: #08B0AE; color: white; padding-bottom: 4px; padding-top: 4px; padding-left: 8px; padding-right: 8px; border-radius: 50%;">@a</span></td>
+                                                <td style="font-weight: bold">@item.VisitorId</td>
+                                                <td style="font-weight: bold">@item.VisitorName</td>
+                                                <td>@item.MeetToWhom</td>
+                                                <td>@item.add</td>
+                                                <td>@item.Type</td>
+                                                <td>@item.InTime</td>
+                                                <td>@item.OutTime</td>
+                                                <td>@item.MobileNo</td>
+
+
+                                                <td>@item.Address</td>
+                                                @if (item.feedback != null)
+                                                { 
+                                                   <td><kbd style="font-size: 16px;padding:3px;background-color:green;color:white;">Taken</kbd></td>
+                                                }
+                                                else{
+                                                   <td><kbd style="font-size: 16px;padding:3px;background-color:#aa1616;color:white;">Not Taken</kbd></td>
+                                                }
+                                                <td>@item.TodaysDate.ToString("dd/MM/yyyy")</td>
+                                                <td>
+                                                          <button class="btn btn-success detail" id="@item.VisitorId"><i class="fa fa-user"></i></button>
+                                                        <button class="btn btn-info feedback" id="@item.VisitorId+@item.VisitorName"><i class="fa fa-file-text-o"></i></button>
+                                                </td>
+                                            </tr>
+                                            
+                                            
+                                            @*    <tr  style="display:none;">
+                                                      <td style="font-weight:bold">ReceptionistId :</td>
+                                                      <td >@item.ReceptionistId</td>
+                                                      <td style="font-weight:bold">Email Id :</td>
+                                                                  <td>@item.EmailId</td>
+                                                      <td style="font-weight:bold">Remark :</td>
+                                                                  <td>@item.Remark</td>
+                                      </tr>*@
+
+                                            a++;
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                             
+                             <br />
+                         }
+                    </div>
+
+
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+        }
+        else
+        {
+        
+          <br />
+            <br />
+             <br />
+            <br />
+            <div class="row">
+                <br />
+                <br />
+            <br />
+             <br />
+            <br />
+            </div>
+        <div class="row">
+      
+            <div class="col-md-2" ></div>
+            <div class="col-md-8">
+                
+                <span style=""><img src="~/Photo/odd.png" style="width:20%;float:left" class="img-responsive"/></span><span style="float:left;margin-top:38px;margin-left:37px;font-size:30px;font-weight:bold">No Visitor Today</span><span><img src="~/Photo/search.png" style="width:20%;"  class="img-responsive"/></span>
+            </div>
+            <div class="col-md-2">
+                
+                </div>
+                  
+            </div>
+        
+        
+        }
+    </div>
+</div>
+
+
+<div id="myModal" style="margin-top: 150px; border: 0px;" class="modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+
+        <div class="modal-content" id="" style="border: 0px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="color: #2f9fe0;">&times;</button>
+                <h4 class="modal-title" style="color: #2f9fe0;">Customer's Feedback...</h4>
+            </div>
+            <div class="modal-body">
+
+                <label>Visitor Id :</label>
+                <input type="text" style="color: #2f9fe0;" name="visitorid" id="vid" class="form-control" readonly="true" />
+
+                <label>Visitor Name :</label>
+                <input type="text" style="color: #2f9fe0;" id="vname" class="form-control" readonly="true" />
+
+                <label>Customer Response/Feedback :</label>
+                <textarea name="remark" id="remark" class="form-control" required></textarea>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #2f9fe0; color: white;">Close</button>
+                <button id="sub" type="submit" class="btn btn-warning pull-right bg-warning" style="background-color: #2f9fe0; color: white;">Save Feedback</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="myModaldetail" style="margin-top: -50px; border: 0px;" class="modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+
+        <div class="modal-content" id="" style="border: 0px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="color: #2f9fe0;">&times;</button>
+                <h4 class="modal-title" style="color: #2f9fe0;">Customer's Detail...</h4>
+            </div>
+            <div class="modal-body">
+                <label>Visitor Id :</label>
+                <input type="text" style="color: #2f9fe0;" id="visitorid" class="form-control" readonly="true" />
+                <label>Visitor Name :</label>
+                <input type="text" style="color: #2f9fe0;" id="visitorname" class="form-control" readonly="true" />
+                <label>Came On :</label>
+                <input type="text" style="color: #2f9fe0;" id="comingdate" class="form-control" readonly="true" />
+                 <label>In Time :</label>
+                <input type="text" style="color: #2f9fe0;" id="intime" class="form-control" readonly="true" />
+                 <label>Out Time :</label>
+                <input type="text" style="color: #2f9fe0;" id="outtime" class="form-control" readonly="true" /> 
+                <label>Met With Whom :</label>
+                <input type="text" style="color: #2f9fe0;" id="mtw" class="form-control" readonly="true" />
+                 <label>Purpose :</label>
+                <input type="text" style="color: #2f9fe0;" id="add" class="form-control" readonly="true" />
+                <label>Refference :</label>
+                <input type="text" style="color: #2f9fe0;" id="Refference" class="form-control" readonly="true" />
+                 <label>Feedback :</label>
+                <textarea name="feedback" id="feedback" class="form-control" required></textarea>      
+                 <label>FeedBack Date :</label>
+                <input type="text" style="color: #2f9fe0;" id="feedbackdate" class="form-control" readonly="true" />
+                 <label>FeedBack Time :</label>
+                <input type="text" style="color: #2f9fe0;" id="feedbacktime" class="form-control" readonly="true" />
+                <label>Mobile Number :</label>
+                <input type="text" style="color: #2f9fe0;" id="mobileno" class="form-control" readonly="true" />                          
+                <label>Email Id :</label>
+                <input type="text" style="color: #2f9fe0;" id="emailid" class="form-control" readonly="true" />
+                 <label>Address :</label>
+                <input type="text" style="color: #2f9fe0;" id="address" class="form-control" readonly="true" />    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #2f9fe0; color: white;">Close</button>               
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $('.detail').on('click', function () {
+            debugger;
+            var id = $(this).attr("id");
+            $.get("/Operator/JsonFunction", { VisitorId: id, Recogniser: "detail" }, function (D) {
+                debugger;
+
+                var d = JSON.parse(D.replace(/\\\"/g, '"'));
+                if (d != null) {
+                    $("#visitorid").val(d.VisitorId);
+                    $("#visitorname").val(d.VisitorName);
+                    $("#comingdate").val(String(d.TodaysDate).substr(0, 10));
+                    $("#intime").val(d.InTime);
+                    $("#outtime").val(d.OutTime);
+                    $("#mtw").val(d.MeetToWhom);
+                    $("#add").val(d.add);
+                    $("#Refference").val(d.Refference);
+                    $("#feedback").html(d.feedback);
+                    $("#feedbackdate").val(String(d.feedbackDate).substr(0, 10));
+                    $("#feedbacktime").val(d.feedbackTime);
+                    $("#mobileno").val(d.MobileNo);
+                    $("#emailid").val(d.EmailId);
+                    $("#address").val(d.Address);
+                    $('#myModaldetail').modal();
+                }
+
+            });
+
+
+        });
+    });
+
+</script>

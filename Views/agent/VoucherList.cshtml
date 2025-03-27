@@ -1,0 +1,209 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Voucher>
+    @using ODHDEVELOPERS.Models
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AgentLayout.cshtml";
+        ViewBag.Title = "VoucherList";
+        var a = 0;
+        Double business = 0, commission = 0;
+    }
+
+                      <div class="page-content">
+                          <!-- Print Button and Date -->
+                          <div class="d-flex justify-content-between align-items-center mt-3 mb-4">
+                              <button class="btn btn-primary px-4 py-2" onclick="PrintMe('divid')">
+                                  <i class="fas fa-print"></i> Print Employee List
+                              </button>
+
+                          </div>
+
+                          @*//Genarate pdf Report by using crystal Report*@
+                          <!--<div class="d-flex justify-content-between align-items-center mt-3 mb-4">-->
+                          <!-- Print Button -->
+                          <!--<a href="@Url.Action("PrintBrokerChainReport")" target="_blank" class="btn btn-primary px-4 py-2">
+                             <i class="fas fa-print"></i> Get Report In PDF
+                             </a>
+                           </div>-->
+
+                          <!-- Employee Search Form -->
+                          <div class="container mt-4 FormContainer" id="divid">
+                              <h2 class="text-center mb-4">Monthly Voucher-Details</h2>
+                              @*@using (Html.BeginForm(null, null, new { @class = "border p-4 rounded shadow formtag" }))*@
+                              @*{*@
+                              <form class="border p-4 rounded shadow formtag">
+
+
+
+                                  <div class="mb-3">
+                                      <label class="form-label formLabel">Select Month</label>
+                                      <select class="form-control formInput"
+                                              style="border: 1px solid #ced4da; border-radius: 5px;" id="month" name="month" required>
+                                          <option selected>Select </option>
+                                          <option value="1">January</option>
+                                          <option value="2">February</option>
+                                          <option value="3">March</option>
+                                          <option value="4">April</option>
+                                          <option value="5">May</option>
+                                          <option value="6">June</option>
+                                          <option value="7">July</option>
+                                          <option value="8">August</option>
+                                          <option value="9">September</option>
+                                          <option value="10">October</option>
+                                          <option value="11">November</option>
+                                          <option value="12">December</option>
+
+
+                                      </select>
+
+                                  </div>
+
+
+                                  <div class="mb-3">
+                                      <label class="form-label formLabel">Select Year</label>
+                                      <select class="form-control formInput"
+                                              style="border: 1px solid #ced4da; border-radius: 5px;" id="year" name="year" required>
+                                          <option selected>Select </option>
+
+                                          <option>2015 </option>
+                                          <option>2016 </option>
+                                          <option>2017 </option>
+                                          <option>2018 </option>
+                                          <option>2019 </option>
+                                          <option>2020 </option>
+                                          <option>2021 </option>
+                                          <option>2022 </option>
+
+
+
+                                      </select>
+
+                                  </div>
+
+                                  <div class="text-center d-grid gap-2">
+                                      <button type="submit" id="Pay" name="Commond" class="btn btn-primary btn-lg formButtom">Submit</button>
+                                  </div>
+
+
+
+                              </form>
+
+                          </div>
+
+                          <!-- Display Results -->
+                          @foreach (var item in Model)
+                          {
+                              <div class="container mt-4 FormContainer" id="divid">
+
+
+                                  <div class="index_body mt-5">
+                                      <div class="table-container">
+                                          <div class="header-row">Total Holiday Leave</div>
+
+                                          <table class="table table-bordered" style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+                                              @if (a == 0)
+                                              {
+                                                  <thead>
+                                                      <tr>
+                                                          <td colspan="10" style="text-align: center;"><b>@mr.agentname ID:-@User.Identity.Name</b></td>
+                                                      </tr>
+                                                      <tr>
+                                                          <th style="width: 4%; text-align: center;">
+                                                              <label id="sn"><b>S.N.</b></label>
+                                                          </th>
+                                                          <th style="width: 8%; text-align: center;">
+                                                              <label><b>@mr.custname Id </b></label>
+                                                          </th>
+                                                          <th style="width: 8%; text-align: center;">
+                                                              <label><b>@mr.custname Name </b></label>
+                                                          </th>
+                                                          <th style="width: 8%; text-align: center;">
+                                                              <label><b>@mr.planname </b></label>
+                                                          </th>
+                                                          <th style="width: 8%; text-align: center;">
+                                                              <label><b>Year </b></label>
+                                                          </th>
+                                                          <th style="width: 10%; text-align: center;">
+                                                              <label id="comm"><b>Business</b></label>
+                                                          </th>
+                                                          <th style="width: 10%; text-align: center;">
+                                                              <label id="tds"><b>Percentage</b></label>
+                                                          </th>
+                                                          <th style="width: 10%; text-align: center;">
+                                                              <label id="Net"><b>Commission</b></label>
+                                                          </th>
+                                                          <th style="width: 8%; text-align: center;">
+                                                              <label id="branch"><b>Branch Code</b></label>
+                                                          </th>
+                                                          <th style="width: 8%; text-align: center;">
+                                                              <label id="Date"><b>Date</b></label>
+                                                          </th>
+
+
+                                                      </tr>
+                                                  </thead>
+                                              }
+                                              @a = a + 1;
+                                              <tbody>
+                                                  <tr style="text-align: center;">
+                                                      <td>
+                                                          @a
+                                                      </td>
+
+
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.newbondid)
+                                                      </td>
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.name)
+                                                      </td>
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.planname)
+                                                      </td>
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.year)
+                                                      </td>
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.business)
+                                                      </td>
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.tds)
+                                                      </td>
+
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.commission)
+                                                      </td>
+                                                      <td>
+                                                          @Html.DisplayFor(modelItem => item.branch)
+                                                      </td>
+
+                                                      <td>
+                                                          @Convert.ToDateTime(item.date).ToString("dd/MM/yyyy")
+                                                      </td>
+
+
+                                                  </tr>
+                                                  business = business + item.business;
+                                                  commission = commission + item.commission;
+                                                  }
+                                                  @if (a > 0)
+                                                  {
+                                                      <tr style="text-align: center;">
+                                                          <td style="width: 24%; text-align: center;" colspan="5"><b>GRAND TOTAL</b></td>
+
+                                                          <td style="width: 8%; text-align: center;"><b>@business</b></td>
+                                                          <td style="width: 8%; text-align: center;"><b></b></td>
+                                                          <td style="width: 8%; text-align: center;"><b>@commission</b></td>
+                                                          <td style="width: 8%; text-align: center;"><b></b></td>
+                                                          <td style="width: 8%; text-align: center;"><b></b></td>
+                                                      </tr>
+
+                                                  }
+
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          }
+                      </div>

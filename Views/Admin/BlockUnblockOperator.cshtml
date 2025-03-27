@@ -1,0 +1,136 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Operator>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1); 
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "BlockUnblockOperator";
+    var a = 0;
+}
+<script src="~/Scripts/print.js" type="text/javascript"></script>
+
+<link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+     
+                   
+  
+
+         
+<div id="divid">
+
+
+    <div style="margin-left: 80rem; margin-top: 20px;">
+        <label>@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</label>
+    </div>
+
+
+
+
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Block-UnBlock Collection Point</div>
+            <table>
+
+                @foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label id="sn"><b>S.N.</b></label>
+                                </th>
+                                <th>
+                                    <label id="OperatorId"><b>Collection Point Id</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="OperatorName"><b>Collection Point Name</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="BranchCode"><b>@mr.branchname Code</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="OperatorMobile"><b>Collection Point Mobile</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="OperatorAddress"><b>Collection Point Address</b></label>
+                                </th>
+                                <th>
+                                    <label id="Operator_Mail"><b>Collection Point Mail</b></label>
+                                </th>
+                                <th>
+                                    <label id="Cdate"><b>Creation date</b></label>
+                                </th>
+                                <th>
+                                    <label id="Action"><b>Action</b></label>
+                                </th>
+
+                            </tr>
+                        </thead>
+                    }
+
+                    a = a + 1;
+                    <tbody>
+                        <tr>
+                            <td>
+                                @a
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OperatorId)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OperatorName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BranchCode)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OperatorMobile)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OperatorAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Operator_Mail)
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(item.Cdate).ToString("dd/MM/yyyy")
+                            </td>
+                            @if (item.Status == 1)
+                            {
+                                <td>
+
+                                    @Html.ActionLink("Block", "BlockUnblockOperator", new { opid = item.OperatorId, status = 1 }, new { onclick = "return confirm('Are you sure to Block this Collection Point?');" })
+                                </td>
+                            }
+                            @if (item.Status == 0)
+                            {
+                                <td>
+                                    @Html.ActionLink("UnBlock", "BlockUnblockOperator", new { opid = item.OperatorId, status = 0 }, new { onclick = "return confirm('Are you sure to Unblock this Collection Point?');" })
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                }
+
+            </table>
+
+        </div>
+        <div class="text-center" style="margin-top:10px">
+
+            <input type="button" class="btn create-btn" name="btnprint" value="Print" onclick="PrintMe('divid')" />
+        </div>
+
+    </div>
+
+</div>

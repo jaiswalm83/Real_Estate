@@ -1,0 +1,109 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DupliReceipt>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        ViewBag.Title = "DuplicateReceipt";
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#BondId").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteBondId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.newbondid };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+    @*<style>
+            /* Zebra striping for even rows */
+            tbody tr:nth-child(even) {
+                background-color: #fff3f5;
+            }
+
+            /* Optional: Define the background color for odd rows */
+            tbody tr:nth-child(odd) {
+                background-color: #ffffff;
+            }
+
+        </style>*@
+    <div class="container mt-4 FormContainer">
+        <h2 class="text-center mb-4"> Print Duplicate Receipt</h2>
+        <div id="branchForm" class="border p-4 rounded shadow formtag">
+            @using (Html.BeginForm())
+            {
+                <!-- Project Year -->
+                <input type="hidden" value="@System.DateTime.Now.Date" name="date" />
+                <div class="mb-3">
+                    <label for="year" class="form-label formLabel">@mr.custname Id or Name:</label>
+                    <input type="text" class="form-control formInput" name="newbondid" id="BondId" placeholder="Customer Id or Name" required>
+                </div>
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn btn-lg formButtom" id="search"><i class="fa fa-search"></i> Search</button>
+                </div>
+            }
+        </div>
+        <div class="mt-4" id="rd">
+            <table>
+                @foreach (var item in Model)
+                {
+                    <thead>
+                        @if (a == 0)
+                        {
+                            <div class="header-row">Renewal-List</div>
+                            <tr>
+                                <th id="cc"><b>@mr.custname Id</b></th>
+                                <th id="sn"><b>Payment_No</b></th>
+                                <th id="pp"><b>PayAmount</b></th>
+                                <th id="action"><b>Action</b></th>
+                            </tr>
+                            a++;
+                        }
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.newbondid)</td>
+                            <td>@Html.DisplayFor(modelItem => item.paymentno)</td>
+                            <td>@Html.DisplayFor(modelItem => item.payamount)</td>
+                            <td>
+                                @Html.ActionLink("Get Receipt In PDF", "DuplicateReceipt",
+                                    new { newbondid = item.newbondid, paymentno = item.paymentno, payamount = item.payamount },
+                                    new { onclick = "return confirm('Are you sure to Print this Receipt?')", target = "_blank" })
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+
+        <h4>@ViewBag.msg</h4>
+    </div>
+
+
+
+
+
+
+
+

@@ -1,0 +1,176 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DailyVisitorDetail>
+
+@{
+    ViewBag.Title = "Visitor_List";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+}
+
+
+<div class="page-content">
+    <div class="container">
+        <div class="page-toolbar">
+
+<div class="page-toolbar-block">
+                <div class="page-toolbar-title">Visitor List</div>
+                <div class="page-toolbar-subtitle">
+                </div>
+            </div>
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<form method="post" action="../Branch/Visitor_List" enctype="multipart/form-data">
+    <div class="row" style="width: 100%">
+
+            <div class="col-md-6" style="width: 100%">
+
+                <div class="block" style="width: 100%">
+
+                    <div class="block-content controls">
+
+    <div class="row">
+<div class="row-form table-responsive" style="overflow: auto">
+<table class="table">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.uniqueid)
+        </th>*@
+        <th>
+           Srno.
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MeetToWhom)
+        </th>
+        <th>
+            Purpose
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.InTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OutTime)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            Mobile
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmailId)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.ReceptionistId)
+        </th>*@
+        <th>
+            Branch Code
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remark)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Refference)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.feedback)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.feedbackDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.feedbackTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TodaysDate)
+        </th>*@
+@*        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.uniqueid)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.VisitorId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VisitorName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MeetToWhom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.add)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.InTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OutTime)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MobileNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailId)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.ReceptionistId)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.OfficeCode)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remark)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Refference)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.feedback)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.feedbackDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.feedbackTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TodaysDate)
+        </td>*@
+       @* <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>*@
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>*@
+    </tr>
+}
+</table>
+</div>
+</div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+</form>
+</div>
+</div>
+</div>

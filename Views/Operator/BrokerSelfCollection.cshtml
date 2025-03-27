@@ -1,0 +1,305 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.TempSelfCollection>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "BrokerSelfCollection";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var pr = db.Operators.Single(o => o.OperatorId == User.Identity.Name);
+        var br = db.Branchtabs.Single(o => o.BranchCode == pr.BranchCode);
+        var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+        var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+        var plan4 = db.Plans.Single(p2 => p2.Plancode == 4);
+        var a = 0;
+        Double sissum = 0, missum = 0, ppsum = 0, sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, total = 0, gtotal = 0;
+
+    }
+
+
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newagent").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Operator/AutoCompleteOperatorAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">@mr.agentname Self Collection</h2>
+
+        @using (Html.BeginForm())
+        {
+
+
+
+            <div id="branchForm" class="form-container">
+
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Select @mr.agentname Id</label>
+                    <input type="text" class="form-control " id="newagent" name="newagent" placeholder="Enter Id" required>
+                </div>
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" name="sdate" placeholder="Enter Date" required>
+                </div>
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">End Date</label>
+                    <input type="date" class="form-control" name="edate" placeholder="Enter Date" required>
+                </div>
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn"><i class="fa fa-search"></i>Search</button>
+                </div>
+
+            </div>
+
+
+
+        }
+
+
+
+
+
+        <div class="index_body">
+            <div class="table-container">
+
+                <div id="1">
+                    @if (Model != null)
+                    {
+                        <table>
+
+
+                            @foreach (var item in Model)
+                            {
+                                if (a == 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4" style="background-color:#ff5722; color:white">@mr.branchname Name:@item.branchname</th>
+
+                                            <th colspan="4" style="background-color:#ff5722; color:white"><b>@mr.agentname Self Collection</b></th>
+                                            <th colspan="5" style="background-color:#ff5722; color:white"><b>Dated:@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy") </b></th>
+                                        </tr>
+                                    </thead>
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4" style="background-color:#ff5722; color:white">@mr.agentname Id:@item.brokercode</th>
+                                            <th colspan="4" style="background-color:#ff5722; color:white">@mr.agentname Name:@item.brokername</th>
+                                            <th colspan="5" style="background-color:#ff5722; color:white"><b>Duration:@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy") -@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></th>
+
+                                        </tr>
+                                    </thead>
+
+
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label><b>S.N.</b></label>
+                                            </th>
+                                            <th>
+                                                <label><b>@mr.custname Id</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>@mr.custname Name</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>Plot Size</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>Booking Amount</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>First </b></label>
+                                            </th>
+                                            <th>
+                                                <label id="email"><b>Second</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>Third</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>Fourth</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>Fifth</b></label>
+                                            </th>
+
+
+                                            <th>
+                                                <label><b>Sixth</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>Seventh</b></label>
+                                            </th>
+                                            <th>
+                                                <label><b>Total</b></label>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                }
+
+                                a = a + 1;
+
+                                total = Convert.ToDouble(item.tMISFresh) + Convert.ToDouble(item.tMIS1) + Convert.ToDouble(item.tMIS2) + Convert.ToDouble(item.tMIS3) + Convert.ToDouble(item.tMIS4) + Convert.ToDouble(item.tMIS5) + Convert.ToDouble(item.tMIS6) + Convert.ToDouble(item.tMIS7a);
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @a
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Newbondid)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Customername)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.plan)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMISFresh)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMIS1)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMIS2)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMIS3)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMIS4)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMIS5)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMIS6)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tMIS7a)
+                                        </td>
+                                        <td>
+                                            @total
+                                        </td>
+
+
+
+
+                                    </tr>
+                                </tbody>
+
+                                missum = missum + Convert.ToDouble(item.tMISFresh);
+                                sum1 = sum1 + Convert.ToDouble(item.tMIS1);
+                                sum2 = sum2 + Convert.ToDouble(item.tMIS2);
+                                sum3 = sum3 + Convert.ToDouble(item.tMIS3);
+                                sum4 = sum4 + Convert.ToDouble(item.tMIS4);
+                                sum5 = sum5 + Convert.ToDouble(item.tMIS5);
+                                sum6 = sum6 + Convert.ToDouble(item.tMIS6);
+                                sum7 = sum7 + Convert.ToDouble(item.tMIS7a);
+                                gtotal = gtotal + total;
+                            }
+
+                            @if (a > 0)
+                            {
+                                <tbody>
+                                    <tr style="text-align: center;">
+                                        <td style="width: 25%" colspan="4"><b>GRAND TOTAL:</b></td>
+                                        <td style="width: 8%; text-align: center;"><b>@missum</b> </td>
+                                        <td style="width: 8%; text-align: center;"><b>@sum1</b></td>
+                                        <td style="width: 10%; text-align: center;"><b>@sum2</b></td>
+                                        <td style="width: 10%; text-align: center;"><b>@sum3</b></td>
+                                        <td style="width: 8%; text-align: center;"><b>@sum4</b></td>
+                                        <td style="width: 8%; text-align: center;"><b>@sum5</b></td>
+                                        <td style="width: 8%; text-align: center;"><b>@sum6</b></td>
+                                        <td style="width: 8%; text-align: center;"><b>@sum7</b></td>
+                                        <td style="width: 8%; text-align: center;"><b>@gtotal</b></td>
+                                    </tr>
+                                </tbody>
+
+                            }
+
+                        </table>
+
+                    }
+                    @if (a > 0)
+                    {
+
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+
+                            <a href="@Url.Action("PrintselfCollection")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                        </div>
+
+                      
+                    }
+                    <div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+

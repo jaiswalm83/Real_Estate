@@ -1,0 +1,59 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "PossessionReport";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db=new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+
+}
+
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newbond").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteBondId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.newbondid };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4"> Print Possession Letter</h2>
+    <div id="branchForm" class="border p-4 rounded shadow formtag">
+        @using (Html.BeginForm("PossessionReport", "Branch", FormMethod.Post))
+        {
+            <!-- Project Year -->
+            <div class="mb-3">
+                <label for="year" class="form-label formLabel">@mr.custname Id :</label>
+                <input type="text" class="form-control formInput" id="newbond" name="newbondid" placeholder="Customer" required>
+            </div>
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom" onclick="target='_blank'"><i class="fa fa-cog"></i>Print Possession Letter</button>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+

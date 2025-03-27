@@ -1,0 +1,175 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Logindetail>
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "HRLoginDetails";
+        var a = 0;
+    }
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#iid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteHRId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.HRName, value: item.HRId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    <script src="~/Scripts/print.js" type="text/javascript"></script>
+
+
+    <div id="divid1">
+        <div id="2">
+
+
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">HR Login-Detail</h2>
+
+                @using (@Html.BeginForm())
+                {
+                    <div id="hide">
+
+
+                        <div class="block">
+
+                            <div class="block-content controls">
+
+
+
+
+
+                                <div id="branchForm" class="form-container">
+
+                                    <!-- Collection Point Name -->
+                                    <div class="form-group">
+                                        <label for="collectionPointName" class="form-label">Enter HR ID or Name</label>
+                                        <input type="text" class="form-control" id="iid" name="iid" required>
+                                    </div>
+
+                                    <div class="text-center d-grid gap-2">
+                                        <button type="submit" id="submit" value="Search" class="btn create-btn">View</button>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                <div id="1">
+                    <div class="index_body">
+                        <div class="table-container">
+                            <table>
+                                @using (Html.BeginForm())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (a == 0)
+                                        {
+                                            <thead>
+                                                <tr style="text-align:center;">
+                                                    <th colspan="5" style="background-color: #ff5722; color: white"><b>HR Login-Detail</b></th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <label id="sn"><b>S.N.</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="cc"><b>HR Id</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="pp"><b>Password</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="intime"><b>Login Time</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="dd"><b>Logout Time</b></label>
+                                                    </th>
+
+
+
+                                                </tr>
+                                            </thead>
+                                        }
+                                        a = a + 1;
+
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @a
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.userid)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.password)
+                                                </td>
+
+                                                <td>
+
+                                                    @Convert.ToDateTime(item.intime).ToString("dd/MM/yyy:HH:mm:ss")
+                                                </td>
+                                                <td>
+
+                                                    @Convert.ToDateTime(item.outtime).ToString("dd/MM/yyy:HH:mm:ss")
+                                                </td>
+
+
+
+
+                                            </tr>
+                                        </tbody>
+
+                                    }
+
+                                }
+
+
+
+                            </table>
+
+                            @if (a > 0)
+                            {
+
+                                <div class="text-center d-grid gap-2">
+                                    <a href="@Url.Action("PrintHRLoginDetails")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                                </div>
+
+
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

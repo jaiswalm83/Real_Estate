@@ -1,0 +1,1053 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Member_tab>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+    var br = db.Operators.Single(o => o.OperatorId == User.Identity.Name);
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "CreateAccount";
+    var a = 0;
+    
+    var dt = DateTime.Now.Date;
+   
+}
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#Doj').datepick();
+
+    });
+</script>
+<script>
+    $(document).ready(function () {
+
+        var status = $("#status").val();
+        if (status == 0) {
+            $('#Doj').attr('readOnly', 'readOnly');
+
+        }
+        else if (status == 1) {
+            $('#Doj').removeAttr('readOnly');
+
+        }
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        {
+            $("#ac1").addClass("hide");
+            $("#ac2").addClass("hide");
+            $("#ac3").addClass("hide");
+            $("#ac4").addClass("hide");
+            $("#ac5").addClass("hide");
+            $("#ac6").addClass("hide");
+            $("#ac7").addClass("hide");
+            $("#ac8").addClass("hide");
+            $("#ac9").addClass("hide");
+            $("#ac10").addClass("hide");
+            $("#ac11").addClass("hide");
+            $("#ac12").addClass("hide");
+            $("#ac13").addClass("hide");
+            $("#ac14").addClass("hide");
+        }
+    })
+</script>
+
+<script>
+    function checkaccount(check_id) {
+        $("input[name=actype]").click(function (e) {
+            if ($("input[name=actype]:checked").val() == "Self") {
+                $("#ac1").addClass("hide");
+                $("#ac2").addClass("hide");
+                $("#ac3").addClass("hide");
+                $("#ac4").addClass("hide");
+                $("#ac5").addClass("hide");
+                $("#ac6").addClass("hide");
+                $("#ac7").addClass("hide");
+                $("#ac8").addClass("hide");
+                $("#ac9").addClass("hide");
+                $("#ac10").addClass("hide");
+                $("#ac11").addClass("hide");
+                $("#ac12").addClass("hide");
+                $("#ac13").addClass("hide");
+                $("#ac14").addClass("hide");
+                // do your addClass
+            } if ($("input[name=actype]:checked").val() == "Joint") {
+                $("#ac1").removeClass("hide");
+                $("#ac1").show();
+                $("#ac2").removeClass("hide");
+                $("#ac3").removeClass("hide");
+                $("#ac4").removeClass("hide");
+                $("#ac5").removeClass("hide");
+                $("#ac6").removeClass("hide");
+                $("#ac7").removeClass("hide");
+                $("#ac8").removeClass("hide");
+                $("#ac9").removeClass("hide");
+                $("#ac10").removeClass("hide");
+                $("#ac11").removeClass("hide");
+                $("#ac12").removeClass("hide");
+                $("#ac13").removeClass("hide");
+                $("#ac14").removeClass("hide");
+                // do your removeClass 
+            }
+            if ($("input[name=actype]:checked").val() == "Either") {
+                $("#ac1").removeClass("hide");
+                $("#ac2").removeClass("hide");
+                $("#ac3").removeClass("hide");
+                $("#ac4").removeClass("hide");
+                $("#ac5").removeClass("hide");
+                $("#ac6").removeClass("hide");
+                $("#ac7").removeClass("hide");
+                $("#ac8").removeClass("hide");
+                $("#ac9").removeClass("hide");
+                $("#ac10").removeClass("hide");
+                $("#ac11").removeClass("hide");
+                $("#ac12").removeClass("hide");
+                $("#ac13").removeClass("hide");
+                $("#ac14").removeClass("hide");
+                // do your removeClass 
+            }
+        });
+    }
+
+</script>
+
+<style type="text/css">
+    .hide {
+        display:none;
+    }
+
+</style>
+
+<script type="text/javascript">
+    function rrreset(to_id) {
+
+        $("#" + to_id).mouseout(function () {
+            var openingamount = $('#openingamount').val();
+            var url = '@Url.Action("reset","Branch")';
+            $.get(url, { openingamount: openingamount }, function data(d) {
+                for (var i = 0; i < d.length; i++) {
+
+                    if (d[i].type == 0) {
+                        $("#msg").text(d[i].msg)
+                    }
+                    else if (d[i].type == 1) {
+                        $("#msg").text('')
+                    }
+
+                }
+            });
+
+        });
+
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#memberid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Operator/AutoCompletememberid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.MemberName, value: item.NewMemberId };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+
+
+    })
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#State").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteState",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.state, value: item.state };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#nomrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#Doj').datepick();
+        $('#dob').datepick();
+    });
+</script>
+
+<div class="page-content">
+
+                <div class="container">
+
+                    <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Account Opening Form</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                       
+                    </div>  
+
+                    @using (Html.BeginForm("CreateAccount", "Operator", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                      
+                           <div class="row" >
+                    
+                                <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block">
+                            
+                                <div class="block-content controls">
+
+                                    
+
+
+
+                                            <div class="row-form">  
+                                         
+    <div class="col-md-9">
+        <div class="input-group">
+       <span class="input-group-addon"><label class="width">Enter Member Id</label></span>  
+        <input type="text" class="form-control"  name="memberid" id="memberid">
+
+        </div>
+                                   
+   </div>
+</div> 
+                                  
+                                     
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                                          
+                                <button value="Search" type="submit" name="command" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>                            
+                               
+                            </div>
+                        </div>  
+
+
+                                    <p>@ViewBag.msg</p> 
+                                    
+                                </div>
+                     
+                                
+                            </div>
+                            </div>
+
+   @foreach (var item in Model)
+          {
+              if (a == 0)
+              {
+                    
+
+             <div class="col-md-6">
+                            
+                            <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Personal Details</strong></h2>
+                                  
+                                </div>
+                                <div class="block-content controls">
+
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9"> 
+                                            <div class="input-group">
+                                                   
+       <span class="input-group-addon"><label class="width">A/C Type</label></span>  
+                   
+                                            <input type="radio"  name="actype" onchange ="checkaccount(this.id)" class="actype" value="Self" id="Saving"  />Self A/c  
+                                             <input type="radio" name="actype"  onchange ="checkaccount(this.id)" class="actype" value="Joint" id="Joint"  />Joint A/c 
+                                     <input type="radio" name="actype" class="actype"  onchange ="checkaccount(this.id)" value="Either" id="Either"  />Either-Survivor A/c 
+                                             
+                                          
+                                         </div>
+                                    </div>
+                                        </div>
+
+
+                                    
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                                <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">@mr.branchname Code </label></span>
+                                              <input type="text" class="form-control " id="BranchCode" value="@br.BranchCode" name="BranchCode" readonly="true" required/>
+                                                </div>
+                                         
+                                        </div>
+                                    </div>
+
+                                    <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Form Fee</label></span>
+                                             <input type="text" class="form-control" id="formfee" required name="formfee" value="@tr.accountformfee" readonly="true"/>
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">A/C Opening Amount(Rs.)</label></span>
+                                             <input type="text" class="form-control" id="openingamount" required name="openingamount" onmouseout="rrreset(this.id)" value="@tr.accountopeningfee" >
+                                                <label id="msg"></label>
+                                               </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Member Id </label></span>  
+                                               
+          <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.NewMemberId)" id="newmemberid"  name="newmemberid" required />
+
+                                            </div>
+                                            </div>
+                                    </div>
+
+                                     <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant Name</label></span>
+                                             <input type="text" value=" @Html.DisplayFor(modelItem => item.MemberName)" class="form-control" id="acholdername" required name="acholdername"  />
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+
+
+
+                                     <div class="row-form" id="ac1">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Name</label></span>
+                                             <input type="text"  class="form-control" id="acholdername2"  name="acholdername2"  />
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+
+
+
+                                     <div class="row-form">
+                                      
+
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Father/Husband's Name</label></span>
+                                      <input type="text" class="form-control" value=" @Html.DisplayFor(modelItem => item.Father)" required name="fathername" id="fathername" />
+                                                </div>
+                                                
+                                        </div>
+                                      
+
+
+                                        <div class="col-md-9"></div>
+                                    </div>
+
+                                     <div class="row-form" id="ac2">
+                                      
+
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Father/Husband's Name</label></span>
+                                      <input type="text" class="form-control"  name="fathername2" id="fathername2" />
+                                                </div>
+                                                
+                                        </div>
+                                      
+
+
+                                        <div class="col-md-9"></div>
+                                    </div>
+
+                                     <div class="row-form" >
+                                    
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Address</label></span>
+                                  <input type="text" class="form-control" id="address" name="address" value="@Html.DisplayFor(modelItem => item.Address)" />
+                                                </div>
+                                                
+                                        </div>
+
+
+                                      
+                                    </div>
+
+                                       <div class="row-form" id="ac3">
+                                    
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Address</label></span>
+                                  <input type="text" class="form-control" id="address2" name="address2" />
+                                                </div>
+                                                
+                                        </div>
+
+
+                                      
+                                    </div>
+
+
+                                     <div class="row-form">
+                                    
+
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Mobile No</label></span>
+                                             <input type='tel' value="@Html.DisplayFor(modelItem => item.Mobile)"  maxlength="10" name="mobileno" id="mobileno" required class="form-control" />
+                                                </div>
+                                                
+                                        </div>
+
+                                    </div>
+
+
+
+                                     <div class="row-form"  id="ac4">
+                                    
+
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Mobile No</label></span>
+                                             <input type='tel'   maxlength="10" name="mobileno2" id="mobileno2"  class="form-control" />
+                                                </div>
+                                                
+                                        </div>
+
+                                    </div>
+
+
+                                     <div class="row-form">
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Email Id</label></span>
+                       <input type="text" class="form-control" id="emailid" name="emailid"  />
+                                                </div>
+                                               
+                                        </div>
+                                    </div>
+
+                                     <div class="row-form"  id="ac5">
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Email Id</label></span>
+                       <input type="text" class="form-control" id="emailid2" name="emailid2"  />
+                                                </div>
+                                               
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+
+                                              <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Gender</label></span>
+                                             <input type="text" value="@Html.DisplayFor(modelItem => item.Gender)"  maxlength="10" name="Gender" id="Gender" required class="form-control" />
+                                                </div>
+
+
+                                        </div>
+                                    </div>
+
+                                     
+                                    <div class="row-form" id="ac6">
+                                        
+                                        <div class="col-md-9">
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Gender</label></span>
+                                            <select name="gender2" id="gender2" class="form-control" >
+                                        
+                                        <option selected>Male</option>
+                                         <option>Female</option>
+                                                </select>
+
+                                                 </div>
+
+                                        </div>
+                                    </div>
+
+                                  
+                                     
+                            
+                                      <div class="row-form">
+                                            <div class="col-md-9">
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Date Of Joining</label></span>
+                           <input type="text" name="Doj" id="Doj" required class="form-control" value="@dt"  />
+                                                </div>
+                                                
+                                        </div>
+
+                                    </div>
+                                  
+
+                                       <div class="row-form">
+                                              <div class="col-md-9">
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">DOB</label></span>
+                                               <input  type="text" value=" @Html.DisplayFor(modelItem => item.DOB)" id="dob" name="dob" required class="form-control" />
+                                                </div>
+                                                
+                                        </div>
+
+                                      
+                                         </div>
+
+
+                                     <div class="row-form" id="ac13">
+                                              <div class="col-md-9">
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 DOB</label></span>
+                                               <input  type="text" id="dob2" name="dob2"  class="form-control" />
+                                                </div>
+                                                
+                                        </div>
+
+                                      
+                                         </div>
+
+                
+                                     
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Select Blood Group</label></span>
+                                              <select name="BloodGroup" id="BloodGroup" class="form-control">
+                                         <option selected>Select</option>
+                                         <option>O +ive</option>
+                                         <option>O -ive</option>
+                                         <option>A +ive</option>
+                                         <option>A -ive</option>
+                                         <option>B +ive</option>
+                                         <option>B -ive</option>
+                                         <option>AB +ive</option>
+                                          <option>AB -ive</option>
+                                                  </select>
+
+                                                 </div>
+
+
+                                        </div>
+                                    </div>
+
+                                     <div class="row-form" id="ac11">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Select Blood Group</label></span>
+                                              <select name="bloodgroup2" id="bloodgroup2" class="form-control">
+                                         <option selected>Select</option>
+                                         <option>O +ive</option>
+                                         <option>O -ive</option>
+                                         <option>A +ive</option>
+                                         <option>A -ive</option>
+                                         <option>B +ive</option>
+                                         <option>B -ive</option>
+                                         <option>AB +ive</option>
+                                          <option>AB -ive</option>
+                                                  </select>
+
+                                                 </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                     <div class="row-form">
+                                           <div class="col-md-9">
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Occupation</label></span>
+                                            <input type="text" id="occupation" name="occupation"  class="form-control"/>
+                                                </div>
+                                                
+                                        </div>
+                                    </div>
+
+                                     <div class="row-form" id="ac7">
+                                           <div class="col-md-9">
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Occupation</label></span>
+                                            <input type="text" id="occupation2" name="occupation2"  class="form-control"/>
+                                                </div>
+                                                
+                                        </div>
+                                    </div>
+
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Select Qualification</label></span>
+                                           <select name="education" id="education" class="form-control">
+                            <option selected>Select</option>
+                                               <option>Below High School</option>
+                              <option>High School</option>
+                             <option>Intermediate</option>
+                               <option>Graduation</option>
+                               <option>Post Graduation</option>
+
+                 </select>
+
+                                                 </div>
+
+                                        </div>
+                                    </div>
+
+                                     <div class="row-form" id="ac8">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Qualification</label></span>
+                                           <select name="education2" id="education2" class="form-control">
+                              <option selected>Select</option>
+                              <option>Below High School</option>
+                              <option>High School</option>
+                              <option>Intermediate</option>
+                              <option>Graduation</option>
+                              <option>Post Graduation</option>
+
+                 </select>
+
+                                                 </div>
+
+                                        </div>
+                                    </div>
+
+
+                         
+                                </div>
+                                
+                            </div>
+                 
+
+           
+                                
+                            </div>
+
+                    <div class="col-md-6">
+
+                        
+                            
+                  <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Guardian Details</strong></h2>
+                                    
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian Name </label></span>  
+                                            <input type="text" id="guardianname" name="guardianname" class="form-control" /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian's Age </label></span>  
+                                            <input type="text" id="gurage" name="gurage" class="form-control" /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Relationship</label></span>  
+                                            <input type="text" class="form-control" id="gurrel" name="gurrel" /></div>
+                                            </div>
+                                    </div>
+                                    
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian Address</label></span>  
+                                            <textarea id="guraddr" name="guraddr" class="form-control"></textarea></div>
+                                            </div>
+                                    </div>
+                                 
+                                   
+                                   
+                         
+                                </div>
+                                
+                            </div>
+
+                            
+
+                         <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Nominee Details</strong> </h2>
+                                   
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                     <div class="row-form">
+                                       
+                                         
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Nominee Name</label></span>
+                                       <input type="text" id="nomineename" name="nomineename" value=" @Html.DisplayFor(modelItem => item.NomineeName)" required class="form-control" />
+                                                </div>
+                                            
+                                            </div>
+
+                                 
+                                    </div>
+
+                                     <div class="row-form">
+                                        
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Nominee Age</label></span>
+                                       <input type="text" id="nomage"  value=" @Html.DisplayFor(modelItem => item.NomineeAge)" name="nomage" required class="form-control" />
+                                                </div>
+                                            
+                                            </div>
+
+
+                                
+                                    </div>
+                                     <div class="row-form">
+                                      
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Relationship</label></span>
+                                  <input type="text" id="nomrel" name="nomrel" value=" @Html.DisplayFor(modelItem => item.NomineeRel)" required class="form-control" />
+                                                </div>
+                                            
+                                            </div>
+
+                            
+                                    </div>
+
+                                     <div class="row-form">
+
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Address</label></span>
+                                  <input type="text" id="nomaddr" name="nomaddr" value=" @Html.DisplayFor(modelItem => item.Nomineeaddr)" required class="form-control" />
+                                                </div>
+                                            
+                                            </div>
+
+                                    </div>
+                                 
+                                </div>
+                            </div>
+
+
+  
+                        <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Bank-Details</strong></h2>
+                                    
+                                </div>
+                                <div class="block-content controls">
+                                   
+                                    <div class="row-form">
+                                       
+                                         <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">PAN No</label></span>
+                                             <input type="text" id="panno" name="panno" class="form-control" value=" @Html.DisplayFor(modelItem => item.panno)"/>
+                                                </div>
+                                                
+                                        </div>
+
+                                         </div>
+                                     
+
+                                    <div class="row-form">
+
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">IFSC Code</label></span>
+                                        <input type="text" id="ifsccode" name="ifsccode" class="form-control" />
+                                                </div>
+                                            
+                                            </div>
+
+                                    </div>
+
+                                     <div class="row-form">
+
+                                           <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Bank Name</label></span>
+                                       <input type="text" name="bankname" id="bankname"  class="form-control"/>
+                                                </div>
+                                            
+                                            </div>
+
+                                       </div>
+
+
+
+                                     <div class="row-form">
+                                       
+                                         <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Bank Address</label></span>
+                                                 <input type="text" id="bankaddress" name="bankaddress" class="form-control"/>
+                                                </div>
+                                            
+                                            </div>
+
+                                    </div>
+
+                                    <div class="row-form">
+                                       
+                                         <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Annual Income</label></span>
+                                                 <input type="number" step="any" id="annualincome" name="annualincome" class="form-control"/>
+                                                </div>
+                                            
+                                            </div>
+
+                                    </div>
+
+                                     <div class="row-form" id="ac14">
+                                       
+                                         <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Applicant-2 Annual Income</label></span>
+                                                 <input type="text" id="annualincome2" name="annualincome2" class="form-control"/>
+                                                </div>
+                                            
+                                            </div>
+
+                                    </div>
+
+                                    </div>
+                                    
+                                </div>
+                         <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Upload</strong></h2>
+                                   
+                                </div>
+                             
+                                        <div class="row-form">
+                                           <div class="col-md-9">
+
+                                         <div class="input-group">
+                                        <span class="input-group-addon"><label class="width">Photo</label></span>
+                                                <input type="file" id="photo" name="Photo" class="form-control" required />
+                                              
+                                            
+                                            </div>
+
+                                 </div>
+
+                                    </div>
+
+                            
+                 <div class="row-form" id="ac12">
+                                           <div class="col-md-9">
+
+                                         <div class="input-group">
+                                        <span class="input-group-addon"><label class="width">Applicant-2 Photo</label></span>
+                                                <input type="file" id="photo2" name="photo2" class="form-control"  />
+                                              
+                                            
+                                            </div>
+
+                                 </div>
+
+                                    </div>
+
+
+
+                                <div class="row-form" >
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            
+                                            <div class="input-group">
+                                        <span class="input-group-addon"><label class="width">ID Proof</label></span>
+                                        <input class="form-control" id="idproof" name="idproof" type="file" required />
+                                               </div>
+
+                                        </div>
+                                    </div>
+
+                                  <div class="row-form" id="ac9">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            
+                                            <div class="input-group">
+                                        <span class="input-group-addon"><label class="width">Applicant-2 ID Proof</label></span>
+                                        <input class="form-control" id="idproof2" name="idproof2" type="file" />
+                                               </div>
+
+                                        </div>
+                                    </div>        
+                            
+
+                                <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            
+                                            <div class="input-group">
+                                        <span class="input-group-addon"><label class="width">Signature</label></span>
+                                        <input class="form-control" id="sign" name="sign" type="file" required />
+                                               </div>
+
+                                        </div>
+                                    </div>
+                               
+                            <div class="row-form" id="ac10">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            
+                                            <div class="input-group">
+                                        <span class="input-group-addon"><label class="width">Applicant-2 Signature</label></span>
+                                        <input class="form-control" id="sign2" name="sign2" type="file" />
+                                               </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            
+
+                        </div>
+       
+                                  <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls">
+                                  
+                                     
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                                          
+                                <button  value="Submit" type="submit" name="command" class="btn btn-primary" onclick="return confirm('Are you sure to create A/c')"> Submit</button>   
+                                
+                                                       
+                               
+                            </div>
+                        </div>  
+                                   <p>@ViewBag.msg</p> 
+                                </div>
+                                
+                            </div>
+                            </div>
+   }
+   }
+                    </div>   
+       
+                    }
+                    </div>  
+                    
+                    </div>
+

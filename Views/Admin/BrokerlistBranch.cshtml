@@ -1,0 +1,177 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerList>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "BrokerlistBranch";
+        var a = 0;
+
+    }
+
+
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#bcode").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteBrachcode",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.BranchName, value: item.BranchCode };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+    <div id="divid1">
+        <div id="2">
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">@mr.agentname List</h2>
+
+                @using (@Html.BeginForm())
+                {
+                    <div id="branchForm" class="form-container">
+
+                        <!-- Collection Point Name -->
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">Enter @mr.branchname Name or Code</label>
+                            <input type="text" class="form-control" name="branch" id="bcode" placeholder="Enter Collection Point Name" required>
+                        </div>
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+                            <button type="submit" class="btn create-btn" id="submit" value="Search">Search</button>
+                        </div>
+
+
+
+                    </div>
+
+                }
+
+
+                <div id="1">
+                    <div class="index_body">
+                        <div class="table-container">
+                            <table>
+                                @using (Html.BeginForm())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (a == 0)
+                                        {
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3" style="background-color:#ff5722; color:white">@mr.branchname Name:@ViewData["Branch"] </th>
+                                                    <th colspan="3" style="background-color:#ff5722; color:white"><b>@mr.agentname List</b></th>
+                                                    <th colspan="3" style="background-color:#ff5722; color:white"><b> @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</b></th>
+                                                </tr>
+                                            </thead>
+
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <label id="sn"><b>S.N.</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="newid"><b>@mr.agentname Id</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="spilid"><b>@mr.agentname Name</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="email"><b>@mr.rankname </b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="introducerid"><b>Introducer Id</b></label>
+                                                    </th>
+
+                                                    <th>
+                                                        <label id="position"><b>Mobile</b></label>
+                                                    </th>
+
+
+
+
+                                                    <th>
+                                                        <label id="doj"><b>Date of Joining</b></label>
+                                                    </th>
+
+                                                </tr>
+                                            </thead>
+                                        }
+                                        a = a + 1;
+
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @a
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.newagentid)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.name)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.rankname)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.introducerid)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.mobile)
+                                                </td>
+                                                <td>
+                                                    @Convert.ToDateTime(item.doj).ToString("dd/MM/yyyy")
+                                                </td>
+
+
+                                            </tr>
+                                        </tbody>
+
+                                    }
+
+                                }
+
+
+
+                            </table>
+                            @if (a > 0)
+                            {
+                                <!-- Create Button -->
+                                <div class="text-center d-grid gap-2">
+                                    <a href="@Url.Action("PrintBrokerListBranch")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

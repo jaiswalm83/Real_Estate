@@ -1,0 +1,50 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Enquary_list";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var list = db.Contacts.OrderByDescending(x => x.cdate).ToList();
+    var a = 0;
+}
+
+<link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+<div class="index_body">
+    <div class="table-container">
+        <div class="header-row">Enquary List</div>
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Name</th>
+                    <th>Email ID</th>
+                    <th>Mobile</th>
+                    <th>Entry Date</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+      
+
+            <tbody>
+
+                @foreach (var ii in list)
+                {
+                    a = a + 1;
+                    <tr>
+                        <td>@a</td>
+                        <td>@ii.name</td>
+                        <td>@ii.emailid</td>
+                        <td>@ii.mobile</td>
+                        <td>@ii.cdate.ToString("dd/MM/yyyy")</td>
+                        <td>@ii.message</td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

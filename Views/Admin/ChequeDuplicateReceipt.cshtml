@@ -1,0 +1,78 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "ChequeDuplicateReceipt";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+}
+
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newbond").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompletetempBondId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.newbondid };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm())
+{
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">
+            Duplicate @mr.custname Report
+        </h2>
+        <div id="paymentForm" class="form-container">
+
+            <!-- Associate ID -->
+            <div class="form-group">
+                <label for="associateId" class="form-label">@mr.custname Id :</label>
+                <input type="text" class="form-control" id="newbond"  name="newbondid" placeholder="Enter ID" required>
+            </div>
+
+
+
+            <!-- Submit Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn create-btn" onclick="target='_blank'" >Get Bond</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+
+
+
+
+

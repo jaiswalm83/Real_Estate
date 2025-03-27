@@ -1,0 +1,80 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseCustomerList>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "DatewiseCustomerLedger";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        var a = 0;
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(c => c.Id == 1);
+        var planlist = (from p in db.Plans where p.status == 1 select p).ToList();
+    }
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <script>
+        $(function () {
+            $('#popupDatepicker').datepick();
+            $('#popupDatepicker1').datepick();
+            $('#inlineDatepicker').datepick({ onSelect: showDate });
+        });
+
+        function showDate(date) {
+            alert('The date chosen is ' + date);
+        }
+    </script>
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+
+        <div  id="divid">
+
+      
+
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">Datewise @mr.custname</h2>
+                @using (Html.BeginForm())
+                {
+                    <div id="branchForm" class="form-container">
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label for="date" class="form-label">Start Date</label>
+                            <input type="text" class="form-control" id="popupDatepicker" name="sdate" placeholder="Enter Date" required>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label for="date" class="form-label">End Date</label>
+                            <input type="text" class="form-control" id="popupDatepicker1" name="edate" placeholder="Enter Date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Select @mr.planname Type</label>
+
+                            <select name="planname" class="form-control">
+                                <option selected value="">--Select--</option>
+                                @foreach (var plan in planlist)
+                                {
+                                    <option value="@plan.shortcutname">@plan.shortcutname</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+                            <button type="submit" class="btn create-btn" onclick="target='_blank'"><i class="fa fa-cog"></i>Search</button>
+                        </div>
+                    </div>
+                
+                      
+                       
+                        }
+
+                    </div>
+
+                </div>
+        

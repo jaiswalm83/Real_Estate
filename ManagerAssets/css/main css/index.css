@@ -1,0 +1,118 @@
+﻿﻿ /* General Styles */
+.index_body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 50px !important;
+    background-color: #f4f4f9;
+    padding: 5px;
+   
+}
+
+/* Table Container */
+.table-container {
+    width: 97%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    overflow-x: auto;  Allows horizontal scrolling on small screens 
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    /*    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);*/
+}
+
+/* Header Row */
+.header-row {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #ff5722;
+    color: white;
+    border-radius: 8px 8px 0 0;
+
+    
+    /*    background-color: #0078d4;*/
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /*table-layout: fixed;*/ /* Ensures columns take up equal width */
+    min-width: 600px; /* Ensures table doesn't collapse on small screens */
+}
+
+thead th {
+    background-color: #f1f5f9;
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #d1d5db;
+    text-align: center;
+    padding: 10px;
+}
+
+tbody td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    color: #333;
+    /*white-space: nowrap;*/ /* Prevents text wrapping */
+}
+
+
+/* Zebra Striping */
+tbody tr:nth-child(even) {
+/*    background-color: #f9fafb;*/
+    background-color: #fff3f5;
+}
+
+tbody tr:hover {
+    background-color: #eef2f6;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .table-container {
+        border: none;
+        box-shadow: none;
+        padding: 0 10px;
+       
+    }
+
+        table {
+            font-size: 13px; /* Reduce font size for small screens */
+            min-width: unset; /* Allow table to shrink on small devices */
+        }
+
+    thead th, tbody td {
+        padding: 6px; /* Reduce padding */
+    }
+
+    .header-row {
+        font-size: 1.2rem; /* Adjust font size for smaller devices */
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-container {
+        margin: 0 auto;
+        padding: 5px;
+    }
+
+    .header-row {
+        font-size: 1rem;
+        padding: 6px;
+
+    }
+
+    table {
+        border: 0;
+        font-size: 12px; /* Smaller font size for extra small screens */
+    }
+
+    thead th, tbody td {
+        padding: 4px;
+    }
+}
+
+

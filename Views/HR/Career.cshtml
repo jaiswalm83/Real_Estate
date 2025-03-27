@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Career";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+
+}
+<script>
+    function checkdistrict(check_id) {
+
+            debugger;
+            var state = $("#state").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+
+
+    }
+</script>
+
+@*IF THIS IS NOT WORKING USE FORM TAG FROM OLD CODE*@
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Add Jobs</h2>
+    <form action="/HR/Career" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow formtag">
+
+        <!-- Job Type -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Job Type</label>
+            <input type="text" required name="jobtype" class="form-control formInput">
+        </div>
+
+        <!-- Job Description -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Job Description</label>
+            <textarea required name="jobdiscription" class="form-control formInput"></textarea>
+        </div>
+
+        <!-- Industry -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Industry</label>
+            <input type="text" id="industry" name="industry" class="form-control formInput" required>
+        </div>
+
+        <!-- Role -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Role</label>
+            <input type="text" name="role" id="role" class="form-control formInput" required>
+        </div>
+
+        <!-- Functional Area -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Functional Area</label>
+            <input type="text" name="functionalarea" class="form-control formInput">
+        </div>
+
+        <!-- Experience -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Experience</label>
+            <input type="text" required name="experience" class="form-control formInput">
+        </div>
+
+        <!-- Title -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Title</label>
+            <input type="text" name="Title" class="form-control formInput" required>
+        </div>
+
+        <!-- Job Location State -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Job Location State</label>
+            <input type="text" id="state" name="joblocationstate" onclick="checkdistrict(this.id)" class="form-control formInput" required>
+        </div>
+
+        <!-- Job Location City -->
+        <div class="mb-3">
+            <label for="remark" class="form-label formLabel">Job Location City</label>
+            <select class="form-control formInput" id="District" name="city">
+                <option disabled="disabled">Select</option>
+            </select>
+        </div>
+
+        <!-- Company Email -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Company Email</label>
+            <input type="email" name="companyemail" class="form-control formInput" required>
+        </div>
+
+        <!-- Company Contact -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Company Contact</label>
+            <input type="text" name="contact" class="form-control formInput" required>
+        </div>
+
+        <!-- From Date -->
+        <div class="mb-3">
+            <label class="form-label formLabel">From Date</label>
+            <input type="date" name="Fromdate" class="form-control formInput" required>
+        </div>
+
+        <!-- To Date -->
+        <div class="mb-3">
+            <label class="form-label formLabel">To Date</label>
+            <input type="date" name="Todate" class="form-control formInput" required>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center d-grid gap-2">
+            <button name="submitbtn" type="submit" class="btn btn-primary formButtom">Submit</button>
+        </div>
+    </form>
+
+    <p>@ViewBag.msg</p>
+</div>
+
+
+
+
+
+
+

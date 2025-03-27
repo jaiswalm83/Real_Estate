@@ -1,0 +1,134 @@
+﻿
+@using ODHDEVELOPERS.Models
+@{
+    ViewBag.Title = "Print";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+
+}
+
+<div class="d-flex justify-content-between">
+    <h4 class="ml-3 mt-3">
+        <b>Welcome, @User.Identity.Name</b>
+    </h4>
+    <label class="mr-3 mt-3"><b>@DateTime.Now</b></label>
+</div>
+
+
+<div class="container shado mt-3">
+    <div class="w-100  card-heading">
+        <h3 class="text-center  text-white pt-1 pb-1">Print</h3>
+    </div>
+
+    <div class="row cardStyle g-3 justify-content-center">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/AgentWelcomeLetter" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/agent (1).png" class="imageSize img-fluid" alt="Agent Welcome Letter" />
+                    <h6 class="card-title mt-1 mb-0">Agent Welcome Letter</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/WelcomeLetter" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/writing.png" class="imageSize img-fluid" alt="Customer Welcome Letter" />
+                    <h6 class="card-title mt-1 mb-0">@mr.custname Welcome Letter</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DuplicateBond" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/client.png" class="imageSize img-fluid" alt="Customer" />
+                    <h6 class="card-title mt-1 mb-0">@mr.custname</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/ChequeDuplicateReceipt" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/rating (1).png" class="imageSize img-fluid" alt="Pending Customer" />
+                    <h6 class="card-title mt-1 mb-0">Pending @mr.custname</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/AllotMentLetter" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/legal.png" class="imageSize img-fluid" alt="Customer Allotment Letter" />
+                    <h6 class="card-title mt-1 mb-0">@mr.custname Allotment Letter</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DuplicateReceipt" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/receipt.png" class="imageSize img-fluid" alt="Renewal" />
+                    <h6 class="card-title mt-1 mb-0">Renewal</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/ChequeDuplicateRenewalReceipt" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/receipt (1).png" class="imageSize img-fluid" alt="Pending Renewal" />
+                    <h6 class="card-title mt-1 mb-0">Pending Renewal</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DupliSpotCommission" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/commission.png" class="imageSize img-fluid" alt="Spot Commission" />
+                    <h6 class="card-title mt-1 mb-0">Spot Commission</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/agreementmodeEMI" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/business-aggrement.png" class="imageSize img-fluid" alt="Agreement to Sell Property (EMI)" />
+                    <h6 class="card-title mt-1 mb-0">Agreement to Sell Property (EMI)</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/agreementmodePART" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/business-aggrement.png" class="imageSize img-fluid" alt="Agreement to Sell Property (PART)" />
+                    <h6 class="card-title mt-1 mb-0">Agreement to Sell Property (PART)</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DealSheetReportbyuserid" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/student-grades.png" class="imageSize img-fluid" alt="Deal Sheet Report" />
+                    <h6 class="card-title mt-1 mb-0">Deal Sheet Report</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/PossessionReport" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/report.png" class="imageSize img-fluid" alt="Possession Report" />
+                    <h6 class="card-title mt-1 mb-0">Possession Report</h6>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

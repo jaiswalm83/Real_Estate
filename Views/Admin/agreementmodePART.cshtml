@@ -1,0 +1,130 @@
+﻿
+@model IEnumerable<ODHDEVELOPERS.Models.appltab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        ViewBag.Title = "agreementmodePART";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+    }
+  
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newbondid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteBondId_Part",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.newbondid };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">
+            @mr.custname AGREEMENT TO SELL PROPERTY (PART)
+        </h2>
+        @using (@Html.BeginForm())
+        {
+
+            <div id="paymentForm" class="form-container">
+
+                <!-- Associate ID -->
+                <div class="form-group">
+                    <label for="associateId" class="form-label">Enter @mr.custname Id</label>
+                    <input type="text" class="form-control" id="newbondid" placeholder="Enter ID" name="customerid" required>
+                </div>
+
+
+
+                <!-- Submit Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn">View</button>
+                </div>
+            </div>
+        }
+
+
+
+        @if (Model != null)
+        {
+            <div class="index_body">
+                <div class="table-container">
+                    <table>
+
+                        <thead class="header-row">
+
+                            <tr>
+                                <th style="background-color:#ff5722; color:white">
+                                    <label id="sn"><b>S.N.</b></label>
+                                </th>
+                                <th style="background-color: #ff5722; color: white">
+                                    <label id="planname"><b>Customer Name</b></label>
+                                </th>
+
+                                <th style="background-color: #ff5722; color: white">
+                                    <label id="term_plan"><b>Customer Id</b></label>
+                                </th>
+
+                                <th style="background-color: #ff5722; color: white">
+                                    <label id="mode"><b>Join Date</b></label>
+                                </th>
+                                <th style="background-color: #ff5722; color: white">
+                                    <label id="mode1"><b>Print</b></label>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        @foreach (var item in Model)
+                        {
+                            a = a + 1;
+                            <tbody>
+                                <tr>
+                                    <td> @a </td>
+                                    <td>@item.name</td>
+                                    <td>@item.newbondid</td>
+                                    <td>@item.formdate.ToString("dd/MM/yyyy")</td>
+                                    <td> <a href="@Url.Action("printemiaggreementPART", "Customer", new {newid= item.newbondid})" target="_blank"><h5 style="color:#0f6db1;">Print Agreement</h5></a></td>
+
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Broker>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        ViewBag.Title = "UpdateBroker";
+        var pagesize = (from r in db.AgentDetails select r).Count();
+        var grid = new WebGrid(null,
+                 defaultSort: "",
+                 rowsPerPage: pagesize,
+                 selectionFieldName: "SearchString",
+                 ajaxUpdateContainerId: "agrid",
+                 sortFieldName: "SortColumn",
+                 sortDirectionFieldName: "SortOrder");
+        grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+        var a = 0;
+    }
+
+    <script type="text/javascript">
+        $(function () {
+            $('.edit-mode').hide();
+            $('.edit-user, .cancel-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+
+            $('.save-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+                var NewAgentId = tr.find("#NewAgentId").html();
+                var name = tr.find("#name").html();
+                var Mobile = tr.find("#Mobile").val();
+                var Panno = tr.find("#Panno").val();
+
+                tr.find("#lblMobile").text(Mobile);
+                tr.find("#lblPanno").text(Panno);
+
+                tr.find('.edit-mode, .display-mode').toggle();
+                var Broker =
+                {
+                    "NewAgentId": NewAgentId,
+                    "name": name,
+                    "Mobile": Mobile,
+                    "Panno": Panno,
+
+                };
+                $.ajax({
+                    url: '/Branch/EditBroker/',
+                    data: JSON.stringify(Broker),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        //alert(data);
+                    }
+                });
+
+            });
+        })
+    </script>
+
+
+    <div class="index_body mt-5">
+        <div class="table-container">
+            <div class="header-row">Update @mr.agentname Mobile No</div>
+            <table>
+
+                @if (a == 0)
+                {
+                    <thead>
+                        <tr>
+                            <th>Associate ID</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>PAN No</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="display-mode" >@item.NewAgentId </span>
+                                    <label id="NewAgentId" class="edit-mode" >@item.NewAgentId</label>
+                                </td>
+                                <td>
+                                    <span class="display-mode" > @item.name </span>
+                                    <label id="name" class="edit-mode"> @item.name</label>
+                                </td>
+                                <td>
+                                    <span class="display-mode"> <label id="lblMobile">@item.Mobile</label> </span>
+                                    <input type="text" id="Mobile" value="@item.Mobile" class="edit-mode" />
+                                </td>
+                                <td>
+                                    <span class="display-mode"> <label id="lblPanno">@item.Panno</label> </span>
+                                    <input type="text" id="Panno" value="@item.Panno" class="edit-mode" />
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm edit-user display-mode">Edit</button>
+                                    <button class="btn btn-success btn-sm save-user edit-mode">Save</button>
+                                    <button class="btn btn-secondary btn-sm cancel-user edit-mode">Cancel</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+
+        </div>
+    </div>
+
+        

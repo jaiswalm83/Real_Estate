@@ -1,0 +1,240 @@
+﻿
+@model IEnumerable<ODHDEVELOPERS.Models.HRTab>
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "UpdateHR";
+        var a = 0;
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#hrid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteHRId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.HRName, value: item.HRId };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="container mt-5">
+        <div class="page-toolbar-block pull-right">
+            <div class="widget-info widget-from">
+                <div>
+                    <label>@DateTime.Now</label>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-center mb-4 create-title">
+            Update HR
+        </h2>
+        @using (Html.BeginForm("UpdateHR", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div id="paymentForm" class="form-container">
+
+                <!-- Associate ID -->
+                <div class="form-group">
+                    <label for="associateId" class="form-label"> Enter Hr ID or Name:</label>
+                    <input type="text" id="hrid" class="form-control" placeholder="Enter Code" required>
+                </div>
+
+
+
+                <!-- Submit Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" id="btnsearch" name="command" value="Search" class="btn create-btn">Search</button>
+                </div>
+            </div>
+
+
+
+            foreach (var item in Model)
+            {
+                if (a == 0)
+                {
+
+                    <div class="row">
+                        <div class="col-md-6">
+
+
+                            <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>HR Details</strong> </h2>
+
+                                </div>
+                                <div class="block-content controls">
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><label class="width">HR Id</label></span>
+                                                <input type="text" class="form-control" required name="nhrid" id="bnid" value="@Html.DisplayFor(modelItem => item.HRId)" readonly="true" />
+                                            </div>
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row-form">
+
+                                        <div class="col-md-9">
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><label class="width">HR Name</label></span>
+                                                <input type="text" class="form-control" name="hrname" id="opname" value="@Html.DisplayFor(modelItem => item.HRName)" required>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><label class="width">Address</label></span>
+                                                <input type="text" class="form-control" required name="address" id="address" value="@Html.DisplayFor(modelItem => item.Address)" />
+                                            </div>
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><label class="width">E-Mail</label></span>
+
+                                                <input type="text" class="form-control" name="email" id="email" value="@Html.DisplayFor(modelItem => item.emailid)" />
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><label class="width">Mobile</label></span>
+                                                <input type="number" class="form-control" required name="mobile" id="mobile" value="@Html.DisplayFor(modelItem => item.Mobile)">
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+
+
+
+
+
+
+                                <div class="page-toolbar-block pull-right">
+                                    <div class="widget-info widget-from">
+                                        <button id="btnupdate" name="command" type="submit" class="btn btn-primary" value="Update" formnovalidate="formnovalidate">Update</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                }
+            }
+
+
+
+            <p style="color:maroon;margin-left:15px;"><b> @ViewBag.msg</b></p>
+
+
+
+
+        }
+
+
+    </div>
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

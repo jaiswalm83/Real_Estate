@@ -1,0 +1,81 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "upload_video";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var list = db.upload_video_tabs.OrderByDescending(x => x.Cdate).ToList();
+    var a = 0;
+}
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Upload Video</h2>
+    @using (Html.BeginForm("upload_video", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div id="uploadVideoForm" class="form-container">
+
+            <div class="form-group">
+                <label for="videoUpload" class="form-label">Upload Video</label>
+                <input type="text" name="file" class="form-control" id="pic">
+
+            </div>
+
+
+
+
+            <div class="text-center">
+                <button type="submit" value="Upload" class="btn create-btn">Upload</button>
+            </div>
+
+
+            <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+        </div>
+    }
+
+    <br />
+
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Video Details</div>
+            <table id="myTable">
+
+                <thead>
+
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>File Name</th>
+                        <th>Entry Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ii in list)
+                    {
+                        a = a + 1;
+                        <tr>
+                            <td>@a</td>
+                            <td>@ii.file</td>
+                            <td>@ii.Cdate.ToString("dd/MM/yyyy")</td>
+                            @if (@ii.status == 0)
+                            {
+                                <td style="text-align: center;"><a href="@Url.Action("Block_unblock_video", "Admin", new { opid = @ii.Id, status = ii.status })" class="btn btn-primary">Active</a></td>
+                            }
+                            else
+                            {
+                                <td style="text-align: center;"><a href="@Url.Action("Block_unblock_video", "Admin", new { opid = @ii.Id, status = ii.status })" class="btn btn-danger">Block</a></td>
+                            }
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+

@@ -1,0 +1,53 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "CreateAllId";
+}
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Create All @mr.agentname I-Card</h2>
+
+
+    @using (Html.BeginForm())
+    {
+        <div id="launchForm" class="form-container">
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn create-btn" onclick="target='_blank'">Genrate</button>
+            </div>
+            </div>
+            }
+        </div>
+
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#agentid").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Admin/AutoCompleteAgentid",
+                            type: "POST",
+                            dataType: "json",
+                            data: { term: request.term },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.name, value: item.NewAgentId };
+                                }))
+
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "", results: ""
+                    }
+                });
+            })
+        </script>
+
+
+

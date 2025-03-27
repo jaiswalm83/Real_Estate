@@ -1,0 +1,39 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db=new UsersContext();
+    var c=db.CompanyInfos.Single(d=>d.Id==1);
+    
+    }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <title>@ViewBag.Title</title>
+</head>
+<body class="container" style="padding-top: 30px; padding-bottom: 17px;">
+    <div class="row">
+        <div class="col-lg-12">
+            <header class="text-right" style="border-bottom:4px double #808080;">
+                <h2 class="display-3 font-weight-bold">@c.CompanyName</h2>
+                <p>Regd. Office : @c.CompanyName<br />
+                Website : <a href="http://@c.HeadOffice" target="_blank">@c.HeadOffice</a> • email : @c.Emailid <br />
+               Contact us : +91-@c.Contact, 8765579797    </p>
+            </header>
+            <div>
+                @RenderBody()
+            </div>
+            <footer style="border-top:1px solid #444;">
+                <h4 class="text-center">This is a computer generated letter hence does not require any signature.</h4>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

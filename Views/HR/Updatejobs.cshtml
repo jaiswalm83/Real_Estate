@@ -1,0 +1,190 @@
+﻿    @model IEnumerable<ODHDEVELOPERS.Models.careertable1>
+    @using ODHDEVELOPERS.Models;
+    @{
+        ViewBag.Title = "Updatejobs";
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        UsersContext db = new UsersContext();
+        var id = TempData["jobid"];
+        var idd = Convert.ToString(id);
+    }
+    <script>
+    function checkdistrict(check_id) {
+
+        debugger;
+        var state = $("#state").val();
+        var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+
+
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#main1").hide();
+        });
+        function getrecord() {
+            debugger;
+            var Jobid = $("#jobid").val();
+            var Url = "/HR/Pickdata"
+            $.get(Url, { jobid: Jobid }, function (d) {
+                $("#main1").show();
+                $("#jobsid").val(Jobid);
+                var select = $("#District");
+                for (var i = 0; d.length > 0; i++) {
+                    $("#jobtype").val(d[i].jobtype);
+                    $("#jobdiscription").val(d[i].jobdiscription);
+                    $("#experience").val(d[i].experience);
+                    $("#industry").val(d[i].industry);
+                    $("#role").val(d[i].role);
+                    $("#functionalarea").val(d[i].functionalarea);
+                    $("#salary").val(d[i].salary);
+                    $("#Title").val(d[i].Title);
+                    $("#Keyword").val(d[i].Keyword);
+                    $("#state").val(d[i].joblocationstate);
+                    $("#experience").val(d[i].experience);
+                    select.append('<option selected value="' + d[i].city + '">' + d[i].city + '</option>');
+                    $("#companyemail").val(d[i].companyemail);
+                    $("#jobid").val(d[i].jobid);
+
+                    $("#contact").val(d[i].contact);
+                }
+            })
+        }
+    </script>
+
+    <div class="container mt-5 FormContainer" >
+        <h2 class="text-center mb-4">Update Jobs</h2>
+        <form action="/HR/Updatejobs" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow formtag">
+
+            <input type="hidden" required name="jobsid" id="jobsid" value="" class="form-control formInput">
+            @* Update Employee Details*@
+            <div class="mb-3">
+                <label class="form-label formLabel">Job Id</label>
+                <input type="text" name="jobid" id="jobid" class="form-control formInput" required>
+            </div>
+
+            @*orange button*@
+            @*<div class="text-center d-grid gap-2">
+            <button name="command" type="submit" class="btn btn-lg formButtom" value="search">Search</button>
+        </div>*@
+
+
+
+            @*blue button*@
+            <div class="text-center d-grid gap-2">
+                <button type="submit" name="command" class="btn btn-info" value="search" onclick="getrecord()">Search</button>
+            </div>
+
+          
+           
+            <div id="main1">
+
+                <!-- job type -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Job Type</label>
+                    <input type="text" required name="jobtype" id="jobtype" class="form-control formInput">
+                </div>
+
+                <!-- job discription -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Job Discription</label>
+                    <input type="text" required name="jobdiscription" id="jobdiscription" class="form-control formInput">
+                </div>
+
+                <!-- role -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Role</label>
+                    <input type="text" name="role" id="role" required class="form-control formInput">
+                </div>
+
+                <!-- functional area -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Functional Area</label>
+                    <input type="text" name="functionalarea" id="functionalarea" class="form-control formInput">
+                </div>
+
+                <!-- salary -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Salary</label>
+                    <input type="text" name="salary" id="salary" class="form-control formInput">
+                </div>
+
+
+
+
+                <!-- experience -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Experience</label>
+                    <input type="text" required name="experience" id="experience" class="form-control formInput">
+                </div>
+
+                <!-- title -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Title</label>
+                    <input type="text" required name="Title" id="Title" class="form-control formInput">
+                </div>
+
+                <!-- keyword -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Keyword</label>
+                    <input type="number" name="Keyword" id="Keyword" class="form-control formInput" required>
+                </div>
+
+                <!-- joblocation state -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Joblocation State</label>
+                    <input type="text" id="state" name="joblocationstate" onclick="checkdistrict(this.id)" class="form-control formInput">
+                </div>
+
+
+                 
+                <div class="mb-3">
+                    <label class="form-label formLabel">Gender</label>
+                    <select class="form-control formInput" id="District" name="city" required>
+                    </select>
+                </div>
+
+                <!-- company email -->
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Company Email</label>
+                    <input type="email" required name="companyemail" id="companyemail" class="form-control formInput">
+                </div>
+
+                <!-- company contact -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Company Contact</label>
+                    <input type="text"  name="contact" id="contact" class="form-control formInput" required>
+                </div>
+
+
+
+                <!-- Submit Button -->
+                @*<div class="text-center d-grid gap-2">
+            <button name="submitbtn" type="submit" class="btn btn-lg formButtom">Register</button>
+        </div>*@
+
+
+
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" value="update" name="command" class="btn btn-primary formButtom">Register</button>
+                </div>
+
+
+
+                <p>@ViewBag.msg</p>
+            </div>
+        </form>
+
+      
+    </div>
+

@@ -1,0 +1,89 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Video";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    UsersContext db = new UsersContext();
+    var list = db.upload_video_tabs.Where(x=>x.status == 1).ToList();
+}
+
+
+<link href="~/Content/Home/gallery_5/src/jquery.littlelightbox.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="~/Content/Home/gallery_5/src/jquery.littlelightbox.js"></script>
+
+
+<style>
+    .lightbox
+    {
+    }
+</style>
+
+
+
+<!--======= BANNER =========-->
+<section class="page-title" style="background-image: url(/assets/images/background/bg-page-title.jpg);">
+    <div class="auto-container">
+        <div class="row clearfix">
+            <!--Title -->
+            <div class="title-column col-md-7 col-sm-6 col-xs-12" >
+                <h1>Video</h1>
+            </div>
+            <!--Bread Crumb -->
+            <div class="breadcrumb-column col-md-5 col-sm-6 col-xs-12">
+                <ul class="bread-crumb clearfix">
+                    <li><a href="../Home/Index">Home</a></li>
+                    <li class="active">Video</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!--======= WHAT WE DO =========-->
+<section class="what-we-do">
+    <div class="container">
+
+        <!--======= TITTLE =========-->
+       @* <div class="tittle">
+            <img src="~/Content/Home/img/head-top.png" alt="">
+            <h3>Our Gallery</h3>
+        </div>*@
+        <div class="container" style="margin-top: 50px; margin-bottom: 50px">
+                <div class="row" id="tt">
+                    @foreach (var item in list)
+                    {
+                        string video_id = item.file.Substring(item.file.LastIndexOf('/') + 1);
+                        video_id = "https://www.youtube.com/embed/" + video_id;
+                    <div class="col-lg-3 col-md-3 wow rotateIn">
+                        <iframe src="@video_id" height="200" width="300" title="Iframe Example"></iframe>
+                        
+                    </div>
+                    }
+                  </div>  
+        </div>
+    </div>
+</section>
+<script>
+    $('.lightbox').littleLightBox();
+</script>
+
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36251023-1']);
+    _gaq.push(['_setDomainName', 'jqueryscript.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
+
+
+
+

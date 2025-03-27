@@ -1,0 +1,161 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.HeadTab>
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "AddHead";
+    }
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <div class="container mt-5">
+        <!-- Title -->
+        <h2 class="text-center create-title">Expense Head</h2>
+
+        <div class="page-toolbar-block pull-right">
+            <div class="widget-info widget-from">
+                <div id="reportrange" class="dtrange">
+                    <span></span><b class="caret"></b>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        @using (Html.BeginForm())
+        {
+            <div id="headForm" class="form-container">
+                <!-- Head Input -->
+                <div class="form-group">
+                    <label for="headInput" class="form-label">Enter Head</label>
+                    <input type="text" class="form-control" name="head" id="head" placeholder="Enter Head" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn">Create Head</button>
+                </div>
+            </div>
+            <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+
+        }
+
+
+
+        <!-- Table Section -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="background-color:#FF5722">ID</th>
+                        <th style="background-color:#FF5722">Head Expense Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span class="display-mode">@a.Id</span>
+                                <label id="id" class="edit-mode">@a.Id</label>
+                            </td>
+                            <td>
+                                <span class="display-mode">@a.head</span>
+                                <label id="head" class="edit-mode">@a.head</label>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+        <style>
+    /* General Table Styles */
+    .table-container {
+        max-width: 100%;
+        margin: auto;
+        overflow-x: auto;
+        background: #ffffff;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+        min-width: 800px;
+    }
+
+    thead th {
+        background-color: #f1f5f9;
+        font-weight: bold;
+        color: #333;
+        border: 1px solid #d1d5db;
+        text-align: center;
+        padding: 10px;
+    }
+
+    tbody td {
+        text-align: center;
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        color: #333;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #fff3f5;
+    }
+
+    tbody tr:hover {
+        background-color: #eef2f6;
+    }
+
+    /* Display Mode */
+    .display-mode {
+        font-size: 14px;
+        color: #333;
+    }
+
+    /* Edit Mode */
+    .edit-mode {
+        display: none;
+    }
+
+    /* Responsive Styles */
+    @@media (max-width: 768px) {
+        .table-container {
+            border: none;
+            box-shadow: none;
+            padding: 0 10px;
+        }
+
+        table {
+            font-size: 13px;
+            min-width: unset;
+        }
+
+        thead th, tbody td {
+            padding: 6px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .table-container {
+            margin: 0 auto;
+            padding: 5px;
+        }
+
+        table {
+            border: 0;
+            font-size: 12px;
+        }
+
+        thead th, tbody td {
+            padding: 4px;
+        }
+    }
+        </style>
+
+
+

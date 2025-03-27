@@ -1,0 +1,214 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AdvPaymentTemp>
+@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Advancepaymentreport";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+    Double tpayment = 0,recoverysum=0;
+
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#sdate').datepick();
+        $('#edate').datepick();
+
+    });
+</script>
+<div class="page-content">
+         
+                <div class="container" id="divid1">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Advance Payment Report</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                    </div>
+ 
+  @using (@Html.BeginForm()){
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                      <div class="row-form">
+                                     
+                                        <div class="col-md-9">
+                                           
+                                            <div class="input-group">
+                        <span class="input-group-addon"><label class="width">Start Date</label></span>  
+                        <input type="text" class="form-control" id="sdate" name="sdate" required ></div>
+            
+                                        </div>
+
+                                    </div>
+                                   
+                                   <div class="row-form">
+                                      
+
+                                        <div class="col-md-9">
+                                            
+                                             <div class="input-group">
+                        <span class="input-group-addon"><label class="width">End Date</label></span>  
+                         <input type="text" class="form-control" id="edate" name="edate" required ></div>
+                                            
+                                           
+
+
+                                        </div>
+                                    </div>
+               
+
+                   <div class="row-form" style="width:100%">
+      <div class="col-md-9">
+          <button id="submit" class="btn btn-primary pull-right" type="submit">View</button>
+     </div>
+              </div>
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+                    }
+
+                  <div id="1">
+<table border="1" style="margin-left:1%; margin-right:1px; width:98%; margin-bottom:70px; ">
+    @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                            <tr>
+                                <th colspan="4" ><b>Advance Payment Report</b></th>
+                                <th colspan="5" ><b>Duration:@item.monthname</b></th>
+                            </tr>
+        
+    <tr>
+        <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+         <th style="width:10%;text-align:center;">
+           <label><b>Name</b></label>
+        </th>
+         <th style="width:10%;text-align:center;">
+           <label><b>@mr.agentname Id</b></label>
+        </th>
+        
+        <th style="width:10%;text-align:center;">
+            <label><b>Amount</b></label>
+        </th>
+         <th style="width:10%;text-align:center;">
+            <label><b>Adv. Payment Date</b></label>
+        </th>
+         <th style="width:10%;text-align:center;">
+            <label><b>Recovery Amount</b></label>
+        </th>
+          <th style="width:10%;text-align:center;">
+            <label><b>Recovery Date</b></label>
+        </th>
+         <th style="width:10%;text-align:center;">
+           <label><b>@mr.branchname Code</b></label>
+        </th>
+        <th style="width:10%;text-align:center;">
+           <label><b>Remark</b></label>
+        </th>
+            
+    </tr>
+    }
+                        a = a + 1;
+                      
+
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.newagentid)
+        </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.amount)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.date)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.recoveryamount)
+        </td>
+          <td>
+             @Html.DisplayFor(modelItem => item.recoverydate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.branchcode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remark)
+        </td>
+        
+        
+        
+      
+         
+     
+    </tr>
+                    
+            tpayment = tpayment + Convert.ToDouble(item.amount);
+            recoverysum = recoverysum + Convert.ToDouble(item.recoveryamount);
+    }
+    
+    
+    
+    if(a>0)
+    {
+        
+    <tr style="text-align:center;">
+        <td colspan="3" >
+            <b>GRAND TOTAL:</b>
+        </td>
+         
+        <td>
+           <b>@tpayment</b>
+        </td>
+        <td></td>
+          <td>
+           <b>@recoverysum</b>
+        </td>
+        <td colspan="3">
+          
+        </td>
+        
+        
+  
+    </tr>
+    }
+                     
+    }
+    
+    
+    
+   
+</table>
+        @if(a>0)
+        {
+         <a href="@Url.Action("PrintAdvancepayment")" target="_blank">Get Report In PDF</a>
+        }
+              </div> 
+                   
+         
+                    </div>
+    </div>
+
+
+

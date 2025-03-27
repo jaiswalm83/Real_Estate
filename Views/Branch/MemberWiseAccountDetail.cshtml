@@ -1,0 +1,142 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DWMemberList>
+@using ODHDEVELOPERS.Models;
+@{
+    
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "MemberWiseAccountDetail";
+    var a = 0;
+    
+}
+
+
+<div class="page-content">
+    
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">All Member List</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div>           
+                        
+                    </div> 
+                    
+                    <div id="1">
+<table border="1" style="margin-left:1%; margin-right:1px; width:98%;">
+    @using (Html.BeginForm())
+    {
+        foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+                            
+      <tr >
+                                  <th colspan="4"style="text-align:center;" >@User.Identity.Name</th>
+                                <th colspan="4" style="text-align:center;"><b>All Member List</b></th>
+                            </tr>
+    <tr>
+        <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="newid"><b>Member Id</b></label>
+            </th>
+        
+        <th style="width:10%;text-align:center;">
+           <label id="introducerid"><b>Member Name</b></label>
+        </th>
+            
+        <th style="width:10%;text-align:center;">
+           <label id="spilid"><b>Date of Birth</b></label>
+        </th>
+           
+        <th style="width:10%;text-align:center;">
+           <label id="position"><b>Father Name</b></label>
+        </th>
+            
+         <th style="width:10%;text-align:center;">
+         <label id="email"><b>Mobile No</b></label>
+        </th>
+
+         <th style="width:10%;text-align:center;">
+           <label id="dojh"><b> Date of Joining</b></label>
+        </th>
+            
+         <th style="width:10%;text-align:center;">
+         <label id="View" ><b>Action</b></label>
+        </th>
+       
+
+         
+      
+    </tr>
+            }
+            a = a + 1;
+
+
+    <tr style="text-align:left;">
+        <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.newmemberid)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.dob)
+        </td>
+
+         <td>
+            @Html.DisplayFor(modelItem => item.fathername)
+        </td>
+       <td>
+            @Html.DisplayFor(modelItem => item.Mobileno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.formdate)
+        </td>
+        <td>
+             @Html.ActionLink("View Account", "MemberAccountDetail", new { newmemberid = item.newmemberid }, new { onclick = "return confirm('Are you sure to View Account?');" })
+        </td>
+       
+    </tr>
+        
+       
+        }
+
+    }
+    
+    
+   
+</table>
+
+                        
+               @if (a > 0)
+              {
+                  <a href="@Url.Action("PrintMemberList")" target="_blank">Get Voucher In PDF</a>
+              }    
+
+
+              </div> 
+                              </div>
+                        
+                    </div> 
+  
+
+
+
+
+
+
+

@@ -1,0 +1,553 @@
+﻿@using ODHDEVELOPERS.Models;
+@model DealSheet
+@{
+    ViewBag.Title = "DealSheetShow";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var item = Model;
+    var chk1 = ""; var chk2 = "";
+}
+
+@*<style>
+    input {
+        pointer-events:none;
+    }     
+   
+</style>*@
+<script>
+    $(document).ready(function () {
+        $("input").attr("disabled", true).css("color","#444");
+    });
+
+</script>
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Deal Sheet</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+        </div>
+
+        <form>
+
+           
+              
+            <div class="row">
+                                   <div class="col-md-6">
+
+                        <div class="block">
+                            <div class="block-content">
+                                <h2><strong>Personal Details</strong></h2>
+
+                            </div>
+                            <div class="block-content controls">
+                                <div class="row-form">
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Deal Id</label></span>
+                                            <input type="text" class="form-control" id="userid" required name="userid" value=" @item.userid" readonly="true" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row-form">
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Customer Name</label></span>
+                                            <input type="text" class="form-control" id="name"value=" @item.customername" required name="customername" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Email-Id</label></span>
+                                            <input type="text" class="form-control" id="email" value=" @item.email" name="email" />
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="row-form">
+
+
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Mobile No</label></span>
+                                            <input type='tel' title="Invalid mobile format" pattern="[6789][0-9]{9}" maxlength="10" name="mobile" id="mobile"value=" @item.mobile" required class="form-control" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row-form">
+
+
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Alt. Mobile No</label></span>
+                                            <input type='tel' title="Invalid mobile format" pattern="[6789][0-9]{9}" maxlength="10" name="almobile" id="almobile" value=" @item.almobile" required class="form-control" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Present Occupation </label>
+                                            </span>
+                                            <input type="text" class="form-control" id="occupation" value=" @item.occupation" name="occupation" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Introducer Name</label></span>
+                                            <input type="text" name="introname" id="introname" value=" @item.introname"required class="form-control" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Introducer Mobile No.</label></span>
+                                            <input type="text" id="intromobile" name="intromobile" value=" @item.intromobile" required class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Select Gender</label></span>
+                                            <select name="Gender" id="Gender" class="form-control" required>
+                                                <option selected value="@item.gender">@item.gender</option>
+                                                <option value="@item.gender">@item.gender</option>
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Customer Pic</label></span>
+                                            <input type="file" name="intropic" id="intropic" @item.intropic class="form-control" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <br />
+                                <br />
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="block">
+                            <div class="block-content">
+                                <h2><strong>Address Details</strong> </h2>
+
+                            </div>
+                            <div class="block-content controls">
+
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Address</label></span>
+                                            <input type="text" id="Address" name="Address" value="@item.address" required class="form-control" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">City</label></span>
+                                            <input type="text" required name="city" value="@item.city" class="form-control" />
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">State</label></span>
+                                            <input type="text" id="state" name="state" value="@item.state" required class="form-control" />
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">District</label></span>
+                                            <input type="text" required name="district" value="@item.district" class="form-control" />
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="row-form">
+                                    <div class="col-md-9">
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Pin Code</label></span>
+                                            <input type="number" name="pincode" value="@item.pincode" class="form-control" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                <div class="col-md-6">
+        
+
+                    <div class="block">
+                        <div class="block-content">
+                            <h2><strong>Details of Pricing</strong> </h2>
+
+                        </div>
+                        <div class="block-content controls">
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Unit No.</label></span>
+                                        <input type="text" id="unitno" name="unitno" value="@item.unitno" required class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Phase No.</label></span>
+                                        <input type="number" id="phaseno" name="phaseno" required value="@item.phaseno" class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Block No.</label></span>
+                                        <input type="text" id="blockno" name="blockno" value="@item.blockno" required class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Unit Area In Sq. Ft.</label></span>
+                                        <input type="number" id="unitarea" name="unitarea" required value="@item.unitarea" class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Unit Type</label>
+                                        </span>
+                                        @if (item.unittype == "Residential")
+                                        {
+                                            chk1 = "checked";
+                                        }
+                                       
+                                       else if (item.unittype == "Residential cum commercial")
+                                        {
+                                            chk2 = "checked";
+                                        }
+                                         <input type="radio" id="Residential" name="unittype" value="@item.unittype" @chk1>
+                                       Residential 
+                                       <input type="radio" id="commercial" name="unittype" value="@item.unittype" @chk2>
+                                       Residential cum commercial   
+                                                  
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Unit Dimensions</label>
+                                        </span>
+                                        @{
+                                            chk1 = "";
+                                            chk2 = "";
+                                            }
+                                        @if (item.unitdimension == "30*60")
+                                            
+                                        {
+                                            
+                                            chk1 = "checked";
+                                        }
+                                         else if (item.unitdimension == "20*45")
+                                            
+                                        {
+                                            chk2 = "checked";
+                                        }
+                                        <input type="radio" id="Unit1" name="unitdimension" value="@item.unitdimension" @chk1 >
+                                        30*60                                                          
+                                             <input type="radio" id="Unit2" name="unitdimension" value="@item.unitdimension" @chk2 >
+                                        20*45                
+                                         
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Preference of Unit </label>
+                                        </span>
+
+                                         @*@if (item.preferenceofunit == "Normal")
+                                            
+                                        {
+                                            chk = "checked";
+                                        }
+                                         else if (item.preferenceofunit == "Corner")
+                                            
+                                        {
+                                            chk = "checked";
+                                        }
+                                         else if (item.preferenceofunit == "Park Facing")
+                                            
+                                        {
+                                            chk = "checked";
+                                        }
+                                         else if (item.preferenceofunit == "30’ wide Road")
+                                            
+                                        {
+                                            chk = "checked";
+                                        }*@
+                                        <input type="hidden" id="hiddenpref" value="@item.preferenceofunit">
+                                        <input type="radio" id="Normal"  name="preferenceofunit" value="Normal">
+                                        Normal               
+                                             <input type="radio" id="Corner" name="preferenceofunit" value="Corner">
+                                        Corner                
+                                          <input type="radio" id="ParkFacing" name="preferenceofunit" value="Park Facing" >
+                                        Park Facing                   
+                                            <input type="radio" id="wideRoad" name="preferenceofunit" value="30’ wide Road" >
+                                        30’ wide Road 
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Basic Sale Price in Rs.</label></span>
+                                        <input type="number" id="basesaleprice"  value="@item.basesaleprice"  name="basesaleprice" required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                             <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Plot Cost.</label></span>
+                                        <input type="number" id="totalplotcost"  value="@item.plotcost"  name="plotcost" required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Preferential Location Charges</label></span>
+                                        <input type="number" id="preloccharge" name="preloccharge"  value="@item.preloccharge"  required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Club Membership Charges </label>
+                                        </span>
+                                        <input type="number" id="cmembershipcharge" name="cmembershipcharge" value="@item.cmembershipcharge" required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Power Backup Charges </label>
+                                        </span>
+                                        <input type="number" id="pbackupcharge" name="pbackupcharge" value="@item.pbackupcharge" required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Discount if any  </label>
+                                        </span>
+                                        <input type="number" id="discount" name="discount"   value="@item.discount" required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Total Unit Cost Rs.</label></span>
+                                        <input type="number" id="totalunitcost" name="totalunitcost"  value="@item.totalunitcost"  required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Valid Days</label></span>
+                                        <input type="number" id="dealdays" name="dealdays"  value="@item.dealdays"  required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Valid Date</label></span>
+                                        <input type="text" readonly="true" id="validdate" value="@item.validdate" name="validdate" required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Remark</label></span>
+                                        <input type="text" readonly="true" id="Remark" value="@item.extra2" name="validdate" required class="form-control" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+                
+            </div>
+        </form>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        var getvalue = $("#hiddenpref").val();
+        $("[name=preferenceofunit]").each(function () {
+            var c = $(this), v = c.val();
+            if (v == getvalue) {
+                c.attr("checked", true);
+                return false;
+            }
+
+        });
+
+    });
+
+</script>

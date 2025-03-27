@@ -1,0 +1,247 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.relation>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "createrelation";
+        var a = 0;
+    }
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <div class="container mt-5">
+        <!-- Title -->
+        <h2 class="text-center create-title">Enter Relation</h2>
+
+        @using (Html.BeginForm())
+        {
+            <!-- Form -->
+            <div id="relationForm" class="form-container">
+                <!-- Relation Input -->
+                <div class="form-group">
+                    <label for="relationInput" class="form-label"> Enter Relation</label>
+                    <input type="text" class="form-control" name="relations" id="relations" placeholder="Enter Relation" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn">Submit</button>
+                </div>
+            </div>
+            <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+        }
+
+
+        @if (Convert.ToInt32(ViewData["count"]) > 0)
+        {
+            <div id="comm" class="table-container">
+                <div id="pn" class="header-row">
+                    <div>
+                        <label id="pname"><b>All Relation List</b></label>
+                    </div>
+
+                </div>
+                <table>
+                    @using (Html.BeginForm())
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                               
+                                <tr>
+                                    <th style="width:10%;text-align:center;">
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                  
+                                    <th style="width:40%;text-align:center;">
+                                        <label id="newid"><b> Relations</b></label>
+                                    </th>
+
+
+                                </tr>
+                            }
+                            a = a + 1;
+
+
+                            <tr style="text-align:left;">
+                                <td>
+                                    @a
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.relations)
+                                </td>
+
+
+
+
+                            </tr>
+
+                        }
+
+                    }
+
+
+
+                </table>
+            </div>
+        }
+
+    </div>
+
+    <style>
+        /* Button Container */
+        .action-buttons {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center; /* Center buttons horizontally */
+            gap: 10px; /* Space between buttons */
+        }
+
+            /* General Button Styles */
+            .action-buttons .btn {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                font-size: 14px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                width: 100%; /* Make buttons full-width */
+                max-width: 200px; /* Limit max width for large screens */
+            }
+
+            /* Edit Button */
+            .action-buttons .btn-primary {
+                background-color: #007bff;
+                color: white;
+            }
+
+                .action-buttons .btn-primary:hover {
+                    background-color: #0056b3;
+                    transform: scale(1.05);
+                }
+
+            /* Save Button */
+            .action-buttons .btn-success {
+                background-color: #28a745;
+                color: white;
+            }
+
+                .action-buttons .btn-success:hover {
+                    background-color: #218838;
+                    transform: scale(1.05);
+                }
+
+            /* Cancel Button */
+            .action-buttons .btn-secondary {
+                background-color: #6c757d;
+                color: white;
+            }
+
+                .action-buttons .btn-secondary:hover {
+                    background-color: #5a6268;
+                    transform: scale(1.05);
+                }
+
+            /* Small Button Size */
+            .action-buttons .btn-sm {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            /* Disabled Button Style */
+            .action-buttons .btn:disabled {
+                background-color: #e0e0e0;
+                cursor: not-allowed;
+            }
+
+
+        /* General Table Styles */
+        .table-container {
+            max-width: 100%;
+            margin: auto;
+            overflow-x: auto;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+            min-width: 800px;
+        }
+
+        thead th {
+            background-color: #f1f5f9;
+            font-weight: bold;
+            color: #333;
+            border: 1px solid #d1d5db;
+            text-align: center;
+            padding: 10px;
+        }
+
+        tbody td {
+            text-align: center;
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            color: #333;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #fff3f5;
+        }
+
+        tbody tr:hover {
+            background-color: #eef2f6;
+        }
+
+        /* Display Mode */
+        .display-mode {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Edit Mode */
+        .edit-mode {
+            display: none;
+        }
+
+        /* Responsive Styles */
+        @@media (max-width: 768px) {
+            .table-container {
+                border: none;
+                box-shadow: none;
+                padding: 0 10px;
+            }
+
+            table {
+                font-size: 13px;
+                min-width: unset;
+            }
+
+            thead th, tbody td {
+                padding: 6px;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .table-container {
+                margin: 0 auto;
+                padding: 5px;
+            }
+
+            table {
+                border: 0;
+                font-size: 12px;
+            }
+
+            thead th, tbody td {
+                padding: 4px;
+            }
+        }
+    </style>
+

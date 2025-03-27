@@ -1,0 +1,287 @@
+﻿@{
+    ViewBag.Title = "Displayjobs";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+}
+<script>
+    function checkdistrict(check_id) {
+
+        $("#" + check_id).mouseout(function () {
+            debugger;
+            var state = $("#state").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+        });
+
+    }
+</script>
+<div class="page-content">
+                <div class="container">
+<div class="page-toolbar">
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Displayjobs</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                    </div> 
+                    
+                    @using (Html.BeginForm("Displayjobs", "HR", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                       <div class="row" >
+                        <div class="col-md-6" style="width:100%">  
+                            <div class="block" >
+                                <div class="block-content controls" >
+                                    <div class="row-form"  >
+                                  <div class="col-md-9">
+                                       <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Job Type</label></span>
+                                             <input type="text"  required name="jobtype" value="" class="form-control">
+                                                </div>
+                                      </div>
+                                            </div>
+                                    <div class="row-form"  >
+                                  <div class="col-md-9">
+                                       <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Job Discription</label></span>
+                                             <textarea  required name="jobdiscription" value=""  class="form-control"></textarea>
+                                                </div>
+                                      </div>
+                                            </div>
+                                    <div class="row-form"  >
+                                  <div class="col-md-9">
+                                       <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Industry</label></span>
+                                             <input type="text" id="industry" required name="industry"  class="form-control">
+                                                </div>
+                                    
+                                
+                                      </div>
+                                            </div>
+                                
+
+
+                                                   
+            
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            
+                                               <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Role</label></span>
+                                                <input type="text"  class="form-control" name="role" id="role" />
+                                                </div>
+                                    
+                                        </div>
+                                    </div>
+
+
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Functional Area</label></span>
+                                                <input type="text" name="functionalarea" class="form-control" />
+                                                    
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                         <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Salary</label></span>
+                                                <input type="text" name="salary" class="form-control"
+                                                    />
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                      <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            
+
+                                             <div class="input-group">
+                                            <span class="input-group-addon"><label class="width" >Experience</label></span>
+
+
+                                                 <select id="experience" class="form-control" name="experience">
+                                                      <option value="0.6yr.">0.6yr.</option>
+                                                         <option value="1yr.">1yr.</option>
+                                                    <option value="2yr.">2yr.</option>
+                                                 <option value="3yr.">3yr.</option>
+                                                        <option value="4yr.">4yr.</option>
+                                                    <option value="5yr.">5yr.</option>
+                                                  <option value="6yr.">6yr.</option>
+                                                  <option value="7yr.">7yr.</option>
+                                                 <option value="8yr.">8yr.</option>
+                                                   <option value="9yr.">9yr.</option>
+                                                   <option value="10yr.">10yr.</option>
+
+                                                 </select>
+
+
+
+                                               
+                                                  
+                                                </div>
+
+                                        </div>
+                                    </div>
+
+                                     
+                                    <div class="row-form">
+                                  
+                                        <div class="col-md-9">
+
+                                             
+            
+                                            
+                                         <div class="input-group">
+                                         <span class="input-group-addon"><label class="width">Title</label></span>
+                                             
+                                             <input type="text" required name="Title" class="form-control" />
+
+                                    
+                                         </div>
+
+
+                                        </div>
+                                    
+                                     
+                                     
+                                     </div>
+
+                                    <div class="row-form">
+                                  
+                                        <div class="col-md-9">
+
+                                             
+            
+                                            
+                                         <div class="input-group">
+                                         <span class="input-group-addon"><label class="width">Keyword</label></span>
+                                             
+                                             <input type="text" required name="Keyword" class="form-control" />
+
+                                    
+                                         </div>
+
+
+                                        </div>
+                                    
+                                     
+                                     
+                                     </div>
+
+
+
+
+
+
+
+                                    <div class="row-form">
+                                  
+                                        <div class="col-md-9">
+
+                                             
+            
+                                            
+                                         <div class="input-group">
+                                         <span class="input-group-addon"><label class="width">Joblocation State</label></span>
+                                             
+                                           <input type="text" id="state" name="joblocationstate" onmouseout="checkdistrict(this.id)" class="form-control" />
+
+                                    
+                                         </div>
+
+
+                                        </div>
+                                    
+                                     
+                                     
+                                     </div>
+                                    <div class="input-group">
+                                            <span class="input-group-addon"><label class="width" >Joblocation City</label></span>
+
+                                           <select class="form-control" id="District" name="city">
+                                            <option disabled="disabled">Select </option>
+
+                                        </select>
+
+
+                                               
+                                                  
+                                                </div>
+                                    
+
+                                    <div class="row-form">
+                                  
+                                        <div class="col-md-9">
+
+                                             
+            
+                                            
+                                         <div class="input-group">
+                                         <span class="input-group-addon"><label class="width">Company Email</label></span>
+                                             
+                                             <input type="email" required name="companyemail" class="form-control" />
+
+                                    
+                                         </div>
+
+
+                                        </div>
+                                    
+                                     
+                                     
+                                     </div>
+                                            
+                                           
+
+                                    
+
+                                    
+                                    
+
+                                      
+
+
+                                        </div>
+                                    </div>
+                               
+                                  
+
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                                          
+                                <button name="submitbtn" type="submit" class="btn btn-primary"> Submit</button>                            
+                               
+                            </div>
+                        </div>
+                                             
+                                    
+                                      <p>@ViewBag.msg</p> 
+                                </div>
+                                
+                            </div>
+                        
+                        
+                    }
+                            </div>
+                          </div>  
+
+		
+			
+            
+
+             
+			

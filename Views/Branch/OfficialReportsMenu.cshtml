@@ -1,0 +1,222 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Branchtabs.Single(b => b.BranchCode == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+ 
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "OfficialReportsMenu";
+}
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Welcome @br.BranchName</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                      
+
+                    </div>
+
+                    <div class="widget stacked">
+					
+				<div class="widget-header">
+					<i class="icon-list-alt"></i>
+					<h3>Official Reports</h3>
+				</div> <!-- /widget-header -->
+				
+				<div class="widget-content">
+					
+					<div class="shortcuts">
+						
+						<a href="~/Branch/OperatorLoginDetails" class="shortcut">
+							<img alt="" src="~/Images/icon/operator.png" />
+							<span class="shortcut-label">Collection Point Login-Details</span>	<br/>
+						</a>
+						
+                        <a href="~/Branch/OfficialCustomerReport" class="shortcut">
+							<img alt="" src="~/Images/icon/1.png" />
+							<span class="shortcut-label">@mr.custname List</span>	<br/><br/>
+						</a>
+                        <a href="~/Branch/DatewiseCustomer" class="shortcut">
+							<img alt="" src="~/Images/icon/1.png" />
+							<span class="shortcut-label">Datewise @mr.custname List</span>	<br/>
+						</a>
+                          <a href="~/Branch/AssignPlotCustomer" class="shortcut">
+                        <img alt="" src="~/Images/icon/assign.jpg" />
+                        <span class="shortcut-label">Assign Plot @mr.custname List</span>
+                    </a>
+                          <a href="~/Branch/DatewiseCustomerLedger" class="shortcut">
+                        <img alt="" src="~/Images/icon/ledger.png" />
+                        <span class="shortcut-label">Datewise @mr.custname Ledger</span>
+                    </a>
+                        <a href="~/Branch/DateWiseMember" class="shortcut">
+							<img alt="" src="~/Images/icon/MemberIcon.png" />
+							<span class="shortcut-label">Datewise Member List</span><br/>	
+						</a>
+                          <a href="~/Branch/MemberWiseAccountDetail" class="shortcut">
+							<img alt="" src="~/Images/icon/MemberIcon.png" />
+							<span class="shortcut-label">All Member List</span>	<br/> 	<br/>
+						</a>
+					@*	<a href="~/Branch/OfficialCdppPlanReport" class="shortcut">
+							<img alt="" src="~/Images/icon/rd.jpg" />
+							<span class="shortcut-label">@plan1.Planname List</span>
+						</a>
+                     
+                       <a href="~/Branch/OfficialSipPlanReport" class="shortcut">
+							<img alt="" src="~/Images/icon/fd.png" />
+							<span class="shortcut-label">@plan2.Planname List</span><br/>
+						</a>			
+                        
+                           <a href="~/Branch/NFPlanList" class="shortcut">
+							<img alt="" src="~/Images/icon/futureplans.jpg" />
+							<span class="shortcut-label">@plan3.Planname List</span><br/>
+						</a>
+                     
+                        <a href="~/Branch/PPlanList" class="shortcut">
+								<img alt="" src="~/Images/icon/pension.jpg" />
+							<span class="shortcut-label">@plan4.Planname List</span><br/>
+						</a>		*@
+                       <a href="~/Branch/OfficialRankListReport" class="shortcut">
+							<img alt="" src="~/Images/icon/28.png" />
+							<span class="shortcut-label">@mr.rankname List</span><br/><br/>
+						</a>
+
+                        <a href="~/Branch/CustumerInstallmentReport" class="shortcut">
+								<img alt="" src="~/Images/icon/73.png" />
+							<span class="shortcut-label">@mr.custname Ledger-Details</span>
+						</a>
+                        
+						<a href="~/Branch/DailyExpense" class="shortcut">
+							<img alt="" src="~/Images/icon/76.png" />
+							<span class="shortcut-label">Daily Expense Details</span><br/>	
+						</a>
+                     <a href="~/Branch/DailyClosingReport" class="shortcut">
+							<img alt="" src="~/Images/icon/76.png" />
+							<span class="shortcut-label">Daily Closing Details</span><br/>	
+						</a>
+                       
+                         <a href="~/Branch/RPStatementReport" class="shortcut">
+							<img alt="" src="~/Images/icon/11.png" />
+							<span class="shortcut-label">RP Statement Report</span><br/>	
+						</a>
+                         <a href="~/Branch/CompleteDailyCollection" class="shortcut">
+							<img alt="" src="~/Images/icon/11.png" />
+							<span class="shortcut-label">Datewise Collection Details</span><br/>	
+						</a>
+						<a href="~/Branch/BranchDailyCollection" class="shortcut">
+							<img alt="" src="~/Images/icon/11.png" />
+							<span class="shortcut-label">Daily Collection</span><br/><br/>	
+						</a>
+                         <a href="~/Branch/DateWiseChequeCollection" class="shortcut">
+                        <img alt="" src="~/Images/icon/cheq.png" />
+                        <span class="shortcut-label">Datewise Cheque Collection</span>
+                    </a>
+                       <a href="~/Branch/DateWiseChequeClearCollection" class="shortcut">
+                        <img alt="" src="~/Images/icon/cheq.png" />
+                        <span class="shortcut-label">Clear Cheque Collection</span>
+                    </a>
+                       @* <a href="~/Branch/DailySavingCollection" class="shortcut">
+							<img alt="" src="~/Images/icon/11.png" />
+							<span class="shortcut-label">Daily Saving A/c Collection</span><br/>	
+						</a>
+                         <a href="#" class="shortcut">
+							<img alt="" src="~/Images/icon/11.png" />
+							<span class="shortcut-label">Datewise Saving A/c Collection</span><br/>	
+						</a>*@
+
+                             <a href="~/Branch/OfficialCancelReceiptReport" class="shortcut">
+							<img alt="" src="~/Images/icon/75.png" />
+							<span class="shortcut-label">Cancel Receipt List</span><br/>
+						</a>
+						
+						<a href="~/Branch/DateWiseCollection" class="shortcut">
+								<img alt="" src="~/Images/icon/74.png" />
+							<span class="shortcut-label">Datewise Business</span><br/>	
+						</a>
+						
+				@*	<a href="~/Branch/CsswiseCollection" class="shortcut">
+								<img alt="" src="~/Images/icon/74.png" />
+							<span class="shortcut-label">CSS Wise Business</span><br/>	
+						</a>*@
+						
+						<a href="~/Branch/FundMobilisation" class="shortcut">
+							<img alt="" src="~/Images/icon/5.png" />
+							<span class="shortcut-label">Fund Mobilisation</span><br/>
+						</a>
+						
+						
+                      @*  <a href="~/Branch/AccBalanceReport" class="shortcut">
+							<img alt="" src="~/Images/icon/Balanceicon.jpg" />
+							<span class="shortcut-label">A/c Balance Report</span><br/>	
+						</a>*@
+                        <a href="~/Branch/PaidVoucher" class="shortcut">
+							<img alt="" src="~/Images/icon/36.png" />
+							<span class="shortcut-label">Paid Voucher</span><br/><br />	
+						</a>
+
+                        <a href="~/Branch/UnPaidVoucher" class="shortcut">
+							<img alt="" src="~/Images/icon/65.png" />
+							<span class="shortcut-label">UnPaid Voucher</span><br/><br />	
+						</a>
+
+                          <a href="~/Branch/RenewalList" class="shortcut">
+							<img alt="" src="~/Images/icon/28.png" />
+							<span class="shortcut-label">Monthly Renewal Report</span><br/>
+						</a>
+
+                         
+                      @*  <a href="~/Branch/AccStatementReport" class="shortcut">
+							<img alt="" src="~/Images/icon/trans.png" />
+							<span class="shortcut-label">A/c Statement Report</span>	
+						</a>*@
+                         <a href="~/Branch/DeactiveList" class="shortcut">
+							<img alt="" src="~/Images/icon/deactive.png" />
+							<span class="shortcut-label">Deactive EMI Payment @mr.custname List</span>							
+						</a>
+						  <a href="~/Branch/Advancepaymentreport" class="shortcut">
+							<img alt="" src="~/Images/icon/advancepay.jpg" />
+							<span class="shortcut-label">Advance Payment Report</span>
+						</a>
+                          <a href="~/Branch/BondApproval" class="shortcut">
+                        <img alt="" src="~/Images/icon/Approved-Stamp-Icon.png"/>
+                        <span class="shortcut-label">Bond Approval</span>
+                    </a>
+                           <a href="~/Branch/ApproveRenewal" class="shortcut">
+                        <img alt="" src="~/Images/icon/Approved-Stamp-Icon.png"/>
+                        <span class="shortcut-label">Renewal Approval</span>
+                    </a>
+                        <a href="~/Branch/ReceptionList" class="shortcut">
+                        <img alt="" src="~/Images/icon/69.png"/>
+                        <span class="shortcut-label">Receptionist List</span>
+                    </a>
+					<a href="~/Branch/Visitor_List" class="shortcut">
+                        <img alt="" src="~/Images/icon/51.png"/>
+                        <span class="shortcut-label">Visitor List</span>
+                    </a>
+                        <a href="~/Branch/dealSheetdetail" class="shortcut">
+                        <img alt="" src="~/Images/icon/51.png"/>
+                        <span class="shortcut-label">Deal Sheet List</span>
+                    </a>
+					</div> <!-- /shortcuts -->	
+				
+				</div> <!-- /widget-content -->
+				
+			</div>
+                     </div>
+
+     </div>

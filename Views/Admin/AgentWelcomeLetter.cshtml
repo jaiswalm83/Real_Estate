@@ -1,0 +1,68 @@
+﻿@using ODHDEVELOPERS.Models;
+@using System;
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<script>
+    $(function () {
+        $('[name=AgentId]').autocomplete({
+            source: function (request, response) {
+                debugger;
+                $.ajax({
+                    url: "/Admin/AgentWelcomeLetter",
+                    type: "Get",
+                    datatype: "JSON",
+                    data: { AgentId: request.term, Recogniser: "Print" },
+                    success: function (data) {
+                        debugger;
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId }
+                        }));
+                    }
+                });
+            }
+        });
+
+        $("#btn").on("click", function (e) {
+
+            // window.open("");
+
+        });
+
+    });
+
+</script>
+
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 create-title">Agent Welcome Letter</h2>
+    <form id="paymentForm" class="form-container" action="/admin/AgentWelcomeLetter" method="post" target="_blank">
+
+        <!-- Associate ID -->
+        <div class="form-group">
+            <label for="associateId" class="form-label">Enter Agent ID:</label>
+            <input type="text" class="form-control" id="associateId" placeholder="Enter ID" name="AgentId" required>
+        </div>
+
+
+
+        <!-- Submit Button -->
+        <div class="text-center d-grid gap-2">
+            <button type="submit" class="btn create-btn">Print Welcome Letter</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+

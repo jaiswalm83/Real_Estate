@@ -1,0 +1,197 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseCustomerList>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "FilterCustomer";
+        var a = 0;
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+
+    }
+
+
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+  
+
+            <div  id="hide">
+               
+
+
+
+                <div class="container mt-5">
+                    <h2 class="text-center mb-4 create-title">Filter @mr.custname List</h2>
+
+                    @using (Html.BeginForm())
+                    {
+                        <div class="block">
+
+                            <div class="block-content controls">
+
+
+                                <!-- Collection Point Name -->
+                                <div class="form-group">
+                                    <label for="collectionPointName" class="form-label">Enter Percentage</label>
+                                    <input type="text" class="form-control " id="per" name="per" placeholder="Enter Collection Point Name" required>
+                                </div>
+
+
+                                <!-- Create Button -->
+                                <div class="text-center d-grid gap-2">
+                                    <button type="submit" id="submit" value="Search" class="btn create-btn">View</button>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    }
+
+
+                    <div class="index_body">
+                        <div class="table-container">
+                            <table>
+                                @using (Html.BeginForm())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (a == 0)
+                                        {
+                                            <thead>
+                                                <tr>
+
+                                                    <th colspan="7" style="background-color: #ff5722; color: white"><b>Filter @mr.custname List</b></th>
+                                                    <th colspan="7" style="background-color: #ff5722; color: white"><b>Dated: @DateTime.Now.ToString("dd/MM/yyyy")</b></th>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th >
+                                                        <label id="sn"><b>S.N.</b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label id="newid"><b>@mr.custname Id</b></label>
+                                                    </th>
+
+                                                    <th >
+                                                        <label id="introducerid"><b>Name</b></label>
+                                                    </th>
+
+                                                    <th >
+                                                        <label id="spilid"><b>Introducer Id</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="position"><b>@mr.planname</b></label>
+                                                    </th>
+
+                                                    <th >
+                                                        <label><b>Booking Amount</b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label><b>Advance </b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label><b>Plot Size</b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label id="pay"><b>Payment </b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label id="email"><b>Mobile No</b></label>
+                                                    </th>
+
+                                                    <th >
+                                                        <label id="doj"><b>Joining Date</b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label><b>Block No</b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label><b>Plot No</b></label>
+                                                    </th>
+                                                    <th >
+                                                        <label><b>Action</b></label>
+                                                    </th>
+
+                                                </tr>
+                                            </thead>
+                                        }
+                                        a = a + 1;
+
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.newbondid)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.newintroducerid)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.planname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.bookingamount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.downpayment)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.plotsize)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.payment)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Mobile)
+                                    </td>
+                                    <td>
+                                        @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.block)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.plotno)
+                                    </td>
+                                    @if (item.plotno == 0)
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Allot Plot", "AllotPlot", new { newbondid = item.newbondid }, new { onclick = "return confirm('Are you sure to Allot?');" })
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-success" disabled="disabled">Alloted</button>
+                                        </td>
+                                    }
+                                </tr>
+                            </tbody>
+
+                                    }
+
+                                }
+                            </table>
+                            @* @if (a > 0)
+                {
+                    <a href="@Url.Action("PrintFilterCustomer")" target="_blank">Get Report In PDF</a>
+                }*@
+                        </div>
+                    </div>
+
+                </div>
+    </div>

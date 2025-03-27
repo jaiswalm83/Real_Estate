@@ -1,0 +1,124 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+
+    ViewBag.Title = "BrokerAdvancePayment";
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+        if (fd.status == 2)
+        {
+            dt = fd.formdate;
+        }
+
+    }
+}
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+
+
+
+
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+@if (fd.status == 0)
+{
+    <script>
+        $(function () {
+            $('#date').datepick();
+        });
+
+    </script>
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newagentid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name + '(' + item.NewAgentId + ')', value: item.NewAgentId };
+                        }))
+
+                    }
+                })
+            }
+        });
+    })
+</script>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 create-title">@mr.agentname Advance Payment</h2>
+
+    @using (Html.BeginForm())
+    {
+
+
+        <div id="paymentForm" class="form-container">
+
+            <!-- Associate ID -->
+            <div class="form-group">
+                <label for="associateId" class="form-label">Enter @mr.agentname Id</label>
+                <input type="text" class="form-control" id="newagentid" name="newagentid" placeholder="Enter Associate ID" required>
+            </div>
+
+            <!-- Select Type -->
+            <div class="form-group">
+                <label for="type" class="form-label" id="type" name="type">Select Type:</label>
+                <select class="form-control" id="type" required>
+                    <option value="0" selected>Payment</option>
+                    <option value="1">Receive</option>
+                </select>
+            </div>
+
+
+
+            <!-- Enter Amount -->
+            <div class="form-group">
+                <label for="amount" class="form-label">Enter Amount:</label>
+                <input type="number" class="form-control" name="amount" id="Amount" placeholder="Enter Amount" required>
+            </div>
+
+            <!-- Remarks -->
+            <div class="form-group">
+                <label for="remarks" class="form-label">Enter Remarks:</label>
+                <textarea class="form-control" name="Remark" id="Remarks" rows="3" placeholder="Enter Remarks"></textarea>
+            </div>
+
+            <!-- Select Date -->
+            <div class="form-group">
+                <label for="date" class="form-label">Select Date:</label>
+                <input type="text" class="form-control" name="date" id="date" value="@dt" readonly required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn create-btn" onclick="return confirm('Are you sure to Advance Payment?')">Add</button>
+            </div>
+        </div>
+    }
+    <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+</div>
+
+
+
+
+
+
+

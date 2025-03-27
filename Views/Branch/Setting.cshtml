@@ -1,0 +1,39 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Branchtabs.Single(b => b.BranchCode == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "Setting";
+}
+
+<div class="page-content">
+    <div class="container">
+        <div class="page-toolbar">
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Welcome @br.BranchName</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+        </div>
+        <div class="widget stacked">
+            <div class="widget-header">
+                <i class="icon-search"></i>
+                <h3>Search</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                <div class="shortcuts">
+                    <a href="~/Branch/SetFormdate" class="shortcut">
+                        <img alt="" src="~/Images/icon/5.png" />
+                        <span class="shortcut-label">Set Business Date</span>
+                    </a>
+                </div>
+                <!-- /shortcuts -->
+
+            </div>
+            <!-- /widget-content -->
+
+        </div>
+    </div>
+
+</div>

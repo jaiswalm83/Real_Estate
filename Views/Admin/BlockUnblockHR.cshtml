@@ -1,0 +1,121 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.HRTab>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "BlockUnblockHR";
+    var a = 0;
+}
+                      <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+                      <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<script src="~/Scripts/print.js" type="text/javascript"></script>
+
+                   
+<div id="divid">
+
+    <div style="margin-left: 80rem; margin-top: 20px; margin-bottom:-3rem">
+        <label>@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</label>
+    </div>
+
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Block-UnBlock HR</div>
+
+            <table>
+
+                @foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label id="sn"><b>S.N.</b></label>
+                                </th>
+                                <th>
+                                    <label id="HRId"><b>HR Id</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="HRName"><b>HR Name</b></label>
+                                </th>
+
+
+
+                                <th>
+                                    <label id="HRMobile"><b>HR Mobile</b></label>
+                                </th>
+
+                                <th>
+                                    <label id="HRAddress"><b>HR Address</b></label>
+                                </th>
+                                <th>
+                                    <label id="HR_Mail"><b>HR Mail</b></label>
+                                </th>
+                                <th>
+                                    <label id="Cdate"><b>Creation date</b></label>
+                                </th>
+                                <th>
+                                    <label id="Action"><b>Action</b></label>
+                                </th>
+
+                            </tr>
+                        </thead>
+                    }
+
+                    a = a + 1;
+                    <tbody>
+                        <tr>
+                            <td>
+                                @a
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HRId)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HRName)
+                            </td>
+
+
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Mobile)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.emailid)
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(item.date).ToString("dd/MM/yyyy")
+                            </td>
+                            @if (item.Status == 1)
+                            {
+                                <td>
+
+                                    @Html.ActionLink("Block", "BlockUnblockHR", new { hrid = item.HRId, status = 1 }, new { onclick = "return confirm('Are you sure to Block this HR?');" })
+                                </td>
+                            }
+                            @if (item.Status == 0)
+                            {
+                                <td>
+                                    @Html.ActionLink("UnBlock", "BlockUnblockHR", new { hrid = item.HRId, status = 0 }, new { onclick = "return confirm('Are you sure to Unblock this HR?');" })
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                }
+
+            </table>
+
+        </div>
+        <div class="text-center" style="margin-top:10px" id="divid">
+            <input type="submit" class="btn create-btn" name="btnprint" value="Print" onclick="PrintMe('divid')" />
+        </div>
+    </div>
+
+</div>

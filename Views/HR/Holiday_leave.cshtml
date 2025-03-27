@@ -1,0 +1,130 @@
+﻿@using ODHDEVELOPERS.Models;
+@model IEnumerable<ODHDEVELOPERS.Models.holidayleavetab>
+    @{
+        ViewBag.Title = "Holiday_leave";
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        UsersContext db = new UsersContext();
+        var id = 1;
+        var list = db.holidayleavetabs.ToList();
+    }
+
+    <script>
+    function hlleave(dd) {
+        debugger;
+        var id = dd;
+        var status = $("#status_" + dd).val();
+        if (status == 1) {
+            status = 0;
+        }
+        else {
+            status = 1;
+        }
+        var Url = '@Url.Action("blacklist" , "HR")';
+        $.get(Url, { status: status, id: id }, function data(d) {
+            debugger;
+            window.location.href = "/HR/Holiday_leave";
+        });
+        }
+    </script>
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4"> Holiday leave</h2>
+        <form  class="border p-4 rounded shadow formtag">
+
+            <!-- Project Year -->
+            <div class="mb-3">
+                <label for="year" class="form-label formLabel">Select Date </label>
+                @*<input type="date" class="form-control" name="ldate" id="ldate"><span class="input-group-addon"><label class="width" style="width:15px;"><span class="fa fa-calender-alt"></span></label></span>*@
+                <input type="date" class="form-control formInput" name="ldate" id="ldate" placeholder="" required>
+            </div>
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom">Submit</button>
+
+                @*blue buttton*@
+                @*<button type="submit" class="btn btn-primary btn-lg formButtom">Submit</button>*@
+
+            </div>
+
+
+
+
+        </form>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    @*form content after search*@
+
+    @if (Model != null)
+    {
+        if (list.Count() != 0)
+        {
+            <div class="index_body mt-5">
+                <div class="table-container">
+                    <div class="header-row">Total Holiday Leave</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Srno.</th>
+                                <th>Leave Date</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+
+                                <tr>
+                                    <td>@item.id</td>
+                                    <td>@item.ldate</td>
+                                    <td>@item.cdate</td>
+                                    @*  <td>@item.status</td>*@
+                                    @if (item.status == 0)
+                                    {
+                                        <td style="color:red;">Active</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="color:green">Inactive</td>
+                                    }
+                                    <input type="hidden" id="status_@item.id" value="@item.status" />
+                                    @if (item.status == 0)
+                                    {
+
+
+                                        <td><input type="button" value="Unblock" class="btn btn-lg formButtom" onclick="hlleave(this.id)" id="@item.id" /></td>
+                                    }
+                                    else
+                                    {
+                                        <td><input type="button" value="Block" class="btn  formButtom" onclick="hlleave(this.id)" id="@item.id" /></td>
+                                    }
+                                </tr>
+                                
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        }
+    }
+
+
+
+
+
+
+
+           

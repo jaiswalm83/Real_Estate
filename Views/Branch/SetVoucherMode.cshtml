@@ -1,0 +1,398 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "SetVoucherMode";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(d => d.Id == 1);
+}
+
+<style type="text/css">
+    .input-group {
+        color:#333;
+    }
+</style>
+
+<script type="text/javascript">
+    function detail(chkid) {
+        //debugger;
+        var chk = $("#" + chkid).val();
+        if (chk == "Cheque") {
+            $("#detail").show();
+            $("#dd").hide();
+            $("#trdetail").hide();
+        }
+        else if (chk == "DD") {
+            $("#dd").show();
+            $("#detail").hide();
+            $("#trdetail").hide();
+        }
+        else if (chk == "banktransaction") {
+            $("#dd").hide();
+            $("#detail").hide();
+            $("#trdetail").show();
+        }
+        else {
+            $("#detail").hide();
+            $("#dd").hide();
+            $("#trdetail").hide();
+        }
+    }
+
+    function isInValid(str) {
+        return str == '' || str == null || (str && str.length > 0 && str.toLowerCase() == 'na') || (str && str.length > 0 && str.toLowerCase() == 'select');
+    }
+
+    function voucherpaymentform_fun(event) {
+        //try{
+            debugger;
+            var msg = '';
+            var paymethodLen = $('[name="paymethod"]:checked').length, transTypeLen = $('[name="transactiontype"]:checked').length,
+                paymethodVal = $('[name="paymethod"]:checked').val(), chddno = $('#' + paymethodVal + '_checkorddno').val(),
+                bank = $('#' + paymethodVal + '_bankname').val(), accno = $('#' + paymethodVal + '_bankaccno').val(),
+                vifsccode = $('#ifsccode').val(), w_chddno = 'Transaction Id',
+                v_chequedate = $('#' + paymethodVal + '_chequedate').val();
+
+            w_chddno = paymethodVal == 'banktransaction' ? w_chddno : paymethodVal + ' No.';
+            msg = paymethodLen == 0 ? 'Plesae select valid payment method...' : msg;
+            msg = paymethodVal == 'banktransaction' && transTypeLen == 0 ? 'Plesae select valid transaction type...' : msg;
+            msg = paymethodVal != 'Cash' && isInValid(chddno) ? 'Plesae select valid ' + w_chddno + '...' : msg;
+            msg = paymethodVal != 'DD' && paymethodVal != 'Cash' && isInValid(accno) ? 'Plesae select valid account no. ...' : msg;
+            msg = paymethodVal != 'DD' && paymethodVal != 'Cash' && isInValid(bank) ? 'Plesae select valid bank name ...' : msg;
+            msg = paymethodVal == 'Cheque' && isInValid(vifsccode) ? 'Plesae select valid ifsc code ...' : msg;
+
+            if (msg.length > 0) {
+                event.preventDefault();
+                alert(msg);
+            } else {
+                if (confirm('Are you sure voucher payment for @Model.Operatorid')) {
+                    $('#bankname').val(bank);
+                    $('#checkorddno').val(chddno);
+                    $('#bankaccno').val(accno);
+                    v_chequedate = v_chequedate ? v_chequedate : '@DateTime.Now.Date';
+                    $('#chequedate').val(v_chequedate);
+                } else {
+                    event.preventDefault();
+                }
+            }
+        //} catch (er) {
+        //    alert(er);
+        //}
+    }
+
+</script>
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Voucher Payment</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+        @if (Model != null)
+        {
+            if (Model.Operatorid != null)
+            {
+        <div class="widget stacked">
+
+            <div class="widget-header">
+                <i class="icon-credit-card"></i>
+                <h3>&nbsp;&nbsp; Voucher Payment Details Of @Model.Operatorid</h3>
+            </div>
+            <!-- /widget-header -->
+
+            <div class="widget-content">
+
+
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="block" >
+
+                            <div class="block-content controls">
+                                                     <form method="post" class="blocked" id="voucherpaymentform" onsubmit="voucherpaymentform_fun(event)">
+                                                         <input type="hidden" name="agentid" id="agentid" value="@Model.agentid" />
+                                                         <input type="hidden" name="month" id="month" value="@Model.month" />
+                                                         <input type="hidden" name="year" id="year" value="@Model.year" />
+                                                         <input type="hidden" name="checkorddno" id="checkorddno" />
+                                                         <input type="hidden" name="bankname" id="bankname" />
+                                                         <input type="hidden" name="bankaccno" id="bankaccno" />
+                                                         <input type="hidden" name="chequedate" id="chequedate" value="@Model.date.Date" />
+                                <div class="block-content">
+                                    <h3><strong style="color:#333;">Payment Details</strong> </h3>
+                                   
+                                </div>
+                                <div class="block-content controls">
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                    <span class="input-group-addon"><label class="width">@mr.agentname Code</label></span>
+                                   <input type="text" id="Operatorid" name="Operatorid" class="form-control" value="@Model.Operatorid" required readonly="" />
+                                               
+                                            </div>
+
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                    <span class="input-group-addon"><label class="width">@mr.agentname Name</label></span>
+                                   <input type="text" id="name" name="name" class="form-control" value="@Model.bankname" required readonly="" />
+                                                
+                                            </div>
+
+                                            </div>
+                                    </div>                                                                        
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9"><div class="input-group">
+       <span class="input-group-addon"><label class="width">Payment Mode </label></span>  
+                                            
+                                             <input type="radio" name="paymethod" value="Cash" checked="checked" onclick="detail(this.id)" id="Cash"> Cash   
+                                             <input type="radio" name="paymethod" value="DD" onclick="detail(this.id)" id="DD"> DD  
+                                          <input type="radio" name="paymethod" value="Cheque" onclick="detail(this.id)" id="Cheque"> Cheque  
+                                             <input type="radio" id="paymethod4" name="paymethod" value="banktransaction" onclick="detail(this.id)"> Bank Transaction
+
+                                        </div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                    <span class="input-group-addon"><label class="width">Payment Date</label></span>
+                                   <input type="text" id="date" name="date" class="form-control" value="@Model.date.ToString("MM/dd/yyyy")" required readonly="" />
+                                                <span class="input-group-addon"><label class="width">@Model.date.ToString("dd/MMM/yyyy")</label></span>
+                                            </div>
+
+                                            </div>
+                                    </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Amount </label>
+                                               </span>
+                                               <input type="text" id="Amount" name="ChequeAmount" class="form-control" required="" readonly="" value="@Model.netamount" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                <div class="row-form" id="detail" style="display: none;">
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Bank Name </label>
+                                               </span>
+                                               <input type="text" id="Cheque_bankname" name="Cheque_bankname" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">A/C No. </label>
+                                               </span>
+                                               <input type="text" id="Cheque_bankaccno" name="Cheque_bankaccno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Cheque No. </label>
+                                               </span>
+                                               <input type="text" id="Cheque_checkorddno" name="Cheque_checkorddno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+@*                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Branch Name </label>
+                                               </span>
+                                               <input type="text" id="barnch" name="Branch" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>*@
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">IFSC Code</label>
+                                               </span>
+                                               <input type="text" id="ifsccode" name="ifsccode" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Cheque Date </label>
+                                               </span>
+                                               <input type="text" id="Cheque_chequedate" name="Cheque_chequedate" readonly="" value="@Model.date" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+@*                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Cheque Image </label>
+                                               </span>
+                                               <input type="file" id="Chequeimage" name="Chequeimage" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>*@
+                               </div>
+          <div class="row-form" id="dd" style="display: none;">
+                                   <div class="row-form">
+
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">DD No. </label>
+                                               </span>
+                                               <input type="text" id="DD_checkorddno" name="DD_checkorddno" class="form-control" />
+                                           </div>
+                                       </div>
+
+                                   </div>
+@*                                   <div class="row-form">
+
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Draw No. </label>
+                                               </span>
+                                               <input type="text" id="drawno" name="drawno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>*@
+                               </div>                                                          
+                                             <div class="row-form" id="trdetail" style="display: none; ">
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Bank Name </label>
+                                               </span>
+                                               <input id="banktransaction_bankname" name="banktransaction_bankname" class="form-control" type="text" />
+
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">A/C No. </label>
+                                               </span>
+                                               <input type="text" id="banktransaction_bankaccno" name="banktransaction_bankaccno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Transaction Id </label>
+                                               </span>
+                                               <input type="text" id="banktransaction_checkorddno" name="banktransaction_checkorddno" class="form-control" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Transaction Date </label>
+                                               </span>
+                                               <input type="text" id="banktransaction_chequedate" name="banktransaction_chequedate" value="@Model.date" class="form-control" readonly="" />
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="row-form">
+                                       <div class="col-md-9">
+                                           <div class="input-group">
+                                               <span class="input-group-addon">
+                                                   <label class="width">Transaction Type </label>
+                                               </span>
+
+                                               <input type="radio" id="trpmethod1" name="transactiontype" value="NEFT" >
+                                               NEFT
+                                            <input type="radio" id="trpmethod2" name="transactiontype" value="IMPS" />
+                                               IMPS
+                                            <input type="radio" id="trpmethod3" name="transactiontype" value="RTGS" />
+                                               RTGS
+                                            <input type="radio" id="trpmethod4" name="transactiontype" value="UPI" />
+                                               UPI
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+
+                                     
+                                      
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">  
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Amount In Words </label></span>  
+                                            <input type="text" name="amountword"  class="form-control" id="amountinword" readonly="true" value="@Model.branchcode" required/></div>
+                                    </div>
+                                 </div>
+
+                                                                         <div class="row-form">
+                                    
+                                        <div class="col-md-9 text-right">  
+                                            <div class="input-group invisible">
+       <span class="input-group-addon"><label class="width">to hidden</label></span>  
+                                           
+                                            </div>
+                                            <button value="payvoucher" class="btn btn-success" name="branchcode">Pay Now</button>
+                                    </div>
+                                 </div>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            }
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    window.addEventListener('load', _startFun_1);
+    function _startFun_1() {
+
+        $('[id$="_chequedate"]').datepick();
+
+
+    }
+
+</script>
+

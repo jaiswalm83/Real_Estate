@@ -1,0 +1,320 @@
+﻿@using ODHDEVELOPERS.Models
+@model IEnumerable<DailyVisitorDetail>
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "FindVisitor";
+    Layout = "~/Views/Shared/_LayoutVisitor.cshtml";
+    var a = 1;
+}
+
+<script>
+    $(function () {
+             
+        var contain = new Array();
+        $(".contain").each(function (a,b) {
+            debugger;
+            contain[a] = $(this).html();
+            $(this).empty();
+
+        });
+
+        $(".but").on('click', function () {
+            debugger;
+            var a = Number($(this).attr("id"));
+            $("#row").html(contain[a]);
+        });
+ 
+    });
+</script>
+<script>
+    var global;
+    $(function () {
+
+
+        //$(".checkout").on("mouseover", function () {
+        //    debugger;
+        //    var c = $(this), id = c.attr("id");
+        //    //$("#" + id).css("display", "block");
+        //    $.get("/Operator/JsonFunction", { VisitorId: id, Recogniser: "Detail" }, function (d) {
+        //        debugger;
+        //        if (d != null)
+        //        {
+        //            var a = "<table class='table'><thead><th>Email Id</th>Receptionist Id<th>Remark</th></thead><tbody><tr><td>' + d.EmailId + '</td><td>' + d.ReceptionistId + '</td><td>' + d.Remark + '</td></tr></tbody></table>;"
+        //            c.tooltip({ title: a, html: true, placement: "left" }).tooltip('show');
+
+        //        }
+        //    });
+
+
+        //});
+
+
+        $(".feedback").on("click", function () {
+            debugger;
+            var id = $(this).attr("id"); idplit = id.split("+"); vid = idplit[0]; vname = idplit[1];
+            global = vid;
+            $("#vid").val(vid)
+            $("#vname").val(vname)
+            $("#myModal").modal();
+        });
+
+        //next function
+        $('#sub').click(function () {
+            $.get("/Operator/JsonFunction", { VisitorId: $("#vid").val(), Remark: $("#remark").val(), Recogniser: "Remark" }, function (d) {
+                debugger;
+                if (d != null) {
+                    $('#' + global).slideUp(1000);
+                    $('#myModal').modal('hide');
+                    global = null;
+                }
+
+            });
+
+        });
+
+    });
+
+</script>
+<style>
+    @@keyframes scale {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    /*sign up form*/
+
+    .modal-content {
+        visibility: visible;
+        -webkit-animation: scale 0.8s;
+        animation: scale 0.5s;
+    }
+
+    #myModal {
+        background-color: rgba(0,0,0,0.2);
+        border: none;
+    }
+    thead > tr > th {
+        text-align: center;
+    }
+
+    tbody > tr > td {
+        text-align: center;
+    }
+
+</style>
+
+<div class="page-content">
+
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Find Visitor</div>
+                <div class="page-toolbar-subtitle">
+                  <!--  <span style="color: #808080"><i class="	fa fa-hand-o-right" style="font-size: 17px; color: red;"></i>&nbsp;&nbsp;You can call to customer for the feedback,Hit <kbd style="font-size: 15px; background-color: #8eb252">&nbsp;Green button&nbsp;</kbd> to get full detail and <kbd style="font-size: 15px; background-color: #2f9fe0">&nbsp;blue button&nbsp;</kbd> to write feedback.</span>-->
+                </div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+                <!-- <span style="color: #C21148; font-size: 15px">Today's Total Visitor</span> &nbsp;<span class="badge">totalvisitor</span>
+                &nbsp;&nbsp;<span style="color: #C21148; font-size: 15px">Check In</span>&nbsp;<span class="badge">checkin</span>
+                &nbsp;&nbsp;<span style="color: #C21148; font-size: 15px">Check Out</span> &nbsp;<span class="badge">checkout</span>
+                <span style="visibility: hidden" class="badge">5</span>-->
+            </div>
+
+
+        </div>
+
+        <div class="row" style="width:100%;position:relative;top:30px;">
+            <div class="col-md-offset-4">
+                 <div class="btn-group">
+                  <button type="button" id="0" class="btn btn-default but"><span style="color:#08B0AE;font-size:13px;">Find Visitor By Id</span></button>
+                     <button type="button" id="1" class="btn btn-default but"><span style="color:#08B0AE;font-size:13px;">Find Visitor DateWise</span></button>
+                
+                   </div>
+            </div>
+            </div>
+        <br />
+        <br />
+        
+        <div class="row" id="row" style="width:100%">
+            <div class="contain">
+               <form method="post">
+            <div class="col-md-3"></div>
+            <div class="col-md-4">
+        
+                 <input type="text" class="form-control" placeholder="Enter The Visitor Id"  name="VisitorId" required/>
+            </div>
+            <div class="col-md-5">
+                <button type="submit" name="command" value="Id" class="btn btn-primary">Search</button>
+                </div>
+                   </form>
+                </div>
+
+            <!--------------------------------------->
+            <div class="contain">
+                 <form method="post">
+        <div class="col-md-2"></div>
+            <div class="col-md-3" >
+                 <input type="date" class="form-control"  name="Sdate" required/>
+            </div>
+            <div class="col-md-3" >
+                <input type="date" class="form-control"   name="Edate" required/>
+            </div>
+            <div class="col-md-2" >
+                <button type="submit" class="btn btn-primary" name="command" value="Date">Search</button>
+            </div>
+                     </form>
+            </div>
+
+        </div>
+
+        @if (Model!=null)
+        {
+        
+        <div class="row" style="width: 100%">
+
+            <div class="col-md-6" style="width: 100%">
+
+                <div class="block" style="width: 100%">
+
+                    <div class="block-content controls">
+
+                        <div class="row">
+
+                            <div class="row-form table-responsive" style="overflow: auto">
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>Visitor Id</th>
+                                            <th>Visitor Name</th>
+                                            <th>Meet To Whom</th>
+                                            <th>Purpose</th>
+                                            <th>Type</th>
+                                            <th>In Time</th>
+                                            <th>Out Time</th>
+                                            <th>Mobile No</th>
+
+
+                                            <th>Address</th>
+
+                                            <th>Date</th>
+                                            <th>FeedBack</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr id="@item.VisitorId">
+                                                <td><span style="background-color: #08B0AE; color: white; padding-bottom: 4px; padding-top: 4px; padding-left: 8px; padding-right: 8px; border-radius: 50%;">@a</span></td>
+                                                <td style="font-weight: bold">@item.VisitorId</td>
+                                                <td style="font-weight: bold">@item.VisitorName</td>
+                                                <td>@item.MeetToWhom</td>
+                                                <td>@item.add</td>
+                                                <td>@item.Type</td>
+                                                <td>@item.InTime</td>
+                                                <td>@item.OutTime</td>
+                                                <td><kbd style="font-size: 16px">@item.MobileNo</kbd></td>
+
+
+                                                <td>@item.Address</td>
+
+                                                <td>@item.TodaysDate.ToString("dd/MM/yyyy")</td>
+                                                @if(item.Status!=5)
+                                                {
+                                                <td><kbd style="background-color:#cf2b2b;font-size:15px;color:white">Not Taken</kbd></td>
+                                                }else{
+                                                <td><kbd style="background-color:#04901c;font-size:15px;color:white">Taken</kbd></td>
+                                                }
+                                                <td>
+                                                    <button class="btn btn-success checkout" id="@item.VisitorId" data-placement="bottom"><i class="fa fa-user"></i></button>
+                                                    &nbsp;&nbsp;
+                                                        <button class="btn btn-info feedback" id="@item.VisitorId+@item.VisitorName"><i class="fa fa-file-text-o"></i></button>
+                                                </td>
+                                            </tr>
+                                                  
+
+                                                a++;
+                                        }
+                                        
+                                    </tbody>
+                                </table>
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+        }
+        else
+        {
+            <br />
+            <br />
+        <div class="row">
+      
+            <div class="col-md-3" ></div>
+            <div class="col-md-6">
+                
+                <span style=""><img src="~/Photo/odd.png" style="width:20%;float:left" class="img-responsive"/></span><span style="float:left;margin-top:38px;margin-left:37px;font-size:36px;font-weight:bold">Search</span><span><img src="~/Photo/search.png" style="width:20%;"  class="img-responsive"/></span>
+            </div>
+            <div class="col-md-3">
+                
+                </div>
+                  
+            </div>
+        
+        }
+    </div>
+</div>
+
+<div id="myModal" style="margin-top: 150px; border: 0px;" class="modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+
+        <div class="modal-content" id="" style="border: 0px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="color: #2f9fe0;">&times;</button>
+                <h4 class="modal-title" style="color: #2f9fe0;">Customer's Feedback...</h4>
+            </div>
+            <div class="modal-body">
+
+                <label>Visitor Id :</label>
+                <input type="text" style="color: #2f9fe0;" name="visitorid" id="vid" class="form-control" readonly="true" />
+
+                <label>Visitor Name :</label>
+                <input type="text" style="color: #2f9fe0;" id="vname" class="form-control" readonly="true" />
+
+                <label>Customer Response/Feedback :</label>
+                <textarea name="remark" id="remark" class="form-control" required></textarea>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color: #2f9fe0; color: white;">Close</button>
+                <button id="sub" type="submit" class="btn btn-warning pull-right bg-warning" style="background-color: #2f9fe0; color: white;">Save Feedback</button>
+            </div>
+        </div>
+
+    </div>
+</div>

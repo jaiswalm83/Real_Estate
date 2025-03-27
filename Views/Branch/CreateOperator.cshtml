@@ -1,0 +1,91 @@
+﻿@model ODHDEVELOPERS.Models.Operator
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "CreateOperator";
+
+    var dt = DateTime.Now;
+
+}
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#date').datepick();
+
+    });
+</script>
+<script type="text/javascript" src="~/Scripts/autosearch.js"></script>
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Create Collection Point</h2>
+    @*<form id="branchForm" class="p-4 rounded shadow formtag">*@
+    @using (Html.BeginForm())
+    {
+        <div class="p-4 rounded shadow formtag">
+            @*Branch Code*@
+            <div class="mb-3">
+                <label for="branchCode" class="form-label formLabel">@mr.branchname Code:</label>
+                <input type="text" class="form-control formInput" name="BranchCode" id="BranchCode" value="@User.Identity.Name" placeholder="Enter Branch Code" readonly="true" required>
+            </div>
+            @*Collection Point Name*@
+            <div class="mb-3">
+                <label for="collectionPointName" class="form-label formLabel">Collection Point Name:</label>
+                <input type="text" class="form-control formInput" name="OperatorName" id="oname" placeholder="Enter Collection Point Name" required>
+
+            </div>
+            @*Collection Point ID*@
+            <div class="mb-3">
+                <label for="collectionPointId" class="form-label formLabel">Collection Point ID:</label>
+                <input type="text" class="form-control formInput" style="text-transform:uppercase" name="OperatorId" id="oid" placeholder="Enter Collection Point ID" required>
+
+            </div>
+            @*Mobile No*@
+            <div class="mb-3">
+                <label for="mobile" class="form-label formLabel">Mobile No:</label>
+                <input type="tel" class="form-control formInput" pattern="[789][0-9]{9}" title="Mobile no is not correct format" maxlength="10" name="OperatorMobile" id="omob" placeholder="Enter Mobile Number" required>
+
+            </div>
+            @*Email ID*@
+            <div class="mb-3">
+                <label for="email" class="form-label formLabel">Email ID:</label>
+                <input type="email" class="form-control formInput" title="EmailId not in correct format" name="Operator_Mail" placeholder="Enter Email ID" required>
+
+            </div>
+            @*Date*@
+            <div class="mb-3">
+                <label for="date" class="form-label formLabel">Date:</label>
+                <input type="text" class="form-control formInput" name="Cdate" value="@dt" id="date" required>
+
+            </div>
+            @*Address*@
+            <div class="mb-3">
+                <label for="address" class="form-label formLabel">Address:</label>
+                <textarea class="form-control formInput" name="OperatorAddress" id="oadd" placeholder="Enter Address" required></textarea>
+
+            </div>
+            @*Create Button*@
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom">Create </button>
+            </div>
+            <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+        </div>
+    }
+    @*</form>*@
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#submit').click(function () {
+             @Html.ValidationSummary( true)
+        });
+    });
+</script>
+
+
+
+
+

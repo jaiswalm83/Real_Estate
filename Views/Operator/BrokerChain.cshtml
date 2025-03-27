@@ -1,0 +1,167 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerChain>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "BrokerChain";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+        var pr = db.Operators.Single(o => o.OperatorId == User.Identity.Name);
+        var br = db.Branchtabs.Single(o => o.BranchCode == pr.BranchCode);
+    }
+
+
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newagent").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Operator/AutoCompleteOperatorAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+  
+
+    <div class="container mt-5">
+
+        <h2 class="text-center mb-4 create-title">@mr.agentname Chain List</h2>
+        @using (Html.BeginForm())
+        {
+
+            <div id="branchForm" class="form-container">
+
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Enter @mr.agentname Id</label>
+                    <input type="text" class="form-control " id="newagent" name="newagentid" placeholder="Enter Id" required>
+                </div>
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn"><i class="fa fa-search"></i>Search</button>
+                </div>
+
+            </div>
+
+
+
+        }
+
+
+        <div class="index_body">
+            <div class="table-container">
+
+                <table>
+
+                    @foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+
+                            <thead>
+
+                                <tr>
+                                    <th colspan="2" style="background-color:#ff5722; color:white">@mr.branchname Name:@br.BranchName</th>
+
+                                    <th colspan="2" style="background-color:#ff5722; color:white"><b>  @mr.agentname Chain List</b></th>
+                                    <th colspan="2" style="background-color:#ff5722; color:white"><b> Date:@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy") </b></th>
+                                </tr>
+
+                            </thead>
+
+
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="NewAgentId"><b>@mr.agentname Id</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="name"><b>@mr.agentname Name</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="RankCode"><b>@mr.rankname</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="BranchCode"><b>Introducer Id</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="Mobile"><b>Introducer Name</b></label>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                        }
+                        a = a + 1;
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @a
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.newagentid)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.rankname)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.introducerid)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.introname)
+                                </td>
+
+
+                            </tr>
+                        </tbody>
+                    }
+
+                </table>
+
+                @if (a > 0)
+                {
+
+
+                    <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+
+                <a href="@Url.Action("PrintBrokerChainReport")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+            </div>
+
+                }
+
+            </div>
+
+        </div>

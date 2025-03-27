@@ -1,0 +1,28 @@
+﻿
+      .mybutton {
+        display: inline-block;
+        position: relative;
+        margin: 10px;
+        padding: 0 20px;
+        text-align: center;
+        text-decoration: none;
+        font: bold 12px/25px Arial, sans-serif;
+        box-shadow:#000 4px 4px 5px;
+      }
+      /* GREEN */
+     .green {
+        color: #3e5706;
+        background: #a5cd4e;
+     }
+     /* RED */
+     .red {
+        color: #19667d;
+        background: #F00;
+     }
+    /* Yellow Color */
+     .yellow {
+        color: #515151;
+        background: #FF0;
+     }
+  
+

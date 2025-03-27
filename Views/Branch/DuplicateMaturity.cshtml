@@ -1,0 +1,58 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "DuplicateMaturity";
+
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newbondid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteMBondId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.newbondid };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<!-- Main Container -->
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Duplicate Maturity Form</h2>
+
+    <!-- Form for Issue Discharge -->
+    <div id="issueDischargeForm" class="border p-4 rounded shadow formtag">
+        @using (Html.BeginForm())
+        {
+            <!-- Customer ID Field -->
+            <div class="mb-3">
+                <label for="customerId" class="form-label formLabel">@mr.custname Id:</label>
+                <input type="text" class="form-control formInput" id="newbondid" name="newbondid"
+                       placeholder="Enter Customer ID" required>
+            </div>
+            <!-- Submit Button -->
+            <div class="text-center d-grid gap-2">
+                 <button type="submit" class="btn btn-lg formButtom" onclick="target='_blank'">Get Maturity Form</button>
+            </div>
+        }
+    </div>
+</div>
+

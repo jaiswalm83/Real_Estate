@@ -1,0 +1,165 @@
+﻿@model ODHDEVELOPERS.Models.Emp_Salary
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.HRTabs.Single(o => o.HRId == User.Identity.Name);
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+    ViewBag.Title = "Empl_salary";
+
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#empid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Operator/AutoCompleteEid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.empid };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Employee Salary</h2>
+    <form class="border p-4 rounded shadow formtag">
+        @*<form action="/HR/EmployeeReg" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow formtag">*@
+        <!-- Branch Code -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Branch Code</label>
+            <input type="text" value="@br.BranchCode" name="branchcode" readonly class="form-control formInput">
+        </div>
+
+        <!-- Month -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Month</label>
+            <select id="Select2" class="form-control formInput" name="month">
+                <option value="" disabled selected>Select</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+            </select>
+        </div>
+
+        <!-- Year -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Year</label>
+            <select id="Select1" class="form-control formInput" name="year">
+                <option value="" disabled selected>Select</option>
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+            </select>
+        </div>
+
+        <!-- Employee ID -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Employee ID</label>
+            <input type="text" required name="empid" id="empid" class="form-control formInput">
+        </div>
+
+        <!-- Full Name -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Full Name</label>
+            <input type="text" id="IntroducerCode" name="name" class="form-control formInput" required>
+        </div>
+
+        <!-- HRA -->
+        <div class="mb-3">
+            <label class="form-label formLabel">HRA</label>
+            <input type="text" name="HRA" class="form-control formInput">
+        </div>
+
+        <!-- DA -->
+        <div class="mb-3">
+            <label class="form-label formLabel">DA</label>
+            <input type="text" name="DA" class="form-control formInput">
+        </div>
+
+        <!-- CCA -->
+        <div class="mb-3">
+            <label class="form-label formLabel">CCA</label>
+            <input type="text" name="CCA" class="form-control formInput">
+        </div>
+
+        <!-- TA -->
+        <div class="mb-3">
+            <label class="form-label formLabel">TA</label>
+            <input type="text" name="TA" class="form-control formInput">
+        </div>
+
+        <!-- Medical -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Medical</label>
+            <input type="text" name="medical" class="form-control formInput">
+        </div>
+
+        <!-- Basic Salary -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Basic Salary</label>
+            <input type="number" name="basicsalary" class="form-control formInput" required>
+        </div>
+
+        <!-- Advance Pay -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Advance Pay</label>
+            <input type="text" name="advance_Pay" class="form-control formInput">
+        </div>
+
+        <!-- Professional Tax -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Professional Tax</label>
+            <input type="text" name="professionaltax" class="form-control formInput">
+        </div>
+
+        <!-- Loan -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Loan</label>
+            <input type="text" name="loan" class="form-control formInput">
+        </div>
+
+        <!-- Provisional Fund -->
+        <div class="mb-3">
+            <label class="form-label formLabel">Provisional Fund</label>
+            <input type="text" name="provisional_fund" class="form-control formInput">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center d-grid gap-2">
+            <button name="submitbtn" type="submit" class="btn btn-lg formButtom">Register</button>
+        </div>
+        @*</form>*@
+    </form>
+    <p>@ViewBag.msg</p>
+</div>
+

@@ -1,0 +1,118 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AgentDetail>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+
+        var br = db.Branchtabs.Single(o => o.BranchCode == User.Identity.Name);
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        ViewBag.Title = "BrokerListReport";
+        var a = 0;
+
+    }
+
+
+    <div class="container mt-5 FormContainer" >
+        <div class="mt-4" id="divid1">
+            @using (@Html.BeginForm())
+            {
+                <div class="row" id="hide">
+                    <div class="col-md-6" style="width:100%">
+
+
+                    </div>
+                </div>
+            }
+        <div id="1">
+            <table class="bg-white">
+                @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                        var tp = "";
+                        var aa = db.NewLogins.Where(n => n.UserName == item.NewAgentId && n.type == "Agent").Count();
+                        if (aa == 1)
+                        {
+                            var ng = db.NewLogins.Single(p => p.UserName == item.NewAgentId && p.type == "Agent");
+                            tp = ng.Password;
+                        }
+                        if (a == 0)
+                        {
+                            <thead>
+                                <tr style="">
+                                    <th colspan="3" class="header-row" style="border-radius: 8px 0 0 0;"> @mr.branchname Name:@br.BranchName</th>
+                                    <th colspan="3" class="header-row" style="border-radius: 0px;"> @mr.agentname List</th>
+                                    <th colspan="3" class="header-row" style="border-radius: 0 8px 0 0;"> @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</th>
+                                </tr>
+                                <tr>
+                                    <th><label id="sn"><b>S.N.</b></label></th>
+                                    <th><label id="newid"><b>@mr.agentname Id</b></label></th>
+                                    <th> <label id="spilid"><b>@mr.agentname Name</b></label></th>
+                                    <th><label id="pass"><b>Password</b></label></th>
+                                    <th><label id="email"><b>@mr.rankname </b></label></th>
+                                    <th><label id="introducerid"><b>Introducer Id</b></label></th>
+                                    <th><label id="position"><b>Mobile</b></label></th>
+                                    <th><label id="doj"><b>Date of Joining</b></label></th>
+                                    <th><label id="action"><b>Action</b></label></th>
+                                </tr>
+                            </thead>
+                        }
+                        a = a + 1;
+                        <tbody>
+                            <tr>
+                                <td>@a</td>
+                                <td> @Html.DisplayFor(modelItem => item.NewAgentId)</td>
+                                <td> @Html.DisplayFor(modelItem => item.name)</td>
+                                <td>@tp</td>
+                                <td>@Html.DisplayFor(modelItem => item.RankName) </td>
+                                <td> @Html.DisplayFor(modelItem => item.NewIntroducerId) </td>
+                                <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                                <td>@Convert.ToDateTime(item.Doj).ToString("dd/MM/yyyy") </td>
+                                <td><button class="btn btn-success btn-sms" title="Send SMS" value="@item.NewAgentId" type="button">Send SMS</button> </td>
+                            </tr>
+                        </tbody>
+                    }
+                }
+            </table>
+            @if (a > 0)
+            {
+                <a href="@Url.Action("PrintBrokerList")" target="_blank">Get Report In PDF</a>
+            }
+        </div>
+        </div>
+    </div>
+
+   
+    <script type="text/javascript">
+
+    $(function () {
+
+        $(".btn-sms").click(function () {
+            var c = $(this), smsid = c.val();
+            if (confirm("Are you sure send sms to " + smsid)) {
+                setTimeout(function () {
+
+                    c.html("<i class='fa fa-spin fa-spinner'></i>&nbsp;&nbsp;Sending...").attr("disabled", "").attr("class", "btn btn-danger");
+                    $.ajax({
+                        url: "@Url.Action("All_Agent")",
+                        data: { smsid: smsid },
+                        method: "post",
+                        success: function (d) {
+                            if (d) {
+                                alert(d);
+                                if (d.toString().indexOf("success") != -1) {
+                                    c.html("SMS Sent");
+                                }
+                            }
+                        }, error: function (er) {
+                            c.removeAttr("disabled").html("SMS Not Sent");
+                        }
+                    });
+
+                }, 1000);
+            }
+        });
+
+    });
+
+    </script>

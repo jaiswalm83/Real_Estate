@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "VisitorEntry";
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    $(function () {
+        $('#date').datepick();
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#introducer").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteAgentId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name + '(' + item.NewAgentId + ')', value: item.name + '(' + item.NewAgentId + ')' };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+
+<div class="page-toolbar-block pull-right" style="display:none">
+    <div class="widget-info widget-from">
+        <div id="reportrange" class="dtrange">
+            <span></span><b class="caret"></b>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 create-title">Visitor Entry Form</h2>
+
+    @using (Html.BeginForm())
+    {
+
+
+        <div id="branchForm" class="form-container">
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Name</label>
+                <input type="text" class="form-control " name="name" id="name" placeholder="Enter Name" required>
+            </div>
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Mobile</label>
+                <input type="text" class="form-control " name="mobile" id="mobile" autocomplete="on" placeholder="Enter Mobile No" required>
+            </div>
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Introducer</label>
+                <input type="text" class="form-control " name="introducer" id="introducer" placeholder="Enter Introducer" required>
+            </div>
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Introducer Mobile</label>
+                <input type="text" class="form-control " name="intromobile" id="intromobile" autocomplete="on" placeholder="Enter Introducer Mobile No" required>
+            </div>
+
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Purpose</label>
+                <input type="text" class="form-control " name="purpose" id="purpose" placeholder="Enter Purpose " required>
+            </div>
+
+
+            <!-- Date -->
+            <div class="form-group">
+                <label for="date" class="form-label">Date</label>
+                <input type="text" class="form-control" name="date" id="date" placeholder="Enter Date" required>
+            </div>
+
+
+            @*<div class="row-form">
+
+                                      <div class="col-md-9">
+                                          <div class="input-group">
+                                              <span class="input-group-addon">
+                                                  <label class="width">In Time</label>
+                                              </span>
+                                              <input type="time" class="form-control "  name="intime" id="intime"/>
+                                          </div>
+
+                                      </div>
+                                  </div>
+                <div class="row-form">
+                                      <div class="col-md-9">
+                                          <div class="input-group">
+                                              <span class="input-group-addon">
+                                                  <label class="width">Out Time</label>
+                                              </span>
+                                              <input type="time" class="form-control "  name="outtime" id="outtime" />
+                                          </div>
+
+                                      </div>
+
+                                  </div>*@
+
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn create-btn">Submit</button>
+            </div>
+
+            <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+        </div>
+    }
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // Initialize Flatpickr
+    flatpickr("#date", {
+        dateFormat: "Y-m-d", // Format stored in the input field (e.g., 2025-01-18)
+        altInput: true,      // Show an alternate date format in the input field
+        altFormat: "F j, Y", // Format shown to the user (e.g., January 18, 2025)
+        allowInput: false,   // Disable manual typing, allowing only calendar selection
+        inline: false        // Show dropdown calendar (not inline)
+    });
+</script>

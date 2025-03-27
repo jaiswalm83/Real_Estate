@@ -1,0 +1,162 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DupliReceipt>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "DuplicateReceipt";
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+
+    }
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#BondId").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Operator/AutoCompleteBWBondid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.newbondid };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+
+
+
+
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">Print Duplicate Receipt</h2>
+        @using (Html.BeginForm())
+        {
+
+
+            <div class="block">
+
+                <div class="block-content controls">
+
+                    <input type="hidden" value="@System.DateTime.Now.Date" name="date" />
+
+                    <div id="branchForm" class="form-container">
+                        <!-- Collection Point Name -->
+                        <div class="form-group">
+                            <label for="collectionPointName" class="form-label">@mr.custname Id or Name</label>
+                            <input type="text" class="form-control " name="newbondid" id="BondId" placeholder="Enter Id" required>
+                        </div>
+
+
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+                            <button type="submit" class="btn create-btn" id="search"><i class="fa fa-search"></i> Search</button>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        }
+   
+
+        <div class="index_body">
+            <div class="table-container">
+              
+
+                <table id="rd">
+                    @foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                            <thead>
+                                <tr>
+                                    <th colspan="100%" style="background-color: #ff5722; color: white; text-align: center; padding: 10px; font-size: x-large">
+                                        <b>Renewal-List</b>
+                                    </th>
+                                </tr>
+                            </thead>
+
+
+
+                            <thead>
+                                <tr>
+
+                                    <th>
+                                        <label id="cc"><b>@mr.custname Id</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="sn"><b>Payment_No</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="pp "><b>PayAmount</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="action"><b>Action</b></label>
+                                    </th>
+
+
+
+                                </tr>
+                            </thead>
+                        }
+                        a = a + 1;
+                        <tbody>
+                            <tr>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.newbondid)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.paymentno)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.payamount)
+                                </td>
+
+                                <td>
+                                    @Html.ActionLink("Get Receipt In PDF", "DuplicateReceipt", new { newbondid = item.newbondid, paymentno = item.paymentno, payamount = item.payamount }, new { onclick = "return confirm('Are you sure to Print this Receipt?'),target='_blank'" })
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    }
+
+
+
+                </table>
+
+
+                <h4>@ViewBag.msg</h4>
+            </div>
+
+        </div>
+
+    </div>
+   
+
+

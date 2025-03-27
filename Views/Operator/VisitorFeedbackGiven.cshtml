@@ -1,0 +1,133 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "VisitorFeedbackGiven";
+    Layout = "~/Views/Shared/_LayoutVisitor.cshtml";
+    var a = 1;
+    var total = db.DailyVisitorDetails.Where(o => o.Status == 5).Count();
+}
+<style>
+     thead > tr > th {
+        text-align: center;
+    }
+
+    tbody > tr > td {
+        text-align: center;
+    }
+</style>
+
+<div class="page-content">
+
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">FeedBack Given Visitor</div>
+                <div class="page-toolbar-subtitle">
+                    <span style="color: #808080"><i class="	fa fa-hand-o-right" style="font-size: 17px; color: red;"></i>&nbsp;&nbsp;Here all the customers have been given there <kbd style="font-size: 15px; background-color: #8eb252">&nbsp;FeedBack&nbsp;</kbd> to get full detail hit <kbd style="font-size: 15px; background-color: #2f9fe0">&nbsp;Get Full Detail&nbsp;</kbd> option on left menu.</span>
+                </div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+                <span style="color: #C21148; font-size: 15px">Total Feedback Givers</span> &nbsp;<span class="badge">@total</span>
+                <!--&nbsp;&nbsp;<span style="color: #C21148; font-size: 15px">Check In</span>&nbsp;<span class="badge">checkin</span>
+                &nbsp;&nbsp;<span style="color: #C21148; font-size: 15px">Check Out</span> &nbsp;<span class="badge">checkout</span>-->
+                <span style="visibility: hidden" class="badge">5</span>
+            </div>
+
+        </div>
+        <div class="row" style="width: 100%">
+
+            <div class="col-md-6" style="width: 100%">
+
+                <div class="block" style="width: 100%">
+
+                    <div class="block-content controls">
+
+                        <div class="row">
+
+                            <div class="row-form table-responsive" style="overflow: auto">
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>Visitor Id</th>
+                                            <th>Visitor Name</th>
+                                            <th>Meet To Whom</th>
+                                            <th>Purpose</th>
+                                            <th>In Time</th>
+                                            <th>Out Time</th>
+                                            <th>Mobile No</th>
+
+
+                                            <th>Address</th>
+
+                                            <th>Office Came on</th>
+                                            <th>FeedBack</th>
+                                            <th>FeedBack Time</th>
+                                            <th>FeedBack Date</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in db.DailyVisitorDetails.Where(o=>o.Status==5).ToList())
+                                        {
+                                            <tr id="@item.VisitorId">
+                                                <td><span style="background-color: #08B0AE; color: white; padding-bottom: 4px; padding-top: 4px; padding-left: 8px; padding-right: 8px; border-radius: 50%;">@a</span></td>
+                                                <td style="font-weight: bold">@item.VisitorId</td>
+                                                <td style="font-weight: bold">@item.VisitorName</td>
+                                                <td>@item.MeetToWhom</td>
+                                                <td>@item.add</td>
+                                                <td>@item.InTime</td>
+                                                <td>@item.OutTime</td>
+                                                <td><kbd style="font-size: 16px">@item.MobileNo</kbd></td>
+
+
+                                                <td>@item.Address</td>
+
+                                                <td>@item.TodaysDate.ToString("dd/MM/yyyy")</td>
+                                                <td>@item.feedback</td>
+                                                <td>@item.feedbackTime</td>
+                                                <td>@item.feedbackDate.ToString("dd/MM/yyyy")</td>
+                                                @*<td>
+                                                    <button class="btn btn-success checkout" id="@item.VisitorId" data-placement="bottom"><i class="fa fa-user"></i></button>
+                                                    &nbsp;&nbsp;
+                                                        <button class="btn btn-info feedback" id="@item.VisitorId+@item.VisitorName"><i class="fa fa-file-text-o"></i></button>
+                                                </td>*@
+                                            </tr>@*
+                                                  <tr  style="display:none;">
+                                                      <td style="font-weight:bold">ReceptionistId :</td>
+                                                      <td >@item.ReceptionistId</td>
+                                                      <td style="font-weight:bold">Email Id :</td>
+                                                                  <td>@item.EmailId</td>
+                                                      <td style="font-weight:bold">Remark :</td>
+                                                                  <td>@item.Remark</td>
+
+                                                              </tr>*@
+
+                                            a++;
+                                        }
+
+                                    </tbody>
+                                </table>
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>

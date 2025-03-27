@@ -1,0 +1,53 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Operators.Single(b => b.OperatorId == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+    ViewBag.Title = "FundManagement";
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Welcome @br.OperatorId</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+        </div>
+
+        <div class="widget stacked">
+
+            <div class="widget-header">
+                <i class="icon-plus"></i>
+                <h3>Fund Management</h3>
+            </div>
+            <!-- /widget-header -->
+
+            <div class="widget-content">
+
+                <div class="shortcuts">
+                      <a href="~/Operator/DailyClosing" class="shortcut">
+                        <img alt="" src="~/Images/icon/chequeregister.png" />
+                        <span class="shortcut-label">Daily Closing</span>
+                    </a>
+                    <a href="~/Operator/ChequeRegis" class="shortcut">
+                        <img alt="" src="~/Images/icon/chequeregister.png" />
+                        <span class="shortcut-label">Cheque Register</span>
+                    </a>
+                    <a href="~/Operator/BankRegis" class="shortcut">
+                        <img alt="" src="~/Images/icon/chequeregister.png" />
+                        <span class="shortcut-label">Bank Transaction Register</span>
+                    </a>
+                </div>
+                <!-- /shortcuts -->
+
+            </div>
+            <!-- /widget-content -->
+
+        </div>
+    </div>
+
+</div>

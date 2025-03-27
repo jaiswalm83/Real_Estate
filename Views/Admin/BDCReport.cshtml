@@ -1,0 +1,264 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.TDSTemp>
+    @using ODHDEVELOPERS.Models;
+    @{
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var vf = db.VFormatTabs.Single(f => f.Id == 2);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "BDCReport";
+        var a = 0;
+        Double sumtds = 0;
+
+    }
+
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newagentid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    <script>
+    function check(check_id) {
+
+        $("#" + check_id).mouseover(function () {
+            var intro = $("#" + check_id).val();
+            var url = '@Url.Action("SelectPanno", "Branch")';
+            $.get(url, { intro: intro }, function data(name1) {
+                $('#panno').val(name1[0].Panno)
+            });
+        });
+
+    }
+    </script>
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">TDS Report</h2>
+        @using (Html.BeginForm())
+        {
+
+
+
+
+            <div class="block">
+
+                <div class="block-content controls">
+
+
+                    <div id="branchForm" class="form-container">
+
+                        <div class="form-group">
+
+                            <label class="form-label">Select Month</label>
+                            <select class="form-control" id="month" name="month" required>
+                                <option selected>Select </option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Select Year</label>
+                            <select class="form-control" id="year" name="year" required>
+                                <option selected>Select </option>
+                                <option>2013 </option>
+                                <option>2014 </option>
+                                <option>2015 </option>
+                                <option>2016 </option>
+                                <option>2017 </option>
+                                <option>2018 </option>
+                                <option>2019 </option>
+                                <option>2020 </option>
+                                <option>2021 </option>
+                                <option>2022 </option>
+
+
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group" style="display:none">
+
+
+                            <label class="form-label">Enter Payment Date</label>
+                            <input type="text" id="pdate" name="paydate" value="2015-06-08" class="form-control" required />
+
+
+
+                        </div>
+
+
+
+                        <div class="text-center d-grid gap-2">
+                            <input type="submit" id="Pay" name="Commond" class="btn create-btn" />
+
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        }
+        <div id="1">
+            <div class="index_body">
+                <div class="table-container">
+                    <table>
+                        @using (Html.BeginForm())
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (a == 0)
+                                {
+
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: #ff5722; color: white">
+                                                <label id="sn"><b>S.N.</b></label>
+                                            </th>
+                                            <th style="background-color: #ff5722; color: white">
+                                                <label id="newid"><b>@mr.agentname Id</b></label>
+                                            </th>
+
+                                            <th style="background-color: #ff5722; color: white">
+                                                <label id="spilid"><b>@mr.agentname Name</b></label>
+                                            </th>
+                                            <th style="background-color: #ff5722; color: white">
+                                                <label id="introducerid"><b>Address</b></label>
+                                            </th>
+
+                                            <th style="background-color: #ff5722; color: white">
+                                                <label id="Amount"><b>DOB</b></label>
+                                            </th>
+
+                                            <th style="background-color: #ff5722; color: white">
+                                                <label><b>Pan No.</b></label>
+                                            </th>
+
+                                            <th style="background-color: #ff5722; color: white">
+                                                <label><b>TDS</b></label>
+                                            </th>
+
+
+
+
+                                        </tr>
+                                    </thead>
+                                }
+                                a = a + 1;
+
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @a
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.brokerid)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.brokername)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.address)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.dob)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.panno)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tds)
+                                        </td>
+
+
+
+                                    </tr>
+                                </tbody>
+
+
+
+                            }
+
+
+                        }
+
+
+
+                    </table>
+
+                    @if (a > 0)
+                    {
+                        <div class="text-center d-grid gap-2">
+                            <a href="@Url.Action("PrintBDCReport")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                        </div>
+
+
+                    }
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+

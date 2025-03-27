@@ -1,0 +1,278 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.CityStateTab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "AddState";
+        var a = 0;
+    }
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <div class="container mt-5">
+        <!-- Title -->
+        <h2 class=" text-center create-title">Select State and City</h2>
+
+        @using (Html.BeginForm())
+        {
+            <!-- Form for State and City Selection -->
+            <div id="locationForm" class="form-container ">
+
+                <!-- State Dropdown -->
+                <div class="mb-3">
+                    <label for="state" class="form-label">Select State</label>
+                    <select class="form-select" id="State" name="State" required>
+                        <option selected>Select </option>
+                        <option>Andhra Pradesh </option>
+                        <option>Arunachal Pradesh </option>
+                        <option>Assam</option>
+                        <option>Bihar </option>
+                        <option>Chattisgarh </option>
+                        <option>Goa </option>
+                        <option>Gujrat </option>
+                        <option>Haryana </option>
+                        <option>Himachal Pradesh</option>
+                        <option>Jammu & Kashmir</option>
+                        <option>Jharkhand </option>
+                        <option>Karnataka </option>
+                        <option>Kerala </option>
+                        <option>Madhya Pradesh </option>
+                        <option>Maharashtra </option>
+                        <option>Manipur</option>
+                        <option>Meghalaya </option>
+                        <option>Mizoram </option>
+                        <option>Nagaland</option>
+                        <option>Odisha </option>
+                        <option>Panjab </option>
+                        <option>Rajasthan </option>
+                        <option>Sikkim </option>
+                        <option>Tamil Nadu</option>
+                        <option>Telangana </option>
+                        <option>Tripura </option>
+                        <option>Uttar Pradesh</option>
+                        <option>UttaraKhand </option>
+                        <option>West Bengal </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="associateIdName" class="form-label">Enter City</label>
+                    <input type="text" class="form-control" name="City" id="City" placeholder="Enter Associate Id or Name" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn">Add</button>
+                </div>
+                <p style="color:maroon; margin-left:15px;"><b> @ViewBag.msg</b></p>
+            </div>
+        }
+
+
+        @if (Convert.ToInt32(ViewData["count"]) > 0)
+        {
+            <div id="comm" class="table-container">
+                <div id="pn" class="header-row">
+                    <div class="header-row">
+                        <label id="pname"><b>All State-City List @DateTime.Now.ToString("dd/MM/yyyy")</b></label>
+                    </div>
+                    @*<div>
+                        <label id="currentDate"><b>@DateTime.Now.ToString("dd/MM/yyyy")</b></label>
+                    </div>*@
+                </div>
+                <table>
+                    @using (Html.BeginForm())
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                               
+                                <tr>
+                                    <th style="width:10%;text-align:center;">
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th style="width:40%;text-align:center;">
+                                        <label id="newid"><b>State</b></label>
+                                    </th>
+                                    <th style="width:40%;text-align:center;">
+                                        <label id="spilid"><b>City</b></label>
+                                    </th>
+                                </tr>
+                            }
+                            a = a + 1;
+
+                            <tr style="text-align:left;">
+                                <td>
+                                    @a
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.state)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.city)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        }
+
+
+        <style>
+            /* Button Container */
+            .action-buttons {
+                display: flex;
+                flex-direction: column; /* Stack buttons vertically */
+                align-items: center; /* Center buttons horizontally */
+                gap: 10px; /* Space between buttons */
+            }
+
+                /* General Button Styles */
+                .action-buttons .btn {
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                    width: 100%; /* Make buttons full-width */
+                    max-width: 200px; /* Limit max width for large screens */
+                }
+
+                /* Edit Button */
+                .action-buttons .btn-primary {
+                    background-color: #007bff;
+                    color: white;
+                }
+
+                    .action-buttons .btn-primary:hover {
+                        background-color: #0056b3;
+                        transform: scale(1.05);
+                    }
+
+                /* Save Button */
+                .action-buttons .btn-success {
+                    background-color: #28a745;
+                    color: white;
+                }
+
+                    .action-buttons .btn-success:hover {
+                        background-color: #218838;
+                        transform: scale(1.05);
+                    }
+
+                /* Cancel Button */
+                .action-buttons .btn-secondary {
+                    background-color: #6c757d;
+                    color: white;
+                }
+
+                    .action-buttons .btn-secondary:hover {
+                        background-color: #5a6268;
+                        transform: scale(1.05);
+                    }
+
+                /* Small Button Size */
+                .action-buttons .btn-sm {
+                    padding: 8px 16px;
+                    font-size: 12px;
+                }
+
+                /* Disabled Button Style */
+                .action-buttons .btn:disabled {
+                    background-color: #e0e0e0;
+                    cursor: not-allowed;
+                }
+
+
+            /* General Table Styles */
+            .table-container {
+                max-width: 100%;
+                margin: auto;
+                overflow-x: auto;
+                background: #ffffff;
+                border: 1px solid #e0e0e0;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                margin-top: 20px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: auto;
+                min-width: 800px;
+            }
+
+            thead th {
+                background-color: #f1f5f9;
+                font-weight: bold;
+                color: #333;
+                border: 1px solid #d1d5db;
+                text-align: center;
+                padding: 10px;
+            }
+
+            tbody td {
+                text-align: center;
+                padding: 8px;
+                border: 1px solid #d1d5db;
+                color: #333;
+            }
+
+            tbody tr:nth-child(even) {
+                background-color: #fff3f5;
+            }
+
+            tbody tr:hover {
+                background-color: #eef2f6;
+            }
+
+            /* Display Mode */
+            .display-mode {
+                font-size: 14px;
+                color: #333;
+            }
+
+            /* Edit Mode */
+            .edit-mode {
+                display: none;
+            }
+
+            /* Responsive Styles */
+            @@media (max-width: 768px) {
+                .table-container {
+                    border: none;
+                    box-shadow: none;
+                    padding: 0 10px;
+                }
+
+                table {
+                    font-size: 13px;
+                    min-width: unset;
+                }
+
+                thead th, tbody td {
+                    padding: 6px;
+                }
+            }
+
+            @@media (max-width: 480px) {
+                .table-container {
+                    margin: 0 auto;
+                    padding: 5px;
+                }
+
+                table {
+                    border: 0;
+                    font-size: 12px;
+                }
+
+                thead th, tbody td {
+                    padding: 4px;
+                }
+            }
+        </style>

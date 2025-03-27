@@ -1,0 +1,58 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "createid";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#agentid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<div class="container mt-5">
+    <h2 class="text-center create-title">Generate ID Card</h2>
+    @using (Html.BeginForm())
+    {
+        <div id="headForm" class="form-container">
+
+            <!-- Single Input -->
+            <div class="mb-3">
+                <label for="headInput" class="form-label">Enter @mr.agentname Id</label>
+                <input type="text" class="form-control" id="agentid" placeholder="Enter Relation" name="agentid" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn create-btn" onclick="target='_blank'">Submit</button>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Bootstrap JS (for popper.js and other bootstrap components) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+

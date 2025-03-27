@@ -1,0 +1,91 @@
+﻿@using ODHDEVELOPERS.Models
+@model IEnumerable<ODHDEVELOPERS.Models.Add_leavetab>
+
+    @{
+        ViewBag.Title = "Add_leavetype";
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        UsersContext db = new UsersContext();
+        var list = db.Add_leavetabs.ToList();
+    }
+
+
+
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4">Add Leave Type</h2>
+        <form method="post" action="../HR/Add_leavetype" class="border p-4 rounded shadow formtag">
+
+            <!-- Project Year -->
+            <div class="mb-3">
+                <label for="leavetype" class="form-label formLabel">Leave Type</label>
+                <input type="text" id="leavetype" name="leavetype" class="form-control formInput" placeholder="Enter Leave Type" required>
+            </div>
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom">
+                    Add Leave
+                </button>
+
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+    @if (Model != null )
+    {
+
+        <div class="index_body mt-5">
+            <div class="table-container">
+                <div class="header-row">Leave Type Table</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Sr. No.</th>
+                            <th scope="col">Type of Leave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.id</td>
+                                <td>@item.leavetype</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    }
+
+
+
+
+
+        @*@if (Model != null && Model.Any())
+        {
+            <div class="table-responsive col-md-8 mx-auto mt-3">
+                <table class="table table-bordered text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Sr. No.</th>
+                            <th scope="col">Type of Leave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.id</td>
+                                <td>@item.leavetype</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }*@
+        

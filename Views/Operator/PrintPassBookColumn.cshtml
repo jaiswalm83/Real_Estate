@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "PrintPassBookColumn";
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+}
+
+<div class="page-content">
+
+                <div class="container">
+
+                    <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Print Passbook Column</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div>           
+                        
+                    </div>  
+
+                           <div class="row" >
+                                
+                               <div class="col-md-6" style="width:100%">
+                                   
+                                  
+               <table id="rd" border="1" style="margin-left:1%; margin-right:1px; width:98%;">
+    
+         <tr >
+                                <th  colspan="9" style="text-align:center;font-size:large;height:50px;"><b>Saving Column-List </b>
+
+                                </th>
+                            
+                
+                         </tr>
+    
+                   
+
+         <tr style="font-size:medium;height:40px;">
+        
+        <th style="width:10%;text-align:center;">
+           <label><b>Sr.</b></label>
+            </th>
+             <th style="width:10%;text-align:center;">
+           <label><b>Tran. Date</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label><b>Tran. Id</b></label>
+            </th>
+            
+        <th style="width:10%;text-align:center;">
+           <label><b>Particulers</b></label>
+            </th>
+            
+             <th style="width:15%;text-align:center;">
+           <label><b>Debit</b></label>
+            </th>
+              <th style="width:15%;text-align:center;">
+           <label><b>Credit</b></label>
+            </th>
+              <th style="width:15%;text-align:center;">
+           <label><b>Balance</b></label>
+            </th>
+        
+ 
+      
+    </tr>
+       
+         
+   
+</table> 
+  
+<div> <a href="@Url.Action("PDFPrintSavingColumn")" target="_blank">Print Saving Column Details</a></div>
+
+<h4>@ViewBag.msg</h4>
+                        </div>          
+                        
+                    </div>
+
+
+
+                    <div class="row" >
+                                
+                               <div class="col-md-6" style="width:100%">
+                                   
+                                  
+               <table id="rd" border="1" style="margin-left:1%; margin-right:1px; width:98%;">
+    
+         <tr >
+                                <th  colspan="9" style="text-align:center;font-size:large;height:50px;"><b>RD Column-List </b>
+
+                                </th>
+                            
+                
+                         </tr>
+    
+                   
+
+         <tr style="font-size:medium;height:40px;">
+        
+        <th style="width:10%;text-align:center;">
+           <label id="cc"><b>Sr.</b></label>
+            </th>
+             <th style="width:10%;text-align:center;">
+           <label id="sn"><b>Tran. Date</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="pp "><b>Tran. Id</b></label>
+            </th>
+            
+        <th style="width:10%;text-align:center;">
+           <label id="action"><b>Particulers</b></label>
+            </th>
+             <th style="width:10%;text-align:center;">
+           <label id="action1"><b>Late Days</b></label>
+            </th>
+              <th style="width:12%;text-align:center;">
+           <label ><b>Late Fine</b></label>
+            </th>
+             <th style="width:12%;text-align:center;">
+           <label ><b>Rebate</b></label>
+            </th>
+              <th style="width:15%;text-align:center;">
+           <label ><b>Deposit</b></label>
+            </th>
+              <th style="width:21%;text-align:center;">
+           <label ><b>Amount</b></label>
+            </th>
+        
+ 
+      
+    </tr>
+         
+    
+           
+ 
+  
+   
+</table> 
+  
+<div> <a href="@Url.Action("PDFPrintRDColumn")" target="_blank">Print RD Column Details</a></div>
+<h4>@ViewBag.msg</h4>
+                        </div>          
+                        
+                    </div>
+
+  
+    </div>
+    </div>
+

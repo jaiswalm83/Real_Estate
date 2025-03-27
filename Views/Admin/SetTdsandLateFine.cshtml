@@ -1,0 +1,87 @@
+﻿@model ODHDEVELOPERS.Models.TDSLF_tab
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "SetTdsandLateFine";
+}
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Set TDS and Late Fine</h2>
+
+    @using (Html.BeginForm())
+    {
+        <!-- Form -->
+        <div id="settingsForm" class="form-container">
+            <!-- TDS(%) With PAN -->
+            <div class="form-group">
+                <label for="tdsWithPan" class="form-label">TDS(%) With PAN</label>
+                <input type="number" class="form-control" name="TDS" id="tds" value="@tr.TDS" required>
+            </div>
+
+            <!-- TDS(%) Without PAN -->
+            <div class="form-group">
+                <label for="tdsWithoutPan" class="form-label">TDS(%) Without PAN</label>
+                <input type="number" class="form-control" name="NPCTDS" id="NPCTDS" value="@tr.NPCTDS" required>
+            </div>
+
+            <!-- Late Fine(%) -->
+            <div class="form-group">
+                <label for="lateFine" class="form-label">Late Fine(%)</label>
+                <input type="number" class="form-control" name="latefine" id="latefine" value="@tr.latefine" required>
+            </div>
+
+            <!-- Processing Fee(%) -->
+            <div class="form-group">
+                <label for="processingFee" class="form-label">Processing Fee(%)</label>
+                <input type="number" class="form-control" name="processingfee" id="processingfee" value="@tr.processingfee" required>
+            </div>
+
+            <!-- Member Fee -->
+            <div class="form-group">
+                <label for="memberFee" class="form-label">Member Fee</label>
+                <input type="number" class="form-control" name="memberfee" id="memberfee" value="@tr.memberfee" required>
+            </div>
+
+            <!-- Set Associate Form Fee -->
+            <div class="form-group">
+                <label for="associateFormFee" class="form-label">Set @mr.agentname Form Fee</label>
+                <input type="number" class="form-control" name="agencyformfee" id="agencyformfee" value="@tr.agencyformfee" required>
+            </div>
+
+            <!-- Set Customer Form Fee -->
+            <div class="form-group">
+                <label for="customerFormFee" class="form-label">Set @mr.custname Form Fee</label>
+                <input type="number" class="form-control" name="applicationfee" id="applicationfee" value="@tr.applicationfee" required>
+            </div>
+
+            <!-- Set A/C Form Fee -->
+            <div class="form-group">
+                <label for="accountFormFee" class="form-label">Set A/C Form Fee</label>
+                <input type="number" class="form-control" name="accountformfee" id="accountformfee" value="@tr.accountformfee" required>
+            </div>
+
+            <!-- Set A/C Opening Amount -->
+            <div class="form-group">
+                <label for="accountOpeningAmount" class="form-label">Set A/C Opening Amount</label>
+                <input type="number" class="form-control" name="accountopeningfee" id="accountopeningfee" value="@tr.accountopeningfee" required>
+            </div>
+
+            <!-- Set Revival Fee -->
+            <div class="form-group">
+                <label for="revivalFee" class="form-label">Set Revival Fee(Rs.)</label>
+                <input type="number" class="form-control" name="revivalfee" id="revivalfee" value="@tr.revivalfee" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn create-btn">Set</button>
+            </div>
+        </div>
+
+        <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+    }
+</div>

@@ -1,0 +1,101 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "BrokerAdvancePayment";
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+        if (fd.status == 2)
+        {
+            dt = fd.formdate;
+        }
+
+    }
+}
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+@if (fd.status == 0)
+{
+    <script>
+        $(function () {
+            $('#date').datepick();
+        });
+
+    </script>
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newagentid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name + '(' + item.NewAgentId + ')', value: item.NewAgentId };
+                        }))
+
+                    }
+                })
+            }
+        });
+    })
+</script>
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">@mr.agentname Advance Payment</h2>
+    <div id="branchForm" class="border p-4 rounded shadow formtag">
+        @using (Html.BeginForm())
+        {
+            <!-- Associate ID -->
+            <div class="mb-3">
+                <label for="associateId" class="form-label formLabel">Enter @mr.agentname Id:</label>
+                <input type="text" id="newagentid" name="newagentid" class="form-control formInput" required />
+            </div>
+
+            <!-- Select section -->
+            <div class="mb-3">
+                <label for="paymentType" class="form-label formLabel">Select Type:</label>
+                <select class="form-control formInput" id="type" name="type" required>
+                    <option value="0" selected>Payment</option>
+                    <option value="1">Receive</option>
+                </select>
+            </div>
+
+            <!-- Payment Amount with Increment/Decrement -->
+            <div class="mb-3">
+                <label for="paymentAmount" class="form-label formLabel">Enter Amount:</label>
+                <input type="number" step="any" class="form-control formInput" name="amount" id="Amount" required />
+            </div>
+
+            <!-- Remark -->
+            <div class="mb-3">
+                <label for="remark" class="form-label formLabel">Remark:</label>
+                <input type="text" class="form-control formInput" name="Remark" id="Remarks" required />
+            </div>
+
+            <!-- Date -->
+            <div class="mb-3">
+                <label for="date" class="form-label formLabel">Select Date:</label>
+                <input type="text" class="form-control formInput date" name="date" id="date" value="@dt" readonly="true" required />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom" onclick="return confirm('Are you sure to Advance Payment?')">Add</button>
+            </div>
+            <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+        }
+    </div>
+</div>
+
+

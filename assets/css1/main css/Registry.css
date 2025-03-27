@@ -1,0 +1,57 @@
+﻿
+.imageSize {
+    height: 64px;
+    width: 64px;
+}
+
+.custom-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .custom-card:hover {
+        transform: translateY(-5px); /* Lifts the card slightly */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-card .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+/* Ensures the row is centered */
+.centered-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Adds responsive breakpoints */
+.col-6 {
+    max-width: 220px;
+}
+
+.section-heading {
+    margin: 20px auto; /* Reduced top margin, centered */
+    font-size: 14px; /* Smaller font size */
+    font-weight: 600; /* Bold text */
+    text-align: center;
+    font-family: 'Poppins', sans-serif; /* Stylish font */
+    color: white;
+    text-transform: uppercase; /* Make it all uppercase */
+    letter-spacing: 2px; /* Add spacing between letters */
+    padding: 10px;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #6a11cb, #2575fc); /* Gradient background */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Shadow for the background */
+    animation: fadeIn 1s ease-out; /* Fade-in animation */
+    width: 60%; /* Set width to 60% */
+}
+

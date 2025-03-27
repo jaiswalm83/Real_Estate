@@ -1,0 +1,216 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.appltab>
+@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "AllotPlot";
+   
+    var a = 0;
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+   
+}
+
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+
+
+<script type="text/javascript">
+
+    function getblock(clicked_id) {
+        debugger;
+        $('input:radio[name="PYN"]').change(function () {
+            if ($(this).is(':checked') && $(this).val() != "N") {
+                $("#plot").removeClass("hide");
+                $("#blok").removeClass("hide");
+                var plotstatus = $("#" + clicked_id).val();
+                var projectid = $("#PlanName").val();
+                var url = '@Url.Action("GetBlockList", "Branch")';
+                $.get(url, { plotstatus: plotstatus, projectid: projectid }, function data(d) {
+                    var block = $('#blk').html('');
+                    block.children().remove();
+                    block.append('<option value="NA">Select</option>');
+                    for (var i = 0; i < d.length; i++) {
+                        block.append('<option value="' + d[i].block + '">' + d[i].block + '</option>');
+                    }
+                });
+            }
+            else if ($(this).is(':checked') && $(this).val() == "N") {
+
+                $("#plot").addClass("hide");
+                $("#blok").addClass("hide");
+
+                var block = $('#blk').html('');
+                block.children().remove();
+                block.append('<option value="NA">Select</option>');
+
+                var plot = $('#plotno').html('');
+                plot.children().remove();
+                plot.append('<option value="0">Select</option>');
+            }
+        });
+
+    }
+
+    function getplot(clicked_id) {
+
+
+        $("#plot").removeClass("hide");
+        var block = $("#" + clicked_id).val();
+        var projectid = $("#PlanName").val();
+        var introid = $("#IntroducerCode").val();
+        var url = '@Url.Action("GetPlotList", "Branch")';
+        $.get(url, { block: block, projectid: projectid, introid: introid }, function data(d) {
+            var select = $('#plotno').html('');
+            select.children().remove();
+            select.append('<option value="0">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].plotno + '">' + d[i].plotno + '</option>');
+            }
+
+        });
+    }
+
+</script>
+<style type="text/css">
+    .hide {
+        display:none;
+    }
+
+</style>
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Allot Plot</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+        @using (Html.BeginForm("AllotPlot", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+
+            <div class="row">
+
+                @foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+                        var pr = db.Plans.Single(p => p.Plancode == item.projectid);
+                
+
+                    <div class="col-md-6">
+                        <div class="block">
+                            <div class="block-content">
+                                <h2><strong>Plot Details</strong> </h2>
+
+                            </div>
+                            <div class="block-content controls">
+                                <input type="hidden" value="@pr.Plancode" id="PlanName" name="plancode"/>
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">@mr.custname Name </label>
+                                            </span>
+                                            <input type="hidden" value="@item.newintroducerid" id="IntroducerCode" name="newintroducerid"/>
+                                            <input type="text" class="form-control" id="name" name="name" value="@item.name" readonly="true" required />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">@mr.custname Id </label>
+                                            </span>
+
+                                            <input type="text" class="form-control" id="newbondid" name="newbondid" value="@item.newbondid" required readonly="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (item.PYN !="n")
+                                {
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <label class="width">Assign Plot No</label>
+                                                </span>
+                                                <input type="radio" id="radio" name="PYN" class="PYN" onclick="getblock(this.id)" value="Y" >
+                                                Yes 
+                                                 <input type="radio" id="radio2" name="PYN" class="PYN" onclick="getblock(this.id)" checked value="N">
+                                                No  
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div id="blok" class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Select Block</label>
+                                            </span>
+                                            <select class="form-control" id="blk" name="block" onclick="getplot(this.id)" required>
+                                                <option value="@item.block" selected>@item.block</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="plot" class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Select Plot No </label>
+                                            </span>
+                                            <select class="form-control" id="plotno" name="plotno" required>
+                                                <option value="@item.plotno" selected>@item.plotno</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6" style="width: 100%">
+                        <div class="block">
+                            <div class="block-content controls">
+                                <div style="margin-left: 46%;">
+                                    <div class="widget-info widget-from">
+
+                                        <button id="submit" type="submit" name="command" value="Update" class="btn btn-primary" onclick="return confirm('Are you sure to Allot Plot??')">Allot</button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                             
+                    }
+                }
+
+            </div>           
+        }
+        <div style="float: left; margin-left: 30px;">
+            <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,995 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Member_tab>
+@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "ManualBond";
+
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+    var a = 0;
+    string todate = DateTime.Now.ToShortDateString();
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+        if (fd.status == 2)
+        {
+            dt = fd.formdate;
+        }
+
+    }
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+@if (fd.status == 0)
+{
+<script>
+    $(function () {
+        $('#formdate').datepick();
+        $('#pdate').datepick();
+
+    });
+</script>
+}
+
+<script>
+
+    $(document).ready(function () {
+        $('#chk').change(function () {
+
+            var adr = $("#addr").val();
+            if (this.checked == true) {
+                $("#guraddr").val(adr);
+            }
+            else if (this.checked == false) {
+                $("#guraddr").val('');
+            }
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#memberid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Operator/AutoCompletememberid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.MemberName, value: item.NewMemberId };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+
+
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#IntroducerCode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+
+
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#nomrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+
+
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#gurrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+
+
+    })
+</script>
+<script>
+
+    function checkid(check_id) {
+        $("#" + check_id).click(function () {
+            var intro = $("#" + check_id).val();
+            var url = '@Url.Action("SelectIntroName", "Branch")';
+            $.get(url, { intro: intro }, function data(name1) {
+                $('#introducername').val(name1)
+            });
+        });
+
+    }
+</script>
+<script type="text/javascript">
+    function check(check_id) {
+
+        $("#" + check_id).click(function () {
+            $('.plantype').prop('checked', false);
+        });
+
+    }
+    ///Selecting Plan Name Start here ////
+    function rply_click(clicked_id) {
+        $("#" + clicked_id).click(function () {
+            var fno = $("#" + clicked_id).val();
+
+
+            var url = '@Url.Action("SelectPlan", "Branch")';
+            $.get(url, { fno: fno }, function data(d) {
+                var select = $("#PlanName");
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].Plancode + '">' + d[i].Planname + '</option>');
+                }
+            });
+        });
+
+    }
+
+    ///Selecting Plan Mode Start here ////
+
+    function selectplan(plan_id) {
+
+        $("#" + plan_id).click(function () {
+            var cpplan = $("#" + plan_id).val();
+            var formdate = $("#formdate").val();
+
+            var url = '@Url.Action("selectmode", "Branch")';
+            $.get(url, { cpplan: cpplan, formdate: formdate }, function data(t) {
+
+                var mode = $("#mode");
+                mode.children().remove();
+                mode.append('<option value="Select">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    mode.append('<option value="' + t[i].mode + '">' + t[i].mode + '</option>');
+                    $("#term").val(t[i].term);
+
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    $('#expirydate').val(parsedDate);
+
+                }
+            });
+        });
+    }
+
+    ///Selecting Plan Mode Start here ////
+
+    function selectexpiry(term_id) {
+
+            var term = $("#" + term_id).val();
+            var formdate = $("#formdate").val();
+
+            var url = '@Url.Action("selectexpiry", "Branch")';
+            $.get(url, { term: term, formdate: formdate }, function data(t) {
+
+                for (var i = 0; i < t.length; i++) {
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    $('#expirydate').val(parsedDate);
+
+                }
+        });
+    }
+
+    function selectduedate(mode_id) {
+
+        var mode = $("#" + mode_id).val();
+        var formdate = $("#formdate").val();
+
+        var url = '@Url.Action("selectduedate", "Branch")';
+        $.get(url, { mode: mode, formdate: formdate }, function data(t) {
+
+                for (var i = 0; i < t.length; i++) {
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    $('#pdate').val(parsedDate);
+
+                }
+            });
+        }
+    ///Selecting Payment Start here ////
+
+    function selectpayment(mode_id) {
+
+        $("#" + mode_id).click(function () {
+            var plan = $("#PlanName").val();
+            var mode = $("#" + mode_id).val();
+
+
+            var url = '@Url.Action("selectpayment", "Branch")';
+            $.get(url, { plan: plan, mode: mode }, function data(t) {
+
+                var payment = $("#payment");
+                payment.children().remove();
+                payment.append('<option value="Select">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    payment.append('<option value="' + t[i].payment + '">' + t[i].payment + '</option>');
+
+                }
+
+
+            });
+        });
+    }
+
+    ///checkig validity of amount Start here ////
+    function checkplan(payment_id) {
+
+        $("#" + payment_id).click(function () {
+            var plan = $("#PlanName").val();
+            var planmode = $('#mode').val();
+            var amount = $("#" + payment_id).val();
+
+            var url = '@Url.Action("selectplotsize", "Branch")';
+            $.get(url, { plan: plan, planmode: planmode, amount: amount }, function data(t) {
+                for (var i = 0; i < t.length; i++) {
+
+                    $("#Totalamount").val(t[i].totalconsideration);
+                    $("#maturityamt").val(t[i].maturityamount);
+                    $("#amountinword").val(t[i].amountinwords);
+                    $("#nolandunit").val(t[i].plotsize);
+                    $("#bookingamount").val(t[i].bookingamount);
+
+                }
+            });
+
+        });
+
+    }
+
+</script>
+
+<script>
+    function SetBookingAmount(checkid) {
+
+        var plotsize = $("#" + checkid).val();
+        var url = '@Url.Action("CalBooking", "Branch")';
+        $.get(url, { plotsize: plotsize }, function data(t) {
+            for (var i = 0; i < t.length; i++) {
+
+                $("#bookingamount").val(t[i].bookingamount);
+            }
+        });
+
+    }
+
+    function SetAmountinword(checkid) {
+
+        var payment = $("#" + checkid).val();
+        var url = '@Url.Action("SetAmountinword", "Branch")';
+        $.get(url, { payment: payment }, function data(t) {
+            for (var i = 0; i < t.length; i++) {
+
+                $("#amountinword").val(t[i].amountword);
+            }
+        });
+
+    }
+</script>
+
+
+
+<div class="page-content">
+
+                <div class="container">
+
+                    <div class="page-toolbar">
+
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">@mr.custname Form</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="row" >
+               @using (Html.BeginForm("ManualBond", "Branch", FormMethod.Post, new { enctype = "multipart/form-data" }))
+               {       
+                  
+                   <div class="col-md-6" style="width: 100%">
+
+                       <div class="block">
+
+                           <div class="block-content controls">
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Enter Member id</label></span>
+                                           <input type="text" class="form-control" name="memberid" id="memberid">
+                                       </div>
+
+                                   </div>
+                               </div>
+
+
+                               <div class="page-toolbar-block pull-right">
+                                   <div class="widget-info widget-from">
+
+                                       <button value="Search" type="submit" name="command" class="btn btn-primary"><i class="fa fa-search"></i>Search</button>
+
+                                   </div>
+                               </div>
+
+
+                               <div style="float: left;">
+                                   <p style="color: maroon;"><b>@ViewData["newbondid"] @ViewBag.msg</b></p>
+                                   @if (ViewBag.msg == mr.custname + " created Successfully....")
+                                   {
+                                       @Html.ActionLink("Print " + mr.custname, "PrintBond", new { newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })
+                                   }
+                               </div>
+
+
+
+                           </div>
+
+
+                       </div>
+                   </div>
+                   
+                   
+                   
+                   foreach (var item in Model)
+                   {
+                       if (a == 0)
+                       {
+                    
+     
+
+             <div class="col-md-6">
+                            
+                            <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Personal Details</strong></h2>
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">@mr.branchname Code </label></span>  
+                                            <input type="text" id="branchcode" class="form-control" readonly="true" value="@User.Identity.Name" name="branchcode" required /></div>
+                                            </div>
+                                    </div>
+                                    <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Form Fee</label></span>
+                                             <input type="text" class="form-control" id="applicationcharge" required name="applicationcharge" value="@tr.applicationfee" readonly="true"/>
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="row-form">
+                                          <div class="col-md-9">
+
+                                          <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Discount(%)</label></span>
+                                             <input type="text" class="form-control" id="discountper" required name="discountper" value="0" />
+                                                </div>
+                                                
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Member Id </label></span>  
+                                               
+    <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.NewMemberId)" id="newmemberid" name="newmemberid" required /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Name of Applicant </label></span>  
+                                               
+     <input type="text" class="form-control" readonly="true" value=" @Html.DisplayFor(modelItem => item.MemberName)" id="name" name="name" required /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+
+                                      <div class="col-md-9">
+
+                                                <div style="float:left; width:100%">
+                      
+                                                     <div style="float:left;width:40%; background-color:#eee">
+                                    <input type="text" style="background-color:#eee" readonly="true" value="@Html.DisplayFor(modelItem => item.Relationof)" class="form-control" required name="RelationOf" id="RelationOf" />
+
+                                                        </div> 
+                                                  
+                                                 <div style="float:left;width:60%;">
+                                 <input type="text" value="@Html.DisplayFor(modelItem => item.Father)" readonly="true" class="form-control" required name="fathername" id="fathername" />
+                                                     </div>
+                                                </div>
+
+                                        </div>
+                                    </div>
+
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Address </label></span>  
+       <input type="text" id="addr"  readonly="true" value=" @Html.DisplayFor(modelItem => item.Address)" name="addr"  class="form-control" required /></div>
+                                            </div>
+                                    </div>
+
+
+                                    <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Mobile No </label></span>  
+          <input type="text" id="mobileno" name="mobileno" maxlength="10" readonly="true" value=" @Html.DisplayFor(modelItem => item.Mobile)" class="form-control" required/></div>
+                                            </div>
+                                    </div>
+
+
+                               
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Introducer Code </label></span>  
+                                         <input type="text" class="form-control"  onclick="checkid(this.id)" id="IntroducerCode" name="newintroducerid" required /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Introducer Name </label></span>  
+                                            <input type="text" class="form-control"/ id="introducername" readonly="true"></div>
+                                            </div>
+                                    </div>
+                                   
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            
+                                            <div class="input-group">
+                                          <span class="input-group-addon"><label class="width">Date of Agreement </label></span>
+                                      <input type="text" class="form-control date" id="formdate" name="formdate" value="@dt" readonly="true" required >
+                                                    </div>
+                                            
+                                              </div>
+                                    </div>
+                                          
+                                     <div class="row-form">
+
+                                        <div class="col-md-9">
+
+                                        <div class="input-group">
+       <span class="input-group-addon"><label class="width">Date of Birth </label></span>  
+                                         <input type="text" id="dob" readonly="true" value=" @Html.DisplayFor(modelItem => item.DOB)" name="dob" class="form-control" required/>
+                                         </div>
+                                            </div>
+
+                                        </div>
+
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Nationality </label></span>  
+     <input type="text" id="nationality" name="nationality" readonly="true" value=" @Html.DisplayFor(modelItem => item.Nationality)" class="form-control"  value="Indian"/></div>
+                                            </div>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+                  <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Guardian Details</strong></h2>
+                                    
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian Name </label></span>  
+                                            <input type="text" id="guardianname" name="guardianname" class="form-control" /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                        
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian's Age </label></span>  
+                                            <input type="text" id="gurage" name="gurage" class="form-control" /></div>
+                                            </div>
+                                    </div>
+                                     <div class="row-form">
+                                      
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Relationship</label></span>  
+                                            <input type="text" class="form-control" id="gurrel" name="gurrel" /></div>
+                                            </div>
+                                    </div>
+
+
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                          &nbsp;&nbsp;  <input id="chk" type="checkbox" name="chk"/>&nbsp;Same As Contributor
+                                            </div>
+                                    </div>
+
+                                    
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Guardian Address</label></span>  
+                                            <textarea id="guraddr" name="guraddr" class="form-control"></textarea></div>
+                                            </div>
+                                    </div>
+                                 
+                                   
+                                   <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            
+                                            
+                                            <div class="input-group">
+                                        <span class="input-group-addon"><label class="width">Upload Image</label></span>
+                                        <input class="form-control" id="File1" name="photo" type="file" />
+                                               </div>
+
+                                        </div>
+                                    </div>
+                         
+                                </div>
+                                
+                            </div>
+
+
+                 <div class="block">
+                                <div class="block-content">
+                                    <h2><strong>Bank Details</strong></h2>
+                                    
+                                </div>
+                                <div class="block-content controls">
+                                    
+                                    <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">PAN No </label></span>  
+             <input type="text" id="panno" name="panno"  value=" @Html.DisplayFor(modelItem => item.panno)" class="form-control" /></div>
+                                            </div>
+                                    </div>
+                                  
+                                  
+                                     <div class="row-form">
+                                       
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Bank Name </label></span>  
+              <input type="text" id="bankname" name="bankname" value=" @Html.DisplayFor(modelItem => item.bankname)" class="form-control"/></div>
+                                            </div>
+                                    </div>
+                                   
+                                     <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">Bank A/C No </label></span>  
+                                            <input type="text" id="accountno" name="accountno" value=" @Html.DisplayFor(modelItem => item.accountno)" class="form-control"/></div>
+                                            </div>
+                                    </div>
+
+                                    <div class="row-form">
+                                    
+                                        <div class="col-md-9">
+                                            <div class="input-group">
+       <span class="input-group-addon"><label class="width">IFSC Code </label></span>  
+                                            <input type="text" id="IFSC"  value=" @Html.DisplayFor(modelItem => item.IFSC)" name="IFSC" class="form-control"/></div>
+                                            </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                          </div> 
+
+
+                   <div class="col-md-6">
+
+                       <div class="block">
+                           <div class="block-content">
+                               <h2><strong>@mr.planname Details</strong> </h2>
+
+                           </div>
+                           <div class="block-content controls">
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">@mr.planname Category</label></span>
+                                           <input type="radio" name="plantype" class="plantype" checked="checked" value="FI" id="FI" />Installment 
+                                          </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">@mr.planname Name </label>
+                                           </span>
+                                           <input id="PlanName" name="PlanName" type="text" class="form-control" required />
+
+                                           @* <select class="form-control" onclick="selectplan(this.id)" id="PlanName" name="plancode" required>
+                                            <option>Select </option>
+                                        </select>*@
+
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Term(Yr.) </label>
+                                           </span>
+                                           <input type="text" class="form-control" name="term" id="term" onclick="selectexpiry(this.id)" required />
+                                       </div>
+                                   </div>
+                               </div>
+
+
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">@mr.planname Mode </label>
+                                           </span>
+                                           <select class="form-control" id="mode" name="mode" onclick="selectduedate(this.id)" required>
+                                               <option value="">Select</option>
+                                               <option value="Monthly">Monthly</option>
+                                               <option value="Quarterly">Quarterly</option>
+                                               <option value="Halfyearly">Halfyearly</option>
+                                               <option value="Yearly">Yearly</option>
+                                           </select>
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Payment(Rs.) </label>
+                                           </span>
+                                           <input id="payment" name="payment"  type="text" class="form-control" required />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Advance Payment</label></span>
+                                           <input id="downpayment" name="downpayment" type="text" class="form-control" required />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Plot Size(Sq.Yd.)</label></span>
+                                           <input id="nolandunit" name="nolandunit" type="text" onclick="SetBookingAmount(this.id)" class="form-control" required />
+                                       </div>
+                                   </div>
+                               </div>
+
+                                <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Booking Amount</label></span>
+                                           <input id="bookingamount" name="bookingamount" onclick="SetAmountinword(this.id)" type="text" class="form-control" required />
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Total Consideration(Rs.) </label>
+                                           </span>
+                                           <input type="text" class="form-control" id="Totalamount" name="totalcon" required />
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Maturity Amount(Rs.)</label></span>
+                                           <input type="text" class="form-control" id="maturityamt" name="expectedraisablevalue" required />
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Expiry Date</label></span>
+                                           <input type="text" class="form-control" id="expirydate" name="expirydate" readonly="true" required />
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="block">
+                           <div class="block-content">
+                               <h2><strong>Nominee Details</strong> </h2>
+
+                           </div>
+                           <div class="block-content controls">
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Nominee Name </label>
+                                           </span>
+                                           <input type="text" id="nomineename" name="nomineename" value=" @Html.DisplayFor(modelItem => item.NomineeName)" class="form-control" />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Nominee Age </label>
+                                           </span>
+                                           <input type="text" id="nomage" name="nomage" value=" @Html.DisplayFor(modelItem => item.NomineeAge)" class="form-control"  />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Relationship </label>
+                                           </span>
+                                           <input type="text" class="form-control" id="nomrel" name="nomrel" value=" @Html.DisplayFor(modelItem => item.NomineeRel)"  />
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Nominee Address </label>
+                                           </span>
+                                           <input type="text" id="nomaddr" name="nomaddr" value=" @Html.DisplayFor(modelItem => item.Nomineeaddr)" class="form-control"  />
+                                       </div>
+                                   </div>
+                               </div>
+
+                           </div>
+                       </div>
+
+                       <div class="block">
+                           <div class="block-content">
+                               <h2><strong>Payment Details</strong> </h2>
+                           </div>
+                           <div class="block-content controls">
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Payment Mode </label>
+                                           </span>
+
+                                           <input type="radio" name="paymethod" value="Cash" checked>
+                                           Cash   
+                                             <input type="radio" name="paymethod" value="DD">
+                                           DD  
+                                          <input type="radio" name="paymethod" value="Cheque">
+                                           Cheque  
+
+
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Installment Due Date</label></span>
+                                           <input type="text" id="pdate" name="pdate" class="form-control " value="@dt" required />
+                                       </div>
+
+                                   </div>
+                               </div>
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Cheque/ DD No. </label>
+                                           </span>
+                                           <input type="text" id="checkorddno" name="checkorddno" class="form-control" />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Draw No. </label>
+                                           </span>
+                                           <input type="text" id="drawno" name="drawno" class="form-control" />
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Branch Payable At </label>
+                                           </span>
+                                           <input type="text" id="branchpay" name="branchpay" class="form-control" />
+                                       </div>
+                                   </div>
+                               </div>
+
+
+                               <div class="row-form">
+
+                                   <div class="col-md-9">
+                                       <div class="input-group">
+                                           <span class="input-group-addon">
+                                               <label class="width">Amount In Words </label>
+                                           </span>
+                                           <input type="text" name="amountword" class="form-control" id="amountinword" readonly="true" required />
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                   </div>
+
+                   <div class="col-md-6" style="width: 100%">
+                       <div class="block">
+                           <div class="block-content controls">
+                               <div style="margin-left: 46%;">
+                                   <div class="widget-info widget-from">
+                                       <button id="submit"  value="Submit" type="submit" name="command" class="btn btn-primary" onclick="return confirm('Are you sure to create @mr.custname?')">Submit</button>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+              
+          
+                       }
+
+                   }
+               }
+               
+ </div>
+          
+                    </div>
+    </div>
+                  
+          

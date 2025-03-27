@@ -1,0 +1,140 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AgentDetail>
+@using ODHDEVELOPERS.Models
+@{
+    ViewBag.Title = "RewardList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var a = 0;
+    var ranklist = db.Ranktabs.Where(d => d.RankCode <= 9).ToList();
+    var mr = db.Members.Single(d => d.Id == 1);
+    var sdate = Convert.ToDateTime(TempData["sdate"]);
+    var edate = Convert.ToDateTime(TempData["edate"]);    
+    
+    //var sdate = db.AwardTabs.Select(d => d.sdate).Distinct().FirstOrDefault();
+    //var edate = db.AwardTabs.Select(d => d.edate).Distinct().FirstOrDefault();
+    //var alist = db.AgentDetails.Where(u => u.Status == 1 && u.Doj <= edate && u.RankCode < 10).OrderByDescending(o => o.RankCode).ToList();
+    BackEnd bk = new BackEnd();
+
+    }
+
+
+<div class="page-content">
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">@mr.agentname Rewards List</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+        </div>
+        @using (Html.BeginForm())
+        {
+            <div class="row" id="hide">
+                <div class="col-md-6" style="width: 98%">
+
+                    <div class="block">
+
+                        <div class="block-content controls">
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Start Date</label></span>
+                                    <input type="date" id="sdate" class="form-control" required name="sdate" value="@TempData["sdate"]" />
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">End Date</label></span>
+                                    <input type="date" id="edate" class="form-control" required name="edate" value="@TempData["edate"]" />
+
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Designation</label></span>
+                                    <select name="RankCode" class="form-control">
+                                        @foreach (var i in ranklist)
+                                        {
+                                            <option value="@i.RankCode">@i.RankCode - @i.RankName</option>   
+                                                }
+                                    </select>
+                                </div>
+
+                            </div>
+                          <div class="row-form" style="width: 98%">
+                                <div class="col-md-9">
+                                    <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="widget stacked">
+            <div class="widget-content">
+                <div class="table-responsive">
+
+
+                    @if (Model.Count() >0)
+                    {
+                                                                     
+                        <table class="table table-striped table-bordered" style="color: #272424;">
+
+                            <thead>
+                                <tr>
+                                    <th class="text-center" colspan="3">@mr.agentname Reward List</th>
+                                    <th colspan="6" class="text-center">Duration @sdate.ToString("dd-MMM-yyyy") to @edate.ToString("dd-MMM-yyyy")</th>
+                                </tr>
+                                <tr>
+                                    <th>S.N.</th>
+                                    <th>@mr.agentname Id</th>
+                                    <th>@mr.agentname Name</th>
+                                    <th>@mr.rankname</th>
+                                    <th>Target Amount</th>
+                                    <th>Rewards</th>
+                                    <th>Salary</th>
+                                    <th>Business</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+                                    var rr = db.AwardTabs.Single(r => r.rankcode == item.RankCode);
+                                    var list = bk.AdvisorChainCollection(item.NewAgentId, sdate, edate);
+                                    var totalbusiness = list.Select(d => d.total).DefaultIfEmpty(0).Sum();
+                                    a++;
+                                    <tr>
+                                        <td>@a</td>
+                                        <td>@item.NewAgentId</td>
+                                        <td>@item.name</td>
+                                        <td>@item.RankCode -[@item.RankName]</td>
+                                        <td>@rr.targetamount</td>
+                                        <td>@rr.awardname</td>
+                                        <td>@rr.salary</td>
+                                        <td>@totalbusiness</td>
+                                        @if (totalbusiness >= rr.targetamount)
+                                        {										
+                                            <td><b class="text-success">Achieved</b></td>
+                                        }
+                                        else
+                                        {
+                                            <td><b class="text-danger">Not-Achieved</b></td>                                    
+                                        }
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

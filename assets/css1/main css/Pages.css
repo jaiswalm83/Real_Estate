@@ -1,0 +1,88 @@
+﻿.imageSize {
+    height: 64px;
+    width: 64px;
+}
+
+
+.card-heading {
+    border-radius: 10px;
+    background-color: #ff5722;
+    margin-top: -15px;
+}
+
+
+.create_logo_img {
+    height: 64px;
+    width: 64px;
+}
+.custom-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none;
+    color: inherit; /* Keeps the original text color */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .custom-card:hover {
+        transform: translateY(-5px); /* Lifts the card slightly */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-card .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+/* Updated Unique Styling for Section Headings */
+.section-heading {
+    margin: 20px auto; /* Reduced top margin, centered */
+    font-size: 14px; /* Smaller font size */
+    font-weight: 600; /* Bold text */
+    text-align: center;
+    font-family: 'Poppins', sans-serif; /* Stylish font */
+    color: white;
+    text-transform: uppercase; /* Make it all uppercase */
+    letter-spacing: 2px; /* Add spacing between letters */
+    padding: 10px;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #6a11cb, #2575fc); /* Gradient background */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Shadow for the background */
+    animation: fadeIn 1s ease-out; /* Fade-in animation */
+    width: 60%; /* Set width to 60% */
+}
+
+/* Animation for Heading */
+keyframes fadeIn {
+    from
+
+{
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+to {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+}
+
+/* Add styling for the section separators */
+.section {
+    padding: 34px 20px;
+    margin-bottom: 40px;
+    background-color: #f8f9fa; /* Light gray background */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 25px;
+}
+
+.card-title {
+    font-size: 14px;
+}
+/*.row{
+    margin:30px;
+}*/

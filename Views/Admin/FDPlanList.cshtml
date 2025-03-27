@@ -1,0 +1,106 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.FdList>
+@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "FDPlanList";
+    var a = 0;
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1); 
+    var row = db.Plans.Single(c => c.Plancode == 2);
+}
+
+
+<div class="page-content">
+      
+                <div class="container" id="divid">
+                  
+<div class="page-toolbar" >
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">@row.Planname List</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                               <div class="page-toolbar-block pull-right">
+                           
+                        </div>    
+                              
+<table border="1" style="margin-left:1%; margin-right:1%; margin-bottom:60px;width:98%;">
+   
+    @foreach(var item in Model){
+        if(a==0)
+        {
+  <tr>
+         <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:15%;text-align:center;">
+           <label id="newid"><b>@mr.planname Name</b></label>
+            </th>
+
+       <th style="width:15%;text-align:center;">
+           <label ><b>Term</b></label>
+            </th>
+           <th style="width:5%;text-align:center;">
+           <label ><b>Plot Size</b></label>
+            </th>
+    
+        <th style="width:20%;text-align:center;">
+           <label><b>Amount</b></label>
+        </th>
+            
+       
+         <th style="width:20%;text-align:center;">
+        <label id="email"><b>Maturity Amount</b></label>
+        </th>
+
+        
+    </tr>
+        }
+
+        a = a + 1;
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Planname)
+        </td>
+
+          <td> 
+              @Math.Round((item.Term),1)
+            
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.plotsize)
+        </td>
+        <td>
+
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.EstimatedValue)
+        </td>
+         
+       
+             
+    </tr>
+    } 
+
+</table>
+
+    @if (a > 0)
+    {
+        <a href="@Url.Action("PrintFdPlanReport")" target="_blank">Get Report In PDF</a>
+    }
+                    </div> 
+
+
+                   
+
+      
+                    </div>
+
+
+    </div>

@@ -1,0 +1,75 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Operators.Single(b => b.OperatorId == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "Createmenu";
+}
+
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+
+<!-- Section 1: Final Report -->
+<div class="section">
+
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2">CREATE</h3>
+    </div>
+    <!-- Main Container -->
+    <div class="container mt-5">
+        <!-- Payment Cards Row -->
+        <div class="row d-flex justify-content-center g-3">
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Operator/Member" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/commission (1).png" />
+                        <h6 class="card-title mt-3">Member</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Operator/NewAgent" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Payment_logo/commission (2).png" />
+                        <h6 class="card-title mt-3">@mr.agentname</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Operator/Bond" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Payment_logo/money.png" />
+                        <h6 class="card-title mt-3">@mr.custname</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Operator/AddExpense" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Payment_logo/money (1).png" />
+                        <h6 class="card-title mt-3">Add Expense</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Operator/PrintId" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Payment_logo/payment-method.png" />
+                        <h6 class="card-title mt-3">Id Card</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Operators.Single(b => b.OperatorId == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+ 
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "Voucher";
+}
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Welcome @br.OperatorId</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                      
+
+                    </div>
+
+                    <div class="widget stacked">
+					
+				<div class="widget-header">
+					<i class="icon-credit-card"></i>
+					<h3>Voucher</h3>
+				</div> <!-- /widget-header -->
+				
+				<div class="widget-content">
+					
+					<div class="shortcuts">
+                         
+                         @if (f1.status == 1)
+                            {
+						<a href="~/Operator/DCBrokerVoucher" class="shortcut">
+							<img alt="" src="~/Images/icon/42.png" />
+							<span class="shortcut-label">@f1.type</span>
+						</a>
+                         }
+                         @if (f2.status == 1)
+                            {
+                        <a href="~/Operator/CCBrokerVoucher" class="shortcut">
+							<img alt="" src="~/Images/icon/43.png" />
+							<span class="shortcut-label">@f2.type</span>
+						</a>
+                         }
+                         @if (f3.status == 1)
+                            {
+						<a href="~/Operator/BWBrokerVoucher" class="shortcut">
+								<img alt="" src="~/Images/icon/67.png" />
+							<span class="shortcut-label">@f3.type</span>	
+						</a>
+                         }
+					
+						
+                        
+					</div> <!-- /shortcuts -->	
+				
+				</div> <!-- /widget-content -->
+				
+			</div>
+                     </div>
+
+     </div>
+

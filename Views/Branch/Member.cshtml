@@ -1,0 +1,604 @@
+﻿@*@model ODHDEVELOPERS.Models.Member_tab
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Member";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+   
+    
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+        if (fd.status == 2)
+        {
+            dt = fd.formdate;
+        }
+
+    }
+   
+}*@
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+@*@if (fd.status == 0)
+{
+<script>
+    $(function () {
+        $('#Doj').datepick();
+
+    });
+</script>
+}*@
+
+
+@*
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#nomrel").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteRelations",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.relations, value: item.relations };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#chk').change(function () {
+            var adr = $("#Address").val();
+            if (this.checked == true) {
+                $("#Nomineeaddr").val(adr);
+            }
+            else if (this.checked == false) {
+                $("#Nomineeaddr").val('');
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#state").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteState",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.state, value: item.state };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+    })
+</script>
+<script>
+    function checkdistrict(check_id) {
+
+        $("#" + check_id).mouseout(function () {
+
+            var state = $("#state").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+        });
+
+    }
+</script>
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#date').datepick();
+        $('#Dob').datepick();
+    });
+</script>
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Member Form</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+
+
+        </div>
+
+        @using (Html.BeginForm())
+        {
+           
+            <div class="row">
+
+
+                <div class="col-md-6">
+
+                    <div class="block">
+                        <div class="block-content">
+                            <h2><strong>Personal Details</strong></h2>
+
+                        </div>
+                        <div class="block-content controls">
+
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">@mr.branchname Code </label>
+                                        </span>
+                                        <input type="text" class="form-control " id="BranchCode" value="@User.Identity.Name" name="BranchCode" readonly="true"/>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Form Fee</label></span>
+                                        <input type="text" class="form-control" id="formfee" required name="formfee" value="@tr.memberfee" readonly="true"/>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row-form hide">
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">No. of Share</label></span>
+                                        <input type="number" class="form-control" id="Share" required name="Share" value="0" />
+                                        <input type="hidden" class="form-control" id="Type" name="Type" value="Member" />
+                                        <input type="hidden" class="form-control" id="Status" name="Status" value="1" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Name</label></span>
+                                        <input type="text" class="form-control" id="name" required name="MemberName" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row-form">
+
+
+                                <div class="col-md-9">
+
+                                    <div style="float: left; width: 100%">
+
+                                        <div style="float: left; width: 40%; background-color: #eee">
+                                            <select class="form-control" name="Relationof">
+                                                <option>S/O</option>
+                                                <option>D/O</option>
+                                                <option>W/O</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div style="float: left; width: 60%;">
+                                            <input type="text" class="form-control" required name="Father" id="Father" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Mother's Name</label></span>
+                                        <input type="text" class="form-control" id="Mother" name="Mother" />
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="row-form">
+
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Mobile No</label></span>
+                                        <input type='tel' title="Invalid mobile format" pattern="[789][0-9]{9}" maxlength="10" name="Mobile" id="Mobile" required class="form-control" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Category</label>
+                                        </span>
+                                        <select class="form-control" id="category" name="category">
+                                            <option value="General">General</option>
+                                            <option value="OBC">OBC</option>
+                                            <option value="SC">SC</option>
+                                            <option value="ST">ST</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Nationality</label></span>
+                                        <input type="text" class="form-control" id="Nationality" name="Nationality" readonly="readonly" value="Indian" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Date Of Joining</label></span>
+                                        <input type="text" name="Cdate" id="Doj" value="@dt" readonly="true" required class="form-control date" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Date of Birth</label></span>
+                                        <input type="text" id="Dob" name="DOB" required class="form-control">
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Select Gender</label></span>
+                                        <select name="Gender" id="Gender" class="form-control" required>
+
+                                            <option selected>Male</option>
+                                            <option>Female</option>
+                                        </select>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br />
+                            <br />
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="block">
+                        <div class="block-content">
+                            <h2><strong>Bank Details</strong></h2>
+
+                        </div>
+                        <div class="block-content controls">
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">PAN No </label>
+                                        </span>
+                                        <input type="text" id="panno" name="panno" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Bank Name </label>
+                                        </span>
+                                        <input type="text" id="bankname" name="bankname" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Bank A/C No </label>
+                                        </span>
+                                        <input type="text" id="accountno" name="accountno" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">IFSC Code </label>
+                                        </span>
+                                        <input type="text" id="IFSC" name="IFSC" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="col-md-6">
+
+
+
+                    <div class="block">
+                        <div class="block-content">
+                            <h2><strong>Address Details</strong> </h2>
+
+                        </div>
+                        <div class="block-content controls">
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Address</label></span>
+                                        <input type="text" id="Address" name="Address" required class="form-control" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">State</label></span>
+                                        <input type="text" id="state" name="state" onmouseout="checkdistrict(this.id)" class="form-control" />
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">District</label></span>
+
+
+                                        <select class="form-control" id="District" name="District">
+                                            <option disabled="disabled">Select </option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Pin Code</label></span>
+                                        <input type="number" name="Pin" class="form-control" />
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="block">
+                        <div class="block-content">
+                            <h2><strong>Nominee Details</strong> </h2>
+
+                        </div>
+                        <div class="block-content controls">
+
+                            <div class="row-form">
+
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Nominee Name</label></span>
+                                        <input type="text" id="NomineeName" name="NomineeName" required class="form-control" />
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Nominee Age</label></span>
+                                        <input type="number" id="NomineeAge" name="NomineeAge" required class="form-control" />
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Relationship</label></span>
+                                        <input type="text" id="nomrel" name="NomineeRel" required class="form-control" />
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+                                    &nbsp;&nbsp;<input id="chk" type="checkbox" name="chk" />&nbsp;Same As Member
+                                </div>
+                            </div>
+
+
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Address</label></span>
+                                        <input type="text" id="Nomineeaddr" name="Nomineeaddr" required class="form-control" />
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="page-toolbar-block pull-right">
+                                <div class="widget-info widget-from">
+
+                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure to create Member?')">Submit</button>
+
+
+
+                                </div>
+                            </div>
+                            <p>@ViewBag.msg</p>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+            </div>
+        }
+
+    </div>
+</div>
+*@
+
+@{
+    Html.RenderPartial("PartialViews/_Member");
+      }

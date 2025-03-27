@@ -1,0 +1,160 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.NewPlan>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1); 
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "UpdateNewPlan";
+    var pagesize = (from r in db.NewPlans select r).Count();
+    var grid = new WebGrid(null,
+             defaultSort: "",
+             rowsPerPage: pagesize,
+             selectionFieldName: "SearchString",
+             ajaxUpdateContainerId: "agrid",
+             sortFieldName: "SortColumn",
+             sortDirectionFieldName: "SortOrder");
+    grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+    var a = 0;
+}
+
+<script type="text/javascript" >
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+
+            var Plancode = tr.find("#Plancode").html();
+            var planname = tr.find("#planname").val();
+            var Term = tr.find("#Term").val();
+            var mlyinstall = tr.find("#mlyinstall").val();
+            var qlyinstall = tr.find("#qlyinstall").val();
+            var hlyinstall = tr.find("#hlyinstall").val();
+            var ylyinstall = tr.find("#ylyinstall").val();
+            var revivaltime = tr.find("#revivaltime").val();
+            var bookingrate = tr.find("#bookingrate").val();
+           
+            tr.find("#lblplanname").text(planname);
+            tr.find("#lblTerm").text(Term);
+            tr.find("#lblmlyinstall").text(mlyinstall);
+            tr.find("#lblqlyinstall").text(qlyinstall);
+            tr.find("#lblhlyinstall").text(hlyinstall);
+            tr.find("#lblylyinstall").text(ylyinstall);
+            tr.find("#lblrevivaltime").text(revivaltime);
+            tr.find("#lblbookingrate").text(bookingrate);
+            
+            tr.find('.edit-mode, .display-mode').toggle();
+            var Plan =
+            {
+                "Plancode": Plancode,
+                "planname": planname,
+                "Term": Term,
+                "mlyinstall": mlyinstall,
+                "qlyinstall": qlyinstall,
+                "hlyinstall": hlyinstall,
+                "ylyinstall": ylyinstall,
+                "revivaltime": revivaltime,
+                "bookingrate": bookingrate
+               
+            };
+            $.ajax({
+                url: '/Admin/UpdateNewPlan/',
+                data: JSON.stringify(Plan),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+
+        });
+    })
+</script>  
+
+<style type="text/css">
+    .dd {
+        height:50px;
+        width:70%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+    .d {
+        height:50px;
+        width:30%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+
+</style>
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Edit @mr.planname Name</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div>           
+                        
+                    </div> 
+
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls">  
+                    
+                                   
+                 @if (a == 0)
+                 {  
+                     <div id="comm">
+                         
+                           <div  id="gridContent" style="padding:20px;" >  
+@grid.GetHtml(
+        tableStyle: "webgrid-table",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "webgrid-row-style",
+        mode: WebGridPagerModes.All,
+        columns:
+             grid.Columns(
+             grid.Column("Plan Code", format: @<text> <span  class="display-mode" style="width:20px;">@item.Plancode </span> <label id="Plancode" class="edit-mode" style="width:20px;">@item.Plancode</label> </text>, style: "col2Width"),
+             grid.Column("planname", "Plan Name", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblplanname">@item.planname</label> </span>  <input type="text" id="planname" value="@item.planname" class="edit-mode" style="width:100px;" /> </text>, style: "col2Width"),
+             grid.Column("Term", "Term", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblTerm">@item.Term</label> </span>  <input type="text" id="Term" value="@item.Term" class="edit-mode" style="width:20px;" /> </text>, style: "col2Width"),
+             grid.Column("mlyinstall", "Monthly", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblmlyinstall">@item.mlyinstall</label> </span>  <input type="text" id="mlyinstall" value="@item.mlyinstall" class="edit-mode" style="width:20px;" /> </text>, style: "col2Width"),
+             grid.Column("qlyinstall", "Quarterly", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblqlyinstall">@item.qlyinstall</label> </span>  <input type="text" id="qlyinstall" value="@item.qlyinstall" class="edit-mode" style="width:20px;" /> </text>, style: "col2Width"),
+             grid.Column("hlyinstall", "Half Yearly", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblhlyinstall">@item.hlyinstall</label> </span>  <input type="text" id="hlyinstall" value="@item.hlyinstall" class="edit-mode" style="width:20px;" /> </text>, style: "col2Width"),
+             grid.Column("ylyinstall", "Yearly", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblylyinstall">@item.ylyinstall</label> </span>  <input type="text" id="ylyinstall" value="@item.ylyinstall" class="edit-mode" style="width:20px;" /> </text>, style: "col2Width"),
+             grid.Column("revivaltime", "Revival Time(In Months)", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblrevivaltime">@item.revivaltime</label> </span>  <input type="text" id="revivaltime" value="@item.revivaltime" class="edit-mode" style="width:20px;" /> </text>, style: "col2Width"),
+             grid.Column("bookingrate", "Booking Rate", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblbookingrate">@item.bookingrate</label> </span>  <input type="text" id="bookingrate" value="@item.bookingrate" class="edit-mode" style="width:20px;" /> </text>, style: "col2Width"),
+             grid.Column("Action", format: @<text>  
+                                <button class="edit-user display-mode" >Edit</button>  
+                                <button class="save-user edit-mode"  >Save</button>  
+                                <button class="cancel-user edit-mode" >Cancel</button>  
+                            </text>, style: "col3Width", canSort: false)
+           ))  
+
+                                    
+                                </div>
+                                </div>
+                 }
+                                             
+                                    </div>
+                            </div>
+                                        
+                   </div> </div> </div>
+    </div>

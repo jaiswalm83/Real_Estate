@@ -1,0 +1,168 @@
+﻿
+@model IEnumerable<ODHDEVELOPERS.Models.Operator>
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "UpdateOperator";
+        var a = 0;
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#opid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteOpId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.OperatorName, value: item.OperatorId };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="container mt-5">
+        <div class="page-toolbar-block pull-right">
+            <div class="widget-info widget-from">
+                <div>
+                    <label>@DateTime.Now</label>
+                </div>
+            </div>
+        </div>
+        <h2 class="text-center mb-4 create-title">
+            Update Collection Point
+        </h2>
+        @using (Html.BeginForm("UpdateOperator", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div id="paymentForm" class="form-container">
+
+                <!-- Associate ID -->
+                <div class="form-group">
+                    <label for="associateId" class="form-label"> Enter Collection Point or Name:</label>
+                    <input type="text" class="form-control" name="opid" id="opid" placeholder="Enter Code" required>
+                </div>
+
+
+
+                <!-- Submit Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" id="btnsearch" name="command" class="btn create-btn" value="Search">Search</button>
+                </div>
+            </div>
+
+
+
+
+
+            foreach (var item in Model)
+            {
+                if (a == 0)
+                {
+
+
+    <h2 class="text-center mb-4 create-title" style="margin-top:3rem">
+        Collection Point Details
+    </h2>
+
+    <div id="paymentForm" class="form-container">
+        <!-- Associate ID -->
+        <div class="form-group">
+            <label for="associateId" class="form-label">Collection Point Id</label>
+            <input type="text" class="form-control" name="nopid" id="bnid" value="@Html.DisplayFor(modelItem => item.OperatorId)" readonly>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="associateId" class="form-label">Name</label>
+            <input type="text" class="form-control" name="opname" id="opname" value="@Html.DisplayFor(modelItem => item.OperatorName)" required>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="associateId" class="form-label">Address</label>
+            <input type="text" class="form-control" name="address" id="address" value="@Html.DisplayFor(modelItem => item.OperatorAddress)" required>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="associateId" class="form-label">E-Mail</label>
+            <input type="text" class="form-control" name="email" id="email" value="@Html.DisplayFor(modelItem => item.Operator_Mail)" required>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label for="associateId" class="form-label">Mobile</label>
+            <input type="text" class="form-control" name="mobile" id="mobile" value="@Html.DisplayFor(modelItem => item.OperatorMobile)" required>
+        </div>
+
+
+
+
+
+
+
+
+
+                                    
+                                            <button id="btnupdate" name="command" type="submit" class="btn create-btn" value="Update" formnovalidate="formnovalidate" style="margin-left:32rem">Update</button>
+
+                                     
+        </div>
+
+                        }
+                        }
+
+                        <p style="color:maroon;margin-left:15px;"><b> @ViewBag.msg</b></p>
+                        }
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

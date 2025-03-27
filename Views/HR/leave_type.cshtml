@@ -1,0 +1,60 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "leave_type";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var list = db.Ranktabs.ToList();
+}
+
+
+
+
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Leave Type</h2>
+    <form id="branchForm" class="border p-4 rounded shadow formtag" method="get" action="../HR/leave_type">
+
+
+        <div class="mb-3">
+            <span class="form-label formLabel"><label class="width">Designation</label></span>
+
+            <label for="year" class="form-label formLabel">Select Date </label>
+            <select id="Select1" class="form-control formInput" name="name">
+                <option value="">Select</option>
+                @foreach (var item in list)
+                {
+                    <option value="@item.RankName">@item.RankName</option>
+                }
+
+            </select>
+        </div>
+
+
+
+        <div class="mb-3">
+
+            <label class="form-label formLabel">No. of Leaves</label>
+
+            <input type="text" id="Introducer"  name="leavetype" class="form-control formInput" required>
+
+
+        </div>
+
+
+
+
+
+        <div class="text-center d-grid gap-2">
+
+            <button name="submitbtn" type="submit" class="btn btn-lg formButtom">Submit</button>
+        </div>
+
+
+
+
+    </form>
+
+
+</div>
+

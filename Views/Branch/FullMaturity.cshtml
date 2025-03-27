@@ -1,0 +1,158 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "FullMaturity";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+
+
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#BondId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteBondId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.newbondid, value: item.newbondid };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<script type="text/javascript">
+
+    ///checkin Renewel-Status Start here ////
+
+    function check(clicked_id) {
+        $("#" + clicked_id).click(function () {
+
+            var newbondid = $("#BondId").val();
+            var url = '@Url.Action("CheckMaturity","Branch")';
+            $.get(url, { newbondid: newbondid }, function data(t) {
+                for (i = 0; i < t.length; i++) {
+                    if (t[i].type == 1) {
+
+                        $("#rdmsg").hide();
+                        $("#pd").show();
+                        $("#rd").show();
+
+                        $("#lblname").text(t[i].name)
+                        $("#lblnewbondid").text(t[i].newbondid)
+                        $("#lblintid").text(t[i].newintroducerid)
+                        $("#lbltotalcoll").text(t[i].totalcon)
+                        $("#lblma").text(t[i].mamount)
+                        $("#newbondid").val(t[i].newbondid)
+                    }
+                    else if (t[i].type == 2) {
+                        $("#rd").hide();
+                        $("#pd").hide();
+                        $("#rdmsg").show();
+                        $("#lblbondid").text(t[i].newbondid)
+                        $("#lblmsg").text(t[i].msg)
+
+                    }
+                }
+            });
+
+        });
+
+    }
+
+
+
+</script>
+
+<div class="container mt-4 FormContainer">
+    <h2 class="text-center mb-4"> Pay Full Maturity</h2>
+    <div id="branchForm" class="border p-4 rounded shadow formtag">
+        @using (Html.BeginForm())
+        {
+            <!-- Project Year -->
+            <div class="mb-3">
+                <label for="year" class="form-label formLabel">@mr.custname Id or Name:</label>
+                <input type="text" class="form-control formInput" name="newbondid" id="BondId" placeholder="@mr.custname Id or Name" required>
+            </div>
+
+            <!-- Create Button -->
+
+            <div class="text-center d-grid gap-2">
+                <button type="button" class="btn btn-lg formButtom" onclick="check(this.id)" id="search">
+                    <i class="fa fa-search"></i> Search
+                </button>
+            </div>
+        }
+    </div>
+    <div class="bg-white">
+        <div class="mt-4" id="rdmsg" style="display:none;">
+            <div class="header-row"> @mr.custname Status</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th id="bid"><b>@mr.custname Id</b></th>
+                        <th id="msg"><b>Message</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><label id="lblbondid"></label></td>
+                        <td><label id="lblmsg"></label></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4" id="rd" style="display:none;">
+            <div class="header-row">@mr.custname-Detail</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th id="sn"><b>Name</b></th>
+                        <th id="cc"><b>@mr.custname Id</b></th>
+                        <th id="pp"><b>Introducer Id</b></th>
+                        <th id="iii"><b>Total Collection</b></th>
+                        <th id="dd"><b>Maturity Amount</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> <label id="lblname"></label></td>
+                        <td> <label id="lblnewbondid"></label></td>
+                        <td> <label id="lblintid"></label></td>
+                        <td> <label id="lbltotalcoll"></label></td>
+                        <td> <label id="lblma"></label></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="pd" class="text-center d-grid mt-3" style="display:none;">
+            @using (Html.BeginForm())
+            {
+                <input type="hidden" class="form-control" name="newbondid2" id="newbondid" />
+                <button id="submit" type="submit" class="btn btn-lg formButtom" onclick="return alert('Are you sure to Pay Maturity?')">
+                    Pay Maturity
+                </button>
+            }
+        </div>
+        <div style="float:left;">
+            <p style="color:maroon;"><b>@ViewBag.cpy</b></p>
+            @if (ViewBag.cpy == "Maturity Done Successfully..")
+            {
+                @Html.ActionLink("Print Maturity Form", "PrintMaturityForm", new { newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print Maturity Form?');", target = "_blank" })
+            }
+        </div>
+    </div>
+</div>
+
+
+

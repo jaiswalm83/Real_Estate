@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "getorderstatus";
+}
+
+@{
+    Layout = null;}
+<!DOCTYPE html>
+<html>
+
+  <head>
+ <!-- To make Layer checkout responsive on your checkout page.-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!--Please add either of the following script to your HTML depending up on your environment-->
+
+<!--For Sandbox-->
+      <link href="~/Content/Home/main.css" rel="stylesheet" />
+
+     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+     .table th, .table td{
+            border-top: 0px solid #dee2e6;
+                padding: 0.2rem;
+      }
+      .table thead th {
+    
+    border-bottom: 0px solid #dee2e6; 
+}
+.table{
+    color: #3f168d;
+    font-weight: bold;}
+.txtstyle{
+  width: 31%;
+  border: 2px solid #ced4da;
+  border-radius: 5px;
+}
+.middlediv{
+
+  background-color: #d61b1b;
+}
+@@media (min-width: 768px) {
+  .app-content {
+    margin-left:0px;
+  }
+} 
+.profile{
+      border-radius: 14px 14px 14px 14px;
+    height: 72px;
+    width: 82px;
+    background-color: #f6ada7;
+    margin-top: 3px;
+    border: 2px solid white;
+    margin-left: 5px;
+
+}
+.widget-small{
+  box-shadow: 8px 11px 4px rgba(0, 0, 0, 0.17);
+      border: 1px solid black;
+}
+
+    </style> 
+  </head>
+
+    <body>
+      <br>
+       <center> <table class="table" style="width:82%;">
+            <tbody>
+                <tr>
+                    <td>OrderId: </td>
+                    <td><input type="text" id="orderid" value=""/></td>
+                </tr>
+               
+                <tr>
+                    <td colspan="2"><button class="btn btn-success" onclick="funforcheckorder()">CHECK ORDER</button><br>
+</td>
+                </tr>
+            </tbody>
+        </table></center>
+
+
+</center>
+
+ <input id="accesskey" type="hidden" value="6fedbd40-9e5f-11ea-98f6-e3dae1fc82bd" />
+@* <input id="callback" type="hidden" value="https://sandbox-demo.open.money/callback" />*@
+        <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+
+        <script>
+            function funforcheckorder() {
+                debugger;
+                var orderid = $("#orderid").val();
+                var scope_timestamp = Math.round((new Date()).getTime() / 1000);
+                var secret = "52f9bf3fa7a225be49767fecae781ef6bb822995"; // Your API secret
+
+                var method = "GET";
+                //var data = '{"orders_id":"' + orderid + '"}';
+
+                //This order is important
+
+                var pre_hash_string = scope_timestamp + method;// + data;
+                // var oo=scope_timestamp+"GET";
+                // var pre_hash_string_ready2 = oo.replace(/\s/g,'');
+                //Removing space and newlines
+
+                var pre_hash_string_ready = pre_hash_string.replace(/\s/g, '');
+                //var sasasas=CryptoJS.HmacSHA256(pre_hash_string_ready2, secret);
+                var scope_hash = CryptoJS.HmacSHA256(pre_hash_string_ready, secret);
+                var ss = "Bearer 6fedbd40-9e5f-11ea-98f6-e3dae1fc82bd:" + scope_hash;
+                var formData = new FormData();
+                formData.append("orderid", orderid);
+                formData.append("shacode", ss);
+                formData.append("timestamp", scope_timestamp);
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GetorderbyICICI",
+                    contentType: "application/json; charset=utf-8",
+                    contentType: false,
+                    processData: false,
+                    dataType: "Json",
+                    data: formData,
+                    success: function (responsedata) {
+                        debugger;
+                        var _status = responsedata[0].status;
+                        if (parseInt(_status) == 1) {
+                           
+                        }
+
+                    },
+                    error: function (respnsedata) {
+                        //alert(data);
+                    }
+
+                });
+            }
+        </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+  </body>
+
+</html>

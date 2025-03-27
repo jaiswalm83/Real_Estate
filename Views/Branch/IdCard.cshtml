@@ -1,0 +1,57 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "IdCard";
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#agentid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4">Generate I Card</h2>
+    <div id="branchForm" class="border p-4 rounded shadow formtag">
+        @using (Html.BeginForm())
+        {
+            <!-- Project Year -->
+            <div class="mb-3">
+                <label for="year" class="form-label formLabel">Enter @mr.agentname Id:</label>
+                <input type="text" id="agentid" class="form-control formInput" required name="agentid">
+            </div>
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom" onclick="target='_blank'"><i class="fa fa-cog"></i>Submit</button>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+
+

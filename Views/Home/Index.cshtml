@@ -1,0 +1,592 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutNew1.cshtml";
+    UsersContext db = new UsersContext();
+    var comp = db.commission_tabs.Where(x => x.Id == 1).ToList();
+    var countachive = db.Acheviers.Where(x => x.status == 1).Count();
+    var ban_img = db.banner_tabs.Where(x => x.status == 1).ToList();
+}
+
+<!--===== HERO AREA STARTS =======-->
+<div class="hero-area-slider">
+    <div class="hero1-section-area">
+        <img src="~/assetshome/img/all-images/hero/hero-img1.png" alt="housebox" class="hero-img1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero-header-area text-center">
+                        <h5>Discover Your Ideal Property Today!</h5>
+                        <div class="space32"></div>
+                        <h1>Find Your Perfect Home</h1>
+                        <div class="space40"></div>
+                        <div class="btn-area1">
+                            <a href="contact.html" class="theme-btn1">
+                                Find Your Dream Home Now <span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                            <a href="projects.html" class="theme-btn2">
+                                View Listings<span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero1-section-area">
+        <img src="~/assetshome/img/all-images/hero/hero-img2.png" alt="housebox" class="hero-img1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero-header-area text-center">
+                        <h5>Discover Your Ideal Property Today!</h5>
+                        <div class="space32"></div>
+                        <h1>Find Your Dream Home</h1>
+                        <div class="space40"></div>
+                        <div class="btn-area1">
+                            <a href="projects.html" class="theme-btn1">
+                                Find Your Dream Home Now <span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                            <a href="projects.html" class="theme-btn2">
+                                View Listings<span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero1-section-area">
+        <img src="~/assetshome/img/all-images/hero/hero-img3.png" alt="housebox" class="hero-img1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero-header-area text-center">
+                        <h5>Discover Your Ideal Property Today!</h5>
+                        <div class="space32"></div>
+                        <h1>Find Your Luxury Home</h1>
+                        <div class="space40"></div>
+                        <div class="btn-area1">
+                            <a href="projects.html" class="theme-btn1">
+                                Find Your Dream Home Now <span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                            <a href="projects.html" class="theme-btn2">
+                                View Listings<span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="testimonial-arrows">
+    <div class="testimonial-prev-arrow">
+        <button><i class="fa-solid fa-angle-left"></i></button>
+    </div>
+    <div class="testimonial-next-arrow">
+        <button><i class="fa-solid fa-angle-right"></i></button>
+    </div>
+</div>
+<!--===== HERO AREA ENDS =======-->
+<!--===== OTHERS AREA STARTS =======-->
+<!--===== OTHERS AREA STARTS =======-->
+<!--===== PROJECT AREA STARTS =======-->
+<div class="project1-section-area sp2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="project-heading heading1 space-margin60 text-center">
+                    <h5>3 step to buy sell property</h5>
+                    <div class="space20"></div>
+                    <h2 class="text-anime-style-3">See How Realton Can Help</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-duration="800">
+                <div class="project-featured-box">
+                    <div class="img1">
+                        <img src="~/assetshome/img/all-images/project/project-img1.png" alt="housebox">
+                    </div>
+                    <div class="space40"></div>
+                    <div class="btn-area">
+                        <a href="projects.html">Buy A Property</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-duration="1000">
+                <div class="project-featured-box">
+                    <div class="img1">
+                        <img src="~/assetshome/img/all-images/project/project-img2.png" alt="housebox">
+                    </div>
+                    <div class="space40"></div>
+                    <div class="btn-area">
+                        <a href="projects.html">Sell A Property</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-duration="1200">
+                <div class="project-featured-box">
+                    <div class="img1">
+                        <img src="~/assetshome/img/all-images/project/project-img3.png" alt="housebox">
+                    </div>
+                    <div class="space40"></div>
+                    <div class="btn-area">
+                        <a href="projects.html">Rent A Property</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===== PROJECT AREA ENDS =======-->
+<!--===== ITEMS AREA STARTS =======-->
+<div class="items-section-area sp1" style="background-image: url(~/assetshome/img/all-images/bg/bg2.png); background-position: center; background-repeat: no-repeat; background-size: cover; background-attachment: fixed;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4">
+                <div class="item-header heading1">
+                    <h5 data-aos="fade-left" data-aos-duration="800">our best featured item</h5>
+                    <div class="space20"></div>
+                    <h2 class="text-anime-style-3">Our Featured Items</h2>
+                    <div class="space16"></div>
+                    <p data-aos="fade-left" data-aos-duration="900">At R.G.A, we’re redefining the way peoples find, sell, and invest the properties, our mission.</p>
+                    <div class="space28"></div>
+                    <div class="btn-area1" data-aos="fade-left" data-aos-duration="1000">
+                        <a href="projects.html" class="theme-btn1">
+                            See All Properties <span class="arrow1">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                    <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                </svg>
+                            </span><span class="arrow2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                    <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-4">
+                <div class="box-slider">
+                    <div class="item-featured-boxarea">
+                        <h5>
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM7 11.5L16 8L12.5 17.0021L11 13L7 11.5Z"></path>
+                                </svg>
+                            </span> Get the Best Property Plans
+                        </h5>
+                        <div class="space20"></div>
+                        <h2>Moon Light Villa</h2>
+                        <div class="space28"></div>
+                        <h3><s>$1.900,000</s>$1.800,000</h3>
+                        <div class="space28"></div>
+                        <div class="btn-area1">
+                            <a href="projects.html" class="theme-btn1">
+                                Schedule Visit <span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="item-featured-boxarea">
+                        <h5>
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM7 11.5L16 8L12.5 17.0021L11 13L7 11.5Z"></path>
+                                </svg>
+                            </span> 60002 Just Mead East Alfonso
+                        </h5>
+                        <div class="space20"></div>
+                        <h2>Moon Light Villa</h2>
+                        <div class="space28"></div>
+                        <h3><s>$1.900,000</s>$1.800,000</h3>
+                        <div class="space28"></div>
+                        <div class="btn-area1">
+                            <a href="projects.html" class="theme-btn1">
+                                Schedule Visit <span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="item-featured-boxarea">
+                        <h5>
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM7 11.5L16 8L12.5 17.0021L11 13L7 11.5Z"></path>
+                                </svg>
+                            </span> 60002 Just Mead East Alfonso
+                        </h5>
+                        <div class="space20"></div>
+                        <h2>Moon Light Villa</h2>
+                        <div class="space28"></div>
+                        <h3><s>$1.900,000</s>$1.800,000</h3>
+                        <div class="space28"></div>
+                        <div class="btn-area1">
+                            <a href="projects.html" class="theme-btn1">
+                                Schedule Visit <span class="arrow1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span><span class="arrow2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                        <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                <div class="testimonial-arrows">
+                    <div class="prev-arrow">
+                        <button><i class="fa-solid fa-angle-up"></i></button>
+                    </div>
+                    <div class="next-arrow">
+                        <button><i class="fa-solid fa-angle-down"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===== ITEMS AREA ENDS =======-->
+<!--===== PROPERTY-LOCATION AREA STARTS =======-->
+<div class="property-location-section-area sp1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 m-auto">
+                <div class="property-headeing heading1 space-margin60 text-center">
+                    <h5>property location</h5>
+                    <div class="space20"></div>
+                    <h2 class="text-anime-style-3">Explore Our Property </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12" data-aos="fade-up" data-aos-duration="1000">
+                <div class="property-single-slider owl-carousel">
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img1.png" alt="housebox">
+                        </div>
+                        <h3>32</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img2.png" alt="housebox">
+                        </div>
+                        <h3>12</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img3.png" alt="housebox">
+                        </div>
+                        <h3>15</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img4.png" alt="housebox">
+                        </div>
+                        <h3>40</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img5.png" alt="housebox">
+                        </div>
+                        <h3>19</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img1.png" alt="housebox">
+                        </div>
+                        <h3>32</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img2.png" alt="housebox">
+                        </div>
+                        <h3>12</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img3.png" alt="housebox">
+                        </div>
+                        <h3>15</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img4.png" alt="housebox">
+                        </div>
+                        <h3>40</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+
+                    <div class="propety-single-boxarea">
+                        <div class="img1 image-anime">
+                            <img src="~/assetshome/img/all-images/property_location/property-img5.png" alt="housebox">
+                        </div>
+                        <h3>19</h3>
+                        <a href="projects.html">Our Properties</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+<!--===== PROPERTY-LOCATION AREA ENDS =======-->
+<!--===== TESTIMONIAL AREA STARTS =======-->
+<div class="testimonial1-section-area sp1" style="background-image: url(/assetshome/img/all-images/bg/bg1.png); background-position: center; background-repeat: no-repeat; background-size: cover;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="testimonial-header space-margin60 heading1">
+                    <h5 data-aos="fade-left" data-aos-duration="800">feedback/testimonial</h5>
+                    <div class="space20"></div>
+                    <h2 class="text-anime-style-3">A Legacy Of Happy Clients</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="testimonialmain-slider">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5">
+                            <div class="images-area2 slider2">
+                                <div class="img1 image-anime">
+                                    <img src="~/assetshome/img/all-images/testimonial/testimonial-img1.png" alt="housebox">
+                                </div>
+                                <div class="img1 image-anime">
+                                    <img src="~/assetshome/img/all-images/testimonial/testimonial-img1-1.png" alt="housebox">
+                                </div>
+                                <div class="img1 image-anime">
+                                    <img src="~/assetshome/img/all-images/testimonial/testimonial-img1-2.png" alt="housebox">
+                                </div>
+                                <div class="img1 image-anime">
+                                    <img src="~/assetshome/img/all-images/testimonial/testimonial-img1-3.png" alt="housebox">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="testimonial-slider-area slider1">
+                                <div class="testimonial-box">
+                                    <img src="~/assetshome/img/icons/quoto-icon1.svg" alt="housebox">
+                                    <div class="space16"></div>
+                                    <p>"When I decided to sell my home, I was overwhelmed with where to start. R.G.A stepped in with a clear plan, professional marketing, constant communicate. Within two weeks, my house was sold above asking.”</p>
+                                    <div class="space32"></div>
+                                    <div class="test-images">
+                                        <div class="auhtor-area">
+                                            <div class="img1">
+                                                <img src="~/assetshome/img/all-images/testimonial/testimonial-img2.png" alt="housebox">
+                                            </div>
+                                            <div class="text">
+                                                <a href="#">Shakib Mahmud</a>
+                                                <div class="space10"></div>
+                                                <p>Happy Client</p>
+                                            </div>
+                                        </div>
+                                        <img src="~/assetshome/img/elements/brand1.png" alt="housebox" class="brand1">
+                                    </div>
+                                </div>
+                                <div class="testimonial-box">
+                                    <img src="~/assetshome/img/icons/quoto-icon1.svg" alt="housebox">
+                                    <div class="space16"></div>
+                                    <p>"Selling our home felt like a huge challenge until we found. Their team guided us every step of the way, from staging the property to negotiating offers. Within days, our home was sold for more than we expected."</p>
+                                    <div class="space32"></div>
+                                    <div class="test-images">
+                                        <div class="auhtor-area">
+                                            <div class="img1">
+                                                <img src="~/assetshome/img/all-images/testimonial/testimonial-img3.png" alt="housebox">
+                                            </div>
+                                            <div class="text">
+                                                <a href="#">Xavi Alonso</a>
+                                                <div class="space10"></div>
+                                                <p>Happy Client</p>
+                                            </div>
+                                        </div>
+                                        <img src="~/assetshome/img/elements/brand1.png" alt="housebox" class="brand1">
+                                    </div>
+                                </div>
+
+                                <div class="testimonial-box">
+                                    <img src="~/assetshome/img/icons/quoto-icon1.svg" alt="housebox">
+                                    <div class="space16"></div>
+                                    <p>"We were first-time buyers, and the process seemed daunting. made everything so simple and stress-free. They listened to our needs, showed us perfect options"</p>
+                                    <div class="space32"></div>
+                                    <div class="test-images">
+                                        <div class="auhtor-area">
+                                            <div class="img1">
+                                                <img src="~/assetshome/img/all-images/testimonial/testimonial-img4.png" alt="housebox">
+                                            </div>
+                                            <div class="text">
+                                                <a href="#">Granit Xhaka</a>
+                                                <div class="space10"></div>
+                                                <p>Happy Client</p>
+                                            </div>
+                                        </div>
+                                        <img src="~/assetshome/img/elements/brand1.png" alt="housebox" class="brand1">
+                                    </div>
+                                </div>
+
+                                <div class="testimonial-box">
+                                    <img src="~/assetshome/img/icons/quoto-icon1.svg" alt="housebox">
+                                    <div class="space16"></div>
+                                    <p>"I relocated for work and needed to sell my house quickly. R.G.A delivered! They handled everything smoothly, and I could focus on my move without worry. I highly recommend their services."</p>
+                                    <div class="space32"></div>
+                                    <div class="test-images">
+                                        <div class="auhtor-area">
+                                            <div class="img1">
+                                                <img src="~/assetshome/img/all-images/testimonial/testimonial-img5.png" alt="housebox">
+                                            </div>
+                                            <div class="text">
+                                                <a href="#">Alex Garcia</a>
+                                                <div class="space10"></div>
+                                                <p>Happy Client</p>
+                                            </div>
+                                        </div>
+                                        <img src="~/assetshome/img/elements/brand1.png" alt="housebox" class="brand1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="testimonial-arrows">
+                                <div class="prev-arrow">
+                                    <button><i class="fa-solid fa-angle-left"></i></button>
+                                </div>
+                                <div class="next-arrow">
+                                    <button><i class="fa-solid fa-angle-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===== TESTIMONIAL AREA ENDS =======-->
+<!--===== CTA AREA STARTS =======-->
+<div class="cta1-section-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="cta-bg-area" style="background-image: url(/assetshome/img/all-images/bg/background.png); background-position: center; background-repeat: no-repeat; background-size: cover;">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5">
+                            <div class="cta-header">
+                                <h2 class="text-anime-style-3">Step Into Your Dream Home with R.G.A</h2>
+                                <div class="space16"></div>
+                                <p data-aos="fade-left" data-aos-duration="1000">At R.G.A, we believe your next home is more than just a place – it’s where your future begins you’re buy.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-5" data-aos="zoom-in" data-aos-duration="1000">
+                            <div class="btn-area1 text-center">
+                                <a href="projects.html" class="theme-btn1">
+                                    Find Your Dream Home <span class="arrow1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                            <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                        </svg>
+                                    </span><span class="arrow2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                            <path d="M12 13H4V11H12V4L20 12L12 20V13Z"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===== CTA AREA ENDS =======-->

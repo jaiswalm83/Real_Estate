@@ -1,0 +1,204 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutNew1.cshtml";
+    UsersContext db = new UsersContext();
+    var comp = db.commission_tabs.Where(x => x.Id == 1).ToList();
+    var countachive = db.Acheviers.Where(x => x.status == 1).Count();
+    var ban_img = db.banner_tabs.Where(x => x.status == 1).ToList();
+}
+
+
+
+
+
+<div class="ttm-page-title-row">
+    <div class="ttm-page-title-row-inner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <div class="page-title-heading">
+                        <h2 class="title">Gallery</h2>
+                    </div>
+                    <div class="breadcrumb-wrapper">
+                        <div class="container">
+                            <div class="breadcrumb-wrapper-inner">
+                                <span>
+                                    <a title="" href="index-2.html" class="home"><i class="themifyicon ti-home"></i>&nbsp;&nbsp;Home</a>
+                                </span>
+                                <span class="ttm-bread-sep">&nbsp; / &nbsp;</span>
+                                <span>Gallery</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--site-main start-->
+<div class="site-main">
+
+    <!--grid-section-->
+    <section class="ttm-row grid-section clearfix">
+        <section class="portfolio-section" id="portfolio">
+            <div class="container">
+                <ul class="row portfolio-item ttm-list ttm-list-style-icon">
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/Screenshot_20230926-103748_2.png" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/Screenshot_20230926-103748_2.png">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/SALEMPUR%20BALAJI%20NAGAR.jpg" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/SALEMPUR%20BALAJI%20NAGAR.jpg">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/de52ee66-46dd-46dc-a02b-8877f87a7ec8.jpg" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/de52ee66-46dd-46dc-a02b-8877f87a7ec8.jpg">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/0e5936d2-4dd9-4392-a686-20465279681f.jpg" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/0e5936d2-4dd9-4392-a686-20465279681f.jpg">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/2641ac00-ef59-46c6-b5bc-ec19a1241df2.jpg" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/2641ac00-ef59-46c6-b5bc-ec19a1241df2.jpg">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/97286e24-9f34-4bae-811d-bc91d73921fe.jpg" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/97286e24-9f34-4bae-811d-bc91d73921fe.jpg">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/a69773fd-cd4b-4f7c-9a6a-754e30f856bb.jpg" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/a69773fd-cd4b-4f7c-9a6a-754e30f856bb.jpg">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mix dev col-xl-3 col-md-4 col-12 col-sm-6 pd">
+                        <img src="~/assets/axisarth/admin/images/4cf2a7e8-a8e6-4d4a-841f-c4d15830077c.jpg" itemprop="thumbnail" alt="Image description" />
+                        <div class="portfolio-overlay">
+                            <div class="overlay-content">
+                                <!--<p class="category">Project Name</p>
+                                <a href="#" title="View Project" target="_blank">
+                                  <div class="magnify-icon">
+                                    <p><span><i class="fa fa-link" aria-hidden="true"></i></span></p>
+                                  </div>
+                                </a>-->
+                                <a data-fancybox="item" title="click to zoom-in" href="admin/images/4cf2a7e8-a8e6-4d4a-841f-c4d15830077c.jpg">
+                                    <div class="magnify-icon">
+                                        <p style="text-align:center"><span><i class="fa fa-search" aria-hidden="true"></i></span></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+
+
+        </section>
+    </section><!--grid-section end-->
+
+
+
+</div><!--site-main end-->

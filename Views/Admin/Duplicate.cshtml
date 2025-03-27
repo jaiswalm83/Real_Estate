@@ -1,0 +1,148 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.CompanyInfos.Single(b => b.AdminId == User.Identity.Name);
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    logo = r.CompanyLogo;
+    companyname = r.CompanyName;
+    incometype = r.IncomeType;
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Duplicate";
+}
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+<!-- Section 1: Final Report -->
+<div class="section">
+   
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2"> Printing</h3>
+    </div>
+    <div class="row g-3">
+        <!-- Main Container -->
+        <div class="container mt-5">
+            <!-- First Row -->
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/AgentWelcomeLetter" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/agent (1).png" />
+                            <h6 class="card-title mt-3">Agent Welcome Letter</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/WelcomeLetter" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/writing.png" />
+                            <h6 class="card-title mt-3">@mr.custname Welcome Letter</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/DuplicateBond" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/client.png" />
+                            <h6 class="card-title mt-3">@mr.custname</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ChequeDuplicateReceipt" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/rating (1).png" />
+                            <h6 class="card-title mt-3">Pending @mr.custname</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/AllotmentLetter" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/money.png" />
+                            <h6 class="card-title mt-3">@mr.custname EMI Allotment Letter</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/agreementmodePART" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/income.png" />
+                            <h6 class="card-title mt-3">@mr.custname Part Payment Allotment Letter</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="row g-3 mt-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/PartAllotMentLetter" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/payment-method.png" />
+                            <h6 class="card-title mt-3">@mr.custname Full Payment Allotment Letter</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/PossessionReport" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/report.png" />
+                            <h6 class="card-title mt-3">Possession Report</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/DuplicateReceipt" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/receipt.png" />
+                            <h6 class="card-title mt-3">Renewal</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/ChequeDuplicateRenewalReceipt" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/receipt (1).png" />
+                            <h6 class="card-title mt-3">Pending Renewal</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/DupliSpotCommission" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/commission.png" />
+                            <h6 class="card-title mt-3">Spot Commission</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/agreementmodeEMI" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/business-aggrement.png" />
+                            <h6 class="card-title mt-3">Agreement to Sell Property (EMI)</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Third Row -->
+            <div class="row g-3 mt-3 d-flex justify-content-center">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/DealSheetReportbyuserid" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/images/logo/ProntingLogo/student-grades.png" />
+                            <h6 class="card-title mt-3">Deal Sheet Report</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>

@@ -1,0 +1,426 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.PlanTab>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var plan1 = db.Plans.Single(p2 => p2.Plancode == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "UpdateRDPlan";
+    var a = 0;
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#plancode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleterdplan",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Planname, value: item.Plancode };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('input[type="radio"]').change(function () {
+            var term = $('#Term').val();
+
+            var str = term.toString();
+            var numarray = str.split('.');
+            var a = new Array();
+            a = numarray;
+            var y = a[0];
+            var m = a[1];
+
+            if (term % 1 == 0) {
+
+                if ($(this).attr("id") == "Radio1") {
+
+                    document.getElementById("Radio2").checked = false;
+                    document.getElementById("Radio3").checked = false;
+                    document.getElementById("Radio4").checked = false;
+
+                    $('#Installments').val(y * 12);
+
+                }
+                else if ($(this).attr("id") == "Radio2") {
+
+                    document.getElementById("Radio1").checked = false;
+                    document.getElementById("Radio3").checked = false;
+                    document.getElementById("Radio4").checked = false;
+
+
+                    $('#Installments').val(y * 4);
+
+                }
+                else if ($(this).attr("id") == "Radio3") {
+                    document.getElementById("Radio1").checked = false;
+                    document.getElementById("Radio2").checked = false;
+                    document.getElementById("Radio4").checked = false;
+
+
+                    $('#Installments').val(y * 2);
+
+                }
+                else if ($(this).attr("id") == "Radio4") {
+
+                    document.getElementById("Radio1").checked = false;
+                    document.getElementById("Radio2").checked = false;
+                    document.getElementById("Radio3").checked = false;
+
+                    $('#Installments').val(term * 1);
+                }
+
+            }
+            else {
+
+
+                if ($(this).attr("id") == "Radio1") {
+
+                    document.getElementById("Radio2").checked = false;
+                    document.getElementById("Radio3").checked = false;
+                    document.getElementById("Radio4").checked = false;
+                    var n = (y * 12) + +m;
+                    $('#Installments').val(n);
+
+                }
+                else if ($(this).attr("id") == "Radio2") {
+
+                    document.getElementById("Radio1").checked = false;
+                    document.getElementById("Radio3").checked = false;
+                    document.getElementById("Radio4").checked = false;
+
+                    var r = m / 3;
+                    $('#Installments').val((y * 4) + r);
+
+                }
+                else if ($(this).attr("id") == "Radio3") {
+                    document.getElementById("Radio1").checked = false;
+                    document.getElementById("Radio2").checked = false;
+                    document.getElementById("Radio4").checked = false;
+
+                    var r2 = m / 6;
+                    $('#Installments').val((y * 2) + r2);
+
+                }
+                else if ($(this).attr("id") == "Radio4") {
+
+                    document.getElementById("Radio1").checked = false;
+                    document.getElementById("Radio2").checked = false;
+                    document.getElementById("Radio3").checked = false;
+
+                    $('#Installments').val(term * 1);
+                }
+            }
+
+        });
+    });
+
+
+</script>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#chk').change(function () {
+            $("#BonusPercent").prop("disabled", !$(this).is(':checked'));
+        });
+    });
+
+</script>
+
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Update @plan1.shortcutname Plan</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                              <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                <div >                                            
+                                <label>@DateTime.Now</label>
+                                </div>                            
+                            </div>
+                        </div> 
+                      </div>  
+                      @using (Html.BeginForm("UpdateRDPlan", "Admin", FormMethod.Post))
+                      {
+                       <div class="row" >
+                        <div class="col-md-6" style="width:100%;">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls">
+                                      
+                                    <div class="row-form">
+                                    <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                                   <span class="input-group-addon">Enter Plan Code or Name</span>
+                                   <input type="text" id="plancode" class="form-control" required name="plancode">
+                                    </div>  
+                                    </div>
+                                     
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                                          
+                               <button id="btnsearch" name="command" type="submit" class="btn btn-primary" value="Search">Search</button>                            
+                                
+                            </div>
+                        </div>  
+                                   </div>           
+                        
+                    </div>  
+                             </div>    </div>
+                          foreach (var item in Model)
+                          {
+                              if (a == 0)
+                              {
+                                  
+                                    <div class="row" >
+                                  <div class="col-md-6">
+                            
+                                     <div class="block" >
+                            <div class="block-content">
+                                    <h2><strong>Plan Details</strong> </h2>
+                                   
+                                </div>
+                                <div class="block-content controls">
+                                  
+                                    <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Plan Name</label>
+
+  </span>
+        <input type="text" class="form-control" name="Planname" id="Planname" value="@Html.DisplayFor(modelItem => item.Planname)" required></div>
+           
+         </div>                       
+    
+</div> 
+
+                                    <div class="row-form">
+                                         <div class="col-md-9">
+                                    <div class="input-group">
+                                   <span class="input-group-addon"><label class="width">Plan Code</label></span>
+                                   <input type="text" id="placode" class="form-control" required name="plancode2" value="@Html.DisplayFor(modelItem => item.Plancode)" readonly="true" />
+                                        </div>
+                                    </div>  
+                                    </div>
+         
+            <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Plan Term</label></span>
+        <input type="number" step="any" class="form-control" name="Term" id="Term" value="@Html.DisplayFor(modelItem => item.Term)" required></div>
+           </div>
+                               
+    
+</div> 
+
+                                    <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Current Mode</label></span>
+        <input id="cmode" name="cmode" class="form-control" value="@Html.DisplayFor(modelItem => item.mode)" readonly="true"/>
+           </div>
+                               
+    
+</div>
+         </div>
+            <div class="row-form">                      
+    <div class="col-md-9">
+        
+          <div class="input-group">
+  <span class="input-group-addon"><label class="width">Select Mode</label></span>
+
+      <div style="width:100%;float:left;">
+
+        
+
+      <div style="width:20%;float:left;">
+           <input id="Radio1" type="radio" name="mode" value="Monthly"/><label for="Radio1">Mly</label>
+           </div>
+      <div style="width:20%;float:left;">
+           <input id="Radio2" type="radio" name="mode" value="Quarterly" /><label for="Radio2">Qly</label>
+                       </div>
+      <div style="width:20%;float:left;">
+           <input id="Radio3" type="radio" name="mode" value="HalfYearly" /><label for="Radio3">Hly</label>
+           </div>
+      <div style="width:20%;float:left;">
+           <input id="Radio4" type="radio" name="mode" value="Yearly"/><label for="Radio4">Yly</label>
+       </div>
+
+
+
+    </div>
+           
+</div>
+
+    </div>
+           
+                                
+    
+</div> 
+         
+            <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">No Of Installment</label></span>
+        <input type="text" class="form-control"  name="Installments" id="Installments" value="@Html.DisplayFor(modelItem => item.Installments)" readonly="true" required></div>
+</div>
+</div>
+          <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Min. Amount</label></span>
+        <input type="text" class="form-control"  name="Minvalue" id="Minvalue" value="@Html.DisplayFor(modelItem => item.Minvalue)" required></div>
+           </div>
+                                           
+    
+</div> 
+         
+         
+             <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Max. Amount</label></span>
+        <input type="text" class="form-control" name="Maxvalue" id="Maxvalue" value="@Html.DisplayFor(modelItem => item.Maxvalue)" required></div>
+           
+                        </div>  
+    
+</div> 
+         
+         
+         
+             <div class="row-form">                      
+
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Divisible By</label></span>
+        <input type="text" class="form-control"  name="Multiple" id="Multiple" value="@Html.DisplayFor(modelItem => item.Multiple)" required></div>
+        </div>
+
+                   
+
+</div> 
+        
+         
+            <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Maturity(%)</label></span>
+        <input type="text" class="form-control"  name="MaturityPercent" id="MaturityPercent" value="@Html.DisplayFor(modelItem => item.MaturityPercent)" required></div>
+
+        </div>
+</div> 
+         
+          <div class="row-form">                      
+    <div class="col-md-9">
+
+            <div class="input-group">
+  <span class="input-group-addon"><label class="width">Select (%) Type</label></span>
+
+             <select required class="form-control" name="PercentType" id="PercentType">
+           @if(item.PercentType=="Simple")
+           {
+            <option selected>Simple</option>
+            <option>Compound</option>
+           }
+           else if (item.PercentType == "Compound")
+           {
+            <option>Simple</option>
+            <option selected>Compound</option>
+           }
+
+        </select>
+</div>
+
+    </div>
+</div> 
+         
+           <div class="row-form">                      
+    <div class="col-md-9">
+
+        <label>Do you want to add Bonus? Yes</label>
+
+        <input type="checkbox" id="chk" name="chk" />
+
+           
+
+
+    </div>
+</div> 
+         
+         
+               
+                          <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+  <span class="input-group-addon"><label class="width">Bonus Percent</label></span>
+        <input type="number" step="any" class="form-control" name="BonusPercent" id="BonusPercent" value="@Html.DisplayFor(modelItem => item.BonusPercent)" disabled="disabled"/>
+
+           </div>
+
+
+    </div>
+</div> 
+       
+                                       </div>
+                          
+                             
+                          
+                        
+                            
+         
+                          <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                <button id="btnupdate" name="command" type="submit" class="btn btn-primary" value="Update" formnovalidate="formnovalidate">Update</button> 
+        
+                                </div>
+                                             </div>
+   </div>
+                                         </div>
+                            
+                      
+                      
+                        </div>
+                          
+                                       
+                              }
+                          }
+                                   
+           <p style="color:maroon;margin-left:15px;"><b> @ViewBag.msg</b></p>     
+                               
+                           
+                         
+                      }
+              
+      
+                    
+          </div>
+                          </div>
+
+
+                    
+
+

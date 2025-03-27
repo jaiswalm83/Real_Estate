@@ -1,0 +1,157 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BlockTab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "UpdateBlock";
+        var pagesize = (from r in db.BlockTabs select r).Count();
+        var grid = new WebGrid(null,
+                 defaultSort: "",
+                 rowsPerPage: pagesize,
+                 selectionFieldName: "SearchString",
+                 ajaxUpdateContainerId: "agrid",
+                 sortFieldName: "SortColumn",
+                 sortDirectionFieldName: "SortOrder");
+        grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+        var a = 0;
+
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Hide edit-mode fields on page load
+            $('.edit-mode').hide();
+
+            // Edit button click - Show Save & Cancel, Hide Edit
+            $('.edit-user').on('click', function () {
+                var tr = $(this).closest('tr');
+
+                // Hide display-mode elements
+                tr.find('.display-mode').hide();
+
+                // Show input fields and Save/Cancel buttons
+                tr.find('.edit-mode').show();
+
+                // Hide Edit button and show Save/Cancel buttons
+                tr.find('.edit-user').hide();
+                tr.find('.save-user, .cancel-user').removeClass('d-none').show();
+            });
+
+            // Cancel button click - Revert changes & show Edit button
+            $('.cancel-user').on('click', function () {
+                var tr = $(this).closest('tr');
+
+                // Restore original values
+                tr.find("input[name='min']").val(tr.find(".lblmin").text().trim());
+                tr.find("input[name='max']").val(tr.find(".lblmax").text().trim());
+
+                // Show display-mode elements
+                tr.find('.display-mode').show();
+
+                // Hide input fields and Save/Cancel buttons
+                tr.find('.edit-mode').hide();
+                tr.find('.save-user, .cancel-user').addClass('d-none').hide();
+
+                // Show Edit button again
+                tr.find('.edit-user').show();
+            });
+
+            // Save button click - Update values & show Edit button
+            $('.save-user').on('click', function () {
+                var tr = $(this).closest('tr');
+
+                var Id = tr.find(".id-value").text().trim();
+                var min = tr.find("input[name='min']").val().trim();
+                var max = tr.find("input[name='max']").val().trim();
+
+                // Update labels with new values
+                tr.find(".lblmin").text(min);
+                tr.find(".lblmax").text(max);
+
+                // Show display-mode elements
+                tr.find('.display-mode').show();
+
+                // Hide input fields and Save/Cancel buttons
+                tr.find('.edit-mode').hide();
+                tr.find('.save-user, .cancel-user').addClass('d-none').hide();
+
+                // Show Edit button again
+                tr.find('.edit-user').show();
+
+                // Send AJAX request
+                var BlockTab = {
+                    "Id": Id,
+                    "min": min,
+                    "max": max
+                };
+
+                $.ajax({
+                    url: '/Admin/EditBlock/',
+                    data: JSON.stringify(BlockTab),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+
+
+
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Edit Block Limit</div>
+            @if (a == 0)
+            {
+                <div id="comm">
+                    <div id="gridContent">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Plan Name</th>
+                                    <th>Block Name</th>
+                                    <th>Min Value</th>
+                                    <th>Max Value</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="id-value">@item.Id</td>
+                                        <td>@item.Planname</td>
+                                        <td>@item.block</td>
+                                        <td>
+                                            <span class="display-mode lblmin">@item.min</span>
+                                            <input type="text" name="min" value="@item.min" class="edit-mode form-control">
+                                        </td>
+                                        <td>
+                                            <span class="display-mode lblmax">@item.max</span>
+                                            <input type="text" name="max" value="@item.max" class="edit-mode form-control">
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary edit-user">Edit</button>
+                                            <button class="btn btn-success save-user edit-mode d-none">Save</button>
+                                            <button class="btn btn-danger cancel-user edit-mode d-none">Cancel</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+

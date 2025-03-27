@@ -1,0 +1,255 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Branchtabs.Single(b => b.BranchCode == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "FieldReportsMenu";
+}
+
+<div class="container shado mt-5">
+    @*Heading*@
+
+    <div class="w-100  card-heading">
+        <h3 class="text-center  text-white pt-1 pb-1">Field Reports</h3>
+    </div>
+
+
+    @*Cards Section*@
+    <div class="row cardStyle g-3 justify-content-center">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerListReport" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/list.png" class="imageSize img-fluid" alt="Datewise Associate List" />
+                    <h6 class="card-title mt-1 mb-0 ">@mr.agentname List</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DatewiseBroker" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/filling-form.png" class="imageSize img-fluid" alt="Customer" />
+                    <h6 class="card-title mt-1 mb-0">Datewise @mr.agentname List</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerChain" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/chain.png" class="imageSize img-fluid" alt="Associate Chain" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Chain</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerPaymentDetail" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/invoice.png" class="imageSize img-fluid" alt="Associate Payment Details" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Payment Details</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/Selfbusiness" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/svg.png" class="imageSize img-fluid" alt="Associate Business Details" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Business Details</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerAccount" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/management.png" class="imageSize img-fluid" alt="Associate Account Details" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Account Details</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerwiseAccountDetail" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/management.png" class="imageSize img-fluid" alt="Associate Wise Account Details" />
+                    <h6 class="card-title mt-1 mb-0 ">Datewise @mr.agentname Account Details</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerSelfCollection" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/money (2).png" class="imageSize img-fluid" alt="Associate Self Collection" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Self Collection</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerChainCollection" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/finance.png" class="imageSize img-fluid" alt="Associate Chain Collectio" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Chain Collection</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerSelfDueCollection" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/money (1).png" class="imageSize img-fluid" alt="Associate Self Due Collection" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Self Due Collection</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BrokerChainDueCollection" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/finance.png" class="imageSize img-fluid" alt="Associate Chain Due Collection" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Chain Due Collection</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/Voucher" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/payment-method.png" class="imageSize img-fluid" alt="Associate Monthely Payment" />
+                    <h6 class="card-title mt-1 mb-0">@mr.agentname Monthly Payment</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/BDCReport" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/CreateLogo/bill.png" class="imageSize img-fluid" alt="TDS Report" />
+                    <h6 class="card-title mt-1 mb-0">TDS Report</h6>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Welcome @br.BranchName</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+
+
+        </div>
+
+        <div class="widget stacked">
+
+            <div class="widget-header">
+                <i class="icon-cog"></i>
+                <h3>Field Reports</h3>
+            </div>
+            <!-- /widget-header -->
+
+            <div class="widget-content">
+
+                <div class="shortcuts">
+                    <a href="~/Branch/BrokerListReport" class="shortcut">
+                        <img alt="" src="~/Images/icon/7.png" />
+                        <span class="shortcut-label">@mr.agentname List</span><br />
+                    </a>
+
+                    <a href="~/Branch/DatewiseBroker" class="shortcut">
+                        <img alt="" src="~/Images/icon/63.png" />
+                        <span class="shortcut-label">Datewise @mr.agentname List</span>
+                    </a>
+
+                    <a href="~/Branch/BrokerChain" class="shortcut">
+                        <img alt="" src="~/Images/icon/52.png" />
+                        <span class="shortcut-label">@mr.agentname Chain</span><br />
+                    </a>
+
+                    <a href="~/Branch/BrokerPaymentDetail" class="shortcut">
+                        <img alt="" src="~/Images/icon/20.png" />
+                        <span class="shortcut-label">@mr.agentname Payment Details</span>
+                    </a>
+                    <a href="~/Branch/Selfbusiness" class="shortcut">
+                        <img alt="" src="~/Images/icon/33.png" />
+                        <span class="shortcut-label">@mr.agentname Business Details</span>
+                    </a>
+                    <a href="~/Branch/BrokerAccount" class="shortcut">
+                        <img alt="" src="~/Images/icon/33.png" />
+                        <span class="shortcut-label">@mr.agentname Account Details</span>
+                    </a>
+
+                    @* <a href="~/Branch/AllSavingaccount" class="shortcut">
+                            <img alt="" src="~/Images/icon/icon_taxfree.png" />
+                            <span class="shortcut-label">Saving A/c List</span><br/>
+                        </a>
+
+                         <a href="~/Branch/DatewisesavingCollection" class="shortcut">
+                            <img alt="" src="~/Images/icon/icon_taxfree.png" />
+                            <span class="shortcut-label"> Datewise Saving A/c Collection</span>
+                        </a>*@
+
+                    <a href="~/Branch/BrokerwiseAccountDetail" class="shortcut">
+                        <img alt="" src="~/Images/icon/16.png" />
+                        <span class="shortcut-label">Datewise @mr.agentname Account Details</span>
+                    </a>
+
+                    <a href="~/Branch/BrokerSelfCollection" class="shortcut">
+                        <img alt="" src="~/Images/icon/11.png" />
+                        <span class="shortcut-label">@mr.agentname Self Collection</span>
+                    </a>
+                    @*<a href="~/Branch/QuotaCollection" class="shortcut">
+                                <img alt="" src="~/Images/icon/quota_icon.gif" />
+                                <span class="shortcut-label">@mr.agentname Quota Collection</span>
+                            </a>
+                        <a href="~/Branch/QuotaAchive" class="shortcut">
+                            <img alt="" src="~/Images/icon/quota_icon.gif" />
+                            <span class="shortcut-label">Quota Collection</span>
+                        </a>*@
+                    <a href="~/Branch/BrokerChainCollection" class="shortcut">
+                        <img alt="" src="~/Images/icon/37.png" />
+                        <span class="shortcut-label">@mr.agentname Chain Collection</span>
+                    </a>
+
+                    <a href="~/Branch/BrokerSelfDueCollection" class="shortcut">
+                        <img alt="" src="~/Images/icon/28.png" />
+                        <span class="shortcut-label">@mr.agentname Self Due Collection</span>
+                    </a>
+
+                    <a href="~/Branch/BrokerChainDueCollection" class="shortcut">
+                        <img alt="" src="~/Images/icon/52.png" />
+                        <span class="shortcut-label">@mr.agentname Chain Due Collection</span>
+                    </a>
+
+                    <a href="~/Branch/Voucher" class="shortcut">
+                        <img alt="" src="~/Images/icon/36.png" />
+                        <span class="shortcut-label">@mr.agentname Monthly Payment</span>
+                    </a>
+
+
+                    <a href="~/Branch/BDCReport" class="shortcut">
+                        <img alt="" src="~/Images/icon/54.png" />
+                        <span class="shortcut-label">TDS Report</span><br />
+                    </a>
+
+
+                </div>
+                <!-- /shortcuts -->
+
+            </div>
+            <!-- /widget-content -->
+
+        </div>
+    </div>
+
+</div>
+

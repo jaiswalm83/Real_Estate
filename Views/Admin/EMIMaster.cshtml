@@ -1,0 +1,186 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.RateTab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        //var plist = db.Plans.Where(a => a.status == 1).ToList();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "EMIMaster";
+        var pagesize = (from r in db.RateTabs select r).Count();
+        var grid = new WebGrid(null,
+                 defaultSort: "",
+                 rowsPerPage: pagesize,
+                 selectionFieldName: "SearchString",
+                 ajaxUpdateContainerId: "agrid",
+                 sortFieldName: "SortColumn",
+                 sortDirectionFieldName: "SortOrder");
+        grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+
+    }
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#projectid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompletenPlan",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.projectname, value: item.projectid };
+
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $('.edit-mode').hide();
+            $('.edit-user, .cancel-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+
+            $('.save-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+
+                var Id = tr.find("#lblId").html();
+                var projectid = $("#pcode").val();
+                var projectname = tr.find("#lblprojectname").html();
+                var term = tr.find("#term").val();
+                var plotcost = tr.find("#plotcost").val();
+                var quotaper = tr.find("#quotaper").val();
+
+                tr.find("#lblplotcost").text(plotcost);
+                tr.find("#lblquotaper").text(quotaper);
+
+                tr.find('.edit-mode, .display-mode').toggle();
+                var RateTab =
+                {
+                    "Id": Id,
+                    "term": term,
+                    "projectid": projectid,
+                    "projectname": projectname,
+                    "term": term,
+                    "plotcost": plotcost,
+                    "quotaper": quotaper
+
+                };
+                $.ajax({
+                    url: '/Admin/EditEMIMaster/',
+                    data: JSON.stringify(RateTab),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+
+            });
+        })
+    </script>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">EMI Master</h2>
+        @using (Html.BeginForm())
+        {
+
+            <div id="branchForm" class="form-container">
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Select @mr.planname Id or Name</label>
+                    <input type="text" class="form-control " name="projectid" id="projectid" placeholder="Enter Collection Point Name" required>
+                </div>
+
+
+
+
+
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn" id="search" onclick="showDiv()">Search</button>
+                </div>
+                <input type="hidden" id="pcode" value="@ViewData["projectid"]" />
+            </div>
+        }
+
+        @if (Convert.ToInt32(ViewData["count"]) > 0)
+        {
+            <div id="comm" style="margin-top:20px">
+                <div id="gridContent">
+                    <table class="webgrid-table">
+                        <thead>
+                            <tr>
+                                <th style="background-color:#ff5722">SN</th>
+                                <th style="background-color:#ff5722">@mr.planname Name</th>
+                                <th style="background-color:#ff5722">Year</th>
+                                <th style="background-color:#ff5722">Plot Cost</th>
+                                <th style="background-color:#ff5722">Plot Size (SqFt)</th>
+                                <th style="background-color:#ff5722">Quota (%)</th>
+                                <th style="background-color:#ff5722">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="display-mode">@item.Id</span>
+                                        <label id="lblId" class="edit-mode">@item.Id</label>
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">@item.projectname</span>
+                                        <label id="lblprojectname" class="edit-mode">@item.projectname</label>
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">@item.term</span>
+                                        <label id="lblterm" class="edit-mode">@item.term</label>
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">
+                                            <label id="lblplotcost">@item.plotcost</label>
+                                        </span>
+                                        <input type="text" id="plotcost" value="@item.plotcost" class="edit-mode" />
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">
+                                            <label id="lblplotsize">@item.plotsize</label>
+                                        </span>
+                                        <input type="text" id="plotsize" value="@item.plotsize" class="edit-mode" readonly="true" />
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">
+                                            <label id="lblquotaper">@item.quotaper</label>
+                                        </span>
+                                        <input type="text" id="quotaper" value="@item.quotaper" class="edit-mode" />
+                                    </td>
+                                    <td>
+                                        <button class="edit-user display-mode btn btn-primary">Edit</button>
+                                        <button class="save-user edit-mode btn btn-success">Save</button>
+                                        <button class="cancel-user edit-mode btn btn-danger">Cancel</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+
+    </div>

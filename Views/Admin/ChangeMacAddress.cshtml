@@ -1,0 +1,95 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.MacTab>
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "ChangeMacAddress";
+        var a = 0;
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    @*<div class="page-content">
+
+
+        <div class="container" id="divid">
+
+            <div class="page-toolbar">
+
+                <div class="page-toolbar-block">
+                    <div class="page-toolbar-title">Change Mac Address</div>
+                    <div class="page-toolbar-subtitle"> </div>
+                </div>
+
+
+            </div>*@
+
+
+            <div class="page-toolbar-block pull-right" style="margin-top:10px">
+                <div class="widget-info widget-from">
+                    <div>
+                        <label>@DateTime.Now</label>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+
+
+            <div class="index_body">
+                <div class="table-container">
+                    <div class="header-row">Change Mac Address</div>
+                    <table>
+
+                        @foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label id="sn"><b>S.N.</b></label>
+                                        </th>
+                                        <th>
+                                            <label id="UserID"><b>User ID</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="Type"><b>Type</b></label>
+
+
+                                        <th>
+                                            <label id="Action"><b>Action</b></label>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                            }
+
+                            a = a + 1;
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.userid)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.type)
+                                    </td>
+
+                                    <td>
+
+                                        @Html.ActionLink("Reset", "ChangeMacAddress", new { userid = item.userid }, new { onclick = "return confirm('Are you sure to Reset Macaddress for this?');" })
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+
+                </div>
+
+
+            </div>
+      

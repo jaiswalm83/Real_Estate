@@ -1,0 +1,104 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    var logo=string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    UsersContext db=new UsersContext();
+    var r = db.CompanyInfos.Single(ci => ci.Id == 1);
+  
+ }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@r.CompanyName-Operator Panel</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="~/Content/css/operatorstyle.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/css/styles.css" rel="stylesheet" type="text/css" id="theme" />
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <!--[if lt IE 10]><link rel="stylesheet" type="text/css" href="~/Content/css/ie.css"/><![endif]-->
+
+    <!--Menu Content Start-->
+    <link href="~/Content/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="~/Content/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="~/Content/css/ui-lightness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet">
+
+    <link href="~/Content/css/base-admin-3.css" rel="stylesheet">
+    <link href="~/Content/css/base-admin-3-responsive.css" rel="stylesheet">
+    <link href="~/Content/css/pages/dashboard.css" rel="stylesheet">
+
+    <link href="~/Content/css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+    <!--Menu Content End-->
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/fancybox/jquery.fancybox.pack.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/d3.v3.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/rickshaw.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/flot/jquery.flot.js"></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/excanvas.min.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.stack.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.pie.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.resize.js'></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/knob/jquery.knob.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-europe-mill-en.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/demo.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/maps.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/charts.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/actions.js"></script>
+    <link rel="stylesheet" href="~/Content/Operatorwidth.css" />
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+   
+</head>
+<body>
+    <div class="page-container">
+
+        <header>
+            <div class="page-head">
+                <ul class="page-head-elements">
+                     <li>
+                        <a href="#" class="dropdown" style="font-size: 30px; margin-left: -10px;">@companyname<span></span></a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+            <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+         
+        </div>
+        <!--=== Footer ===-->
+        <footer>
+        </footer>
+    </div>
+
+
+</body>
+</html>

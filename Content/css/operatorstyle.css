@@ -1,0 +1,115 @@
+﻿body {
+}
+.divstyle {
+    margin:30px;
+
+}
+
+
+
+body {
+}
+.left {
+
+    float:left;
+    width:45%;
+    text-align:right;
+    height:50px;
+
+}
+
+
+.lefttxt {
+    width:600px;
+    height:60px;
+}
+
+
+.leftadd {
+    width:600px;
+    height:70px;
+}
+
+.leftdiv2 {
+width:527px;
+height:60px;
+float:left;
+text-align:left;
+}
+
+
+.leftdiv1 {
+width:75px;
+height:60px;
+float:left;
+
+}
+
+.right {
+
+   float:right;
+    width:45%;
+    text-align:center;
+    height:50px;
+}
+
+
+.main {
+    height:800px;
+    background-color:white;
+    margin-left:15px;
+   
+}
+
+.main1 {
+    height:400px;
+    background-color:white;
+    text-align:center;
+   
+}
+
+.maindistri {
+    height:650px;
+    background-color:white;
+    text-align:center;
+    margin-left:100px;
+}
+
+
+.textarearight {
+   
+     float:right;
+    width:49%;
+    text-align:left;
+    height:50px;
+}
+
+.textarealeft {
+   
+    float:left;
+    width:45%;
+    text-align:right;
+    height:50px;
+}
+
+
+.new {
+    float:left;
+    width:10%;
+    text-align:center;
+    height:20px;
+     
+}
+
+.mainupdate {
+
+     height:350px;
+    background-color:white;
+    text-align:center;
+    margin-left:100px;
+}
+
+
+
+
+	

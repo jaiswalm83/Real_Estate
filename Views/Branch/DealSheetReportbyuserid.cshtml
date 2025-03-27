@@ -1,0 +1,60 @@
+﻿@using ODHDEVELOPERS.Models;
+@using System;
+@{
+    ViewBag.Title = "AgentWelcomeLetter";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+}
+
+<script>
+    $(function () {
+        $('[name=Userid]').autocomplete({
+            source: function (request, response) {
+                debugger;
+                $.ajax({
+                    url: "/Branch/DealSheetReportbyuserid",
+                    type: "Get",
+                    datatype: "JSON",
+                    data: { Userid: request.term, Recogniser: "Print" },
+                    success: function (data) {
+                        debugger;
+                        response($.map(data, function (item) {
+                            return { value: item.userid, label: item.customername }
+                        }));
+                    }
+                });
+            }
+        });
+
+        $("#btn").on("click", function (e) {
+
+            // window.open("");
+
+        });
+
+    });
+
+</script>
+
+
+<div class="container mt-5 FormContainer">
+    <h2 class="text-center mb-4"> Deal Sheet Report</h2>
+    <form action="/Branch/DealSheetReportbyuserid" method="post" target="_blank" class="border p-4 rounded shadow formtag">
+
+        <!-- Project Year -->
+        <div class="mb-3">
+            <label for="year" class="form-label formLabel"> Deal Sheet:</label>
+            <input type="text" name="Userid" placeholder="Enter the Deal Id " class="form-control formInput" id="projectyear" required/>
+        </div>
+
+        <!-- Create Button -->
+        <div class="text-center d-grid gap-2">
+            <button id="btn" type="submit" class="btn btn-lg formButtom" style="margin-top: 0px;">Print Deal Sheet</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+

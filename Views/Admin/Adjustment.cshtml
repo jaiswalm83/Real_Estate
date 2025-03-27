@@ -1,0 +1,60 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+    
+    logo = r.CompanyLogo;
+    companyname = r.CompanyName;
+    incometype = r.IncomeType;
+    
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Adjustment";
+}
+
+
+<div class="page-content">
+      
+                <div class="container" style="width:775px; padding-left:0px;padding-right:0px;">
+                  
+<div class="page-toolbar" style="width:770px;">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title"></div>
+                            <h4><b>Welcome, @r.CompanyName</b></h4>
+                        </div>
+                               <div style="margin-top:0px;float:right;margin-right:10px;">
+                            
+                        </div>    
+                      
+                    </div> 
+
+                     <div class="widget stacked">
+					
+				<div class="widget-header">
+					<i class="icon-print"></i>
+					<h3>Adjustment</h3>
+				</div> <!-- /widget-header -->
+				
+				<div class="widget-content">
+					
+					<div class="shortcuts">
+						<a href="~/Admin/DeleteCommission" class="shortcut">
+							<img alt="" src="~/Images/icon/comm.jpg" />
+							<span class="shortcut-label">Pre-Fill @mr.custname</span>
+						</a>
+						
+						    
+						
+					</div> <!-- /shortcuts -->	
+				
+				</div> <!-- /widget-content -->
+				
+			</div>
+                    </div> <!-- /widget-content -->
+				
+			</div>
+

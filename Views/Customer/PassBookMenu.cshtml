@@ -1,0 +1,74 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+  
+  
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewBag.Title = "PassBookMenu";
+}
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Welcome @User.Identity.Name</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                      
+
+                    </div>
+
+                    <div class="widget stacked">
+					
+				<div class="widget-header">
+					<i class="icon-credit-card"></i>
+					<h3>Print Passbook</h3>
+				</div> <!-- /widget-header -->
+				
+				<div class="widget-content">
+					
+					<div class="shortcuts">
+                          <a href="~/Customer/PrintPassBookDetail" class="shortcut">
+							<img alt="" src="~/Images/icon/26.png" />
+							<span class="shortcut-label">Print RD Detail<br /></span>
+                            <br />
+						</a>
+                        <a href="~/Customer/PrintSavingPassBookDetail" class="shortcut">
+							<img alt="" src="~/Images/icon/26.png" />
+							<span class="shortcut-label">Print Saving Detail</span>
+                           <br />
+						</a>
+                        <a href="~/Customer/PrintPassBookColumn" class="shortcut">
+							<img alt="" src="~/Images/icon/26.png" />
+							<span class="shortcut-label">Print Column<br /></span>
+                            <br />
+						</a>
+                        
+					<a href="~/Customer/PrintPassBook" class="shortcut">
+							<img alt="" src="~/Images/icon/26.png" />
+							<span class="shortcut-label">Print RD Transaction</span>
+                          
+						</a>
+
+                        <a href="~/Customer/SavingTransiction" class="shortcut">
+							<img alt="" src="~/Images/icon/26.png" />
+							<span class="shortcut-label">Print Saving Transaction</span>
+                          
+						</a>
+						
+                        
+					</div> <!-- /shortcuts -->	
+				
+				</div> <!-- /widget-content -->
+				
+			</div>
+                     </div>
+
+     </div>
+
+

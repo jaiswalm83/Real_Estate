@@ -1,0 +1,85 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "View Jobs";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var srno = 1;
+
+    var jobList = db.careertable1s.ToList();
+}
+
+<div class="page-content">
+   
+
+    <!-- Display Results -->
+    <div class="container mt-4 FormContainer">
+        <h2 class="text-center mb-4">View Jobs</h2>
+
+        <div class="index_body mt-5">
+            <div class="table-container">
+                <div class="header-row" style="">Total Holiday Leave</div>
+
+                <table class="table table-bordered" style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+                    <thead>
+                        <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                            <th style="width: 5%; text-align: center; padding: 8px;">Sr.No.</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Job ID</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Job Type</th>
+                            <th style="width: 15%; text-align: center; padding: 8px;">Job Description</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Experience</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Industry</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Role</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Functional Area</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Salary</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Title</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Job Location</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">City</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Company E-mail</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Publish Date</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">From Date</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">To Date</th>
+                            <th style="width: 10%; text-align: center; padding: 8px;">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (jobList.Count != 0)
+                        {
+                            foreach (var item in jobList)
+                            {
+                                <tr>
+                                    <td style="padding: 8px;">@srno</td>
+                                    <td style="padding: 8px;">@item.jobid</td>
+                                    <td style="padding: 8px;">@item.jobtype</td>
+                                    <td style="padding: 8px;">@item.jobdiscription</td>
+                                    <td style="padding: 8px;">@item.experience</td>
+                                    <td style="padding: 8px;">@item.industry</td>
+                                    <td style="padding: 8px;">@item.role</td>
+                                    <td style="padding: 8px;">@item.functionalarea</td>
+                                    <td style="padding: 8px;">@item.salary</td>
+                                    <td style="padding: 8px;">@item.Title</td>
+                                    <td style="padding: 8px;">@item.joblocationstate</td>
+                                    <td style="padding: 8px;">@item.city</td>
+                                    <td style="padding: 8px;">@item.companyemail</td>
+                                    <td style="padding: 8px;">@item.publisdate.ToString("dd/MM/yyyy")</td>
+                                    <td style="padding: 8px;">@item.Fromdate.ToString("dd/MM/yyyy")</td>
+                                    <td style="padding: 8px;">@item.Todate.ToString("dd/MM/yyyy")</td>
+                                    <td style="color:@(item.status == 0 ? "red" : "green");">
+                                        @(item.status == 0 ? "Inactive" : "Active")
+                                    </td>
+                                </tr>
+                                srno++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="17" style="text-align: center; padding: 8px;">No records found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

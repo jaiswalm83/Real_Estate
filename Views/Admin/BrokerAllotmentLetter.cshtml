@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "BrokerAllotmentLetter";
+    
+}
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "AllotMentLetter";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+}
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#brokerid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+                    }
+                })
+            }
+        });
+    })
+</script>
+
+
+@using(Html.BeginForm())
+{
+    <div class="page-content">
+        <div class="container">
+            <div class="page-toolbar">
+                <div class="page-toolbar-block">
+                    <div class="page-toolbar-title">@mr.agentname Welcome Letter</div>
+                    <div class="page-toolbar-subtitle"></div>
+                </div>
+                <div class="page-toolbar-block pull-right">
+                </div>
+            </div>
+            <div class="row" style="width: 100%">
+                <div class="col-md-6" style="width: 100%">
+                    <div class="block" style="width: 100%">
+                        <div class="block-content controls">
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-addon">@mr.agentname Name/@mr.agentname Id :</span>
+                                        <input type="text" class="form-control" id="newbond" name="newbondid" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page-toolbar-block pull-right">
+                                <div class="widget-info widget-from">
+                                    <button type="submit" class="btn btn-primary" onclick="target='_blank'"><i class="fa fa-cog"></i> Get Welcome Letter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Referral ID</th><td></td>
+                <th>Date of Joining</th><td></td>
+
+            </tr>
+            <tr>
+                <th>Sponser ID</th><td></td>
+                <th>Sponser ID</th><td></td>
+
+            </tr>
+            <tr><th>User ID</th><td></td>
+                <th>User ID</th><td></td>
+
+            </tr>
+            <tr>
+                <th>Name</th><td></td>
+                <th>Designation</th><td></td>
+
+            </tr>
+            <tr>
+                <th>Father/Husband Name</th><td></td>
+                <th>Password</th><td></td>
+
+            </tr>
+            <tr>
+                <th>Address</th><td></td>
+                <th>Date Of Birth</th><td></td>
+
+            </tr>
+            <tr>
+                <th>City</th><td></td>
+                <th>Pin code</th><td></td>
+
+            </tr>
+            <tr>
+                <th>State</th><td></td>
+                <th>Mobile No.</th><td></td>
+
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <p>
+            Dear DEEPANKAR KUSHWAHA,
+We welcome you from the bottom of our heart to the  "ODH Developers Private Limited" and Congratulations  for becoming a part of ODH family.
+"ODH Developers Private Limited" has taken a great leap to give you all complete solutions to home, health, wealth and freedom from a single platform.
+Our aim is to provide people with a home of their dream at a reasonable cost. Our research team studied Indian market in great depth so that people of rural and urban areas can get access to the world's best investment in real estate where they can get good profits by investing in the future. We are committed in improving the standards of living in India and promoting inter culture influences to try and make this country a better place to live in.
+"ODH Developers Private Limited"  aims to fulfill every Indian's dreams for a luxuries home. We can convert our dream into reality by "ODH Developers Private Limited". It is  one of the best real estate  company, where you can make a good profit by investing your money . bring this amazing opportunity to you and invite one and all to the wonderful family of "ODH Developers Private Limited" to join the breathtaking journey forthwith.
+ODH DEVELOPERS PRIVATE LIMITED appreciates your valuable contribution for promoting inspiring project and our unique Business Opportunity leading people to realize their true potential and achieve success in life.
+We are thankful to all our Business Associates for their overwhelming response. We assure you that the confidence, which you all have invested in us will go a long way in consolidating our position as an innovative and entrepreneurial company in India.
+We look forward to creating a long-term mutually beneficial working relationship with each other.
+Assuring you of our full co-operation in making this tie up a success for both of us and wishing you peace, prosperity and success ahead in life.
+We value your relationship with us and assure you of our best services always.
+
+We wish you all the best.For "ODH Developers Private Limited"
+
+Authorized Signatory
+
+        </p>
+    </div>
+</div>

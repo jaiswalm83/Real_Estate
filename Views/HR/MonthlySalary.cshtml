@@ -1,0 +1,228 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Salary_em>
+@{
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+    ViewBag.Title = "MonthlySalary";
+    var a = 0;
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#month").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/HR/AutoCompleteSalaryMonth",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.month, value: item.month };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+
+</script>
+
+
+
+
+
+
+<script src="~/Scripts/print.js" type="text/javascript"></script>
+<div class="page-content">
+      <div>
+                    <input type="button" style="margin-left:10px;margin-top:10px;margin-bottom:10px;" name="btnprint" value="Print" onclick="PrintMe('divid')"/></div>
+                <div class="container" >
+                  
+<div class="page-toolbar" >
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Employee List</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                               <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                <div >                                            
+                                <label> @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</label>
+                                </div>                            
+                            </div>
+                        </div>   
+    
+    
+     @using (Html.BeginForm())
+  {
+
+                       <div class="row" >
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+
+
+                                    <div class="row-form"  >
+                                    
+                                  <div class="col-md-9">
+
+
+                                       <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Salary Month</label></span>
+                                             <input type="text"  required id="month" name="month"  class="form-control" >
+                                                </div>
+                                    
+                                
+                                      </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                               
+                                  
+
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                                          
+                                <button name="submitbtn" type="submit" class="btn btn-primary"> View</button>                            
+                               
+                            </div>
+                        </div>
+                                             
+                                    
+                                      <p>@ViewBag.msg</p> 
+                                </div>
+                                
+                            </div>
+                        
+                        
+  }
+    
+    
+    @if (Convert.ToInt32(ViewData["count"])>0)
+    {
+        
+    <div id="divid">  
+     <div style="background-color:#61708f;color:white; font-size:large;text-align:center"><b>&nbsp;Employee Salary List</b> </div><br/><br/>                                               
+ 
+     
+                              
+<table border="1" style="margin-left:1%; margin-right:1%; margin-bottom:30px; width:98%">
+   
+    @foreach (var item in Model)
+    {
+        if (a == 0)
+        {
+  <tr>
+        <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="EmployeeId"><b>Employee Id</b></label>
+            </th>
+        
+        <th style="width:10%;text-align:center;">
+           <label id="EmployeeName"><b>Name</b></label>
+        </th>
+            
+        <th style="width:10%;text-align:center;">
+           <label id="BranchCode"><b>Designation</b></label>
+        </th>
+      <th style="width:10%;text-align:center;">
+           <label id="Department"><b>Department</b></label>
+            </th>
+        
+        <th style="width:10%;text-align:center;">
+           <label id="Designation"><b>Basic Salary</b></label>
+        </th>
+            
+        <th style="width:5%;text-align:center;">
+           <label id="bs"><b>Net Salary</b></label>
+        </th>
+            
+      
+
+
+      
+
+      <th style="width:10%;text-align:center;">
+           <label ><b>Date</b></label>
+        </th>
+
+
+      
+
+      <th style="width:10%;text-align:center;">
+           <label ><b>Month</b></label>
+        </th>
+      <th style="width:10%;text-align:center;">
+           <label ><b>Year</b></label>
+        </th>
+    </tr>
+        }
+
+        a = a + 1;
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.empid)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.designation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.department)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.basicsalary)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.netsalary)
+        </td>
+       
+     
+        <td>
+            @Convert.ToDateTime(item.date).ToString("dd/MM/yyyy")
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.month)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.year)
+        </td>
+
+    </tr>
+    } 
+
+</table>
+        </div>
+    }
+                    </div> 
+
+
+                   
+
+      
+                    </div>
+
+
+    </div>
+
+

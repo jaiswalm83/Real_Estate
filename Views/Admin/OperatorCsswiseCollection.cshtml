@@ -1,0 +1,331 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.CsswiseBusiness>
+    @using ODHDEVELOPERS.Models
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "OperatorCsswiseCollection";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+        var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+        var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+        Double amount = 0, latefine = 0, rebate = 0, payamount = 0;
+
+    }
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#opid").autocomplete({
+
+                source: function (request, response) {
+                    debugger;
+                    $.ajax({
+                        url: "/Admin/AutoCompleteOpId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.OperatorName, value: item.OperatorId };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+    <script type="text/javascript">
+    function changedate(to_id) {
+
+        $("#" + to_id).click(function () {
+            var date = $("#date").val();
+            var opid = $("#opid").val();
+
+            var url = '@Url.Action("selectcssnoOperator","Admin")';
+            $.get(url, { date: date, opid : opid }, function data(t) {
+
+                var mincss = $("#mincss");
+                var maxcss = $("#maxcss");
+
+                mincss.children().remove();
+                maxcss.children().remove();
+
+                mincss.append('<option value="Select">Select</option>');
+                maxcss.append('<option value="Select">Select</option>');
+
+                for (var i = 0; i < t.length; i++) {
+
+                    mincss.append('<option value="' + t[i].cssno + '">' + t[i].cssno + '</option>');
+                    maxcss.append('<option value="' + t[i].cssno + '">' + t[i].cssno + '</option>');
+                }
+
+
+            });
+        });
+
+    }
+    </script>
+
+
+
+    <div id="divid1">
+        <div id="2">
+
+
+
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">CSS Wise Business</h2>
+
+                @using (@Html.BeginForm())
+                {
+                    <div id="hide">
+
+
+                        <div id="branchForm" class="form-container">
+
+                            <!-- Collection Point Name -->
+                            <div class="form-group">
+                                <label for="collectionPointName" class="form-label">Collection Point Id</label>
+                                <input type="text" class="form-control" name="opid" id="opid" placeholder="Enter Collection Point Name" required>
+                            </div>
+
+
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">Select Date</label>
+                                <input type="text" class="form-control datepicker" name="date" id="date" placeholder="Enter Date" onclick="changedate(this.id)" required>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="collectionPointName" class="form-label">Min. CSS</label>
+
+
+                                <select class="form-control" id="mincss" name="mincss" required>
+                                    <option>Select </option>
+
+                                </select>
+
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="collectionPointName" class="form-label">Max. CSS</label>
+                                <select class="form-control" id="maxcss" name="maxcss" required>
+                                    <option>Select </option>
+
+                                </select>
+
+                            </div>
+
+
+
+                            <!-- Create Button -->
+                            <div class="text-center d-grid gap-2">
+                                <button type="submit" class="btn create-btn" id="submit" value="Search">View</button>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+                }
+                <div id="1">
+
+                    <div class="index_body">
+                        <div class="table-container">
+                            <table>
+                                @using (Html.BeginForm())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        if (a == 0)
+                                        {
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="4" style="background-color:#ff5722; color:white">@mr.branchname Name:@ViewData["Branch"]</th>
+                                                    <th colspan="3" style="background-color:#ff5722; color:white"><b>CSS Wise Business Report</b></th>
+                                                    <th colspan="6" style="background-color:#ff5722; color:white"><b>Date:@item.date.ToString("dd/MM/yyyy")</b></th>
+                                                </tr>
+                                            </thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <label id="sn"><b>S.N.</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="cid"><b>@mr.custname Id</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="cname"><b>@mr.custname Name</b></label>
+                                                    </th>
+
+                                                    <th>
+                                                        <label id="cssno"><b>CSS No</b></label>
+                                                    </th>
+
+                                                    <th>
+                                                        <label id="plan"><b>@mr.planname</b></label>
+                                                    </th>
+
+                                                    <th>
+                                                        <label id="Term"><b>Term</b></label>
+                                                    </th>
+
+
+                                                    <th>
+                                                        <label id="Mode"><b>Mode</b></label>
+                                                    </th>
+
+                                                    <th>
+                                                        <label id="Amount"><b>Amount</b></label>
+                                                    </th>
+
+                                                    <th>
+                                                        <label id="latefine"><b>Late Fine</b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="rebate"><b>Rebate</b></label>
+                                                    </th>
+
+                                                    <th>
+                                                        <label id="payamount"><b>Payamount </b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="paymethod"><b>Mode Of Payment </b></label>
+                                                    </th>
+                                                    <th>
+                                                        <label id="expirydate"><b>Expiry Date </b></label>
+                                                    </th>
+
+
+
+
+                                                </tr>
+                                            </thead>
+                                        }
+                                        a = a + 1;
+
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @a
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.newbondid)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.name)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.cssno)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.planname)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.term)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.mode)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.amount)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.latefine)
+
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.rebate)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.payamount)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.paymethod)
+                                                </td>
+                                                <td>
+                                                    @item.expirydate.ToString("dd/MM/yyyy")
+                                                </td>
+
+
+
+
+                                            </tr>
+                                        </tbody>
+                                        amount = amount + Convert.ToDouble(item.amount);
+                                        latefine = latefine + Convert.ToDouble(item.latefine);
+                                        rebate = rebate + Convert.ToDouble(item.rebate);
+                                        payamount = payamount + Convert.ToDouble(item.payamount);
+
+
+                                    }
+                                    if (a > 0)
+                                    {
+                                        <tr>
+                                            <td colspan="5">
+                                            </td>
+                                            <td colspan="2">
+                                                <b>GRAND TOTAL:</b>
+                                            </td>
+                                            <td>
+                                                <b> @amount</b>
+                                            </td>
+                                            <td>
+                                                <b> @latefine</b>
+                                            </td>
+                                            <td>
+                                                <b> @rebate</b>
+                                            </td>
+
+                                            <td>
+                                                <b> @payamount</b>
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+
+
+
+
+                            </table>
+                            @if (a > 0)
+                            {
+                                <a href="@Url.Action("PrintOperatorCsswiseBusiness")" class="btn create-btn" target="_blank">Get Report In PDF</a>
+                            }
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>

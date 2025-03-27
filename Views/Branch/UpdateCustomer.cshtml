@@ -1,0 +1,127 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Customer>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        ViewBag.Title = "UpdateCustomer";
+        var pagesize = (from r in db.appltabs select r).Count();
+        var grid = new WebGrid(null,
+                 defaultSort: "",
+                 rowsPerPage: pagesize,
+                 selectionFieldName: "SearchString",
+                 ajaxUpdateContainerId: "agrid",
+                 sortFieldName: "SortColumn",
+                 sortDirectionFieldName: "SortOrder");
+        grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+        var a = 0;
+    }
+
+    <script type="text/javascript">
+        $(function () {
+            $('.edit-mode').hide();
+            $('.edit-user, .cancel-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+
+            $('.save-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+                var newbondid = tr.find("#newbondid").html();
+                var name = tr.find("#name").html();
+                var Mobile = tr.find("#Mobile").val();
+
+                tr.find("#lblMobile").text(Mobile);
+
+                tr.find('.edit-mode, .display-mode').toggle();
+                var Customer =
+                {
+                    "newbondid": newbondid,
+                    "name": name,
+                    "Mobile": Mobile,
+
+
+                };
+                $.ajax({
+                    url: '/Branch/EditCustomer/',
+                    data: JSON.stringify(Customer),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        //alert(data);
+                    }
+                });
+
+            });
+        })
+    </script>
+
+    @*<style type="text/css">
+        .dd {
+            height: 50px;
+            width: 70%;
+            float: left;
+            font-family: 'Arial Rounded MT';
+            font-size: 20px;
+        }
+
+        .d {
+            height: 50px;
+            width: 30%;
+            float: left;
+            font-family: 'Arial Rounded MT';
+            font-size: 20px;
+        }
+    </style>*@
+
+
+    <div class="index_body mt-5">
+        <div class="table-container">
+            <div class="header-row">Update @mr.custname Mobile No</div>
+            <table>
+
+                @if (a == 0)
+                {
+                    <thead>
+                        <tr>
+                            <th>Associate ID</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="display-mode">@item.newbondid </span>
+                                    <label id="newbondid" class="edit-mode" >@item.newbondid</label>
+                                </td>
+                                <td>
+                                    <span class="display-mode" > @item.name </span>
+                                    <label id="name" class="edit-mode">@item.name</label>
+                                </td>
+                                <td>
+                                    <span class="display-mode"> <label id="lblMobile">@item.Mobile</label> </span>
+                                    <input type="text" id="Mobile" value="@item.Mobile" class="edit-mode"/>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm edit-user display-mode">Edit</button>
+                                    <button class="btn btn-success btn-sm save-user edit-mode">Save</button>
+                                    <button class="btn btn-secondary btn-sm cancel-user edit-mode">Cancel</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+
+        </div>
+    </div>
+
+
+
+   
+
+

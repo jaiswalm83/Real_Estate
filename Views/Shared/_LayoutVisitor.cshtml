@@ -1,0 +1,481 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    var logo=string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+   
+    UsersContext db=new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var br = db.DailyVisitors.Single(c => c.UserName == User.Identity.Name);
+    var r = db.CompanyInfos.Single(ci => ci.Id == 1);
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode== 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    double bu = 0;
+    DateTime date = DateTime.Now.Date;
+    var count = db.Formdates.Where(v => v.opid == User.Identity.Name).Count();
+    bu = (from a in db.calculators where a.opid == User.Identity.Name && a.dateofcollection==date select a.amount).DefaultIfEmpty(0).Sum();
+    
+        logo = r.CompanyLogo;
+         companyname = r.CompanyName;
+         incometype = r.IncomeType;
+         var dcount = (from a in db.DailyDepositTabs where a.opid == User.Identity.Name && a.status == 0 select a).Count();
+ }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Receptionist Pannel</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="~/Content/css/operatorstyle.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/css/styles.css" rel="stylesheet" type="text/css" id="theme" />
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <!--[if lt IE 10]><link rel="stylesheet" type="text/css" href="~/Content/css/ie.css"/><![endif]-->
+
+    <!--Menu Content Start-->
+    <link href="~/Content/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="~/Content/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="~/Content/css/ui-lightness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet">
+
+    <link href="~/Content/css/base-admin-3.css" rel="stylesheet">
+    <link href="~/Content/css/base-admin-3-responsive.css" rel="stylesheet">
+    <link href="~/Content/css/pages/dashboard.css" rel="stylesheet">
+
+    <link href="~/Content/css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+    <!--Menu Content End-->
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/fancybox/jquery.fancybox.pack.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/d3.v3.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/rickshaw.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/flot/jquery.flot.js"></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/excanvas.min.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.stack.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.pie.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.resize.js'></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/knob/jquery.knob.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-europe-mill-en.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/demo.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/maps.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/charts.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/actions.js"></script>
+    <link rel="stylesheet" href="~/Content/Operatorwidth.css" />
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    @if (count > 0)
+    {
+        var dd = db.Formdates.Single(v => v.opid == User.Identity.Name);
+        var days = (DateTime.Now.Date - dd.formdate.Date).TotalDays;
+
+        if (dd.status == 1)
+        {
+                 
+        <script>
+            $(document).ready(function () {
+                var monn = $("#mon").val();
+                $('.date').datepick({ dateFormat: 'mm/dd/yyyy', minDate: -monn, maxDate: 0 });
+                $('.datee').datepick({ dateFormat: 'mm/dd/yyyy' });
+
+            });
+
+
+        </script>
+        }
+        else if (dd.status == 0)
+        {
+        <script>
+            $(function () {
+                $('.date').datepick({ dateFormat: 'mm/dd/yyyy', minDate: 0, maxDate: 0 });
+                $('.datee').datepick({ dateFormat: 'mm/dd/yyyy' });
+            });
+        </script>
+        }
+        else if (dd.status == 2)
+        {
+        <script>
+            $(function () {
+                var monn = $("#mon").val();
+                $('.date').datepick({ dateFormat: 'mm/dd/yyyy', minDate: -monn, maxDate: -monn });
+                $('.datee').datepick({ dateFormat: 'mm/dd/yyyy' });
+            });
+
+
+        </script>
+        }
+    }
+    else
+    {
+        <script>
+            $(function () {
+                $('.date').datepick({ dateFormat: 'mm/dd/yyyy', minDate: 0, maxDate: 0 });
+                $('.datee').datepick({ dateFormat: 'mm/dd/yyyy' });
+                $(".month").datepick({ dateFormat: 'MM yyyy' });
+            });
+        </script>
+   }
+
+
+        <style type="text/css">
+        div.page-toolbar,.page-toolbar + div,.page-toolbar + form,.page-toolbar + form + div,.widget.stacked,.page-content .page-toolbar{
+            width:97% !important;
+        }            
+                    .page-content .block {
+                width:100% !important;
+            } 
+    </style>
+</head>
+<body>
+    <div class="page-container">
+
+        <header>
+            <div class="page-head">
+
+                <ul class="page-head-elements">
+                    <li><a href="#" class="page-navigation-toggle"><span class="fa fa-bars"></span></a></li>
+                    <li class="search">
+                        <input type="text" class="form-control" placeholder="Search..." />
+                    </li>
+                     <li>
+                        <a href="#" class="dropdown" style="font-size: 30px; margin-left: 100px;">@companyname<span></span></a>
+                    </li>
+                </ul>
+
+                <ul class="page-head-elements pull-right">
+
+
+                    <li>
+
+                        @*<a href="#" class="dropdown">Your Collection:<span> @bu</span></a>*@
+
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown"><span class="fa fa-comments"></span></a>
+
+                    </li>
+
+                    <li><a href="#" class="page-sidebar-toggle"><span class="fa fa-tasks"></span></a></li>
+                </ul>
+
+            </div>
+
+
+
+            @if(dcount==0)
+            {
+            <div class="page-navigation">
+
+                <div class="page-navigation-info">
+                   @* <div style="float: left;">
+                        <img id="imgid" src="@Url.Content(logo) "  style="height:70px; width:100px;" /></div>
+                    <div style="float: left;"><a href="~/Admin/Index">
+                        <h5 style="color: white;"><b>&nbsp;@companyname</b></h5>
+                    </a></div>*@
+                </div>
+
+                <div class="profile">
+                    <div class="profile-info">
+                        <div class="profile-title" style="text-transform: uppercase; margin-left: 5px; float: left; font-size: small;">
+                            <h6>Hello , @db.DailyVisitors.Single(o=>o.UserName==User.Identity.Name).ReceptionistName</h6>
+                        </div>
+                        <div class="profile-buttons">
+                            <div class="btn-group">
+                                <a class="but dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                              @*      <li><a href="~/Operator/Profile">Profile</a></li>*@
+                                    <li class="divider"></li>
+                                    <li><a href="~/Operator/ChangeCredential">Change Password</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="~/Operator/Logout">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="navigation">
+                    @*<li><a href="~/Operator/Index"><i class="fa fa-home"></i>Home</a></li>*@
+                    <li><a href="~/Operator/DailyVisitorDetail"><i class="fa fa-plus"></i>Add Visitor</a>
+                        @*  <ul>
+                              <li><a href="~/Operator/NewAgent"><i class="fa fa-caret-right"></i>@mr.agentname</a></li>
+                            <li><a href="~/Operator/NewAgreement"><i class="fa fa-caret-right"></i>@mr.custname</a></li>
+                             <li><a href="~/Operator/AddExpense"><i class="fa fa-caret-right"></i>Add Expense</a></li>
+                            <li><a href="~/Operator/PrintId"><i class="fa fa-caret-right"></i>ID Card</a></li>
+                                 
+                           
+                        </ul>*@
+                    </li>
+                     <li><a href="~/Operator/TodayList"><i class="fa fa-plus"></i>Today's Visitor List</a>
+                        @*  <ul>
+                              <li><a href="~/Operator/NewAgent"><i class="fa fa-caret-right"></i>@mr.agentname</a></li>
+                            <li><a href="~/Operator/NewAgreement"><i class="fa fa-caret-right"></i>@mr.custname</a></li>
+                             <li><a href="~/Operator/AddExpense"><i class="fa fa-caret-right"></i>Add Expense</a></li>
+                            <li><a href="~/Operator/PrintId"><i class="fa fa-caret-right"></i>ID Card</a></li>
+                                 
+                           m
+                        </ul>*@
+                    </li>
+                    <li><a href="~/Operator/RecentVisitorDetail"><i class="fa fa-plus"></i>Recent Visitor List</a>
+                        @*  <ul>
+                              <li><a href="~/Operator/NewAgent"><i class="fa fa-caret-right"></i>@mr.agentname</a></li>
+                            <li><a href="~/Operator/NewAgreement"><i class="fa fa-caret-right"></i>@mr.custname</a></li>
+                             <li><a href="~/Operator/AddExpense"><i class="fa fa-caret-right"></i>Add Expense</a></li>
+                            <li><a href="~/Operator/PrintId"><i class="fa fa-caret-right"></i>ID Card</a></li>
+                                 
+                           
+                        </ul>*@
+                    </li>
+                     <li><a href="~/Operator/FindVisitor"><i class="fa fa-plus"></i>Find Visitor</a>
+                        @*  <ul>
+                              <li><a href="~/Operator/NewAgent"><i class="fa fa-caret-right"></i>@mr.agentname</a></li>
+                            <li><a href="~/Operator/NewAgreement"><i class="fa fa-caret-right"></i>@mr.custname</a></li>
+                             <li><a href="~/Operator/AddExpense"><i class="fa fa-caret-right"></i>Add Expense</a></li>
+                            <li><a href="~/Operator/PrintId"><i class="fa fa-caret-right"></i>ID Card</a></li>
+                                 
+                           
+                        </ul>*@
+                    </li>
+                     <li><a href="~/Operator/VisitorFeedbackGiven"><i class="fa fa-plus"></i>Feedback Given Visitor</a>
+                        @*  <ul>
+                              <li><a href="~/Operator/NewAgent"><i class="fa fa-caret-right"></i>@mr.agentname</a></li>
+                            <li><a href="~/Operator/NewAgreement"><i class="fa fa-caret-right"></i>@mr.custname</a></li>
+                             <li><a href="~/Operator/AddExpense"><i class="fa fa-caret-right"></i>Add Expense</a></li>
+                            <li><a href="~/Operator/PrintId"><i class="fa fa-caret-right"></i>ID Card</a></li>
+                                 
+                           
+                        </ul>*@
+                    </li>
+
+                    <li><a href="~/Operator/GetFullVisitorDetail"><i class="fa fa-plus"></i>Get Visitor's Full Detail </a>
+                        <li><a href="~/Operator/agentcoming"><i class="fa fa-plus"></i> Add Agent ComeOut</a>
+                        @*  <ul>
+                              <li><a href="~/Operator/NewAgent"><i class="fa fa-caret-right"></i>@mr.agentname</a></li>
+                            <li><a href="~/Operator/NewAgreement"><i class="fa fa-caret-right"></i>@mr.custname</a></li>
+                             <li><a href="~/Operator/AddExpense"><i class="fa fa-caret-right"></i>Add Expense</a></li>
+                            <li><a href="~/Operator/PrintId"><i class="fa fa-caret-right"></i>ID Card</a></li>
+                                 
+                           
+                        </ul>*@
+                    </li>
+                   @* <li><a href="~/Operator/UploadDocument"><i class="fa fa-upload"></i>Upload Document</a>
+                          <ul>
+                              <li><a href=""><i class="fa fa-caret-right"></i></a></li>
+                           
+                        </ul>
+                    </li>
+                     <li><a href="~/Operator/UpdateMenu"><i class="glyphicon glyphicon-edit"></i>Update</a>
+                        
+                    </li>
+                    <li><a href="~/Operator/VisitorEntry"><i class="fa fa-upload"></i>Visitors Entry Form</a>
+                      
+                    </li>
+
+
+                    <li class="active">
+                    <li><a href="~/Operator/PaymentMenu"><i class="fa fa-credit-card"></i>Payment</a>*@
+                        @* <ul>
+                            <li><a href=""><i class="fa fa-caret-right"></i></a></li>
+                                                     
+                           
+                                                      
+                        </ul>*@
+                   @* </li>*@
+                        @*  <li><a href="~/Operator/FundManagement"><i class="fa fa-credit-card"></i>Fund Management</a>
+                      
+                    </li>
+                    <li><a href="~/Operator/Duplicatemenu"><i class="fa fa-pencil"></i>Duplicate</a>*@
+                        @* <ul>
+                            <li><a href="~/Operator/DuplicateBond"><i class="fa fa-caret-right"></i>@mr.custname</a></li> 
+                            <li><a href="~/Operator/DuplicateReceipt"><i class="fa fa-caret-right"></i>Renewal</a></li>
+                          <li><a href="#"><i class="fa fa-caret-right"></i> @mr.agentname Voucher </a>
+                                <ul>
+                                     @if (f1.status == 1)
+                            {
+                            <li><a href="~/Operator/DupliOBVoucher"><i class="fa fa-caret-right"></i>@f1.type</a></li>
+                                     }
+                                     @if (f2.status == 1)
+                            {
+                            <li><a href="#"><i class="fa fa-caret-right"></i>@f2.type</a></li>   
+                                     }
+                                     @if (f3.status == 1)
+                            {
+                            <li><a href="#"><i class="fa fa-caret-right"></i>@f3.type</a></li> 
+                                     }
+                        </ul>
+                            </li> 
+                                              
+                        </ul>
+                    </li>*@
+                    @*  <li><a href="~/Operator/Voucher"><i class="fa fa-credit-card"></i> Voucher</a></li>*@
+
+                    @*<li><a href="~/Operator/PassBookMenu"><i class="fa fa-credit-card"></i> Passbook</a></li>*@
+                    @* <li><a href="~/Operator/Fieldmenu"><i class="fa fa-cogs"></i>Field Reports</a>
+                        <ul>
+                           
+                            <li><a href="~/Operator/Broker"><i class="fa fa-caret-right"></i>@mr.agentname List</a></li>
+                            <li><a href="~/Operator/BrokerChain"><i class="fa fa-caret-right"></i>@mr.agentname Chain</a></li>
+                            <li><a href="#"><i class="fa fa-caret-right"></i>@mr.agentname Payment Details</a></li>
+                            <li><a href="~/Operator/BrokerAmount"><i class="fa fa-caret-right"></i>@mr.agentname Account Details</a></li>
+                            <li><a href="#"><i class="fa fa-caret-right"></i>@mr.agentname Wise Account Details</a></li>
+                            <li><a href="~/Operator/BrokerSelfCollection"><i class="fa fa-caret-right"></i>@mr.agentname Self Collection</a></li>
+                            <li><a href="#"><i class="fa fa-caret-right"></i>@mr.agentname Chain Collection</a></li>
+                            <li><a href="~/Operator/BrokerSelfDueCollection"><i class="fa fa-caret-right"></i>@mr.agentname Self Due Collection</a></li>
+                            <li><a href="#"><i class="fa fa-caret-right"></i>@mr.agentname Chain Due Collection</a></li>
+                            
+                           
+                        </ul>
+                  </li>*@
+                    @* <li><a href="~/Operator/Officialmenu"><i class="fa fa-desktop"></i>Official Reports</a>
+                       <ul>
+                            
+                             <li><a href="~/Operator/Customer"><i class="fa fa-caret-right"></i>Customer List</a></li>
+                             <li><a href="#"><i class="fa fa-caret-right"></i> @mr.planname List</a>
+                                <ul>
+                                    <li><a href="~/Operator/RdPlanList"><i class="fa fa-caret-right"></i> @plan1.Planname</a></li>
+                                    <li><a href="~/Operator/FDPlanList"><i class="fa fa-caret-right"></i>@plan2.Planname</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="~/Operator/RankList"><i class="fa fa-caret-right"></i>Rank List</a></li>                            
+                            <li><a href="~/Operator/Installment"><i class="fa fa-caret-right"></i>@mr.custname Installment Details</a></li>  
+                            <li><a href="~/Operator/DailyExpense"><i class="fa fa-caret-right"></i>Daily Expense Details</a></li>                           
+                            <li><a href="~/Operator/DailyCollectionReport"><i class="fa fa-caret-right"></i>Daily Collection </a></li>                            
+                            <li><a href="~/Operator/CancelReceiptList"><i class="fa fa-caret-right"></i>Cancel Receipt List</a></li>                            
+                            <li><a href="~/Operator/DateWiseCollection"><i class="fa fa-caret-right"></i>Datewise Business</a></li>                            
+                            <li><a href="~/Operator/FundMobilisation"><i class="fa fa-caret-right"></i>Fund Mobilisation</a></li> 
+                            <li><a href="#"><i class="fa fa-caret-right"></i>Maturity Paid Details</a></li>                              
+                        </ul>
+                    </li>*@
+                   @* <li><a href="~/Operator/Searchmenu"><i class="fa fa-search"></i>Search</a>*@
+                        @* <ul>
+                            <li><a href="~/Operator/SearchBroker"><i class="fa fa-caret-right"></i>@mr.agentname</a></li>
+
+                             <li><a href="~/Operator/SearchBond"><i class="fa fa-caret-right"></i> @mr.custname</a></li>
+                                </ul>
+                    </li>*@
+
+                </ul>
+
+            </div>
+            }
+            else
+            {
+            <div class="page-navigation">
+
+                <div class="page-navigation-info">
+                 
+                </div>
+
+                <div class="profile">
+                    <div class="profile-info">
+                        <div class="profile-title" style="text-transform: uppercase; margin-left: 5px; float: left; font-size: small;">
+                            <h6>Hello , @User.Identity.Name</h6>
+                        </div>
+                        <div class="profile-buttons">
+                            <div class="btn-group">
+                                <a class="but dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                               @*     <li><a href="~/Operator/Profile">Profile</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="~/Operator/ChangePassword">Change Password</a></li>*@
+                                    <li class="divider"></li>
+                                    <li><a href="~/Operator/Logout">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="navigation">
+                    <li><a href="~/Operator/Index"><i class="fa fa-home"></i>Home</a></li>
+                 @*   <li><a href="~/Operator/Createmenu"><i class="fa fa-plus"></i>Create</a>
+                      
+                    </li>*@
+                    <li><a href="~/Operator/UploadDocument"><i class="fa fa-upload"></i>Upload Document</a>
+                     
+                    </li>
+                     <li><a href="~/Operator/UpdateMenu"><i class="glyphicon glyphicon-edit"></i>Update</a>
+                        
+                    </li>
+                    <li><a href="~/Operator/VisitorEntry"><i class="fa fa-upload"></i>Visitors Entry Form</a>
+                      
+                    </li>
+
+
+                    <li class="active">
+                 @*   <li><a href="~/Operator/PaymentMenu"><i class="fa fa-credit-card"></i>Payment</a>
+                   
+                    </li>*@
+                          <li><a href="~/Operator/FundManagement"><i class="fa fa-credit-card"></i>Fund Management</a>
+                      
+                    </li>
+                    <li><a href="~/Operator/Duplicatemenu"><i class="fa fa-pencil"></i>Duplicate</a>
+                      
+                    </li>
+              
+                    <li><a href="~/Operator/Fieldmenu"><i class="fa fa-cogs"></i>Field Reports</a>
+                      
+                    </li>
+                    <li><a href="~/Operator/Officialmenu"><i class="fa fa-desktop"></i>Official Reports</a>
+                       
+                    </li>
+                 
+                    </li>
+
+                </ul>
+
+            </div>
+            }
+        </header>
+
+
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+        @RenderBody()
+    </section>
+            @if (count > 0)
+            {
+                var dd = db.Formdates.Single(v => v.opid == User.Identity.Name);
+                var days = (DateTime.Now.Date - dd.formdate.Date).TotalDays;
+                <input type="hidden" id="mon" value="@days" />  
+            }
+        </div>
+
+
+        <!--=== Footer ===-->
+        <footer>
+        </footer>
+    </div>
+
+
+</body>
+</html>

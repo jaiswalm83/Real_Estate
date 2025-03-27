@@ -1,0 +1,107 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "BulkReceipt";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+    var br = db.Branchtabs.Single(o => o.BranchCode == User.Identity.Name);
+    
+    
+}
+
+<script type="text/javascript">
+    function changedate(to_id) {
+
+        $("#" + to_id).mouseover(function () {
+            var date = $("#date").val();
+
+            var url = '@Url.Action("selectcssno","Branch")';
+            $.get(url, { date: date }, function data(t) {
+
+                var mincss = $("#mincss");
+                var maxcss = $("#maxcss");
+
+                mincss.children().remove();
+                maxcss.children().remove();
+
+                mincss.append('<option value="Select">Select</option>');
+                maxcss.append('<option value="Select">Select</option>');
+
+                for (var i = 0; i < t.length; i++) {
+
+                    mincss.append('<option value="' + t[i].cssno + '">' + t[i].cssno + '</option>');
+                    maxcss.append('<option value="' + t[i].cssno + '">' + t[i].cssno + '</option>');
+                }
+
+
+            });
+        });
+       
+    }
+</script>
+<div class="page-content">
+         
+                <div class="container" id="divid1">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Print Bulk Receipt</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                    </div>
+ 
+  @using (@Html.BeginForm()){
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                    <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Select Date</label></span>
+                    <input type="text" id="date" class="form-control datepicker" onmouseover="changedate(this.id)" required name="date" />
+                         
+                </div>   </div>
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Min. CSS</label></span>
+                    
+               <select class="form-control" id="mincss" name="mincss"   required>
+                                            <option>Select </option>
+
+                                        </select>
+                         
+                </div>   </div>
+            
+              <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Max. CSS</label></span>
+                <select class="form-control" id="maxcss" name="maxcss"   required>
+                                            <option>Select </option>
+
+                                        </select>
+                         
+                </div>   </div>
+
+
+                   <div class="row-form" style="width:100%">
+      <div class="col-md-9">
+          <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit" onclick="target='_blank'">View</button>
+     </div>
+              </div>
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+                    }
+                   
+                   
+         
+                    </div>
+    </div>
+

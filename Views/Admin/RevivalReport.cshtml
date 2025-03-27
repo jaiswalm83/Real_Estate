@@ -1,0 +1,140 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.appltab>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "RevivalReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int a = 0;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var planlist = (from p in db.Plans where p.status == 1 select p).ToList();
+}
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar"style="margin-bottom:30px">
+      @using (Html.BeginForm())
+                {
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Unrelease Customer List </div>
+
+                            <div class="page-toolbar-subtitle"> </div>
+                             <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">Select @mr.planname Type</span>
+                                    <select name="plancode" required class="form-control">
+                                        <option selected disabled="disabled">--Select--</option>
+                                        @foreach (var plan in planlist)
+                                        {
+                                            <option value="@plan.Plancode">@plan.shortcutname</option>
+                                        }
+                                        <option value="0">All</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                              <div class="row-form" style="width: 100%;margin-top:2%">
+                                <div class="col-md-9">
+                                    <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit">View</button>
+                                </div>
+                            </div>
+                        </div>
+      }
+                      </div>  
+
+
+                    <table border="1" style="margin-left:1%; margin-right:1%; margin-bottom:30px; margin-top:20px; width:95%">
+   
+    @foreach (var item in Model)
+    {
+        var pamt=(from ab in db.Installmenttabs where ab.newbondid==item.newbondid select ab.payamount).Sum();
+        if (a == 0)
+        {
+            
+  <tr>
+        <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="OperatorId"><b>Newbond Id</b></label>
+            </th>
+         <th style="width:10%;text-align:center;">
+           <label id="name"><b>Name</b></label>
+            </th>
+       <th style="width:10%;text-align:center;">
+           <label id="introducer"><b>Introducer ID</b></label>
+            </th>
+      <th style="width:10%;text-align:center;">
+           <label id="planname"><b>Plan Name</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="plotsize"><b>Plot Size</b></label>
+            </th>
+       <th style="width:10%;text-align:center;">
+           <label id="Plot cost"><b>Plot Cost</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="bookingamount"><b>Booking Amount</b></label>
+            </th>
+       <th style="width:10%;text-align:center;">
+           <label id="paidamount"><b>Paid Amount</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="mobileno"><b>Mobile No.</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="jdaye"><b>Joining Date</b></label>
+            </th>
+    </tr>
+        }
+
+        a = a + 1;
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.newbondid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.newintroducerid)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.planname)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.nolandunit)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.totalcon)
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.bookingamount)
+        </td>
+          <td>
+            @pamt
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.mobileno)
+        </td>
+        <td>
+          @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+            </td>
+    </tr>
+    } 
+
+</table>
+<p style="color:maroon;margin-left:15px;"><b> @ViewBag.msg</b></p>     
+ @*   @if (a > 0)
+    {
+        <a href="@Url.Action("PrintOperatorList")" target="_blank">Get Report In PDF</a>
+    }
+      *@     
+                 
+                    
+          </div>
+                          </div>

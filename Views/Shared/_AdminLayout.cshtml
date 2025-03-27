@@ -1,0 +1,366 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+    var currentUser = db.NewLogins.SingleOrDefault(u => u.UserName == User.Identity.Name); // Logged-in user fetch karna
+
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+
+    logo = r.CompanyLogo;
+    companyname = r.CompanyName;
+    incometype = r.IncomeType;
+    var validitydays = r.RegDate.Subtract(DateTime.Now.Date).TotalDays;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>  R.G Groups-Admin Panel</title>
+    <link href="~/assets/css1/style.css" rel="stylesheet" />
+
+    <link href="~/assets/css1/baguetteBox.min.css" rel="stylesheet" />
+
+    <link href="~/assets/css1/baguetteBox.min.css" rel="stylesheet" />
+    <link href="~/assets/css1/bootstrap-grid.css" rel="stylesheet" />
+    <link href="~/assets/css1/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="~/assets/css1/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/assets/css1/bootstrap.css" rel="stylesheet" />
+    <link href="~/assets/css1/calendar.css" rel="stylesheet" />
+    <link href="~/assets/css1/calendar.min.css" rel="stylesheet" />
+    <link href="~/assets/css1/custom.css" rel="stylesheet" />
+    <link href="~/assets/css1/flaticon.css" rel="stylesheet" />
+    <link href="~/assets/css1/font-awesome.css" rel="stylesheet" />
+    <link href="~/assets/css1/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/assets/css1/jquery.fancybox.css" rel="stylesheet" />
+    <link href="~/assets/css1/search_bar.css" rel="stylesheet" />
+    <link href="~/assets/css1/Create.css" rel="stylesheet" />
+
+    <link rel="icon" href="/favicon.ico" type="~/assetshome/img/logo/rggroups_logo.png">
+
+
+
+
+    <!-- site icon -->
+    <link rel="icon" href="~/images/fevicon.png" type="image/png" />
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="~/assets/css1/bootstrap.min.css" />
+    <!-- site css -->
+    <link rel="stylesheet" href="~/assets/style.css" />
+    <!-- responsive css -->
+    <link rel="stylesheet" href="~/assets/css1/responsive.css" />
+    <!-- color css -->
+    <link rel="stylesheet" href="~/assets/css1/colors.css" />
+    <!-- select bootstrap -->
+    <link rel="stylesheet" href="~/assets/css1/bootstrap-select.css" />
+    <!-- scrollbar css -->
+    <link rel="stylesheet" href="~/assets/css1/perfect-scrollbar.css" />
+    <!-- custom css -->
+    <link rel="stylesheet" href="~/assets/css1/custom.css" />
+    <!--[if lt IE 9]>
+    <script src="~https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="~https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+
+
+
+    @*Last One*@
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    @*<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">*@
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/fancybox/jquery.fancybox.pack.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/d3.v3.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/rickshaw.min.js"></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/knob/jquery.knob.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-europe-mill-en.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/demo.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/maps.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/charts.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/actions.js"></script>
+
+
+
+
+
+
+
+</head>
+<body>
+    <div class="full_container">
+        <div class="inner_container">
+            <!-- Sidebar  -->
+            <nav id="sidebar">
+                <div class="sidebar_blog_1">
+                    <div class="sidebar-header">
+                        <div class="logo_section">
+                            <a href="/index.html"><img class="logo_icon img-responsive" src="@r.CompanyLogo" alt="#"  style="margin-top:20px"/></a>
+                        </div>
+                    </div>
+                    <a href="~/Admin/Index">
+                        <div class="sidebar_user_info">
+                            <div class="icon_setting"></div>
+                            <div class="user_profle_side">
+                                <div class="user_img"><img class="img-responsive" src="@r.CompanyLogo" alt="#" style="margin-top:20px" /></div>
+                                <div class="user_info">
+                                    <h6>R.G Groups Admin</h6>
+                                    @*@User.Identity.Name*@
+                                    <p><span class="online_animation"></span> Online</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="sidebar_blog_2">
+                    <h4>General</h4>
+                    <ul class="list-unstyled components">
+                        <li class="active">
+                            <a href="~/Admin/Index" aria-expanded="false"> <i class="bi bi-house-door fa yellow_color"></i> <span>Home</span></a>
+
+                        </li>
+
+                        
+
+                        @if (currentUser.type != "Subadmin")
+                        {
+                            <li><a href="~/Admin/Create"><i class="fa-solid fa-user-plus orange_color"></i> <span>Create</span></a></li>
+                        }
+
+
+
+                        <li><a href="~/Admin/Vehicle"><i class="fa-solid fa-star orange_color"></i> <span>Extra</span></a></li>
+                        <li><a href="~/Admin/PaymentMenu"><i class="fa-solid fa-credit-card purple_color"></i> <span>Payment</span></a></li>
+                        <li><a href="~/Admin/Duplicate"><i class="fa-solid fa-print purple_color2"></i> <span>Printing</span></a></li>
+                        <li><a href="~/Admin/Registry"><i class="fa-solid fa-address-book blue1_color"></i> <span>Registry</span></a></li>
+                        <li><a href="~/Admin/Update"><i class="fa-solid fa-pen-to-square green_color"></i> <span>Update</span></a></li>
+                        <li><a href="~/Admin/CompleteReport"><i class="fa-solid fa-file-alt yellow_color"></i> <span>Complete Reports</span></a></li>
+                        <li><a href="~/Admin/BranchReport"><i class="fa-solid fa-file-alt yellow_color"></i> <span>Branch Reports</span></a></li>
+                        <li><a href="~/Admin/OperatorReport"><i class="fa-solid fa-file-alt yellow_color"></i> <span>Collection Point Reports</span></a></li>
+                        <li><a href="~/Admin/AppMenu"><i class="fa-solid fa-mobile purple_color2"></i> <span>App Setting</span></a></li>
+                        <li><a href="~/Admin/Setting"><i class="fa-solid fa-cogs yellow_color"></i> <span>Settings</span></a></li>
+                        <li><a href="~/Admin/Delete"><i class="fa-solid fa-trash red_color"></i> <span>Delete</span></a></li>
+                        <li><a href="~/Admin/SearchMenu"><i class="fa-solid fa-search blue1_color"></i> <span>Search</span></a></li>
+                        <li><a href="~/Admin/Website"><i class="fa-solid fa-globe blue1_color"></i> <span>Website</span></a></li>
+                        <li><a href="~/Admin/Enquary_list"><i class="fa-solid fa-list blue1_color"></i> <span>Enquiry List</span></a></li>
+
+
+                        @*<li><a href="~/Admin/Achievers"><i class="glyphicon glyphicon-search"></i>Add Achievers</a></li>
+        <li><a href="~/Admin/Media_Centre"><i class="glyphicon glyphicon-search"></i>Add Gallery</a></li>
+        <li><a href="~/Admin/banner_upload"><i class="glyphicon glyphicon-search"></i>Add Banner</a></li>
+        <li><a href="~/Admin/upload_video"><i class="glyphicon glyphicon-search"></i>Upload Video</a></li>*@
+
+                    </ul>
+                </div>
+            </nav>
+            <!-- end sidebar -->
+            <!-- right content -->
+            <div id="content">
+                <!-- topbar -->
+                <div class="topbar">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <div class="full">
+                            <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                            <div class="logo_section mt-3 ml-5">
+                                <h1 class="welcome-heading" style="color:white;   "> Welcome , @companyname</h1>
+
+
+                                <style>
+                                    /* Default style for larger screens */
+                                    .welcome-heading {
+                                        color: white;
+                                        text-align: left; /* Default alignment for laptops */
+                                        font-size: 2.5rem; /* Adjust font size as needed */
+                                        line-height: 1.2; /* Adjust line spacing */
+                                        margin-left: 301px;
+                                         /* Default margin-left for larger screens */
+                                    }
+
+                                    /* Adjustments for screens smaller than 768px (phones and tablets) */
+                                    @@media (max-width: 768px) {
+                                        .welcome-heading {
+                                            margin-left: 0 !important; /* Force override margin-left for smaller screens */
+                                            text-align: center; /* Center-align for smaller devices */
+                                            font-size: 1rem; /* Adjust font size for smaller devices */
+                                            line-height: 1.1; /* Compact line spacing */
+                                            margin-top: 0.9rem; /* Optional margin-top adjustment */
+                                        }
+
+
+                                    }
+
+
+                                </style>
+
+
+
+                            </div>
+
+                            <div class="right_topbar">
+                                <div class="icon_info">
+                                  
+                                    <ul class="user_profile_dd">
+                                        <li>
+                                            <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="@r.CompanyLogo" alt="#" /><span class="name_user">Admin</span></a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="~/profile.html">My Profile</a>
+                                                <a class="dropdown-item" href="~/settings.html">Settings</a>
+                                                <a class="dropdown-item" href="~/help.html">Help</a>
+                                                <a class="dropdown-item" href="~/Admin/Logout"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+
+                <!-- end topbar -->
+                <!-- jQuery -->
+                @*<script src="~/assets/js/admin_js/jquery.min.js"></script>*@
+                <script src="~/assets/js/admin_js/popper.min.js"></script>
+                <script src="~/assets/js/admin_js/bootstrap.min.js"></script>
+                <!-- wow anim/ation -->
+                <script src="~/assets/js/admin_js/animate.js"></script>
+                <!-- select c/ountry -->
+                <script src="~/assets/js/admin_js/bootstrap-select.js"></script>
+                <!-- owl caro/usel -->
+                <script src="~/assets/js/admin_js/owl.carousel.js"></script>
+                <!-- chart js -->
+                <script src="~/assets/js/admin_js/Chart.min.js"></script>
+                <script src="~/assets/js/admin_js/Chart.bundle.min.js"></script>
+                <script src="~/assets/js/admin_js/utils.js"></script>
+                <script src="~/assets/js/admin_js/analyser.js"></script>
+                <!-- nice scrollbar -->
+                <script src="~/assets/js/admin_js/perfect-scrollbar.min.js"></script>
+                <script>
+                    var ps = new PerfectScrollbar('#sidebar');
+                </script>
+                <!-- custom js -->
+                @*<script src="~/assets/js/admin_js/custom.js"></script>*@
+                <script src="~/assets/js/admin_js/chart_custom_style1.js"></script>
+                <div>
+                    @RenderSection("featured", required: false)
+                    <section class="content-wrapper main-content clear-fix">
+                        @RenderBody()
+                    </section>
+                </div>
+                @if (validitydays <= 15)
+                {
+                    <div id="boxes">
+                        <div id="dialog" class="window">
+                            <h2 style="color: red; margin-top: 75px; font-size: 20px; font-family: 'Bodoni MT'">Your Software going to expire after @validitydays days .Please make payemnt to continue services.</h2>
+                            <div id="popupfoot"><a href="#" style="color: black;" class="close btn"><b>Make Payment</b></a> | <a class="agree" style="color: red;" href="#">I do not agree</a> </div>
+                        </div>
+                        <div id="mask"></div>
+                    </div>
+                }
+
+                @*<div class="container-fluid">
+                        <div class="footer">
+                            <p>
+                                Copyright © 2018 Designed by html.design. All rights reserved.<br><br>
+                                Distributed By: <a href="https://themewagon.com/">ThemeWagon</a>
+                            </p>
+                        </div>
+                    </div>*@
+
+</body>
+</html>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var id = '#dialog';
+
+        //Get the screen height and width
+        var maskHeight = $(document).height();
+        var maskWidth = $(window).width();
+
+        //Set heigth and width to mask to fill up the whole screen
+        $('#mask').css({ 'width': maskWidth, 'height': maskHeight });
+
+        //transition effect
+        $('#mask').fadeIn(500);
+        $('#mask').fadeTo("slow", 0.9);
+
+        //Get the window height and width
+        var winH = $(window).height();
+        var winW = $(window).width();
+
+        //Set the popup window to center
+        $(id).css('top', winH / 2 - $(id).height() / 2);
+        $(id).css('left', winW / 2 - $(id).width() / 2);
+
+        //transition effect
+        $(id).fadeIn(2000);
+
+        //if close button is clicked
+        $('.window .close').click(function (e) {
+            //Cancel the link behavior
+            e.preventDefault();
+
+            $('#mask').hide();
+            $('.window').hide();
+        });
+
+        //if mask is clicked
+        $('#mask').click(function () {
+            $(this).hide();
+            $('.window').hide();
+        });
+
+    });
+
+
+    $(document).ready(function () {
+        /*-- sidebar js --*/
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+        /*-- calendar js --*/
+        $('#example14').calendar({
+            inline: true
+        });
+        $('#example15').calendar();
+        /*-- tooltip js --*/
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+

@@ -1,0 +1,176 @@
+﻿@model ODHDEVELOPERS.Models.PlanTab
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var plan2 = db.Plans.Single(p2 => p2.Plancode== 2); 
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "CreateSisPlan";
+    var mr = db.Members.Single(m => m.Id == 1);  
+}
+
+<script>
+    
+$(document).ready(function(){
+    $('#chk').change(function () {
+        $("#BonusPercent").prop("disabled", !$(this).is(':checked'));
+    });
+});
+
+</script>
+
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Create @plan2.Planname</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                               
+                        
+                    </div> 
+
+
+
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls">  
+
+     @using (Html.BeginForm())
+     {
+    
+ 
+                                   
+                  <input type="hidden" id="rd" name="Type" value="FD" />  
+         <input type="hidden" id="installments" name="Installments" value="1" />   
+         <input type="hidden" id="mode" name="mode" value="Single" />                      
+                           
+           <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">@mr.planname Name </label></span>  
+        <input type="text" class="form-control"  name="Planname" id="Planname" required></div>
+           
+           </div>
+    
+</div> 
+         
+            <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">@mr.planname Term </label></span>  
+        <input type="text" class="form-control" name="Term" id="Term" required></div>
+           
+          </div>                   
+    
+</div> 
+         
+         
+          <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">Min. Amount </label></span>  
+        <input type="text" class="form-control"  name="Minvalue" id="Minvalue" required></div>
+               
+    </div>
+</div> 
+         
+         
+             <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">Max. Amount </label></span>  
+        <input type="text" class="form-control"  name="Maxvalue" id="Maxvalue" required></div>
+          </div>    
+          
+</div> 
+         
+         
+         
+             <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">Divisible By </label></span>  
+        <input type="text" class="form-control"  name="Multiple" id="Multiple" required></div>
+</div>
+</div> 
+          
+         
+            <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">Maturity(%) </label></span>  
+        <input type="text" class="form-control"  name="MaturityPercent" id="MaturityPercent" required></div>
+</div>
+</div> 
+        
+          <div class="row-form">                      
+    <div class="col-md-9">
+        
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">Select (%) Type </label></span>  
+
+            
+ 
+
+             <select required class="form-control" name="PercentType" id="PercentType">
+           
+            <option selected>Simple</option>
+            <option>Compound</option>
+
+      
+        </select>
+
+             </div>
+</div>
+
+
+
+    </div>
+         
+           <div class="row-form">                      
+    <div class="col-md-9">
+
+        <label>Do you want to add Bonus? Yes</label>
+
+        <input type="checkbox" id="chk" name="chk" />
+
+    </div>
+</div>       
+         
+         
+         
+                          <div class="row-form">                      
+    <div class="col-md-9">
+         <div class="input-group">
+       <span class="input-group-addon"><label class="width">Bonus(%) </label></span>  
+        <input type="text" class="form-control" disabled="" name="BonusPercent" id="BonusPercent" ></div>
+        </div>
+</div> 
+           
+         
+                
+               
+                 <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+         <button  type="submit" class="btn btn-primary pull-right"> Create @mr.planname</button>   
+                                </div>
+                                             </div>
+         
+     <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+     }
+                                </div>
+                                
+                            
+                                         
+                                    </div>
+                            </div>
+                                        
+                   </div> </div> </div>
+                   

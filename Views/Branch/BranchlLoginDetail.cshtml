@@ -1,0 +1,93 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.branchlogindetail>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1); 
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "BranchlLoginDetail";
+    var a = 0;
+}
+
+
+
+
+<script src="~/Scripts/print.js" type="text/javascript"></script>
+<div class="page-content">
+           <div style="margin-left:25px;">
+   <a href="@Url.Action("PrintBranchLoginDtl")" target="_blank">Get Report In PDF</a></div>
+                <div class="container">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">@mr.branchname Login Detail</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div>           
+                     
+                    </div>
+ 
+                  
+                   
+         <div id="1">
+<table border="1" style="margin-left:1%; margin-right:1px; width:98%; margin-bottom:60px;">
+    @using (Html.BeginForm())
+    {
+        foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+                            <tr >
+                                <th  colspan="4" style="text-align:center;"><b>@mr.branchname Login Detail </b></th>
+                            
+                            </tr>
+         
+    <tr>
+        <th style="width:20%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:40%;text-align:center;">
+           <label id="cc"><b>Code</b></label>
+            </th>
+       
+        <th style="width:40%;text-align:center;">
+           <label id="dd"><b>Date Time</b></label>
+            </th>
+        
+ 
+      
+    </tr>
+            }
+            a = a + 1;
+
+
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.iid)
+        </td>
+       
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.date_time)
+        </td>
+        
+     
+       
+             
+    </tr>
+                   
+    }
+
+    }
+    
+    
+   
+</table>
+              </div> 
+                    </div>
+    </div>

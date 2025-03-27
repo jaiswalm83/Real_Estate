@@ -1,0 +1,180 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerList>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "AllBroker";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+
+        var a = 0;
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div id="divid1">
+        <div id="2">
+
+            @*<div class="page-toolbar-block">
+                    <div class="page-toolbar-title">All @mr.agentname List</div>
+                    <div class="page-toolbar-subtitle"></div>
+                </div>*@
+            <div class="index_body">
+                <div class="table-container">
+                    <div class="header-row">All @mr.agentname List</div>
+
+
+
+
+
+                    <div id="1">
+                        <table border="1">
+                            @using (Html.BeginForm())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    var tp = "";
+                                    var aa = db.NewLogins.Where(n => n.UserName == item.newagentid && n.type == "Agent").Count();
+                                    if (aa == 1)
+                                    {
+                                        var ng = db.NewLogins.Single(p => p.UserName == item.newagentid && p.type == "Agent");
+                                        tp = ng.Password;
+                                    }
+                                    if (a == 0)
+                                    {
+
+                                        <tr style="text-align:center;">
+                                            <th colspan="3"></th>
+                                            <th colspan="3" style="text-align:center;"><b>All @mr.agentname List</b></th>
+                                            <th colspan="3" style="text-align:center;"><b>@DateTime.Now.ToString("dd/MM/yyyy")</b></th>
+                                            <th colspan="3"></th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:5%;text-align:center;">
+                                                <label id="sn"><b>S.N.</b></label>
+                                            </th>
+                                            <th style="width:20%;text-align:center;">
+                                                <label id="newid"><b>@mr.agentname Id</b></label>
+                                            </th>
+                                            <th style="width:15%;text-align:center;">
+                                                <label id="spilid"><b>@mr.agentname Name</b></label>
+                                            </th>
+                                            <th style="width:15%;text-align:center;">
+                                                <label id="introducerid"><b>Introducer Id</b></label>
+                                            </th>
+
+
+
+
+                                            <th style="width:10%;text-align:center;">
+                                                <label id="position"><b>Mobile</b></label>
+                                            </th>
+                                            <th style="width:10%;text-align:center;">
+                                                <label><b>Password</b></label>
+                                            </th>
+
+
+                                            <th style="width:10%;text-align:center;">
+                                                <label id="email"><b>@mr.rankname </b></label>
+                                            </th>
+
+                                            <th style="width:10%;text-align:center;">
+                                                <label id="doj"><b>Date of Joining</b></label>
+                                            </th>
+                                            <th style="width: 10%; text-align: center;">
+                                                <label id="action"><b>Action</b></label>
+                                            </th>
+                                        </tr>
+                                    }
+                                    a = a + 1;
+
+
+                                    <tr style="text-align:left;">
+
+                                        <td>
+                                            @a
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.newagentid)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.name)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.introducerid)
+                                        </td>
+
+
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.mobile)
+                                        </td>
+
+                                        <td>
+                                            @tp
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.rankname)
+                                        </td>
+                                        <td>
+                                            @Convert.ToDateTime(item.doj).ToString("dd/MM/yyyy")
+
+                                        </td>
+                                        <td><button class="btn btn-success btn-sms" title="Send SMS" value="@item.newagentid" type="button">Send SMS</button></td>
+
+                                    </tr>
+
+                                }
+
+                            }
+
+
+
+                        </table>
+                        @if (a > 0)
+                        {
+                            <div class="text-center d-grid gap-2">
+                                <a href="@Url.Action("PrintAllBrokerList")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                                </div>
+                                }
+                            </div>
+
+
+                        </div>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+    $(function () {
+        $(".btn-sms").click(function () {
+            var c = $(this), smsid = c.val();
+            if (confirm("Are you sure send sms to " + smsid)) {
+                setTimeout(function () {
+
+                    c.html("<i class='fa fa-spin fa-spinner'></i>&nbsp;&nbsp;Sending...").attr("disabled", "").attr("class", "btn btn-danger");
+                    $.ajax({
+                        url: "@Url.Action("AllBroker_List")",
+                        data: { smsid: smsid },
+                        method: "post",
+                        success: function (d) {
+                            if (d) {
+                                alert(d);
+                                if (d.toString().indexOf("success") != -1) {
+                                    c.html("SMS Sent");
+                                }
+                            }
+                        }, error: function (er) {
+                            c.removeAttr("disabled").html("SMS Not Sent");
+                        }
+                    });
+
+                }, 1000);
+            }
+        });
+
+    });
+
+    </script>

@@ -1,0 +1,64 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Advance_payment_list";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var list = db.Member_tabs.Where(x => x.paymethod == "banktransaction" && x.paymethod == "Cash" && x.paymethod == "DD").ToList();
+    var a = 0;
+}
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Enquary List</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                           
+                        </div>           
+                        
+                    </div> 
+                 <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls"></div>
+                                   <table  class="table-responsive table-bordered table" id="myTable" style="width:100%;">
+                                <thead>
+                                  
+                                    <tr >
+                                        <th >Sr No.</th>
+                                        <th>Member Name</th>
+                                        <th>Member Id</th>
+                                        <th>Mobile No.</th>
+                                        <th>Branch Code</th>
+                                        <th>Entry Date</th>
+                                        <th>Booking Amount</th>
+                                        
+                                    </tr>
+                                </thead>
+                                       @foreach(var ii in list)
+                                       {
+                                           a = a + 1;
+                                    <tr>
+                                    <td>@a</td>
+                                     <td>@ii.MemberName</td>
+                                     <td>@ii.NewMemberId</td>
+                                     <td>@ii.Mobile</td>
+                                     <td>@ii.BranchCode</td>
+                                     <td>@ii.Cdate</td>
+                                     <td>@ii.booking_amt</td>
+                                    </tr>
+                                       }
+                            </table>   
+                                    </div>
+                            </div>
+                                        
+                   </div>
+
+</div> </div>
+

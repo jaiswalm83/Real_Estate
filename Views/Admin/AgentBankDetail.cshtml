@@ -1,0 +1,175 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.VoucherList>
+@using ODHDEVELOPERS.Models;
+
+@{
+    ViewBag.Title = "AgentBankDetail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int a = 0;
+    Double gamount = 0;
+        Double amount=0;
+        Double tds=0;
+}
+<style type="text/css">
+    td { 
+        text-align:left;
+    }
+</style>
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Agent/Associate Bank Detail Report</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right text-danger">
+                @TempData["message"]
+            </div>
+
+        </div>
+
+   
+
+        <div class="row">
+            <div class="col-md-6" style="width: 100%">
+
+                <div class="block">
+
+                    <div class="block-content controls">
+                           @using (Html.BeginForm())
+        {
+                   
+            <div class="row" style="width: 100%">
+                <div class="col-md-6" style="width: 100%">
+
+                    <div class="block" style="width: 100%">
+
+                        <div class="block-content controls">
+                             
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Select Month</label></span>
+                                    <select class="form-control" id="month" name="month" required>
+                                        <option selected>Select </option>
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                    <span class="input-group-addon">
+                                        <label class="width">Select Year</label></span>
+                                    <select class="form-control" id="year" name="year" required>
+                                        <option selected>Select </option>
+                                        <option>2015 </option>
+                                        <option>2016 </option>
+                                        <option>2017 </option>
+                                        <option>2018 </option>
+                                        <option>2019 </option>
+                                        <option>2020 </option>
+                                        <option>2021 </option>
+                                        <option>2022 </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="page-toolbar-block pull-right">
+                                <div class="widget-info widget-from">
+
+                                    <input type="submit" id="Pay" name="Commond" class="btn btn-primary pull-right" />
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>  
+        }          
+                        
+                        <div class="col-md-12">
+                                                <div class="table-responsive">
+                     
+                            @if((Model).Count()!=0){
+                              
+                                <table class="table table-bordered">
+                                   
+                                      
+                                      @foreach(var item in Model)
+                                {
+                                           <tr>
+                                            @if (a == 0)
+                                            {
+                                           <td colspan="7"><a href="@Url.Action("AgentBankDetail_excel")" target="_blank"><button style="background-color:#5e7621;color:black;">Get Report In Excel</button></a>
+                                               <a href="@Url.Action("AgentBankDetail_PDF")" target="_blank"><button style="background-color:#821414;color:white;">Report In PDF</button> </a>
+                                           </td>
+                                            }
+                                       </tr>
+                                            if (a == 0)
+                                            {
+                                    <tr><th>Sr. No.</th><th>Agent Name</th><th>Agent Id</th><th>Mobile</th><th>Pann No.</th><th>Bank Account No.</th><th>IFSC Code</th><th>Gross Amount</th><th>TDS Amount</th><th>Amount</th></tr>
+                                            }
+                                            a = a + 1;
+                                          <tr><td>@a</td><td>@item.name</td><td>@item.newagentid</td><td>@item.OtherMobile</td><td>@item.Panno</td><td>@item.BankAccountno</td><td>@item.IFCCode</td><td>@item.GrossAmount</td><td>@item.TDSAmount</td><td>@item.amount</td></tr>
+                                    gamount=gamount+@item.GrossAmount;
+                                    tds=tds+item.TDSAmount;
+                                    amount=amount+item.amount;
+                                }
+                                    <tr><td colspan="7"><b style="color:#1f0e76">Grand Total</b></td><td><b style="color:#1f0e76">@gamount</b></td><td><b style="color:#1f0e76">@tds</b></td><td style="text-align:right"><b style="color:#1f0e76">@amount</b></td></tr>
+                                  
+                                </table>
+                            }
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#NewAgentId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+                    }
+                })
+            }
+        });
+    })
+
+</script>

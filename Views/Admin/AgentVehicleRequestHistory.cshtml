@@ -1,0 +1,278 @@
+﻿
+@using ODHDEVELOPERS.Models
+@{
+    ViewBag.Title = "AgentVehicleRequestHistory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    UsersContext db = new UsersContext();
+    // var name = db.NewLogins.Single(o => o.UserName == User.Identity.Name).type;
+
+
+    var date = DateTime.Now.Date;
+    var totalrequest = db.VehicleRequestDetails.Where(o => o.RequestedDate == date).Count();
+    var approve = db.VehicleRequestDetails.Where(o => o.Status == 2).Count();
+    var cancel = db.VehicleRequestDetails.Where(o => o.Status == 3).Count();
+    var model = db.VehicleRequestDetails.ToList();
+    var a = 1;
+
+}
+
+<style>
+    .pbtn {
+        background-color: #de9018; /* Button background color */
+        color: white; /* Text color */
+        padding: 5px 10px; /* Button padding */
+        border: none; /* Remove default border */
+        border-radius: 5px; /* Slightly rounded corners */
+        font-size: 16px; /* Font size */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s ease; /* Smooth hover effect */
+    }
+
+        .pbtn:hover {
+            background-color: #c67f12; /* Darker shade for hover effect */
+        }
+</style>
+<link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script type="text/javascript" src="~/Scripts/autosearch.js"></script>
+
+
+<div class="container mt-5">
+    <!-- Vehicle Request Header Section -->
+    <div class="form-container d-flex justify-content-between align-items-center flex-wrap p-3 mb-4"
+         style="background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 5px;">
+        <!-- Title Section -->
+        <span class="title" style="font-size: 18px; font-weight: bold;">Vehicle Request History</span>
+
+        <!-- Details Section -->
+        <div class="d-flex flex-wrap justify-content-end" style="gap: 15px;">
+            <span>Total Vehicle Request: <strong>@totalrequest</strong></span>
+            <span>Total Approved Request: <strong>@approve</strong></span>
+            <span>Total Cancelled Request: <strong>@cancel</strong></span>
+        </div>
+    </div>
+    @if (model.Count() > 0)
+    {
+
+        <div class="index_body">
+            <div class="table-container">
+                <!-- Header Row -->
+               
+
+                <!-- Table -->
+                <table>
+                    <!-- Table Head -->
+                    <thead>
+                        <tr>
+                            <th>Serial No.</th>
+                            <th>Request Token</th>
+                            <th>Agent Id</th>
+
+                            <th>No. Of Visitor</th>
+                            <th>Distance</th>
+                            <th>Visit Date</th>
+                            <th>Return Date</th>
+                            <th>Requested Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <!-- Table Body -->
+                    <tbody>
+                        @foreach (var item in model)
+                        {
+                            <tr>
+                                <td>@a</td>
+                                <td>@item.RequestToken</td>
+                                <td>@item.AgentId</td>
+
+
+                                <td>@item.NoOfSeatRequired</td>
+                                <td>@item.TravelDistance km</td>
+                                <td>@item.VisitDate.ToString("dd-MM-yyyy")</td>
+                                <td>@item.ReturnDate.ToString("dd-MM-yyyy")</td>
+                                <td>@item.RequestedDate.ToString("dd-MM-yyyy")</td>
+                                <td><a class="pbtn">Pending..</a></td>
+
+
+
+                                @if (item.Status == 1)
+                                {
+
+                                    <td><kbd style="color:white;font-weight:bold;padding:5px;font-size:14px;background-color:#de9018">Pending..</kbd></td>
+
+                                }
+                                else if (item.Status == 2)
+                                {
+                                    <td><kbd style="color:white;font-weight:bold;padding:5px;font-size:14px;background-color:#369B07">Approved</kbd></td>
+                                }
+                                else
+                                {
+                                    <td><kbd style="color:whitesmoke;font-weight:bold;padding:5px;font-size:14px;background-color:#C21148">Cancelled</kbd></td>
+                                }
+
+
+                            </tr>
+                            a++;
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+
+<script>
+    $(function () {
+        $('.check').on('click', function () {
+            debugger;
+            var ele = $(this), spil = ele.attr("id"), array = spil.split('+');
+            $.get("/admin/VehicleApproveCancel", { RequestToken: array[0], Recogniser: "Approved" }, function (d) {
+                debugger;
+                if (d == 1) {
+
+                }
+            });
+        });
+        $('.cancel').on('click', function () {
+            debugger;
+
+            var ele = $(this), spil = ele.attr("id"), array = spil.split('+');
+            $('#myModal').modal();
+            $('#token').val(array[1]);
+            $('#vid').val(array[0])
+
+        });
+
+    });
+
+
+</script>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+        }
+        else
+        {
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-4">
+            <img src="../Images/nodata.png" />
+        </div>
+    </div>
+</div>
+
+         }
+
+
+<!----->
+    </div>
+
+</div>
+<!-------Modal------->
+<div id="myModal" style="margin-top:150px;border:0px;" class="modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <form method="post" action="/admin/AgentVehicleRequest">
+            <div class="modal-content" style="border:0px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="color:#2f9fe0;">&times;</button>
+                    <h4 class="modal-title" style="color:#2f9fe0;">Remark...</h4>
+                </div>
+                <div class="modal-body">
+
+                    <label>Request Token</label>
+                    <input type="text" style="color:#2f9fe0;" name="RequestToken" id="token" class="form-control" readonly="true" />
+
+                    <label>Agent Id</label>
+                    <input type="text" style="color:#2f9fe0;" id="vid" class="form-control" readonly="true" />
+
+                    <label>Remark</label>
+                    <textarea name="remark" class="form-control" required></textarea>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" style="background-color:#2f9fe0;color:white;">Close</button>
+                    <button type="submit" class="btn btn-warning pull-right bg-warning" style="background-color:#2f9fe0;color:white;">Save Remark</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@if (ViewBag.msg != "" && ViewBag.msg != null)
+{
+    <script>
+        (function myFunction() {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+        })();
+
+    </script>
+
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#submit').click(function () {
+            @Html.ValidationSummary(true)
+        });
+    });
+
+
+
+</script>
+
+
+<script>
+    $(function () {
+        $('.date').datepick();
+
+        function Time() {
+
+
+            var a = new Date();
+            var b = a.getHours();
+            if (a.getHours() > 12) {
+                b = a.getHours() - 12;
+            }
+
+            var t = b + ":" + a.getMinutes() + ":" + a.getSeconds();
+            $("#time").val(t).css("padding-left", "30px");
+
+        }
+
+        setInterval(Time, 1000);
+
+
+        $(".checkout").on("click", function () {
+            debugger;
+            var id = $(this).attr("id"); idplit = id.split("+"); vid = idplit[0]; vname = idplit[1];
+            $("#vid").val(vid)
+            $("#vname").val(vname)
+            $("#myModal").modal();
+
+        });
+    });
+</script>

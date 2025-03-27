@@ -1,0 +1,101 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseCustomerList>
+@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "ChequeRegis";
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    int a=0;
+}
+
+<div class="page-content">
+
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Cheque Register Report</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+       
+        <div class="row" >
+            <div class="col-md-6" style="width: 98%">
+
+                <table border="1" style="margin-left: 1%; margin-right: 1px; margin-bottom: 30px; width: 100%;">
+                    @using (Html.BeginForm())
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                        <tr>
+                            
+                    <th colspan="4"><b> <a href="@Url.Action("PrintChequeRegis")" target="_blank">Get Report In PDF</a></b></th>
+              
+                            <th colspan="4"><b>Dated: @DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy")</b></th>
+                        </tr>
+                        <tr>
+                            <th style="width: 5%; text-align: center;">
+                                <label id="sn"><b>S.N.</b></label>
+                            </th>
+                            <th style="width: 10%; text-align: center;">
+                                <label id="newid"><b>Account Holder Name</b></label>
+                            </th>
+
+                            <th style="width: 10%; text-align: center;">
+                                <label id="introducerid"><b>Cheque No</b></label>
+                            </th>
+
+                            <th style="width: 10%; text-align: center;">
+                                <label id="spilid"><b>Amount</b></label>
+                            </th>
+                          <th style="width: 8%; text-align: center;">
+                                <label id="doj"><b>Bank</b></label>
+                            </th>
+                            <th style="width: 8%; text-align: center;">
+                                <label id="pay"><b>Cheque Date </b></label>
+                            </th>
+                            
+                        </tr>
+                            }
+                            a = a + 1;
+
+
+                        <tr style="text-align: center;">
+                            <td>
+                                @a
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.newbondid)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.name)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.payment)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.payment)
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+
+                            </td>
+                          
+                        </tr>
+                   
+                        }
+
+                    }
+                </table>
+               
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,284 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.CsswiseBusiness>
+@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "CsswiseCollection";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var br = db.Branchtabs.Single(o => o.BranchCode == User.Identity.Name);
+    Double amount = 0, latefine = 0, rebate = 0, payamount = 0;
+    
+}
+
+
+<div class="page-content">
+         
+                <div class="container" id="divid1">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">CSS Wise Business</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                    </div>
+ 
+  @using (@Html.BeginForm()){
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                    <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Select Date</label></span>
+                    <input type="text" id="date" class="form-control datepicker" onclick="changedate(this.id)" required name="date" />
+                         
+                </div>   </div>
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Min. CSS</label></span>
+                    
+               <select class="form-control" id="mincss" name="mincss"   required>
+                                            <option>Select </option>
+
+                                        </select>
+                         
+                </div>   </div>
+            
+              <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Max. CSS</label></span>
+                <select class="form-control" id="maxcss" name="maxcss"   required>
+                                            <option>Select </option>
+
+                                        </select>
+                         
+                </div>   </div>
+
+
+                   <div class="row-form" style="width:100%">
+      <div class="col-md-9">
+          <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit">View</button>
+     </div>
+              </div>
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+                    }
+                  <div id="1">
+<table border="1" style="margin-left:1%; margin-right:1px; width:98%; margin-bottom:70px; ">
+    @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                            <tr><th colspan="4" >@mr.branchname Name:@br.BranchName</th>
+                                <th colspan="3" ><b>CSS Wise Business Report</b></th>
+                                <th colspan="6" ><b>Date:@item.date.ToString("dd/MM/yyyy")</b></th>
+                            </tr>
+        
+    <tr>
+        <th style="width:2%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+         <th style="width:8%;text-align:center;">
+           <label id="cid"><b>@mr.custname Id</b></label>
+        </th>
+        <th style="width:9%;text-align:center;">
+           <label id="cname"><b>@mr.custname Name</b></label>
+            </th>
+        
+        <th style="width:9%;text-align:center;">
+           <label id="cssno"><b>CSS No</b></label>
+        </th>
+            
+        <th style="width:8%;text-align:center;">
+           <label id="plan"><b>@mr.planname</b></label>
+        </th>
+            
+        <th style="width:8%;text-align:center;">
+            <label id="Term" ><b>Installment</b></label>
+        </th>
+             
+             
+        <th style="width:8%;text-align:center;">
+        <label id="Mode" ><b>Mode</b></label>
+        </th>
+            
+         <th style="width:8%;text-align:center;">
+         <label id="Amount"><b>Amount</b></label>
+        </th>
+
+         <th style="width:8%;text-align:center;">
+           <label id="latefine"><b>Late Fine</b></label>
+        </th>
+      <th style="width:8%;text-align:center;">
+           <label id="rebate"><b>Rebate</b></label>
+        </th>
+
+         <th style="width:8%;text-align:center;">
+           <label id="payamount"><b>Payamount </b></label>
+        </th>
+          <th style="width:8%;text-align:center;">
+           <label id="paymethod"><b>Mode Of Payment </b></label>
+        </th>
+        <th style="width:8%;text-align:center;">
+           <label id="expirydate"><b>Expiry Date </b></label>
+        </th>
+
+       
+
+      
+    </tr>
+    }
+                        a = a + 1;
+                        
+
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.newbondid)
+        </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cssno)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.planname)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.term)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.mode)
+        </td>
+         
+        <td>
+            @Html.DisplayFor(modelItem => item.amount)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.latefine)
+           
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.rebate)
+        </td>
+
+       <td>
+            @Html.DisplayFor(modelItem => item.payamount)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.paymethod)
+        </td>
+        <td>
+            @item.expirydate.ToString("dd/MM/yyyy")
+        </td>
+                        
+       
+        
+
+    </tr>
+                        amount = amount + Convert.ToDouble(item.amount);
+                        latefine = latefine + Convert.ToDouble(item.latefine);
+                        rebate = rebate + Convert.ToDouble(item.rebate);
+                        payamount = payamount + Convert.ToDouble(item.payamount);
+                        
+                        
+    }
+    if(a>0)
+    {
+    <tr style="text-align:center;">
+        <td colspan="5">
+            
+        </td>
+        <td colspan="2">
+            <b>GRAND TOTAL:</b>
+        </td>
+          <td>
+           <b> @amount</b>
+        </td>
+            <td>
+           <b> @latefine</b>
+        </td>
+        <td>
+           <b> @rebate</b>
+        </td>
+        
+        <td>
+           <b> @payamount</b>
+        </td>
+        <td></td>
+        
+      
+                        
+        <td>
+           
+        
+            </td>
+    </tr>
+    }
+                     
+    }
+    
+    
+    
+   
+</table>
+                       @if(a>0)
+        {
+         <a href="@Url.Action("PrintCsswiseBusiness")" target="_blank">Get Report In PDF</a>
+        }
+              </div> 
+                   
+         
+                    </div>
+    </div>
+
+<script type="text/javascript">
+    function changedate(to_id) {
+        debugger;
+        $("#" + to_id).click(function () {
+            var date = $("#date").val();
+
+            var url = '@Url.Action("selectcssno", "Branch")';
+            $.get(url, { date: date }, function data(t) {
+
+                var mincss = $("#mincss");
+                var maxcss = $("#maxcss");
+
+                mincss.children().remove();
+                maxcss.children().remove();
+
+                mincss.append('<option value="Select">Select</option>');
+                maxcss.append('<option value="Select">Select</option>');
+
+                for (var i = 0; i < t.length; i++) {
+                    debugger;
+                    mincss.append('<option value="' + t[i].cssno + '">' + t[i].cssno + '</option>');
+                    maxcss.append('<option value="' + t[i].cssno + '">' + t[i].cssno + '</option>');
+                }
+
+
+            });
+        });
+
+    }
+    //setTimeout(changedate, 1000);
+</script>

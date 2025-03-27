@@ -1,0 +1,196 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Installmenttab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "Renewalsms";
+        var a = 0;
+    }
+
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#BondId").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteBondId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.newbondid };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <div class="container mt-5">
+        <!-- Title -->
+        <h2 class="text-center create-title">Send Renewal SMS</h2>
+        @using (Html.BeginForm())
+        {
+            <!-- Form -->
+            <div id="sendRenewalSmsForm" class="form-container">
+                <input type="hidden" value="@System.DateTime.Now.Date" name="date" />
+                <!-- Customer ID or Name -->
+                <div class="form-group">
+                    <label for="customerIdName" class="form-label">@mr.custname Id or Name</label>
+                    <input type="text" class="form-control" name="newbondid" id="BondId" placeholder="Enter Customer ID or Name" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn" id="search">Search</button>
+                </div>
+            </div>
+        }
+
+
+        <div class="index_body">
+            <div class="table-container">
+                <table>
+
+                    @foreach (var item in Model)
+
+                    {
+
+                        if (a == 0)
+                        {
+
+                            <div class="header-row">Renewal-List</div>
+
+
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label id="ii"><b>Install</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="cc"><b>@mr.custname Id</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="sn"><b>Amount</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="pp "><b>Plan Name</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="gg"><b>Receipt No</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="kk"><b>Year</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="mm"><b>Mode</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="vv "><b>Payment Date</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="ccc"><b>Expiry Date</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label><b>Mobile No.</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="zz"><b>Branch Code</b></label>
+                                    </th>
+
+
+                                    <th>
+                                        <label id="action"><b>Action</b></label>
+                                    </th>
+
+
+
+                                </tr>
+                            </thead>
+                        }
+                        a = a + 1;
+                        <tbody>
+                            <tr>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.installmentno)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.newbondid)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.amount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.planname)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.receiptno)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.year)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mode)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.paymentdate)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.expirydate)
+                                </td>
+
+                                <td>
+                                    @ViewData["mob"]
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.branch)
+                                </td>
+
+
+                                <td>
+                                    @Html.ActionLink("Send Sms", "Renewalsms", new { newbondid = item.newbondid, receiptno = item.receiptno }, new { onclick = "return confirm('Are You sure to send sms..?');" })
+                                </td>
+
+                            </tr>
+                        </tbody>
+
+
+                    }
+
+                </table>
+
+
+
+                    <h4>@ViewBag.msg</h4>
+                </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+

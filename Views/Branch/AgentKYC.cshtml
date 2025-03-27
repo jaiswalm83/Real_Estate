@@ -1,0 +1,148 @@
+﻿@using ODHDEVELOPERS.Models;
+@model AgentDetail
+@{
+    ViewBag.Title = "AgentKYC";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+}
+<style type="text/css">
+    .block-content {
+        width: 97% !important;
+    }
+
+    .block {
+        width: 91%;
+    }
+</style>
+
+
+<div class="container mt-4 FormContainer">
+    <h2 class="text-center mb-4"> Duplicate Customer Report</h2>
+    <form method="post" id="branchForm" class="border p-4 rounded shadow formtag">
+
+        <!-- Project Year -->
+        <div class="mb-3">
+            <label for="year" class="form-label formLabel">Customer Id:</label>
+            <input type="text" class="form-control formInput" name="NewAgentId" id="NewAgentId" placeholder="Customer Id" required>
+        </div>
+
+        <!-- Create Button -->
+        <div class="text-center d-grid gap-2">
+            <button type="submit" value="Search" name="command" class="btn btn-lg formButtom"><i class="fa fa-search"></i>Search</button>
+        </div>
+    </form>
+    @if (Model != null)
+    {
+        if (Model.NewAgentId != null)
+        {
+            <h4 class="text-success text-center" id="message">@ViewBag.message</h4>
+            <form method="post" class="mt-3">
+                <div class="p-4 rounded shadow formtag">
+                    <h2 class="text-center mb-3">Bank KYC Details</h2>
+                    @*Branch Code*@
+                    <div class="mb-3">
+                        <label for="branchCode" class="form-label formLabel">Agent Id:</label>
+                        <input type="text" class="form-control formInput" value="@Model.NewAgentId"
+                               name="NewAgentId" readonly="disabled">
+                    </div>
+                    @*Collection Point Name*@
+                    <div class="mb-3">
+                        <label for="collectionPointName" class="form-label formLabel">Agent Name:</label>
+                        <input type="text" class="form-control formInput" value="@Model.name" name="name"
+                               id="name" readonly="disabled">
+
+                    </div>
+                    @*Collection Point ID*@
+                    <div class="mb-3">
+                        <label for="collectionPointId" class="form-label formLabel">Mobile:</label>
+                        <input type="text" class="form-control formInput" value="@Model.Mobile"
+                               name="Mobile" id="Mobile" readonly="disabled">
+
+                    </div>
+                    @*Mobile No*@
+                    <div class="mb-3">
+                        <label for="mobile" class="form-label formLabel">Other Mobile:</label>
+                        <input type="text" class="form-control formInput" value="@Model.OtherMobile"
+                               name="OtherMobile" id="OtherMobile" maxlength="10">
+
+                    </div>
+                    @*Email ID*@
+                    <div class="mb-3">
+                        <label for="email" class="form-label formLabel">PAN No:</label>
+                        <input type="text" class="form-control formInput" value="@Model.Panno"
+                               name="Panno" id="Panno" maxlength="10">
+
+                    </div>
+                    @*Date*@
+                    <div class="mb-3">
+                        <label for="date" class="form-label formLabel">Aadhar No:</label>
+                        <input type="text" class="form-control formInput" value="@Model.Aadhaar_No"
+                               name="Aadhaar_No" id="Aadhaar_No">
+
+                    </div>
+                    @*Address*@
+                    <div class="mb-3">
+                        <label for="address" class="form-label formLabel">Driving Licence No:</label>
+                        <input type="text" class="form-control formInput" value="@Model.Drivinglno"
+                               name="Drivinglno" id="Drivinglno">
+
+                    </div>
+                    @*Collection Point ID*@
+                    <div class="mb-3">
+                        <label for="collectionPointId" class="form-label formLabel">Bank Name:</label>
+                        <input type="text" class="form-control formInput" value="@Model.BankName"
+                               name="BankName" id="BankName">
+
+                    </div>
+                    @*Mobile No*@
+                    <div class="mb-3">
+                        <label for="mobile" class="form-label formLabel">Branch Name:</label>
+                        <input type="text" class="form-control formInput" value="@Model.BankBranchName" name="BankBranchName" id="BankBranchName">
+
+                    </div>
+                    @*Email ID*@
+                    <div class="mb-3">
+                        <label for="email" class="form-label formLabel">Bank A/C No:</label>
+                        <input type="text" class="form-control formInput" value="@Model.BankAccountno" name="BankAccountno" id="BankAccountno">
+                    </div>
+                    @*Date*@
+                    <div class="mb-3">
+                        <label for="date" class="form-label formLabel">IFSC Code:</label>
+                        <input type="text" class="form-control formInput" value="@Model.IFCCode" name="IFCCode" id="IFCCode">
+
+                    </div>
+                    @*Address*@
+                    <div class="mb-3">
+                        <label for="address" class="form-label formLabel">Bank Address:</label>
+                        <input type="text" class="form-control formInput" value="@Model.BankAddress" name="BankAddress" id="BankAddress">
+
+                    </div>
+                    @*Create Button*@
+                    <div class="text-center d-grid gap-2">
+                        <button type="submit" value="Update" name="command" class="btn btn-lg formButtom">Update</button>
+                    </div>
+                </div>
+
+            </form>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#NewAgentId').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AgentIdAC/",
+                    type: "get",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }));
+                    }
+                });
+            }
+        });
+    });
+</script>

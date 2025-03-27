@@ -1,0 +1,314 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var hlist = (from hh in db.HeadTabs select hh).ToList();
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "AddExpense";
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+        if (fd.status == 2)
+        {
+            dt = fd.formdate;
+        }
+
+    }
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+@if (fd.status == 0)
+{
+<script>
+    $(function () {
+        $('#date').datepick();
+        
+    });
+</script>  
+}
+<script>
+    function detail(chkid) {
+        var amt = $("#exAmount").val()
+        var chk = $("#" + chkid).val();
+        if (chk == "Cheque") {
+            $("#detail").show();
+            $("#dd").hide();
+            $("#trdetail").hide();
+            $("#ChequeAmount").val(amt);
+        }
+        else if (chk == "DD") {
+            $("#dd").show();
+            $("#detail").hide();
+            $("#trdetail").hide();
+            $("#DDamount").val(amt);
+        }
+        else if (chk == "banktransaction") {
+            $("#dd").hide();
+            $("#detail").hide();
+            $("#trdetail").show();
+            $("#tramount").val(amt);
+        }
+        else {
+            $("#detail").hide();
+            $("#dd").hide();
+            $("#trdetail").hide();
+        }
+    }
+</script>
+
+
+                        <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+
+                        <div class="container mt-5">
+                            <h2 class="text-center mb-4 create-title">Add Expense</h2>
+
+                            @using (Html.BeginForm("AddExpense", "Operator", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+
+
+                                <div id="branchForm" class="form-container">
+
+
+
+
+
+
+
+                                    <div class="form-group">
+                                        <label class="form-label">Select Type </label>
+
+                                        <select class="form-control" id="Expense" name="head" required>
+                                            <option selected>Select </option>
+                                            @foreach (var h in hlist)
+                                            {
+                                                <option>@h.head </option>
+
+                                            }
+
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Select Type</label>
+
+                                        <select class="form-control" id="type" name="type" required>
+                                            <option value="0" selected>Payment</option>
+                                            <option value="1">Receive</option>
+                                        </select>
+                                    </div>
+
+
+
+                                    <!-- Collection Point Name -->
+                                    <div class="form-group">
+                                        <label for="collectionPointName" class="form-label">Enter Amount</label>
+                                        <input type="text" class="form-control " name="amount" id="exAmount" placeholder="Enter Collection Point Name" required>
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">Payment Mode </label>
+
+
+                                        <input type="radio" id="paymethod" name="paymethod" value="Cash" checked onclick="detail(this.id)">
+                                        Cash
+                                        <input type="radio" id="paymethod2" name="paymethod" value="DD" onclick="detail(this.id)">
+                                        DD
+                                        <input type="radio" id="paymethod3" name="paymethod" value="Cheque" onclick="detail(this.id)">
+                                        Cheque
+                                        <input type="radio" id="paymethod4" name="paymethod" value="banktransaction" onclick="detail(this.id)">
+                                        Bank Transaction
+
+                                    </div>
+
+
+
+
+                                    <div class="row-form" id="dd" style="display: none;">
+
+
+
+                                        <div class="form-group">
+
+                                            <label class="form-label">DD No. </label>
+
+                                            <input type="text" id="ddno" name="ddno" class="form-control" />
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="form-label">DD Amount </label>
+
+                                            <input type="text" id="DDamount" name="DDamount" class="form-control" readonly="true" />
+                                        </div>
+
+                                        </div>
+                                        <div class="row-form" id="detail" style="display: none; margin-bottom: 10%;">
+                                            <div class="form-group">
+                                                <label class="form-label">Bank Name </label>
+
+                                                <input type="text" id="bank" name="bank" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">A/C No. </label>
+
+                                                <input type="text" id="ACNO" name="Account" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Cheque No. </label>
+
+                                                <input type="text" id="chequeno" name="chequeno" class="form-control" />
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">A/C Holder Name </label>
+
+                                                <input type="text" id="ACname" name="ACholdername" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Branch Name </label>
+
+                                                <input type="text" id="barnch" name="Branch" class="form-control" />
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">IFSC </label>
+
+                                                <input type="text" id="IFSCcode" name="IFSCCode" class="form-control" />
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">Amount </label>
+
+                                                <input type="text" id="ChequeAmount" name="ChequeAmount" class="form-control" readonly="true" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Cheque Date </label>
+
+                                                <input type="text" id="Date" name="Chequedate" value="@dt" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Cheque Image </label>
+
+                                                <input type="file" id="Chequeimage" name="Chequeimage" class="form-control" />
+
+                                            </div>
+
+                                       </div>
+
+                                        <div class="row-form" id="trdetail" style="display: none; margin-bottom: 10%;">
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">Bank Name </label>
+
+                                                <select id="trbank" name="trbank" class="form-control">
+                                                    <option>select</option>
+                                                    @foreach (var blist in db.BankDetail_Tabs.ToList())
+                                                    {
+
+                                                        <option value="@blist.bankname">@blist.bankname</option>
+
+                                                    }
+                                                </select>
+                                            </div>
+
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">Transaction Id </label>
+
+                                                <input type="text" id="transactionid" name="transactionid" class="form-control" />
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">Transaction Date </label>
+
+                                                <input type="date" id="transactiondate" name="transactiondate" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Amount </label>
+
+                                                <input type="text" id="tramount" name="tramount" class="form-control" readonly="true" />
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">Pay Method </label>
+
+
+                                                <input type="radio" id="trpmethod1" name="transactiontype" value="NEFT" checked>
+                                                NEFT
+                                                <input type="radio" id="trpmethod2" name="transactiontype" value="IMPS" />
+                                                IMPS
+                                                <input type="radio" id="trpmethod3" name="transactiontype" value="RTGS" />
+                                                RTGS
+                                                <input type="radio" id="trpmethod4" name="transactiontype" value="UPI" />
+                                                UPI
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">A/C Holder's A/C No. </label>
+                                               
+                                                <input type="text" id="holderacno" name="holderacno" class="form-control" />
+                                            </div>
+                                        
+                                        </div>
+
+
+
+
+                                        <!-- Collection Point Name -->
+                                        <div class="form-group">
+                                            <label for="collectionPointName" class="form-label">Enter Remarks</label>
+                                            <input type="text" class="form-control " name="remarks" id="Remarks" placeholder="Enter Collection Point Name" required>
+                                        </div>
+
+
+
+
+                                        <div class="form-group">
+                                            <label class="form-label">Select Date</label>
+
+                                            <input type="text" class="form-control date" value="@dt" name="date" id="date" readonly="true" />
+                                        </div>
+
+
+
+                                        <!-- Create Button -->
+                                        <div class="text-center d-grid gap-2">
+                                            <button type="submit" class="btn create-btn">Add</button>
+                                        </div>
+
+
+
+
+                                        <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+                                      </div>
+                                
+                                        }
+                                    </div>
+                          
+
+
+                        
+     

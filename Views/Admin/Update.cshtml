@@ -1,0 +1,134 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.CompanyInfos.Single(b => b.AdminId == User.Identity.Name);
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+
+
+    logo = r.CompanyLogo;
+    companyname = r.CompanyName;
+    incometype = r.IncomeType;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Update";
+}
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+<!-- Section 1: Final Report -->
+<div class="section">
+    
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2">Update</h3>
+    </div>
+    <!-- Main Container -->
+    <div class="row g-3">
+        <div class="container mt-5">
+            <!-- First Row -->
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdateBranch" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/location-pin.png" />
+                            <h6 class="card-title mt-3">@mr.branchname</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdateOperator" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/map.png" />
+                            <h6 class="card-title mt-3">Collection Point</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdateHR" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/hr.png" />
+                            <h6 class="card-title mt-3">Hr</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdatePlan" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/clipboard.png" />
+                            <h6 class="card-title mt-3">@mr.planname Category</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdateBlock" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/cubes.png" />
+                            <h6 class="card-title mt-3">Block</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdatePlotLimit" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/edit.png" />
+                            <h6 class="card-title mt-3">Edit Plot Limit</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Second Row -->
+            <div class="row g-3 mt-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/EMIMaster" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/ledger.png" />
+                            <h6 class="card-title mt-3">Emi Master</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdateRank" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/next-level.png" />
+                            <h6 class="card-title mt-3">@mr.rankname</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdateExpense" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/commission.png" />
+                            <h6 class="card-title mt-3">Expense</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/UpdateMember" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/team.png" />
+                            <h6 class="card-title mt-3">Member</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="#" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/manager.png" alt="Accountant" />
+                            <h6 class="card-title mt-3">Associate</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="#" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/handshake.png" />
+                            <h6 class="card-title mt-3">Customer</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+

@@ -1,0 +1,414 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.MergeDailyCollection>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "CompleteDailyCollection";
+    var a = 0;
+    Double appfee = 0, agencyfee = 0, memberfee = 0, acformfee = 0, sum = 0, late = 0, rebate = 0, diposit = 0, withdraw = 0;
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+<script>
+    $(function () {
+        $('#sdate').datepick();
+        $('#edate').datepick();
+        
+    });
+
+</script>
+
+<div class="page-content">
+                <div class="container">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Datewise Collection Details</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                     
+                    </div>
+ 
+  @using (@Html.BeginForm())
+  {
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:98%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width"> Type</label></span>
+                <select  id="type"  class="form-control" required name="type">
+                    <option >Select</option>
+                     <option value="Cheque">Cheque</option>
+                     <option value="Cash">Cash</option>
+                     <option value="banktransaction">Bank Transaction</option>
+                </select>
+                         
+                </div>   </div>
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width"> Start Date</label></span>
+                    <input type="text" id="sdate"  class="form-control" required name="sdate">
+                         
+                </div>   </div>
+<div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width"> End Date</label></span>
+                    <input type="text" id="edate"  class="form-control" required name="edate">
+                         
+                </div>   </div>
+                                    
+
+                   <div class="row-form" style="width:98%">
+      <div class="col-md-9" style="text-align:right">
+          <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit" >View</button>
+     </div>
+              </div>
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+  }
+                 
+                      
+
+<table border="1" style="margin-left:1%; margin-right:1px; width:95%; margin-bottom:30px; ">
+   
+        @foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+                            <tr style="font-size:13px;color:#2192d6;font-weight:100"><th colspan="3">@mr.branchname Name:@User.Identity.Name</th>
+                                <th colspan="2" ><b>Datewise Collection Details</b></th>
+                                <th colspan="6" ><b> Duration:@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy")-@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></th>                               
+                            </tr>
+    <tr>
+        <th style="width:5%;text-align:center;">
+           <label><b>S.N.</b></label>
+            </th>
+         <th style="width:8%;text-align:center;">
+           <label><b>CSS No</b></label>
+        </th>
+        <th style="width:17%;text-align:center;">
+           <label ><b>@mr.custname Id</b></label>
+            </th>
+         <th style="width:15%;text-align:center;">
+           <label ><b>Name</b></label>
+            </th>
+           <th style="width:19%;text-align:center;">
+         <label><b>Introducer Id</b></label>
+        </th>
+        <th style="width:6%;text-align:center;">
+           <label id="term_plan"><b>Type</b></label>
+        </th>
+
+         <th style="width:10%;text-align:center;">
+         <label ><b>Payment Date</b></label>
+        </th>
+          
+        <th style="width:10%;text-align:center;">
+         <label ><b>Amount</b></label>
+        </th>
+          
+         <th style="width:10%;text-align:center;">
+           <label><b>Late Fee</b></label>
+        </th>
+
+         <th style="width:10%;text-align:center;">
+           <label><b>Rebate</b></label>
+        </th>
+       
+           <th style="width:10%;text-align:center;">
+           <label><b>Pay Method</b></label>
+        </th>
+        
+    </tr>
+            
+
+            }
+            a = a + 1;
+
+           
+            <tr style="text-align:left;">
+        <td>
+            @a
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.cssno)
+        </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.newbondid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        
+         <td>
+            @Html.DisplayFor(modelItem => item.newintroducerid)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.newrenew)
+        </td>
+
+         <td>
+            @Html.DisplayFor(modelItem => item.date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.amount)
+        </td>
+        
+        <td>
+           
+            @Html.DisplayFor(modelItem => item.latefine)
+           
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.rebate)
+        </td>
+       
+           <td>
+              @if(item.paymethod=="Cheque")
+              {
+          <a href=""  data-target="#@item.no" role="button" class="btn btn-default btn-primary" data-toggle="modal">Cheque</a>
+              }
+                 else if (item.paymethod == "banktransaction")
+              {
+          <a href=""  data-target="#@item.trno" role="button" class="btn btn-default btn-primary" data-toggle="modal"> @Html.DisplayFor(modelItem => item.paymethod)</a>
+              }
+              else
+              {
+                     @Html.DisplayFor(modelItem => item.paymethod)
+              }
+        </td>
+    </tr>
+            late = late + Convert.ToDouble(item.latefine);
+            rebate = rebate + Convert.ToDouble(item.rebate);
+            sum = sum + Convert.ToDouble(item.amount);
+            appfee = Convert.ToDouble(item.appcharge);
+            agencyfee = Convert.ToDouble(item.formfee);
+            memberfee = Convert.ToDouble(item.memberfee);
+            acformfee = Convert.ToDouble(item.acformfee);
+          //  totalexp = Convert.ToDouble(item.totalexp);
+         //   totalvoucher = Convert.ToDouble(item.voucher);
+            diposit = Convert.ToDouble(item.dipositsaving);
+            withdraw = Convert.ToDouble(item.widthdrawsaving);
+        }
+    @if(a>0)
+    {
+    <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>TOTAL:</b></label></td><td><label><b>@sum</b></label></td><td><label><b> @late</b></label></td><td><label><b>@rebate</b></label></td><td></td>
+                
+            </tr>
+        <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>@mr.custname Fee:</b></label></td><td><label><b>@appfee</b></label></td><td colspan="2"></td><td></td>
+            </tr>
+        <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>@mr.agentname Fee:</b></label></td><td><label><b>@agencyfee</b></label></td><td colspan="2"></td><td></td>
+            </tr>
+          <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>Member Fee:</b></label></td><td><label><b>@memberfee</b></label></td><td colspan="2"></td><td></td>
+            </tr>
+        <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>A/c Form Fee:</b></label></td><td><label><b>@acformfee</b></label></td><td colspan="2"></td><td></td>
+            </tr>
+        <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>Total Saving Deposit:</b></label></td><td><label><b>@diposit</b></label></td><td colspan="2"></td><td></td>
+            </tr>
+          <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>TOTAL INCOME:</b></label></td><td><label><b>@(sum+appfee+agencyfee+memberfee+acformfee+diposit+late)</b></label></td><td colspan="2"></td><td></td>
+            </tr>
+      
+         <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>Total Saving Withdraw:</b></label></td><td><label><b>@withdraw</b></label></td><td colspan="2"></td><td></td>
+            </tr>
+        
+         <tr style="text-align:left;">
+         <td style="width:20%" colspan="3"></td><td colspan="4"><label><b>GRAND TOTAL:</b></label></td><td><label><b>@(sum+appfee+agencyfee+memberfee+acformfee+diposit+late-withdraw-rebate)</b></label></td><td colspan="2"></td><td></td>
+         </tr>
+    }
+    
+  
+</table>
+                      
+
+@if (a > 0)
+{
+    <a href="@Url.Action("PrintCompleteDailyCollection")" target="_blank">Get Report In PDF</a>
+}
+    
+          </div>
+    </div>
+ @foreach (var ii in Model)
+    {
+<div class="modal fade" id="@ii.no" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="background-color:#b2b0b0;">
+                <h4 class="modal-title w-100 font-weight-bold" style="color:#123897;">Cheque Detail</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="row"style="margin-left:10px;">
+                    <div class="col-md-12">
+              <div class="col-md-6">
+                  <label style="color:#123897;">Bank:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.bank</label>
+              </div>
+                        </div>
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Branch Name:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Bbranch</label>
+              </div>
+
+                         </div>
+                      <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">IFSC</label>
+                          </div>
+              <div class="col-md-6">
+                 <label>@ii.IFSCCode</label>
+              </div>
+                         
+                            </div>
+
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Account Holder Name:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.ACholdername</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">Cheque No:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.chequeno</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">Cheque Amount:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.ChequeAmount</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Cheque Date:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Chequedate</label>
+              </div>
+                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    }
+ @foreach (var ii in Model)
+    {
+<div class="modal fade" id="@ii.trno" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="background-color:#b2b0b0;">
+                <h4 class="modal-title w-100 font-weight-bold" style="color:#123897;">Transaction Detail</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="row"style="margin-left:10px;">
+                    <div class="col-md-12">
+              <div class="col-md-6">
+                  <label style="color:#123897;">Bank Name:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.bank</label>
+              </div>
+                        </div>
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Transaction Id:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.chequeno</label>
+              </div>
+
+                         </div>
+                      <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">transaction Type</label>
+                          </div>
+              <div class="col-md-6">
+                 <label>@ii.transactiontype</label>
+              </div>
+                         
+                            </div>
+
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Account Holder's A/C No:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Account</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">Transaction Amount:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.ChequeAmount</label>
+              </div>
+                         </div>
+                     
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Transaction Date:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Chequedate</label>
+              </div>
+                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    }

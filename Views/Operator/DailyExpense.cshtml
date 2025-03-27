@@ -1,0 +1,162 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Expense>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+        ViewBag.Title = "DailyExpense";
+        var a = 0;
+        Double sum = 0;
+        var or = db.Operators.Single(o => o.OperatorId == User.Identity.Name);
+        var br = db.Branchtabs.Single(b => b.BranchCode == or.BranchCode);
+        Double expense = Convert.ToDouble(ViewData["expense"]);
+
+    }
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+   
+
+
+    <div id="divid1">
+        <div id="2">
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">Daily Expense Report</h2>
+
+                @using (@Html.BeginForm())
+                {
+                    <div id="hide">
+                        <div id="branchForm" class="form-container">
+
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">Select Start Date</label>
+                                <input type="text" id="sdate" class="form-control datepicker" required name="sdate">
+                            </div>
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">Select End Date</label>
+                                <input type="text" id="edate" class="form-control datepicker" required name="edate" required>
+                            </div>
+
+
+                            <!-- Create Button -->
+                            <div class="text-center d-grid gap-2">
+                                <button type="submit" class="btn create-btn" id="submit" name="command" value="Search">View</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                }
+
+                @using (Html.BeginForm())
+                {
+                    <div class="index_body">
+                        <div class="table-container">
+                            <div id="1">
+                                <table>
+                                    @using (Html.BeginForm())
+                                    {
+                                        foreach (var item in Model)
+                                        {
+
+                                            if (a == 0)
+                                            {
+                                                <thead>
+                                                    <tr>
+                                                        <td style="background-color:#ff5722; color:white"> <label id="dddd"><b>Branch Name: @br.BranchName</b></label></td>
+                                                        <td colspan="3" style="background-color:#ff5722; color:white"><b>Daily Expense Report </b></td>
+                                                        <td colspan="2" style="background-color:#ff5722; color:white"><b>Printed: @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</b></td>
+                                                    </tr>
+
+                                                </thead>
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <label id="sn"><b>S.N.</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="date"><b>Date</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label><b>Head</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label><b>Remark</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label><b>Paymethod</b></label>
+                                                        </th>
+                                                        <th>
+                                                            <label id="Amount"><b>Amount</b></label>
+                                                        </th>
+
+
+                                                    </tr>
+                                                </thead>
+                                            }
+                                            a = a + 1;
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        @a
+                                                    </td>
+                                                    <td>
+                                                        @Convert.ToDateTime(item.date_time).ToString("dd/MM/yyyy")
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.head)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Remark)
+                                                    </td>
+                                                    <td>@item.paymethod</td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.amount)
+                                                    </td>
+
+
+                                                </tr>
+                                            </tbody>
+                                            sum = sum + Convert.ToDouble(item.amount);
+                                        }
+
+                                        if (a > 0)
+                                        {
+                                            <thead>
+                                                <tr><td colspan="4"> <label id="toatlction"><b>Grand Total:</b></label></td><td colspan="2" style="width:20%;text-align:center;"><b>@sum</b></td></tr>
+                                            </thead>
+
+
+                                        }
+                                    }
+
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    if (a > 0)
+                    {
+                        <!-- Create Button -->
+                        <div class="text-center d-grid gap-2">
+
+                            <a href="@Url.Action("PrintExpanse")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                        </div>
+
+
+                    }
+
+
+
+                }
+            </div>
+                    </div>

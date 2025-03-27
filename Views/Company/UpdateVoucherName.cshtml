@@ -1,0 +1,124 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.VFormatTab>
+@{
+    Layout = "~/Views/Shared/_CompanyLayout.cshtml";
+    ViewBag.Title = "UpdateVoucherName";
+    var grid = new WebGrid(Model);
+    var a = 0;
+}
+
+<script type="text/javascript" >
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var Id = tr.find("#Id").html();
+            var type = tr.find("#type").val();
+           
+
+
+            tr.find("#lbltype").text(type);
+           
+
+            tr.find('.edit-mode, .display-mode').toggle();
+            var VFormatTab =
+            {
+                "Id": Id,
+                "type": type,
+               
+
+            };
+            $.ajax({
+                url: '/Company/EditVoucher/',
+                data: JSON.stringify(VFormatTab),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    //alert(data);
+                }
+            });
+
+        });
+    })
+</script>  
+
+<style type="text/css">
+    .dd {
+        height:50px;
+        width:70%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+    .d {
+        height:50px;
+        width:30%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+
+</style>
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Update Voucher Name</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                        
+                    </div> 
+
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls">  
+                    
+                                   
+                 @if (a == 0)
+                 {  
+                     <div id="comm">
+                         
+                           <div  id="gridContent" style="padding:20px;" >  
+@grid.GetHtml(
+        tableStyle: "webgrid-table",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "webgrid-row-style",
+        mode: WebGridPagerModes.All,
+        columns:
+             grid.Columns(
+             grid.Column("Id", format: @<text> <span  class="display-mode" style="width:20px;text-align:center;">@item.Id </span> <label id="Id" class="edit-mode" style="width:100px;">@item.Id</label> </text>, style: "col2Width"),
+             grid.Column("type", "Voucher Name", format: @<text> <span  class="display-mode" style="width:100px;"> <label id="lbltype">@item.type</label> </span>  <input type="text" id="type" value="@item.type" class="edit-mode" style="width:100px;" /> </text>, style: "col2Width"),
+             grid.Column("Action", format: @<text>  
+                                <button class="edit-user display-mode" >Edit</button>  
+                                <button class="save-user edit-mode"  >Save</button>  
+                                <button class="cancel-user edit-mode" >Cancel</button>  
+                            </text>, style: "col3Width", canSort: false)
+           ))  
+
+                                    
+                                </div>
+                                </div>
+                 }
+                                             
+                                    </div>
+                            </div>
+                                        
+                   </div> </div> </div>
+    </div>

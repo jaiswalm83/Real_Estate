@@ -1,0 +1,64 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Totalleave";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var Attendencedate = Convert.ToDateTime(TempData["md"]);
+    var newdays = DateTime.DaysInMonth(Attendencedate.Year, Attendencedate.Month);
+    DateTime firstofmonth = new DateTime(Attendencedate.Year, Attendencedate.Month, 1);
+    DateTime lastofmonth = new DateTime(Attendencedate.Year, Attendencedate.Month, newdays);
+    var empid=Convert.ToString(TempData["id"]);
+    var atten = Convert.ToString(TempData["idd"]);
+    var status = Convert.ToInt32(TempData["ad"]);
+    var id = db.Emp_attens.Where(a=>a.empid == empid &&  a.Attendencedate >= firstofmonth && a.Attendencedate <= lastofmonth && a.atten == "A").Count();
+    var emp = db.Emp_leaves.Where(a => a.empid == empid && a.sdate >= firstofmonth && a.edate <= lastofmonth && a.status == 1).Count();
+    var ab = id-emp;
+    var list = db.Emp_leaves.Where(a=>a.empid==empid).ToList();
+}
+
+ <div class="page-content">
+ <div class="container">
+<div class="page-toolbar">
+    <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Total Remaining_Leave</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+    </div>
+     <div class="row" >
+     <div class="col-md-4" style="width:100%">
+    <form method="post" action="../HR/Totalleave">
+        <table class="table table-bordered" style="margin-left:1%; margin-right:1px; width:95%; margin-bottom:30px;border:1px solid black;">
+       <thead style="border:1px solid #1a0404;">
+        <tr>
+        <th>Srno.</th>
+        <th>Empid</th>
+        <th>Branch Code</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Reason</th>
+        <th>Leave Type</th>
+        <th>Remaining Leaves</th>
+         </tr>
+           </thead>
+    <tbody>
+        @foreach (var item in list)
+        {
+       
+            <tr>
+            <td>@item.Id</td>
+             <td>@item.empid</td>
+             <td>@item.branchcode</td>
+              <td>@item.sdate</td>
+              <td>@item.edate</td>
+              <td>@item.reason</td>
+              <td>@item.leavetype</td>
+              <td>@ab</td>
+            </tr>
+        }
+    </tbody>
+ </table>
+    </form>
+         </div>
+         </div>
+    </div>
+     </div>

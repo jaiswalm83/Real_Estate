@@ -1,0 +1,232 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseCustomerList>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "DatewiseCustomer";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        var a = 0;
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(c => c.Id == 1);
+
+    }
+
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <script>
+        $(function () {
+            $('#popupDatepicker').datepick();
+            $('#popupDatepicker1').datepick();
+            $('#inlineDatepicker').datepick({ onSelect: showDate });
+        });
+
+        function showDate(date) {
+            alert('The date chosen is ' + date);
+        }
+    </script>
+
+
+
+
+
+    <div id="divid">
+
+
+        <div class="page-toolbar-block pull-right">
+            <div class="widget-info widget-from">
+                <div>
+                    <label>@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</label>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="container mt-5">
+            <h2 class="text-center mb-4 create-title">Datewise @mr.custname</h2>
+            @using (Html.BeginForm())
+            {
+
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">Start Date</label>
+                    <input type="text" class="form-control" id="popupDatepicker" name="sdate" placeholder="Enter Date" required>
+                </div>
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">End Date</label>
+                    <input type="text" class="form-control" id="popupDatepicker1" name="edate" placeholder="Enter Date" required>
+                </div>
+
+
+
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn"><i class="fa fa-cog"></i>Search</button>
+                </div>
+
+
+
+            }
+
+
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <table>
+
+                @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+
+
+                            <tr>
+
+                                <th colspan="12">
+                                    <a href="@Url.Action("PrintDatewiseCustomer")" target="_blank">Get Report In PDF</a>
+                                </th>
+
+
+                            </tr>
+                           
+                            <thead>
+                                <tr>
+                                    <th colspan="4"  style="background-color: #ff5722; color: white">@mr.branchname Name:@User.Identity.Name</th>
+                                    <th colspan="4"  style="background-color: #ff5722; color: white"><b>@mr.custname List</b></th>
+                                    <th colspan="5"  style="background-color: #ff5722; color: white"><b>Dated:@DateTime.Now.Date.ToString("dd/MM/yyyy")</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th style="width: 5%; text-align: center;">
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label id="newid"><b>@mr.custname Id</b></label>
+                                    </th>
+
+                                    <th style="width: 10%; text-align: center;">
+                                        <label id="introducerid"><b>Name</b></label>
+                                    </th>
+
+                                    <th style="width: 10%; text-align: center;">
+                                        <label id="spilid"><b>Introducer Id</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label id="position"><b>@mr.planname Name</b></label>
+                                    </th>
+
+                                    <th style="width: 10%; text-align: center;">
+                                        <label><b>Booking Amount</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label><b>Adv.Payment</b></label>
+                                    </th>
+                                    <th style="width: 8%; text-align: center;">
+                                        <label><b>Plot Size</b></label>
+                                    </th>
+                                    <th style="width: 8%; text-align: center;">
+                                        <label id="doj"><b>Payment </b></label>
+                                    </th>
+                                    <th style="width: 8%; text-align: center;">
+                                        <label id="Mode"><b>Mode</b></label>
+                                    </th>
+                                    <th style="width: 8%; text-align: center;">
+                                        <label id="email"><b>Mobile No</b></label>
+                                    </th>
+
+                                    <th style="width: 8%; text-align: center;">
+                                        <label><b>Date of Joining</b></label>
+                                    </th>
+                                    <th style="width: 8%; text-align: center;">
+                                        <label><b>Action</b></label>
+                                    </th>
+                                </tr>
+                            </tbody>
+                                }
+                                a = a + 1;
+
+            <tbody>
+                <tr>
+                    <td>
+                        @a
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newbondid)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newintroducerid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.planname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bookingamount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.downpayment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.plotsize)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.payment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mobile)
+                    </td>
+                    <td>
+                        @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.ActionLink("Send SMS ", "DatewiseCustomer", new { newbondid = item.newbondid, mobileno = item.Mobile })
+                    </td>
+
+                </tr>
+            </tbody>
+
+                                }
+
+                                }
+
+
+
+                        </table>
+
+
+
+
+
+
+
+        </div>
+
+    </div>

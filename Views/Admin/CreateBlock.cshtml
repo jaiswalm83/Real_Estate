@@ -1,0 +1,97 @@
+﻿@model ODHDEVELOPERS.Models.BlockTab
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "CreateBlock";
+
+    //for accessing all cityname
+    var allplan = db.Plans.Where(d => d.status == 1).ToList();
+
+}
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Create New Block</h2>
+
+
+    @using (Html.BeginForm())
+    {
+
+        <!-- Form -->
+<div id="blockForm" class="form-container">
+    <!-- Project Name Dropdown -->
+    <div class="form-group">
+        <label for="projectName" class="form-label">Enter @mr.planname Name</label>
+
+        <select class="form-control" name="Plancode" id="Plancode" onchange="selectphase(this.id)" required>
+            <option value="">Select</option>
+            @foreach (var i in allplan)
+            {
+                <option value="@i.Plancode">@i.Planname</option>
+            }
+        </select>
+    </div>
+
+    <!-- Phase Name Dropdown -->
+    <div class="form-group">
+        <label for="phaseName" class="form-label" id="phaseid" name="phaseid">Phase Name</label>
+        <select class="form-control" id="phaseName" required>
+            <option value="" disabled selected>Select Phase Name</option>
+            <option value="phase1">Phase 1</option>
+            <option value="phase2">Phase 2</option>
+            <option value="phase3">Phase 3</option>
+            <option value="valley">Valley</option>
+        </select>
+    </div>
+
+    <!-- Block Name Input -->
+    <div class="form-group">
+        <label for="blockName" class="form-label">Block Name</label>
+        <input type="text" class="form-control" name="block" id="block" placeholder="Enter Block Name" required>
+    </div>
+
+    <!-- Min Value Input -->
+    <div class="form-group">
+        <label for="minValue" class="form-label">Min Value</label>
+        <input type="number" class="form-control" name="min" id="min" placeholder="Enter Min Value" required>
+    </div>
+
+    <!-- Max Value Input -->
+    <div class="form-group">
+        <label for="maxValue" class="form-label">Max Value</label>
+        <input type="number" class="form-control" name="max" id="max" placeholder="Enter Max Value" required>
+    </div>
+
+    <!-- Create Button -->
+    <div class="text-center">
+        <button type="submit" class="btn create-btn">Create</button>
+    </div>
+    <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+</div>
+    }
+    </div>
+
+
+<script type="text/javascript">
+    function selectphase(bid) {
+
+        var phaseid = $("#phaseid");
+        var projectid = $("#" + bid).val();
+
+        var url = '@Url.Action("selectphase", "Branch")';
+        if (projectid > 0) {
+            $.get(url, { projectid: projectid }, function data(t) {
+
+                phaseid.html('');
+                phaseid.append('<option value="">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    phaseid.append('<option value="' + t[i].Id + '">' + t[i].Phase + '</option>');
+                }
+            });
+        }
+
+    }
+</script>

@@ -1,0 +1,564 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var comp = db.CompanyInfos.Single(x => x.Id == 1);
+}
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from world5.commonsupport.com/html2/tyche-property/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 22 Oct 2020 07:25:10 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>@comp.CompanyName</title>
+    <!-- Stylesheets -->
+    <link href="~/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="~/assets/css/revolution-slider.css" rel="stylesheet">
+    <link href="~/assets/css/style.css" rel="stylesheet">
+    <!-- Responsive -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="~/assets/css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="~/assets/js/respond.js"></script><![endif]-->
+    <script src="~/assets/js/jquery.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Preloader -->
+        <div class="preloader"></div>
+
+        <!-- Main Header-->
+        <header class="main-header header-style-three">            <!-- Header Top -->
+          
+            <!--second header-->
+             <div class="header-upper">
+        	<div class="auto-container">
+            	<div class="clearfix">
+                	
+                	<div class="pull-left logo-outer">
+                    	<div class="logo">
+           <a href="../Home/Index" class="img-responsive">
+                            <img src="@Url.Content(@comp.CompanyLogo)" alt="" style="width:150px;height:100px"  title="@comp.CompanyName"></a>
+            
+            </div>
+                    </div>
+                    
+                    <div class="pull-right menu-outer clearfix">
+                    	
+                        <div class="nav-outer clearfix">
+                            <!-- Main Menu -->
+                            <nav class="main-menu">
+                                <div class="navbar-header">
+                                    <!-- Toggle Button -->    	
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    </button>
+                                </div>
+                                
+                                <div class="navbar-collapse collapse clearfix">
+                                    <ul class="navigation clearfix" style="color: black">
+                                    <li><a href="../Home/Index">Home</a>
+                                    </li>
+                                    <li class="dropdown"><a href="#">About Us</a>
+                                        <ul>
+                                            <li><a href="../Home/Vissionandmission">Vision & Mission</a></li>
+                                            <li><a href="../Home/Companyprofile">Company profile</a></li>
+                                            <li><a href="../Home/OurTeam">Team</a></li>
+                                            <li><a href="../Home/Value">Value</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">Project</a>
+                                        <ul>
+                                            <li><a href="../Home/Project">Unit Availability</a></li>
+                                            <li><a href="#">ODH Homes</a></li>
+                                        </ul>
+                                    </li>
+                                        <li class="dropdown"><a href="#">Gallery</a>
+                                        <ul>
+                                            <li><a href="../Home/Gallerys">Image</a></li>
+                                            <li><a href="../Home/Video">Video</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Leasing</a></li>
+                                   
+                                    <li><a href="../Home/Inquery">Enquiry</a></li>
+                                    @*  <li><a href="../Home/Project">Unit Availability</a></li>*@
+                                    <li><a href="../Home/Contact">Contact Us</a></li>
+                                    <li><a href="../Home/Career">Career</a>
+                                    <li><a href="../Home/Login">Login</a>
+                                    </li>
+                                </ul>
+                                </div>
+                            </nav><!-- Main Menu End-->
+                            
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+        <!--Sticky Header-->
+       <div class="sticky-header">
+        	<div class="auto-container clearfix">
+            	<!--Logo-->
+            	<div class="logo pull-left">
+                	<img src="@Url.Content(@comp.CompanyLogo)" alt="" style="width:150px;height:100px"  title="@comp.CompanyName"></a>
+                </div>
+                
+                <!--Right Col-->
+                <div class="right-col pull-right">
+                	<!-- Main Menu -->
+                    <nav class="main-menu">
+                        <div class="navbar-header">
+                            <!-- Toggle Button -->    	
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        
+                        <div class="navbar-collapse collapse clearfix">
+                             <ul class="navigation clearfix">
+                                    <li><a href="../Home/Index">Home</a>
+                                    </li>
+                                    <li class="dropdown"><a href="#">About Us</a>
+                                        <ul>
+                                            <li><a href="../Home/Vissionandmission">Vision & Mission</a></li>
+                                            <li><a href="../Home/Companyprofile">Company profile</a></li>
+                                            <li><a href="../Home/OurTeam">Team</a></li>
+                                            <li><a href="../Home/Value">Value</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">Project</a>
+                                        <ul>
+                                            <li><a href="../Home/Project">Unit Availability</a></li>
+                                            <li><a href="#">ODH Homes</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Leasing</a></li>
+                                    <li><a href="../Home/Gallerys">Gallery</a></li>
+                                    <li><a href="../Home/Inquery">Enquiry</a></li>
+                                    @* <li><a href="../Home/Project">Unit Availability</a></li>*@
+                                    <li><a href="../Home/Contact">Contact Us</a></li>
+                                    <li><a href="../Home/Career">Career</a>
+                                    <li><a href="../Home/Login">Login</a>
+                                    </li>
+                                </ul>
+                        </div>
+                    </nav><!-- Main Menu End-->
+                </div>
+                
+            </div>
+        </div><!--End Bounce In Header--><!--Secondheaderend-->
+
+            <!-- Header Top End -->
+
+            <!--Header-Upper-->
+       @*     <div class="header-upper">
+                <div class="auto-container clearfix">
+                    <!--Logo-->
+
+                    <div class="logo pull-left">
+                        <a href="../Home/Index" class="img-responsive">
+                           
+
+                            <img src="@Url.Content(@comp.CompanyLogo)" alt="" style="width:150px;height:100px"  title="@comp.CompanyName">
+                        </a>
+                      
+                    </div>
+
+                    <!--Right Col-->
+                    <div class="right-col pull-right" style="margin-top: 20px">
+                        <!-- Main Menu -->
+                        <nav class="main-menu" style="background-color: white; color: black;">
+                            <div class="navbar-header">
+                                <!-- Toggle Button -->
+                                <div class="navbar-header">
+                                    <!-- Toggle Button -->
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="navbar-collapse collapse clearfix">
+                                <ul class="navigation clearfix" style="color: black">
+                                    <li><a href="../Home/Index">Home</a>
+                                    </li>
+                                    <li class="dropdown"><a href="#">About Us</a>
+                                        <ul>
+                                            <li><a href="../Home/Vissionandmission">Vision & Mission</a></li>
+                                            <li><a href="../Home/Companyprofile">Company profile</a></li>
+                                            <li><a href="../Home/OurTeam">Team</a></li>
+                                            <li><a href="../Home/Value">Value</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">Project</a>
+                                        <ul>
+                                            <li><a href="../Home/Project">Unit Availability</a></li>
+                                            <li><a href="#">ODH Homes</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Leasing</a></li>
+                                    <li><a href="../Home/Gallerys">Gallery</a></li>
+                                    <li><a href="../Home/Inquery">Enquiry</a></li>
+                                 
+                                    <li><a href="../Home/Contact">Contact Us</a></li>
+                                    <li><a href="../Home/Career">Career</a>
+                                    <li><a href="../Home/Login">Login</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <!-- Main Menu End-->
+
+                    </div>
+
+                </div>
+            </div>
+          
+            <!--Header-Lower-->
+
+
+
+            <!--Sticky Header-->
+            <div class="sticky-header">
+                <div class="auto-container clearfix">
+                    <!--Logo-->
+
+                    <div class="logo pull-left">
+                        <a href="../Home/Index" class="img-responsive">
+
+
+                            <img src="@Url.Content(@comp.CompanyLogo)" alt="" style="width:150px;height:100px"  title="@comp.CompanyName"></a>
+                       
+                    </div>
+
+                    <!--Right Col-->
+                    <div class="right-col pull-right" style="margin-top: 20px">
+                        <!-- Main Menu -->
+                        <nav class="main-menu">
+                            <div class="navbar-header">
+                                <!-- Toggle Button -->
+
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+
+                            </div>
+
+                            <div class="navbar-collapse collapse clearfix">
+                                <ul class="navigation clearfix">
+                                    <li><a href="../Home/Index">Home</a>
+                                    </li>
+                                    <li class="dropdown"><a href="#">About Us</a>
+                                        <ul>
+                                            <li><a href="../Home/Vissionandmission">Vision & Mission</a></li>
+                                            <li><a href="../Home/Companyprofile">Company profile</a></li>
+                                            <li><a href="../Home/OurTeam">Team</a></li>
+                                            <li><a href="../Home/Value">Value</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#">Project</a>
+                                        <ul>
+                                            <li><a href="../Home/Project">Unit Availability</a></li>
+                                            <li><a href="#">ODH Homes</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#">Leasing</a></li>
+                                    <li><a href="../Home/Gallerys">Gallery</a></li>
+                                    <li><a href="../Home/Inquery">Enquiry</a></li>
+                                   
+                                    <li><a href="../Home/Contact">Contact Us</a></li>
+                                    <li><a href="../Home/Career">Career</a>
+                                    <li><a href="../Home/Login">Login</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <!-- Main Menu End-->
+
+                    </div>
+
+                </div>
+            </div>*@
+            <!--End Bounce In Header-->
+
+        </header>
+        <!--End Main Header -->
+
+        @RenderBody()
+
+        <!--Main Footer-->
+        @*  <footer class="main-footer">*@
+        @*  <!--Footer Bar-->
+            <div class="footer-bar">
+                <div class="auto-container">
+                    <ul>
+                        <li><a href="#"><span class="icon flaticon-location-2"></span>See Map</a></li>
+                        <li><a href="#" class="scroll-to-target" data-target=".main-header"><span class="up-arrow flaticon-arrows-4"></span>Scroll up</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!--Footer Bottom-->
+            <div class="footer-bottom">
+                <div class="auto-container">
+                    <div class="centered-content">
+                       <div class="col-md-12 col-md-6 col-xs-6">
+
+
+                       </div>
+                        <div class="copyright">Copy Rights &copy; @DateTime.UtcNow.ToShortDateString()</div>
+                    </div>
+                </div>
+            </div>*@
+        <footer class="main-footer" style="background:black;">
+            <div class="container">
+                <div class="row module-wrapper" style="margin-top: 20px; margin-bottom: 20px;">
+                    <div class="col-md-3 col-sm-8">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4 style="color: yellowgreen">@comp.CompanyName</h4>
+                            </div>
+                            <!-- end title -->
+                            <div class="recent-post-widget">
+                                <ul class="recent-posts" style="color: white">
+
+                                    <li>
+                                        <span>Working Day: Monday To Sunday</span>
+                                        <br />
+                                        <span>Week off: Wednesday</span>
+                                    </li>
+                                    <li>
+                                        <span>Working Hours: 10AM TO 6PM</span>
+
+                                    </li>
+                                </ul>
+                                <!-- end latest-tweet -->
+                            </div>
+                            
+                            <div class="recent-post-widget">
+                                <i style="color: #25d366; font-size: 30px;" class="fa fa-whatsapp"></i>&nbsp;&nbsp;&nbsp;
+                                <a href="https://www.facebook.com/ODH-Developers-Private-Limited-104186568289795"><i style="color: #4267b2; font-size: 30px;" class="fa fa-facebook-f"></i></a>&nbsp;&nbsp;&nbsp;
+                                <a href="#"><span style="color:#1DA1F2; font-size: 30px;" class="fa fa-twitter"></span></a>&nbsp;&nbsp;&nbsp;
+                        
+                            <a href="#"><span style="color:#0072b1; font-size: 30px;" class="fa fa-linkedin"></span></a>&nbsp;&nbsp;&nbsp;
+                           </div>
+                            <!-- end twitter-widget -->
+                        </div>
+                        <!-- end widge -->
+                    </div>
+                    <!-- end col -->
+
+
+
+                    <div class="col-md-3 col-sm-8">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4 style="color: yellowgreen">About Us</h4>
+                            </div>
+                            <ul class="site-links" style="color: white">
+                                <li><a href="../Home/Vissionandmission" title="Vision & Mission" style="color: white">Vision & Mission</a></li>
+                                <li><a href="../Home/Companyprofile" title="Company Profile" style="color: white">Company Profile</a></li>
+                                <li><a href="../Home/OurTeam" title="Team" style="color: white">Team</a></li>
+                                <li><a href="../Home/Value" title="Value" style="color: white">Value</a></li>
+                            </ul>
+                        </div>
+                        <!-- end widget -->
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-md-3 col-sm-8">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4 style="color: yellowgreen">Quick Links</h4>
+                            </div>
+                            <ul class="site-links" style="color: white">
+                                <li><a href="#" style="color: white" title="FAQ">FAQ</a></li>
+                                <li><a href="../Home/Termandcondition" title="Terms & Conditions" style="color: white">Terms &amp; Conditions</a></li>
+                                <li><a href="../Home/privacypolicy" title="Privacy Policy" style="color: white">Privacy Policy</a></li>
+                                <li><a href="../Home/Inquery" title="Enquery" style="color: white">Enquiry</a></li>
+                                <li><a href="../Home/Contact" title="Contact Us" style="color: white">Contact Us</a></li>
+                            </ul>
+                        </div>
+                        <!-- end widget -->
+                    </div>
+                    <div class="col-md-3 col-sm-8">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4 style="color: yellowgreen">Contact Details</h4>
+                            </div>
+                            <ul class="site-links" style="color: white">
+                                <li><i style="font-size: 20px; color: goldenrod;" class="fa fa-map-marker"></i>&nbsp;@comp.Address</li>
+                                <li><i class="fa fa-mobile" style="color: lightskyblue; font-size: 20px;"></i>&nbsp;8765579797</li>
+                                <li><i style="color: #25d366; font-size: 20px;" class="fa fa-whatsapp"></i>&nbsp;@comp.Contact</li>
+                                <li class=""><i class="fa fa-envelope" style="color: white; font-size: 15px;"></i>&nbsp;@comp.Emailid</li>
+                                @* <li><i class="fa fa-bank"></i>Branch Office-AMAN SHAHEED,  HAMIRPUR(U.P.)210301</li>*@
+                            </ul>
+                        </div>
+                        <!-- end widget -->
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+        </footer>
+
+        <section class="copyright col-md-12" style="background-color: white">
+            <div class="container">
+                
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </section>
+        <!-- end section -->
+    </div>
+
+
+    @*</footer>*@
+
+
+    <!--End pagewrapper-->
+
+    <!--Scroll to top-->
+    <div class="scroll-to-top scroll-to-target" data-target=".main-header"><span class="icon fa fa-long-arrow-up"></span></div>
+
+
+    <!--Gallery Popup-->
+    <div class="gallery-box" id="gallery-popup">
+        <!--Bg Fade Layer-->
+        <div class="bg-fade-layer"></div>
+
+        <div class="popup-container">
+            <div class="popup-content">
+
+                <div class="popup-header">
+                    <button type="button" class="btn-close"><span class="fa fa-close"></span></button>
+                    <h3>Interior Design</h3>
+                </div>
+
+                <div class="content-outer">
+
+                    <!--Vertical Slider-->
+                    <div class="vertical-slider">
+
+                        <!-- template -->
+                        <div class="ms-vertical-template  ms-tabs-vertical-template">
+                            <!-- masterslider -->
+                            <div class="master-slider ms-skin-default" id="masterslider">
+
+                                <div class="ms-slide">
+                                    <img src="~/assets/css/masterslider/style/indusS" data-src="~/assets/images/gallery/34.jpg" alt="" />
+                                    <img class="ms-thumb" src="~/assets/images/gallery/thumb-9.jpg" alt="thumb" />
+                                </div>
+
+                                <div class="ms-slide">
+                                    <img src="~/assets/css/masterslider/style/indusS" data-src="~/assets/images/gallery/34.jpg" alt="" />
+                                    <img class="ms-thumb" src="~/assets/images/gallery/thumb-10.jpg" alt="thumb" />
+                                </div>
+
+                                <div class="ms-slide">
+                                    <img src="~/assets/css/masterslider/style/indusS" data-src="~/assets/images/gallery/34.jpg" alt="" />
+                                    <img class="ms-thumb" src="~/assets/images/gallery/thumb-11.jpg" alt="thumb" />
+                                </div>
+
+                                <div class="ms-slide">
+                                    <img src="~/assets/css/masterslider/style/indusS" data-src="~/assets/images/gallery/34.jpg" alt="" />
+                                    <img class="ms-thumb" src="~/assets/images/gallery/thumb-12.jpg" alt="thumb" />
+                                </div>
+
+                                <div class="ms-slide">
+                                    <img src="~/assets/css/masterslider/style/icici(1)" data-src="~/assets/images/gallery/34.jpg" alt="" />
+                                    <img class="ms-thumb" src="~/assets/images/gallery/thumb-11.jpg" alt="thumb" />
+                                </div>
+
+                                <div class="ms-slide">
+                                    <img src="~/assets/css/masterslider/style/icici(1)" data-src="~/assets/images/gallery/34.jpg" alt="" />
+                                    <img class="ms-thumb" src="~/assets/images/gallery/thumb-12.jpg" alt="thumb" />
+                                </div>
+
+                            </div>
+                            <!-- end of masterslider -->
+                        </div>
+                        <!-- end of template -->
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!--popup-content -->
+        </div>
+        <!-- popup-container -->
+    </div>
+    <!-- Gallery Box -->
+
+
+    <script src="~/assets/js/jquery-ui.min.js"></script>
+    <script src="~/assets/js/bootstrap.min.js"></script>
+    <script src="~/assets/js/revolution.min.js"></script>
+    <script src="~/assets/js/jquery.fancybox.pack.js"></script>
+    <script src="~/assets/js/isotope.js"></script>
+    <script src="~/assets/js/owl.js"></script>
+    <!--Locations Map JS-->
+    <script src="http://maps.google.com/maps/api/js?v=3"></script>
+    <script src="~/assets/js/jquery.gmap.js"></script>
+    <!--Locations Map End-->
+    <script src="~/assets/js/jquery.easing.min.js"></script>
+    <script src="~/assets/js/masterslider/masterslider.js"></script>
+    <script src="~/assets/js/wow.js"></script>
+    <script src="~/assets/js/script.js"></script>
+</body>
+
+<!-- Mirrored from world5.commonsupport.com/html2/tyche-property/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 22 Oct 2020 07:27:37 GMT -->
+</html>
+<style>
+    .main-header .nav-outer
+    {
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: transparent;
+    }
+
+    .main-menu .navigation > li > a
+    {
+        color: black;
+        font-size: 14px;
+    }
+
+    .main-menu .navbar-collapse > ul li.dropdown .dropdown-btn
+    {
+        position: absolute;
+        right: -15px;
+        top: 6px;
+        width: 34px;
+        height: 30px;
+        border: 1px solid #ffffff;
+        background: url(../assets/images/icons/submenu-icon.png) center center no-repeat;
+        background-size: 20px;
+        cursor: pointer;
+        z-index: 5;
+        display: none;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

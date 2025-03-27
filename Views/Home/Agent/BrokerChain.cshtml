@@ -1,0 +1,123 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerChain>
+@using ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+    ViewBag.Title = "BrokerChain";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+  
+}
+
+ 
+<div class="page-content">
+
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">@mr.agentname Chain List</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+
+<div class="table-responsive">
+
+        <table class="table table-striped" border="2">
+
+            @foreach (var item in Model)
+            {
+                if (a == 0)
+                {
+                <tr>
+
+                    <th colspan="3"><b>@mr.agentname Chain List</b></th>
+                    <th colspan="3"><b>Date:@Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy") </b></th>
+                </tr>
+                <tr>
+                    <th style="width: 5%;">
+                        <label id="sn"><b>S.N.</b></label>
+                    </th>
+                    <th style="width: 20%;">
+                        <label id="NewAgentId"><b>@mr.agentname Id</b></label>
+                    </th>
+
+                    <th style="width: 20%;">
+                        <label id="name"><b>@mr.agentname Name</b></label>
+                    </th>
+                    <th style="width: 20%;">
+                        <label id=""><b>@mr.rankname</b></label>
+                    </th>
+
+                    
+
+                    <th style="width: 20%;">
+                        <label id=""><b>IntroducerId</b></label>
+                    </th>
+
+                    <th style="width: 15%;">
+                        <label id=""><b>Introducer Name</b></label>
+                    </th>
+                    
+                    @*<th style="width:20%;">
+           <label id="BranchCode"><b>Introducer Id</b></label>
+        </th>
+            
+        <th style="width:20%;">
+            <label id="Mobile" ><b>Introducer Name</b></label>
+        </th>*@
+
+                </tr>
+        }
+        a = a + 1;
+                <tr>
+                    <td>
+                        @a
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newagentid)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.rankname)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.introducerid)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.introname)
+                    </td>
+
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.introducerid)
+        </td>
+             <td>
+            @Html.DisplayFor(modelItem => item.introname)
+        </td>*@
+
+
+                </tr>
+            }
+
+        </table>
+
+        @if (a > 0)
+        {
+            <a href="@Url.Action("PrintBrokerChainReport")" target="_blank">Get Report In PDF</a>
+        }
+    </div>
+    </div>
+
+</div>
+

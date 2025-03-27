@@ -1,0 +1,197 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseDueCollection>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "DWDueCollection";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        var a = 0;
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(c => c.Id == 1);
+
+    }
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+        });
+    </script>
+
+    <div id="divid">
+
+
+        <div class="container mt-5">
+            <h2 class="text-center mb-4 create-title">Bondwise Due Collection</h2>
+            @using (Html.BeginForm())
+            {
+
+
+                <div id="branchForm" class="form-container">
+
+
+                    <!-- Date -->
+                    <div class="form-group">
+                        <label for="date" class="form-label">Start Date</label>
+                        <input type="text" class="form-control" name="sdate" id="sdate" required>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="form-group">
+                        <label for="date" class="form-label">End Date</label>
+                        <input type="text" class="form-control" name="edate" id="edate" required>
+                    </div>
+
+
+                    <div class="text-center d-grid gap-2">
+                        <button type="submit" class="btn create-btn"><i class="fa fa-cog"></i>Search</button>
+                    </div>
+
+
+
+
+                </div>
+            }
+
+
+
+
+            <div class="index_body">
+                <div class="table-container">
+
+
+                    <table>
+
+                        @using (Html.BeginForm())
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (a == 0)
+                                {
+                                    <thead>
+                                        <tr>
+
+                                            <th colspan="9">
+                                                <a href="@Url.Action("PrintDWDueCollection")" target="_blank">Get Report In PDF</a>
+                                            </th>
+
+
+                                        </tr>
+                                    </thead>
+
+
+                                    <thead>
+                                        <tr>
+
+                                            <th colspan="5" style="background-color: #ff5722; color: white"><b>Datewise Due Collection</b></th>
+                                            <th colspan="4" style="background-color: #ff5722; color: white"><b>Dated:@DateTime.Now.Date.ToString("dd/MM/yyyy")</b></th>
+                                        </tr>
+                                    </thead>
+
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label id="sn"><b>S.N.</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="newid"><b>@mr.custname Id</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label id="name"><b>Name</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label id="introducerid"><b>Introducer Id</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label><b>Mobile No</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="position"><b>Branch </b></label>
+                                            </th>
+
+
+                                            <th>
+                                                <label id="Installments"><b>Due Installments</b></label>
+                                            </th>
+                                            <th>
+                                                <label id="Amount"><b>Amount</b></label>
+                                            </th>
+
+                                            <th>
+                                                <label id="doj"><b>Date Of Joining </b></label>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                }
+                                a = a + 1;
+
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @a
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.newbondid)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.name)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.newintroducerid)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.companyname)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.branchname)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.installment)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.amount)
+                                        </td>
+                                        <td>
+                                            @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+
+                            }
+
+                        }
+
+
+
+                    </table>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+

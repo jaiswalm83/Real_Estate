@@ -1,0 +1,78 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.promotiondetail>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "PromotionList";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        UsersContext db = new UsersContext();
+        var a = 0;
+        var mr = db.Members.Single(d => d.Id == 1);
+
+    }
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+
+        });
+
+    </script>
+
+
+
+   
+
+    <div id="divid1">
+        <div  id="2">
+
+
+
+            <div class="container mt-5">
+                <h2 class="text-center mb-4 create-title">@mr.agentname Promotion Report</h2>
+
+                @using (Html.BeginForm())
+                {
+                    <div id="hide">
+
+
+                        <div class="block">
+
+                            <div class="block-content controls">
+
+
+                                <div id="branchForm" class="form-container">
+
+
+                                    <!-- Date -->
+                                    <div class="form-group">
+                                        <label for="date" class="form-label">Start Date</label>
+                                        <input type="text" class="form-control" name="sdate" id="sdate" value="@ViewData["sdate"]" required>
+                                    </div>
+
+                                    <!-- Date -->
+                                    <div class="form-group">
+                                        <label for="date" class="form-label">End Date</label>
+                                        <input type="text" class="form-control" name="edate" id="edate" value="@ViewData["edate"]" required>
+                                    </div>
+
+
+                                    <div class="text-center d-grid gap-2">
+                                        <button type="submit" id="submit" value="Search" class="btn create-btn" onclick="target='_blank'">View</button>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>

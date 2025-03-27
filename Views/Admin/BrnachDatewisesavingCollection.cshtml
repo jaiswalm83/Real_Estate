@@ -1,0 +1,209 @@
+﻿
+@model IEnumerable<ODHDEVELOPERS.Models.DWAccListCollection>
+@using ODHDEVELOPERS.Models
+@{ 
+   UsersContext db = new UsersContext();
+   
+   Layout = "~/Views/Shared/_AdminLayout.cshtml";
+   ViewBag.Title = "BrnachDatewisesavingCollection";
+   var a = 0;
+   double cr = 0;
+   double de = 0;
+   double bal = 0;
+ 
+  
+}
+  
+ <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#sdate').datepick();
+        $('#edate').datepick();
+      
+    });
+</script>
+<div class="page-content">
+     <div>
+                   
+                <div class="container">
+                    <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Date Wise Saving Collection</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        
+                    </div>
+   @using (Html.BeginForm()){
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:98%">
+
+
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                     <div class="row-form">
+                                         <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                <span class="input-group-addon">Select Branch Code</span>
+                        <input type="text"  name="bcode" class="form-control" />
+                         
+                </div>
+<br/>
+
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                <span class="input-group-addon">Select Start Date</span>
+                        <input type="text" id="sdate" name="sdate" class="form-control" />
+                         
+                </div> 
+                                         <br />
+                                         <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                <span class="input-group-addon">Select End Date</span>
+                        <input type="text" id="edate" name="edate" class="form-control" />
+                         
+                </div> 
+                                     </div>
+                   <div class="row-form" style="width:98%">
+      <div class="col-md-9">
+          <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit" >View</button>
+     </div>
+              </div>
+
+
+
+        </div>
+        </div>
+                            
+                </div>
+        </div>
+                            
+                    }              
+                          
+                                       
+<table border="1" style="margin-left:1%; margin-right:1px; margin-bottom:30px;width:98%;">
+    
+    @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                       
+                        if (a == 0)
+                        {
+                            
+                              <tr >
+                                  <th colspan="2"style="text-align:center;" >@User.Identity.Name</th>
+                                <th colspan="1" style="text-align:center;"><b>Datewise Saving List</b></th>
+                                <th colspan="3"style="text-align:center;" ><b>Dated:@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy") - @Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></th>
+                            </tr>
+    <tr>
+        <th style="width:10%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:20%;text-align:center;">
+           <label ><b>Account No.</b></label>
+            </th>
+         <th style="width:20%;text-align:center;">
+           <label ><b>Name</b></label>
+            </th>
+        <th style="width:15%;text-align:center;">
+           <label ><b>Credit</b></label>
+            </th>
+        <th style="width:15%;text-align:center;">
+           <label ><b>Debit</b></label>
+            </th>
+        <th style="width:20%;text-align:center;">
+           <label ><b>Balance</b></label>
+            </th>
+        
+        
+       
+      
+    </tr>
+    }
+                        
+                        a = a + 1;
+                        cr = cr + item.credit;
+                        de = de + item.debit;
+                        bal = bal + item.balance;
+                      
+
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.accountno)
+        </td>
+        
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        
+
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.credit)
+           
+        </td>
+
+       
+
+        <td style="text-align:center;">
+            @Html.DisplayFor(modelItem => item.debit)
+        </td>
+
+         <td style="text-align:center;">
+           @item.balance
+        </td>
+             
+    </tr>
+                            
+                                   
+    }
+    
+   
+                             
+                          
+     if(a>0)
+     {
+        <tr >
+         
+               <th colspan="2"style="text-align:center;" ></th>
+                                  <th colspan="2"style="text-align:center;" >Total Credit </th>
+                                <th colspan="2" style="text-align:center;"><b>@cr</b></th>                             
+                            </tr>
+      <tr >
+                                 <th colspan="2"style="text-align:center;" ></th>
+                                  <th colspan="2"style="text-align:center;" >Total Debit </th>
+                                <th colspan="2" style="text-align:center;"><b>@de</b></th>                             
+                            </tr>                           
+                          <tr >
+                                 <th colspan="2"style="text-align:center;" ></th>
+                                  <th colspan="2"style="text-align:center;" >Total Balance </th>
+                                <th colspan="2" style="text-align:center;"><b>@bal</b></th>                             
+                            </tr>      
+    }
+    }
+    
+    
+   
+</table>
+             
+                @if (a > 0)
+                {
+                    <a href="@Url.Action("PrintBranchDatewisesavingCollection")" target="_blank">Get Report In PDF</a>
+                }            
+      
+                  
+                   
+    
+                     
+                    </div>
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,168 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.SpotCommList>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "SpotCommission";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+        var br = db.CompanyInfos.Single(o => o.Id == 1);
+        Double businesssum = 0, commsum = 0;
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newagentid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.NewAgentId, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">Payment Spot Commission</h2>
+        @using (Html.BeginForm())
+        {
+            <div id="paymentForm" class="form-container">
+
+                <!-- Associate ID -->
+                <div class="form-group">
+                    <label for="associateId" class="form-label">Enter @mr.agentname Id</label>
+                    <input type="text" class="form-control" id="newagentid" name="newagentid" placeholder="Enter Associate ID" required>
+                </div>
+
+
+
+                <!-- Submit Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn">Search</button>
+                </div>
+            </div>
+        }
+    </div>
+
+
+    <table border="1" style="margin-left: 1%; margin-right: 1%; margin-bottom: 60px; width: 98%;">
+
+        @foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+
+                <tr style="text-align: center;">
+                    <th style="width: 5%; text-align: center;">
+                        <label id="sn" style="text-align: center;"><b>S.N.</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="NewAgentId"><b>@mr.agentname Id</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label><b>@mr.custname Id</b></label>
+                    </th>
+
+                    <th style="width: 10%; text-align: center;">
+                        <label><b>@mr.custname Name</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="Business"><b>Business</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="Commission"><b>Commission</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label><b>Date</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="Action"><b>Action</b></label>
+                    </th>
+
+
+                </tr>
+            }
+            a = a + 1;
+            <tr style="text-align: center">
+                <td>
+                    @a
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.newagentid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.newbondid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Business)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commission)
+                </td>
+
+                <td>
+                    @Convert.ToDateTime(item.date).ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @Html.ActionLink("Pay", "SCV", new { newagentid = item.newagentid, newbondid = item.newbondid, date = item.date, commission = item.Commission }, new { onclick = "return confirm('Are you sure to Pay this Commission?');" })
+                    @*  @Html.ActionLink("Pay", "SpotCommission", new { newagentid = item.newagentid, newbondid = item.newbondid, date = item.date }, new { onclick = "return confirm('Are you sure to Pay this Commission?');" })*@
+                </td>
+
+
+
+            </tr>
+            businesssum = businesssum + Convert.ToDouble(item.Business);
+            commsum = commsum + Convert.ToDouble(item.Commission);
+        }
+        @if (a > 0)
+        {
+            <tr style="text-align: center;">
+                <td colspan="4">
+                    <b>GRAND TOTAL:</b>
+                </td>
+                <td>
+                    <b>@businesssum</b>
+                </td>
+                <td>
+                    <b>@commsum</b>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+        }
+    </table>
+
+
+    <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+    @if (ViewBag.msg == "Spot Commission Paid Successfully")
+    {
+        @Html.ActionLink("Print Report", "PrintSpotCommission", new { newagentid = ViewData["newagentid"], newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print this Report?'), target='_blank'" })
+    }
+
+
+    </div>
+
+    </div>
+
+

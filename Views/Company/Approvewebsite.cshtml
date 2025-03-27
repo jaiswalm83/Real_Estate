@@ -1,0 +1,62 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var dd = db.PC_Tabs.OrderBy(p => p.PCId).ToList();
+    Layout = "~/Views/Shared/_CompanyLayout.cshtml";
+    ViewBag.Title = "Approvewebsite";
+    var a = 0;
+    }
+
+<div class="page-content">
+    <div class="container" id="divid">
+        <div class="page-toolbar">
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Approve PC Login</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+        </div>
+
+        <table style="width: 100%; text-align: center;" border="0" class="table table-responsive table-striped table-bordered table-hover table-condensed">
+            @if (a == 0)
+            {
+                <tr>
+                    <td style="font: bold 14px arial;">Sr No.</td>
+                    <td style="font: bold 14px arial;">User Id</td>
+                    <td style="font: bold 14px arial;">User Name</td>
+                    <td style="font: bold 14px arial;">PC Id</td>
+                    <td style="font: bold 14px arial;">Date Time</td>
+                    <td style="font: bold 14px arial;" colspan="2">Action</td>
+
+                </tr>
+                }
+
+
+            @foreach (var item in dd)
+            {
+                a = a + 1;
+                <tr>
+                    <td>@a</td>
+                    <td>@item.userid</td>
+                    <td>@item.PCName</td>
+                    <td>@item.PCId</td>
+                    <td>@item.addate.ToString("dd/MM/yyyy hh:mm:ss")</td>
+                    @if (item.status == 0)
+                    {
+                                        
+                        <td class="warning">@Html.ActionLink("Approve", "Approvewebsite", new { Id = item.Id, status = 1 })</td>
+                        }
+                    else
+                    {
+                        <td class="success">@Html.ActionLink("Block", "Approvewebsite", new { Id = item.Id, status = 0 })</td>
+                        }
+                    <td class="danger">@Html.ActionLink("Delete", "Approvewebsite", new { Id = item.Id, status = 2 })</td>
+                </tr>
+                }
+
+        </table>
+
+    </div>
+
+
+</div>
+

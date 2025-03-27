@@ -1,0 +1,291 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Emp_Reg>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        ViewBag.Title = "EmployeeAtten";
+        var a = 0;
+        UsersContext db = new UsersContext();
+        //var list = db.Emp_attens.ToList();
+    }
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#memberid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/HR/AutoCompletemember_Atten",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.empid };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            }),
+                //$("#date1").datepicker();
+
+                $("#attendencefrom").removeAttr('readonly');
+            $("#attendenceto").removeAttr('readonly');
+
+        });
+    </script>
+    <script>
+        function getvalue() {
+            var value = $("#att").val();
+            if (value == "L") {
+                $("#attendencefrom").attr('readonly', true);
+                $("#attendencefrom").val('empty');
+                $("#attendenceto").attr('readonly', true);
+                $("#attendenceto").val('empty');
+
+
+            }
+            else {
+                $("#attendencefrom").removeAttr('readonly');
+                $("#attendenceto").removeAttr('readonly');
+
+            }
+        }
+    </script>
+
+    <script>
+    function blockjobs(dd) {
+        debugger;
+        var Id = dd;
+        var status=0;
+        var buttonname = $(".btn").val();
+        if (buttonname == "Block") {
+            $("#att_").show();
+            $("#attendencefrom_").show();
+            $("#attendenceto_").show();
+            $("#time_").show();
+            status = 0;
+        }
+        if (buttonname == "Unblock") {
+            $("#att_").hide();
+            $("#attendencefrom_").hide();
+            $("#attendenceto_").hide();
+            $("#time_").hide();
+            status = 1;
+        }
+        var url = '@Url.Action("block_emp", "HR")';
+
+        $.get(url, { status: status, Id: Id }, function data(d) {
+
+            for (var i = 0; i < d.length; i++) {
+
+            }
+
+        });
+        //var buttonname =$(".abc").val();
+        //if(buttonname == "Unblock"){
+
+        //}
+        //if(buttonname == "Block"){
+        //    $(".bc").show();
+        //}
+    }
+    </script>
+    @*<script>
+            function newfun() {
+                debugger;
+                var buttonname =$(".abc").val();
+                if(buttonname == "Unblock"){
+                    $(".aa").hide();
+                }
+                if(buttonname == "Block"){
+                    $(".bc").show();
+                }
+            }
+        </script>*@
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4"> Employee Attendance</h2>
+        <form id="#" method="post" action="~/HR/EmployeeAtten" class="border p-4 rounded shadow formtag">
+
+            <!-- Project Year -->
+            <div class="mb-3">
+                <label class="form-label formLabel">Enter Member id</label>
+                <input type="text" name="memberid" id="memberid" class="form-control formInput" placeholder="" required>
+            </div>
+
+            @*select date*@
+            <div class="mb-3">
+                <label class="form-label formLabel">Select Date</label>
+                <input type="date" name="date1" id="date1" class="form-control formInput" placeholder="" required>
+            </div>
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button value="Search" type="submit" name="command" class="btn btn-lg formButtom">
+                    Search
+                </button>
+
+                @*blue buttton*@
+                @*<button type="submit" class="btn btn-primary btn-lg formButtom">Submit</button>*@
+
+            </div>
+
+
+
+
+        </form>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    @*form content after search*@
+
+    <div id="1">
+        @if (Model != null)
+        {
+            <div class="index_body mt-5">
+                <div class="table-container">
+                    <div class="header-row">Total Holiday Leave</div>
+                    <table>
+                        @foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                                <tr>
+                                    <th style="width: 8%; text-align: center;">
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th style="width: 12%; text-align: center;">
+                                        <label id="empid"><b>Emp ID</b></label>
+                                    </th>
+                                    <th style="width: 15%; text-align: center;">
+                                        <label id="name"><b>Name</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label><b>Action</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label><b>Timing (From)</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label><b>Timing (To)</b></label>
+                                    </th>
+                                    <th style="width: 17%; text-align: center;">
+                                        <label><b>Attendance Date</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label><b>Status</b></label>
+                                    </th>
+                                    <th style="width: 10%; text-align: center;">
+                                        <label><b>Action</b></label>
+                                    </th>
+                                </tr>
+                            }
+                            a = a + 1;
+
+                            <tr style="text-align: center;">
+                                <td>@a</td>
+                                <td><span id="db">@Html.DisplayFor(modelItem => item.empid)</span></td>
+                                <td><span id="ab">@Html.DisplayFor(modelItem => item.name)</span></td>
+
+                                @if (item.status == 0)
+                                {
+                                    <td colspan="4"></td>
+                                    <td style="color: red;">Inactive</td>
+                                    <td>
+                                        <a href="@Url.Action("block_emp", "HR", new { Id = @item.Id, status = @item.status })" class="btn btn-primary" onclick="blockjobs(this.id)">Unblock</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <select id="att_@a" name="att" onchange="getvalue()">
+                                            <option selected="selected" value="A">Absent</option>
+                                            <option value="P">Present</option>
+                                            <option value="A">Week Off</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="time" name="From" id="attendencefrom_@a">
+                                    </td>
+                                    <td>
+                                        <input type="time" name="To" id="attendenceto_@a">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="Attendencedate1" id="time_@a" value="@TempData["date1"]" readonly="true">
+                                    </td>
+                                    <td style="color: green;">Active</td>
+                                    <td>
+                                        <a href="@Url.Action("block_emp", "HR", new { Id = @item.Id, status = @item.status })" class="btn btn-primary" onclick="blockjobs(this.id)">Block</a>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#gedrecord(id)').click(function () {
+                var empid = $('#db').val(empid);
+                var name = $('#ab').val(name);
+                var atten = $('#att').val(atten);
+                var From = $('#endtime').val(From);
+                var To = $('#end').val(To);
+                var Attendencedate = $('#Time').val(Attendencedate);
+                //var Data = 'empid=' + empid & 'name=' + name & 'atten=' + atten & 'From=' + From & 'To=' + To & 'Attendencedate=' + Attendencedate;
+                $.ajax({
+                    type: "Get",
+                    Url: "/attandance/HR",
+                    Data: { employeid: empid, attend: atten, Namee: name, Fromm: From, Too: To, Attendence: Attendencedate },
+                    success: function (ht) {
+                        $('#gedrecord(id)').val('data sent');
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+    <script type="text/javascript">
+
+        $('#gedrecord(id)').click(function () {
+            var empid = $('#db').val(empid);
+            var name = $('#ab').val(name);
+            var atten = $('#att').val(atten);
+            var From = $('#endtime').val(From);
+            var To = $('#end').val(To);
+            var Attendencedate = $('#Time').val(Attendencedate);
+            $.ajax({
+                url: "/HR/AutoCompletemember_Atten",
+                type: "POST",
+                dataType: "json",
+                data: { term: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.name, value: item.empid };
+
+
+                    }))
+
+                }
+
+            }
+                        });
+
+
+
+    </script>
+

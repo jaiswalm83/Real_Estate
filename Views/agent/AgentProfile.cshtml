@@ -1,0 +1,124 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AgentDetail>
+@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+    ViewBag.Title = "AgentProfile";
+}
+
+<style type="text/css">
+    .dd {
+        height:50px;
+        width:70%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+    .d {
+        height:50px;
+        width:30%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+        color:gray;
+     
+    }
+</style>
+
+<div class="page-content">
+
+                <div class="container">
+                   <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Agent Profile</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                              <div class="page-toolbar-block pull-right">
+                            
+                        </div>
+                    </div>
+
+
+             <br />
+               
+       
+
+       <div style="width:100%;">
+
+ @foreach (var item in Model) { 
+     
+        <div style="margin-left:30px;">
+            <div>
+     <div class="d">Agent Id -:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.NewAgentId)</div></div>
+             <div>
+     <div class="d">Name-:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.name)</div></div>
+             <div>
+           <div class="d">Introducer Id -:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.NewIntroducerId)</div> </div>
+
+            
+        
+        <div>
+          <div class="d">Branch Code-:</div>
+        <div class="dd">
+            @Html.DisplayFor(modelItem => item.BranchCode)
+        </div></div>
+        
+        <div>
+     <div class="d">@mr -:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.RankName)</div> </div>
+             <div>
+                 <div class="d">Address -:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.Address)</div></div>
+             <div>
+     <div class="d">Mobile Number-:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.Mobile)</div> </div>
+             <div>
+           <div class="d">Email Id -:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.Email)</div> </div>
+
+            
+        
+        <div>
+          <div class="d">Nominee Name-:</div>
+        <div class="dd">
+            @Html.DisplayFor(modelItem => item.NomineeName)
+        </div></div>
+        
+        <div>
+     <div class="d">Nominee Address -:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.NomineeAddress)</div> </div>
+             <div>
+                <div class="d">Date of Joining -:</div>  
+       
+       <div class="dd">@Html.DisplayFor(modelItem => item.Doj)</div>
+        </div>
+
+             </div>
+
+   
+      <div style="margin-left:30px;">
+
+   
+  
+      <div class="dd" > 
+   
+            @Html.ActionLink("Edit Agent", "EditAgent", new { id=item.AgencyCode})
+          </div>
+  </div>
+ } 
+ </div>  
+                    </div>
+    </div>

@@ -1,0 +1,92 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Branchtabs.Single(b => b.BranchCode == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+ 
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml"; 
+    ViewBag.Title = "DuplicateMenu";
+}
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Welcome @br.BranchName</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+
+
+        </div>
+
+        <div class="widget stacked">
+
+            <div class="widget-header">
+                <i class="icon-credit-card"></i>
+                <h3>Duplicate</h3>
+            </div>
+            <!-- /widget-header -->
+
+            <div class="widget-content">
+
+                <div class="shortcuts">
+                     <a href="~/Branch/AgreementForm" class="shortcut">
+                        <img alt="" src="~/Images/icon/agreement.png" />
+                        <span class="shortcut-label">Agreement Form</span>
+                        <br />
+                    </a>
+                    <a href="~/Branch/DuplicateBond" class="shortcut">
+                        <img alt="" src="~/Images/icon/2.png" />
+                        <span class="shortcut-label">@mr.custname</span>
+                        <br />
+                    </a>
+                     <a href="~/Branch/ChequeDuplicateReceipt" class="shortcut">
+                        <img alt="" src="~/Images/icon/2.png" />
+                        <span class="shortcut-label">Pending @mr.custname</span>
+                        <br />
+                    </a>
+                    <a href="~/Branch/DuplicateReceipt" class="shortcut">
+                        <img alt="" src="~/Images/icon/54.png" />
+                        <span class="shortcut-label">Single Renewal</span>
+                        <br />
+                    </a>
+                    <a href="~/Branch/BulkReceipt" class="shortcut">
+                        <img alt="" src="~/Images/icon/bulkreceipt.png" />
+                        <span class="shortcut-label">Bulk Renewal</span>
+                        <br />
+                    </a>
+                    <a href="~/Branch/DupliSpotCommission" class="shortcut">
+                        <img alt="" src="~/Images/icon/spotcomm.jpg" />
+                        <span class="shortcut-label">Spot Commission</span>
+                        <br />
+                    </a>
+                    @* <a href="~/Branch/PrintMoneyBack" class="shortcut">
+							<img alt="" src="~/Images/icon/cheque.jpg" />
+							<span class="shortcut-label">Cheque</span>
+                            <br />
+						</a>*@
+
+
+                </div>
+                <!-- /shortcuts -->
+
+            </div>
+            <!-- /widget-content -->
+
+        </div>
+
+
+    </div>
+
+</div>

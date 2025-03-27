@@ -1,0 +1,70 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "PrintId";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#agentid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Operator/AutoCompleteOperatorAgentid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.NewAgentId };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+                                <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+
+
+                                <div class="container mt-5">
+                                    <h2 class="text-center mb-4 create-title">Generate I Card</h2>
+                                    @using (Html.BeginForm())
+                                    {
+
+
+                                        <div id="branchForm" class="form-container">
+                                            <!-- Collection Point Name -->
+                                            <div class="form-group">
+                                                <label for="collectionPointName" class="form-label">Enter @mr.agentname Id</label>
+                                                <input type="text" class="form-control " id="agentid" name="agentid" placeholder="Enter Id" required>
+                                            </div>
+
+
+                                            <!-- Create Button -->
+                                            <div class="text-center d-grid gap-2">
+                                                <button type="submit" class="btn create-btn" onclick="target='_blank'">Submit</button>
+                                            </div>
+
+
+                                        </div>
+
+
+                                    }
+
+                                </div>
+                     
+
+
+  
+
+

@@ -1,0 +1,346 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.InstallmentList>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "ApproveRenewal";
+    ViewBag.Title = "ApproveRenewal";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    int a = 0;
+}
+
+
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Pending Renewal List</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                              <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                <div >                                            
+                                <label>@DateTime.Now</label>
+                                </div>                            
+                            </div>
+                        </div> 
+                      </div>  
+                     
+                    <table border="1" style="margin-left:1%; margin-right:1%; margin-bottom:30px; width:95%">
+   
+    @foreach (var item in Model)
+    {
+        var list=db.appltabs.Single(d=>d.newbondid==item.newbondid);
+        if (a == 0)
+        {
+  <tr>
+        <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:5%;text-align:center;">
+           <label id="newbondid"><b>NewBond ID</b></label>
+            </th>
+         <th style="width:5%;text-align:center;">
+           <label id="name"><b>Bond Name</b></label>
+              </th>
+              <th style="width:10%;text-align:center;">
+           <label id="intro"><b>Introducer</b></label>
+        </th>
+       <th style="width:10%;text-align:center;">
+           <label id="introducer"><b>Branch</b></label>
+            </th>
+     
+        <th style="width:10%;text-align:center;">
+           <label id="BranchCode"><b>Payment Date</b></label>
+        </th>
+             <th style="width:10%;text-align:center;">
+           <label id="OperatorName"><b>Amount</b></label>
+        </th>
+        <th style="width:10%;text-align:center;">
+            <label id="OperatorMobile" ><b>Pay Amount</b></label>
+        </th>
+       
+       <th style="width:10%;text-align:center;">
+            <label id="bankname" ><b>Bank Name</b></label>
+        </th>
+      <th style="width:10%;text-align:center;">
+            <label id="chequeno" ><b>Cheque No.</b></label>
+        </th>
+        <th style="width:5%;text-align:center;">
+            <label id="paymethod" ><b>Paymethod</b></label>
+        </th>
+      <th style="width:5%;text-align:center;" colspan="2">
+            <label id="Action" ><b>Action</b></label>
+        </th>
+    </tr>
+        }
+
+        a = a + 1;
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+      
+        <td>
+            @Html.DisplayFor(modelItem => item.newbondid)
+        </td>
+          <td>
+         @list.name
+        </td>
+        <td>
+            @list.newintroducerid
+        </td>
+        <td>
+            @list.branchcode
+        </td>
+        
+        <td>
+              @Convert.ToDateTime(item.paymentdate).ToString("dd/MM/yyyy")
+        </td>
+        <td>
+           @list.totalcon
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.payamount)
+        </td>
+       
+         <td>
+            @Html.DisplayFor(modelItem => item.bank)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.chequeno)
+        </td>
+        <td>
+            @if(item.paymethod=="Cheque")
+            {
+       <a href=""  data-target="#@item.Id" role="button" class="btn btn-default btn-primary" data-toggle="modal">Cheque</a>
+            }
+            else if (item.paymethod == "banktransaction")
+            {
+             <a href=""  data-target="#@item.id2" role="button" class="btn btn-default btn-success" data-toggle="modal">Bank Transaction</a>
+            }
+        </td>
+         <td>
+          <label>
+         @Html.ActionLink("Accept", "ApproveRenewal", new { nnewbondid =@item.newbondid,payno=@item.paymentno,status=1}, new { onclick = "return confirm('Are you sure to you want to accept?');" })
+          </label>
+             </td>
+             <td>
+                        <label>
+                            <button type="button" class="btn btn" data-toggle="modal" data-target="#@item.IIDD">
+                                Reject
+                            </button>
+
+                        </label>
+                    </td>
+    </tr>
+    } 
+</table>       
+          </div>
+  
+                          </div>
+  
+    @foreach (var ii in Model)
+    {
+<div class="modal fade" id="@ii.Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="background-color:#b2b0b0;">
+                <h4 class="modal-title w-100 font-weight-bold" style="color:#123897;">Cheque Detail</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="row"style="margin-left:10px;">
+                    <div class="col-md-12">
+              <div class="col-md-6">
+                  <label style="color:#123897;">Bank:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.bank</label>
+              </div>
+                        </div>
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Branch Name:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Bbranch</label>
+              </div>
+
+                         </div>
+                      <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">IFSC</label>
+                          </div>
+              <div class="col-md-6">
+                 <label>@ii.IFSC</label>
+              </div>
+                         
+                            </div>
+
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Account Holder Name:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.ACholdername</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">Cheque No:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.chequeno</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">Cheque Amount:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Chequeamount</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Cheque Date:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Chequedate</label>
+              </div>
+                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    }
+ @foreach (var rr in Model)
+    {
+<div class="modal fade" id="@rr.IIDD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     @using(Html.BeginForm())
+        {
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="color:#084083; font-size:24px;">Reason</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       
+      <div class="modal-body">
+          <div class="row" style="padding-bottom:1em; margin-left:4px;">
+           <div class="col-md-12">
+              <div class="col-md-3"><b>Penality Charge</b></div>
+              <div class="col-md-8">
+                   <input type="number" name="penality" value="@rr.penality"/>
+                  </div>
+                <div class="col-md-1"></div>
+          </div>
+              </div>
+
+      <div class="row"  style="margin-left:4px;">
+          <div class="col-md-12">
+              <div class="col-md-3"></div>
+              <div class="col-md-8">
+              <textarea cols="50" rows="5" name="reason"></textarea>
+                  <input type="hidden"name="bond" value="@rr.newbondid"/>
+                   <input type="hidden"name="paymentno" value="@rr.paymentno "/>
+                  </div>
+                <div class="col-md-1"></div>
+          </div>
+      </div>
+      </div>
+            
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+        
+    </div>
+  </div>
+     }
+</div>
+ }
+
+@foreach (var ii in Model)
+    {
+<div class="modal fade" id="@ii.id2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="background-color:#b2b0b0;">
+                <h4 class="modal-title w-100 font-weight-bold" style="color:#123897;">Bank Transaction Detail</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="row"style="margin-left:10px;">
+                    <div class="col-md-12">
+              <div class="col-md-6">
+                  <label style="color:#123897;">Bank Name:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.bank</label>
+              </div>
+                        </div>
+                     
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">Pay Method:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.ACholdername</label>
+              </div>
+                         </div>
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">transaction  No:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.chequeno</label>
+              </div>
+                         </div>
+
+                     <div class="col-md-12">
+             <div class="col-md-6">
+                  <label  style="color:#123897;">Transaction Amount:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Chequeamount</label>
+              </div>
+                         </div>
+
+                     <div class="col-md-12">
+                      <div class="col-md-6">
+                  <label  style="color:#123897;">Transaction Date:</label>
+                </div>
+
+              <div class="col-md-6">
+                 <label>@ii.Chequedate</label>
+              </div>
+                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    }

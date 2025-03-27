@@ -1,0 +1,227 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var comp = db.CompanyInfos.Single(x=>x.Id==1);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@comp.CompanyName</title>
+    <meta name="keywords" content="Real estate company in Kanpur">
+    <meta name="description" content="Real estate company in Kanpur">
+    <meta name="author" content="ODH">
+
+
+
+    <!--MAIN STYLE-->
+
+    <link href="~/Content/Home/css/animate.css" rel="stylesheet" />
+    <link href="~/Content/Home/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Home/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/Home/css/main.css" rel="stylesheet" />
+    <link href="~/Content/Home/css/responsive.css" rel="stylesheet" />
+    <link href="~/Content/Home/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+</head>
+<body>
+    <!-- Page Wrap ===========================================-->
+    <div id="wrap" class="home-3">
+
+      <!--======= TOP BAR =========-->
+  <div class="top-bar">
+    <div class="container">
+      <ul class="left-bar-side">
+        <li>
+          <p><i class="fa fa-phone"></i> Call Us Now : +91-@comp.Contact </p>
+          <span>|</span> </li>
+        <li>
+          <p><i class="fa fa-envelope-o"></i> @comp.Emailid </p>
+          <span>|</span> </li>
+        <li>
+          <a href="../Home/Login"><p style="color:white;font-size:22px;"><i class="fa fa-lock"></i> Login </p></a>
+          <span>|</span> </li>
+      </ul>
+      <ul class="right-bar-side social_icons">
+        <li class="facebook"> <a href="#."><i class="fa fa-facebook"></i> </a></li>
+        <li class="twitter"> <a href="#."><i class="fa fa-twitter"></i> </a></li>
+        <li class="linkedin"> <a href="#."><i class="fa fa-linkedin"></i> </a></li>
+        <li class="tumblr"> <a href="#."><i class="fa fa-tumblr"></i> </a></li>
+      </ul>
+    </div>  </div>
+
+        <!--======= HEADER =========-->
+        <header class="sticky">
+
+
+            <!--======= MENU START =========-->
+            <div class="container">
+
+                <!--======= LOGO =========-->
+                <div class="logo">
+                    <a href="#">
+                        <img src="~/Content/Home/images/logo.png" style="height:60px;width:200px;margin-top:-15px"  alt=""/ ></a>
+                </div>
+                <!--======= NAV =========-->
+                <nav>
+
+                    <ul class="ownmenu">
+                        <li class="active"><a href="../Home/Index">Home</a></li>
+                        <li><a href="#">About </a>
+                            <ul class="dropdown">
+
+                                <li><a href="../Home/vissionandmission">Vision &#038; Mission</a></li>
+                                <li><a href="../Home/companyprofile">Company Profile</a></li>
+                                @*<li><a href="../Home/management">Management</a></li>*@
+                                <li><a href="../Home/team">Team</a></li>
+                                <li><a href="../Home/values">Values</a></li>
+
+
+                            </ul>
+                        </li>
+               @*         <li><a href="#">Our Projects</a>
+                            <ul class="dropdown">
+                                <li><a href="#">ODH Homes</a></li>
+                                <li><a href="#">ODH Township</a></li>
+                                <li><a href="#">ODH Valley</a></li>
+
+                            </ul>
+                        </li>*@
+                       
+                       
+                        <li><a href="../Home/Banker">Our Bankers</a></li>
+                        <li><a href="../Home/Project">Plot Availability </a></li>
+                        <li><a href="../Home/Legal">Legal</a></li>
+                         <li><a href="../Home/Gallerys">Gallery</a></li>
+                         <li><a href="~/Home/careerportal">Career</a></li>
+                        <li><a href="../Home/Contact">Contact us</a></li>
+                        <!--======= MEGA MENU =========-->
+
+                      
+                    </ul>
+                    <!--======= SUBMIT COUPON =========-->
+                    <div class="sub-nav-co"><a href="#."><i class="fa fa-search"></i></a></div>
+                </nav>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+      <!--======= FOOTER =========-->
+  <footer>
+    <div class="container"> 
+      
+      <!--======= NEWSLETTER =========-->
+      <div class="subcribe">
+        <div class="col-sm-5 no-padding">
+          <h4>Subscribe to our newsletter</h4>
+        </div>
+        <div class="col-sm-7 no-padding">
+          <form>
+            <input class="font-montserrat" type="email" placeholder="E-mail Address" value="" required>
+            <button type="submit" class="btn"> Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <ul class="row">
+        
+        <!--======= HAPPY CLIENTS =========-->
+        <li class="col-sm-3">
+          <h5>Find us</h5>
+          
+          <!--======= SOCIAL ICONS =========-->
+          
+          <ul class="social_icons">
+            <li class="facebook"> <a href="#."><i class="fa fa-facebook"></i> </a></li>
+            <li class="twitter"> <a href="#."><i class="fa fa-twitter"></i> </a></li>
+            <li class="linkedin"> <a href="#."><i class="fa fa-linkedin"></i> </a></li>
+            <li class="tumblr"> <a href="#."><i class="fa fa-tumblr"></i> </a></li>
+          </ul>
+          @*<hr />*@
+         @* <h5>Booking Start</h5>
+          <hr>*@
+          <div class="pm-button">@*<a href="#"><img style="width:237px; height:103px;" src="Images/book-now.png" /></a>*@
+       
+
+          </div>
+          <hr>
+          <h5>Verify By</h5>
+          <hr>
+          <div class="pm-button">
+        <span id="siteseal"><script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=x7OAwnWl36EWyCraI9xn1zazljjMHDzjXfbu9l0Fi8QLaoFkddSYdpkuop3b"></script></span>
+        </div>
+        </li>
+        
+        <!--======= HAPPY CLIENTS =========-->
+        <li class="col-sm-3"> 
+          <!--======= LINKS =========-->
+          <h5>Important Links</h5>
+          <hr>
+          <ul class="link">
+            <li>
+              <p> <a href="/Home/DigitalServices">Digital Services</a> </p></li>
+              
+            <li>
+              <p> <a href="/Home/Termandcondition">Term & Conditions</a> </p></li>
+               <li>
+              <p> <a href="/Home/privacypolicy">Privacy Policy</a> </p></li>
+          </ul>
+        </li>
+     
+        <!--======= HAPPY CLIENTS =========-->
+        <li class="col-sm-3"> 
+          <!--======= LINKS =========-->
+          <h5>Contact</h5>
+          <hr>
+            <div class="loc-info">
+            
+                <h5 style="font-size: 13px;">Corporate Office</h5>
+                <hr>
+                <p>
+                    <i class="fa fa-map-marker"></i>@comp.Address
+                    <br />
+                    
+                </p>
+               
+                <p><i class="fa fa-print"></i>+91-@comp.Contact</p>
+                <p><i class="fa fa-envelope-o"></i>@comp.Emailid</p>
+            </div>
+        </li>
+      </ul>
+    </div>
+    <script type="text/javascript" src="https://cdn.ywxi.net/js/1.js" async></script>  </footer>
+  
+  <!--======= RIGHTS =========-->
+  <div class="rights">
+    <div class="container">
+      <p class="font-montserrat">� @comp.RegDate.Date.Year @comp.CompanyName All rights reserved</p>
+    </div>
+  </div></div>
+
+    @*<a href="~/Content/Home/"></a>*@
+    <script src="~/Content/Home/js/jquery-1.11.0.min.js"></script>
+    <script src="~/Content/js/jquery-ui.min.js"></script>
+    <script src="~/Content/Home/js/wow.min.js"></script>
+    <script src="~/Content/Home/js/bootstrap-select.js"></script>
+    <script src="~/Content/Home/js/bootstrap.min.js"></script>
+    <script src="~/Content/Home/js/jquery.flexslider-min.js"></script>
+    <script src="~/Content/Home/js/jquery.stellar.js"></script>
+    <script src="~/Content/Home/js/jquery.sticky.js"></script>
+    <script src="~/Content/Home/js/jquery.nouislider.min.js"></script>    
+    <script src="~/Content/Home/js/owl.carousel.min.js"></script>
+    <script src="~/Content/Home/js/own-menu.js"></script>
+    <script src="~/Content/Home/js/main.js"></script>
+    @if (TempData["Error"] != null) { 
+    <script type="text/javascript">
+        alert('@TempData["Error"]');
+    </script>
+        TempData["Error"] = null;
+    }
+</body>
+</html>

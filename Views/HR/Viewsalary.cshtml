@@ -1,0 +1,859 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Salary_em>
+    @{
+
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        ViewBag.Title = "Viewsalary";
+
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#empid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Operator/AutoCompleteEid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.empid };
+
+
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $("#emp").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/HR/AutoCompleteEmp_sal_year",
+                            type: "POST",
+                            dataType: "json",
+                            data: { term: request.term },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.year, value: item.year };
+                                }))
+
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: "", results: ""
+                    }
+                });
+            })
+
+        </script>*@
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#month").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/HR/AutoCompleteEmp_sal_month",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.month, value: item.month };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+
+    </script>
+
+    <div class="page-content">
+        <div>
+            <input type="button" style="margin-left:10px;margin-top:10px;margin-bottom:10px;" name="btnprint" value="Print" onclick="PrintMe('divid')" />
+            @* <input type="button" style="margin-left:10px;margin-top:10px;margin-bottom:10px;" name="btnprint" value="Print" onclick="PrintMe('1')" />*@
+        </div>
+        <div class="container">
+            <div class="page-toolbar" id="2">
+
+                <div class="page-toolbar-block">
+                    <div class="page-toolbar-title">Pay Salary System</div>
+                    <div class="page-toolbar-subtitle"></div>
+                </div>
+
+                <div class="page-toolbar-block pull-right">
+
+                </div>
+
+            </div>
+            @using (Html.BeginForm())
+            {
+
+                <div class="row">
+                    <div class="col-md-6" style="width:100%">
+
+                        <div class="block">
+
+                            <div class="block-content controls">
+
+
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Employee ID</label></span>
+                                            <input type="text" required id="empid" name="empid" class="form-control">
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Month</label></span>
+                                            <select class="form-control" style="width:100%" name="month">
+                                                <option value="1">January</option>
+                                                <option value="2">Febrary</option>
+                                                <option value="3">March</option>
+                                                <option value="4">April</option>
+                                                <option value="5">May</option>
+                                                <option value="6">June</option>
+                                                <option value="7">July</option>
+                                                <option value="8">August</option>
+                                                <option value="9">September</option>
+                                                <option value="10">October</option>
+                                                <option value="11">November</option>
+                                                <option value="12">December</option>
+                                            </select>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row-form">
+
+                                    <div class="col-md-9">
+
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><label class="width">Year</label></span>
+                                            <input type="text" required name="year" class="form-control">
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+
+                                <button name="submitbtn" type="submit" class="btn btn-primary"> View</button>
+
+                            </div>
+                        </div>
+
+
+                        <p>@ViewBag.msg</p>
+                    </div>
+
+                </div>
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+            @if (Model != null)
+            {
+                <div id="divid">
+                    @foreach (var item in Model)
+                    {
+
+                        <div style="background-color:#61708f;color:white; font-size:large;text-align:center"><b>&nbsp;PAY SLIP</b> </div><br /><br />
+                        <table style="width:900px;">
+
+                            <tr>
+                                <td>
+                                    <table style="width:400px;" border="0" cellpadding="0" cellspacing="10">
+
+
+                                        <tr>
+                                            <td>
+                                                Empid
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.empid)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Name
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.name)
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Designation
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.designation)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Department
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.department)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Date Of Joining
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.doj)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Date
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.date)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label style="color:maroon;font-size:15px;"> Basic Salary </label>
+                                            </td>
+
+                                            <td>
+                                                <label style="color:maroon;font-size:15px;"> @Html.DisplayFor(modelItem => item.basicsalary)</label>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr><td></td></tr>
+                                        <tr><td></td></tr>
+                                        <tr><td></td></tr>
+                                        <tr><td></td></tr>
+
+
+                                        <tr>
+                                            <td><label style="font-size:15px;">Incentives Amount</label> </td>
+                                        </tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr>
+                                            <td>
+                                                HRA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.HRA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                DA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                CCA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CCA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                TA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Medical
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.medical)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label style="color:maroon;font-size:15px;">Gross Incentives Amount </label>
+                                            </td>
+
+                                            <td>
+                                                <label style="color:maroon;font-size:15px;"> @Html.DisplayFor(modelItem => item.grossincentive)</label>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+
+
+
+                                    </table>
+                                </td>
+
+
+
+                                <td style="vertical-align:top;">
+                                    <table style="width:400px; ">
+
+                                        <tr>
+
+                                            <td style="text-align:center;margin-top:30px;">
+                                                @if (item.img != null)
+                                                {
+
+                                                    <img src="  @Url.Content(item.img) " width="150" height="150" />
+
+                                                }
+                                                else
+                                                {
+                                                    <label>no image</label>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr>
+                                            <td>
+                                                <label style="font-size:15px;">Deductions Amount</label>
+                                            </td>
+                                        </tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+
+                                        <tr>
+                                            <td>
+                                                Advance Pay
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.advance_Pay)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Professional Tax
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.professionaltax)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Loan
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.loan)
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Professional Fund
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.provisional_fund)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+
+                                        <tr>
+                                            <td>
+                                                <label style="color:maroon;font-size:15px;"> Gross Deduction Amount</label>
+                                            </td>
+
+                                            <td>
+                                                <label style="color:maroon;font-size:15;"> @Html.DisplayFor(modelItem => item.deductionamount)</label>
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+                                </td>
+
+
+                            </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr style="text-align:center; font-size:20px;color:maroon;">
+                                <td>
+                                    <label>Net Salary</label>
+                                </td>
+
+                                <td>
+                                    <label> @Html.DisplayFor(modelItem => item.netsalary)</label>
+                                </td>
+
+                            </tr>
+
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                        </table>
+
+                        <br /> <br />
+
+
+
+                        <div style="margin-left:30px;">
+                            <img src="~/Images/cutt.png" height="30" width="150" />
+                        </div>
+
+
+
+                        <br /> <br />
+
+
+
+
+
+
+                        <div style="background-color:#61708f;color:white; font-size:large;text-align:center"><b>&nbsp;PAY SLIP</b> </div><br /><br />
+                        <table style="width:900px;">
+
+                            <tr>
+                                <td>
+                                    <table style="width:400px;">
+
+
+                                        <tr>
+                                            <td>
+                                                Empid
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.empid)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Name
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.name)
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Designation
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.designation)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Department
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.department)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Date Of Joining
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.doj)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Date
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.date)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label> Basic Salary </label>
+                                            </td>
+
+                                            <td>
+                                                <label> @Html.DisplayFor(modelItem => item.basicsalary)</label>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Incentives Amount</label> </td>
+                                        </tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr>
+                                            <td>
+                                                HRA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.HRA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                DA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                CCA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CCA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                TA
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TA)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Medical
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.medical)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Gross Incentives Amount </label>
+                                            </td>
+
+                                            <td>
+                                                <label> @Html.DisplayFor(modelItem => item.grossincentive)</label>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+
+
+
+                                    </table>
+                                </td>
+
+
+
+                                <td style="vertical-align:top;">
+                                    <table style="width:400px; ">
+
+                                        <tr>
+
+                                            <td style="text-align:center;margin-top:30px;">
+                                                <img src="  @Url.Content(item.img) " width="150" height="150" />
+                                            </td>
+                                        </tr>
+
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr>
+                                            <td>
+                                                <label>Deductions Amount</label>
+                                            </td>
+                                        </tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+
+                                        <tr>
+                                            <td>
+                                                Advance Pay
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.advance_Pay)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Professional Tax
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.professionaltax)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Loan
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.loan)
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Professional Fund
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.provisional_fund)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr> <td> </td></tr>
+                                        <tr> <td> </td></tr>
+
+                                        <tr>
+                                            <td>
+                                                <label> Gross Deduction Amount</label>
+                                            </td>
+
+                                            <td>
+                                                <label> @Html.DisplayFor(modelItem => item.deductionamount)</label>
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+                                </td>
+
+
+                            </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr style="text-align:center; font-size:20px;color:maroon;">
+                                <td>
+                                    <label>Net Salary</label>
+                                </td>
+
+                                <td>
+                                    <label> @Html.DisplayFor(modelItem => item.netsalary)</label>
+                                </td>
+
+                            </tr>
+
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                            <tr><td></td> </tr>
+                        </table>
+
+
+
+
+                    }
+
+                </div>
+
+            }
+            else
+            {
+                <center><label style="color:red;">allready pay salary</label></center>
+            }
+
+
+
+
+
+
+        </div>
+    </div>
+
+

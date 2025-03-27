@@ -1,0 +1,115 @@
+﻿@*@model ODHDEVELOPERS.Models.Branchtab*@
+@model IEnumerable<ODHDEVELOPERS.Models.Branchtab>
+    @using ODHDEVELOPERS.Models;
+
+
+
+
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "CreateBranch";
+    }
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+    <!-- Container for the form -->
+    <div class="container mt-5">
+        <!-- Title of the form -->
+        <h2 class="text-center mb-4 create-title">Create @mr.branchname</h2>
+
+        @using (Html.BeginForm())
+        {
+            <!-- Form element -->
+            <div id="branchForm" class="form-container">
+
+                <!-- Branch Name -->
+                <div class="form-group">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="BranchName" id="bname" placeholder="Enter Name" required>
+                </div>
+
+                <!-- Branch Prefix -->
+                <div class="form-group">
+                    <label for="prefix" class="form-label">Prefix</label>
+                    <input type="text" class="form-control" name="prefix" id="prefix" placeholder="Enter Prefix" required>
+                </div>
+
+                <!-- Branch Code -->
+                <div class="form-group">
+                    <label for="code" class="form-label">Code</label>
+                    <input type="text" class="form-control" name="BranchCode" id="BranchCode" placeholder="Enter Code" required>
+                </div>
+
+                <!-- Branch Address -->
+                <div class="form-group">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" name="branchaddress" id="badd" rows="3" placeholder="Enter Address" required></textarea>
+                </div>
+
+                <!-- District -->
+                <div class="form-group">
+                    <label for="district" class="form-label">District</label>
+                    <input type="text" class="form-control" name="BranchDistrict" id="bdistrict" placeholder="Enter District" required>
+                </div>
+
+                <!-- Mobile Number -->
+                <div class="form-group">
+                    <label for="mobile" class="form-label">Mobile No</label>
+                    <input type="tel" class="form-control" name="mobile" id="mobile" maxlength="10" pattern="[789][0-9]{9}" title="Mobile no is not correct format" placeholder="Enter Mobile Number" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn">Create</button>
+                </div>
+            </div>
+            <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+        }
+    </div>
+
+    <!-- Inline styling for form elements -->
+
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Branch Details</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Prefix</th>
+                        <th>Branch Name</th>
+                        <th>Branch Code</th>
+                        <th>Branch District</th>
+                        <th>Branch Address</th>
+                        <th>Password</th>
+                        <th>Mobile</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Company Id</th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+                    <tbody>
+                        <tr>
+
+                            <td>@item.prefix</td>
+                            <td>@item.BranchName</td>
+                            <td>@item.BranchCode</td>
+                            <td>@item.BranchDistrict</td>
+                            <td>@item.branchaddress</td>
+                            <td>@item.password</td>
+                            <td>@item.mobile</td>
+                            <td>@item.type</td>
+                            <td>@item.status</td>
+                            <td>@item.companyid</td>
+                           
+                        </tr>
+
+                    </tbody>
+                }
+                </table>
+        </div>
+    </div>

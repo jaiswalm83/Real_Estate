@@ -1,0 +1,69 @@
+﻿.topbar {
+    background-color: #1e2a38;
+    padding: 10px 15px;
+}
+
+    .topbar .form-control.inp-search {
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        padding: 10px 20px;
+    }
+
+    .topbar .btn-search {
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-weight: bold;
+    }
+
+    .topbar .right_topbar .icon_info {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .topbar .right_topbar .user_profile_dd img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .topbar .right_topbar .user_profile_dd .dropdown-toggle {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+    }
+
+    .topbar .right_topbar .dropdown-menu {
+        background-color: #1e2a38;
+        border: 1px solid #444;
+        color: white;
+    }
+
+    .topbar .right_topbar .dropdown-item {
+        color: white;
+    }
+
+        .topbar .right_topbar .dropdown-item:hover {
+            background-color: #444;
+        }
+
+@media (max-width: 768px) {
+    .topbar .full {
+        flex-direction: column;
+    }
+
+    .topbar .logo_section {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .topbar .form-control.inp-search {
+        width: 100%;
+    }
+
+    .topbar .right_topbar {
+        text-align: center;
+    }
+}

@@ -1,0 +1,68 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.CompanyInfos.Single(b => b.AdminId == User.Identity.Name);
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+
+
+
+    logo = br.CompanyLogo;
+    companyname = br.CompanyName;
+    incometype = br.IncomeType;
+
+
+    ViewBag.Title = "Vehicle";
+
+}
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+
+
+<!-- Section 1: Final Report -->
+<div class="section">
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2">Extra</h3>
+    </div>
+    <div class="container mt-5">
+        <!-- Extra Cards Row -->
+        <div class="row g-3 d-flex justify-content-center">
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="/Admin/AgentVehicleRequest" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img src="~/images/logo/Extra_logo/vehicle.png" class="imageSize" />
+                        <h6 class="card-title mt-3">Vehicle Request</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="/Admin/AgentVehicleRequestHistory" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img src="~/images/logo/Extra_logo/autonomous-car.png" class="imageSize" />
+                        <h6 class="card-title mt-3">Agent Vehicle Request History</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="/Admin/ReceptionistList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img src="~/images/logo/Extra_logo/receptionist.png" class="imageSize" />
+                        <h6 class="card-title mt-3">Receptionist List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="/Admin/SendCredential" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img src="~/images/logo/Extra_logo/log-in.png" class="imageSize" />
+                        <h6 class="card-title mt-3">Send Credentials</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

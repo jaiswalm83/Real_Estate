@@ -1,0 +1,174 @@
+﻿
+@model IEnumerable<ODHDEVELOPERS.Models.SpotCommList>
+    @using ODHDEVELOPERS.Models;
+    @{
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "DWSpotCommission";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+        var br = db.CompanyInfos.Single(o => o.Id == 1);
+        Double businesssum = 0, commsum = 0;
+    }
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+
+        });
+    </script>
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">Payment Datewise Spot Commission</h2>
+        @using (Html.BeginForm())
+        {
+            <div id="paymentForm" class="form-container">
+
+
+                <!-- Select Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">Start Date:</label>
+                    <input type="text" class="form-control" name="sdate" id="sdate" placeholder="Start Date" required>
+                </div>
+
+                <!-- Select Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">End Date:</label>
+                    <input type="text" class="form-control" name="edate" id="edate" placeholder="End Date" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn">Search</button>
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+    <table border="1" style="margin-left:1%; margin-right:1%; margin-bottom:60px;width:98%;">
+
+        @foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+
+                <tr style="text-align: center;">
+                    <th style="width: 5%; text-align: center;">
+                        <label id="sn" style="text-align: center;"><b>S.N.</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="NewAgentId"><b>@mr.agentname Id</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label><b>@mr.custname Id</b></label>
+                    </th>
+
+                    <th style="width: 10%; text-align: center;">
+                        <label><b>@mr.custname Name</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="Business"><b>Business</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="Commission"><b>Commission</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label><b>Date</b></label>
+                    </th>
+                    <th style="width: 10%; text-align: center;">
+                        <label id="Action"><b>Action</b></label>
+                    </th>
+
+
+                </tr>
+            }
+            a = a + 1;
+            <tr style="text-align:center">
+                <td>
+                    @a
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.newagentid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.newbondid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Business)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commission)
+                </td>
+                <td>
+                    @Convert.ToDateTime(item.date).ToString("dd/MM/yyyy")
+                </td>
+
+                <td>
+                    @Html.ActionLink("Pay", "DWS", new { newagentid = item.newagentid, newbondid = item.newbondid, sdate = item.sdate, edate = item.edate }, new { onclick = "return confirm('Are you sure to Pay this Commission?');" })
+                    @*  @Html.ActionLink("Pay", "DWSpotCommission", new { newagentid = item.newagentid, newbondid = item.newbondid, sdate = item.sdate, edate = item.edate }, new { onclick = "return confirm('Are you sure to Pay this Commission?');" })*@
+
+                </td>
+
+            </tr>
+            businesssum = businesssum + Convert.ToDouble(item.Business);
+            commsum = commsum + Convert.ToDouble(item.Commission);
+        }
+        @if (a > 0)
+        {
+            <tr style="text-align:center;">
+                <td colspan="4">
+                    <b>GRAND TOTAL:</b>
+                </td>
+                <td>
+                    <b> @businesssum</b>
+                </td>
+                <td>
+                    <b> @commsum</b>
+                </td>
+                <td>
+                </td>
+            </tr>
+        }
+    </table>
+
+
+    <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+    @if (ViewBag.msg == "Spot Commission Paid Successfully")
+    {
+        @Html.ActionLink("Print Report", "PrintDWSpotCommission", new { newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print this Report?'), target='_blank'" })
+    }
+
+
+    </div>
+
+    </div>
+
+
+    <script>
+        // Initialize Flatpickr on the input with id="date"
+        flatpickr("#date", {
+            dateFormat: "Y-m-d", // The format for the date output in the input field
+            altInput: true, // Display the formatted date in the input field
+            altFormat: "F j, Y", // Display format in the input field (e.g., "December 10, 2024")
+            allowInput: true, // Allow users to type the date manually as well
+            inline: false, // This shows the calendar as a dropdown instead of inline
+        });
+    </script>

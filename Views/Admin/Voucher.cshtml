@@ -1,0 +1,168 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+
+    var mr = db.Members.Single(m => m.Id == 1);
+
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Voucher";
+}
+<link href="~/assets/css1/main css/Registry.css" rel="stylesheet" />
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+
+<div class="page-content">
+
+    <div class="container">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title"></div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+        </div>
+
+        <div class="widget stacked">
+
+            <div class="widget-header">
+                <i class="icon-credit-card"></i>
+                <h3>Voucher</h3>
+            </div> <!-- /widget-header -->
+
+            <div class="widget-content">
+
+                <div class="shortcuts">
+
+                    @if (f1.status == 1)
+                    {
+                        <a href="~/Admin/DCBrokerVoucher" class="shortcut">
+                            <img alt="" src="~/Images/icon/42.png" />
+                            <span class="shortcut-label">@f1.type</span>
+                        </a>
+                    }
+                    @if (f2.status == 1)
+                    {
+                        <a href="~/Admin/CCBrokerVoucher" class="shortcut">
+                            <img alt="" src="~/Images/icon/43.png" />
+                            <span class="shortcut-label">@f2.type</span>
+                        </a>
+                    }
+                    @if (f3.status == 1)
+                    {
+                        <a href="~/Admin/BWBrokerVoucher" class="shortcut">
+                            <img alt="" src="~/Images/icon/67.png" />
+                            <span class="shortcut-label">@f3.type</span>
+                        </a>
+                    }
+
+                    <a href="~/Admin/ReleaseVoucher" class="shortcut">
+                        <img alt="" src="~/Images/icon/74.png" />
+                        <span class="shortcut-label">Release Voucher Date</span>
+                    </a>
+                    <a href="~/Admin/GenerateVoucher" class="shortcut">
+                        <img alt="" src="~/Images/icon/74.png" />
+                        <span class="shortcut-label">Generate Voucher</span>
+                        <br />
+                    </a>
+
+
+
+                </div> <!-- /shortcuts -->
+
+            </div> <!-- /widget-content -->
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="section">
+
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2">Voucher</h3>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container mt-5">
+        <!-- First Row (Centered Cards with Responsive Behavior) -->
+        <div class="centered-row">
+            <!-- Card 1 (Plot Registry) -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                @if (f1.status == 1)
+                {
+
+                    <a href="~/Admin/DCBrokerVoucher" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/property.png" />
+                            <h6 class="card-title mt-3">@f1.type </h6>
+                        </div>
+                    </a>
+                }
+            </div>
+            <!-- Card 2 (Pre Surrender) -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                @if (f2.status == 1)
+                {
+                    <a href="~/Admin/CCBrokerVoucher" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/browsing.png" />
+                            <h6 class="card-title mt-3">@f2.type</h6>
+                        </div>
+                    </a>
+                }
+            </div>
+
+            <!-- Card 2 (Pre Surrender) -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                @if (f3.status == 1)
+                {
+                    <a href="~/Admin/BWBrokerVoucher" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/browsing.png" />
+                            <h6 class="card-title mt-3">@f3.type</h6>
+                        </div>
+                    </a>
+                }
+            </div>
+
+            <!-- Card 2 (Pre Surrender) -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+             
+                    <a href="~/Admin/ReleaseVoucher" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/browsing.png" />
+                            <h6 class="card-title mt-3">Release Voucher Date</h6>
+                        </div>
+                    </a>
+                
+            </div>
+
+
+            <!-- Card 2 (Pre Surrender) -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3" style="height:155px" >
+             
+                    <a href="~/Admin/GenerateVoucher" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/browsing.png" />
+                            <h6 class="card-title mt-3">Generate Voucher</h6>
+                        </div>
+                    </a>
+              
+            </div>
+
+
+        </div>
+    </div>
+    </div>

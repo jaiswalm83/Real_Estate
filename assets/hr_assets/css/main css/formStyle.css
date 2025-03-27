@@ -1,0 +1,42 @@
+﻿.FormContainer {
+    background-color: #fff3f5;
+    border: 2px solid #fff3f5;
+    
+}
+
+    .FormContainer h2 {
+        color: #ff6600;
+        font-weight: bold;
+        font-family: 'Poppins';
+    }
+.formtag {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+    .formtag h4 {
+        color: #ff6600;
+        font-weight: bold;
+        font-family: 'Poppins';
+    }
+
+.formLabel {
+    color: #1a202c;
+    font-weight: 500;
+    color: #ff6600;
+}
+
+.formInput {
+    background-color: #f9fafb!important;
+    border: 1px solid #cbd5e0!important;
+    border-radius: 25px!important;
+    color: #2d3748!important;
+}
+
+.formButtom {
+    background-color: #ff6600;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 25px;
+    width: 200px;
+    border: 0px;
+}

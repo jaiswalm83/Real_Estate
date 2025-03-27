@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerChain>
+@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+    ViewBag.Title = "SelfVoucherList";
+    var a = 0;
+}
+<div class="page-content">
+
+                <div class="container" id="div1">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Self Voucher List</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                               <div class="page-toolbar-block pull-right">
+                           
+                        </div> 
+    
+
+</div> 
+
+                   
+            
+<table border="1" style="margin-left:15px; margin-right:15px;">
+    @foreach(var item in Model){
+if(a==0)
+{
+    <tr><td colspan="9" style="width:100%;"><a href="@Url.Action("PrintVoucherReport")">Get Report In PDF</a></td></tr>
+    <tr>
+        <th style="width:5%;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:20%;">
+           <label id="NewAgentId"><b>@mr.agentname Id</b></label>
+            </th>
+        
+        <th style="width:20%;">
+           <label id="name"><b>@mr.agentname Name</b></label>
+        </th>
+            <th style="width:15%;">
+           <label id="RankCode"><b>@mr.rankname Name</b></label>
+        </th>
+        <th style="width:20%;">
+           <label id="BranchCode"><b>Introducer Id</b></label>
+        </th>
+            
+        <th style="width:20%;">
+            <label id="Mobile" ><b>Introducer Name</b></label>
+        </th>
+             
+         
+            
+        
+             
+
+    </tr>
+    }
+        a = a + 1;
+    <tr>
+        <td>
+            @a
+        </td>
+        
+      <td>
+            @Html.DisplayFor(modelItem => item.newagentid)
+        </td>
+        
+         <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+       
+         <td>
+            @Html.DisplayFor(modelItem => item.rankname)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.introducerid)
+        </td>
+             <td>
+            @Html.DisplayFor(modelItem => item.introname)
+        </td>
+
+            
+    </tr>
+} 
+
+</table>
+
+                    </div>
+
+</div>
+
+
+

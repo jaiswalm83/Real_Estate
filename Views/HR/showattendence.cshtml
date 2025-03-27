@@ -1,0 +1,79 @@
+﻿@using ODHDEVELOPERS.Models;
+ @{
+    ViewBag.Title = "showattendence";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var empid = Convert.ToString(TempData["id"]);
+    var Attendencedate = Convert.ToDateTime(TempData["idd"]);
+    var newdays = DateTime.DaysInMonth(Attendencedate.Year, Attendencedate.Month);
+    DateTime firstofmonth = new DateTime(Attendencedate.Year, Attendencedate.Month, 1);
+    DateTime lastofmonth = new DateTime(Attendencedate.Year, Attendencedate.Month, newdays);
+    var list = db.Emp_attens.Where(a => a.empid == empid && a.Attendencedate >= firstofmonth && a.Attendencedate <= lastofmonth && a.status!=3).ToList();
+    var cnta = db.Emp_attens.Where(a => a.empid == empid && a.Attendencedate >= firstofmonth && a.Attendencedate <= lastofmonth && a.atten == "A" && a.status != 3).Count();
+    var cntp = db.Emp_attens.Where(a => a.empid == empid && a.Attendencedate >= firstofmonth && a.Attendencedate <= lastofmonth && a.atten == "P" && a.status != 3).Count();
+    var cntl = db.Emp_leaves.Where(a => a.empid == empid && a.sdate >= firstofmonth && a.edate <= lastofmonth && a.leavetype == a.leavetype).Count();
+    //var abc = db.Emp_attens.Where(a => a.empid == empid && a.Attendencedate >= firstofmonth && a.Attendencedate <= lastofmonth).ToList();
+    //var ab = lastofmonth.Day - firstofmonth.Day;
+    var cntc = db.Emp_leaves.Where(a => a.empid == empid && a.sdate >= firstofmonth && a.edate <=lastofmonth && a.leavetype == "Casual Leave").Count();
+    var b = 0;
+    }
+<div class="page-content">
+<div class="container">     
+<div class="page-toolbar">
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">showattendence</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                    </div> 
+                       <div class="row" >
+                        <div class="col-md-6" style="width:100%">
+<form>
+    @if (TempData["msg"] != null)
+    {
+        <label style="color:red">@TempData["msg"]</label> 
+    }
+       <table class="table table-responsive" id="mytable" style="border:1px solid #1a0404;">
+           <thead style="border:1px solid #1a0404;">
+               <tr>
+                   <th>Srno.</th>
+                   <th>Employee Id</th>
+                   <th>Employee Name</th>
+                   <th>From</th>
+                   <th>To</th>
+                   <th>Status</th>
+                   <th>Attendence Date</th>
+                   <th>Action</th>
+              </tr>
+           </thead>
+           <tbody style="border:1px solid #1a0404;">
+            @foreach (var item in list)
+           {
+               b = b + 1;
+               <tr>
+               <td>@b</td>
+               <td>@item.empid</td>
+               <td>@item.name</td>
+               <td>@item.timingfrom</td>
+               <td>@item.timingto</td>
+               <td>@item.atten</td>
+               <td>@item.Attendencedate</td>
+                   <td><a href="@Url.Action("deleteattendence", "HR", new {firstofmonth=firstofmonth,lastofmonth=lastofmonth, id= item.Id,status=item.status})" class="btn btn-danger btn-sm">Delete</a></td>
+               </tr>
+           }    
+       </tbody>
+       </table>
+    <footer>
+        <div class="col-md-3">
+        <label>Total Absent(@cnta)</label>
+        </div>
+        <div class="col-md-3">
+        <label>Total Present(@cntp)</label>
+        </div>
+        <div class="col-md-3">
+        <label>Total Leaves(@cntl)</label>
+        </div>
+        <div class="col-md-3">
+        <label>Total Casual Leave(@cntc)</label>
+        </div>
+    </footer>
+</form></div></div></div></div>

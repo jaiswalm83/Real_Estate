@@ -1,0 +1,303 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DailyDepositTab>
+@{
+    ViewBag.Title = "DailyClosingReport";
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+  int a = 0;
+}
+
+<div class="page-content">
+    <div>
+
+        <div class="container">
+            <div class="page-toolbar">
+
+                <div class="page-toolbar-block">
+                    <div class="page-toolbar-title">DateWise Closing List</div>
+                    <div class="page-toolbar-subtitle"></div>
+                </div>
+
+
+            </div>
+            @using (Html.BeginForm())
+            {
+                <div class="row" id="hide">
+                    <div class="col-md-6" style="width: 98%">
+
+
+                        <div class="block">
+
+                            <div class="block-content controls">
+                                <div class="row-form">
+                                    <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                        <span class="input-group-addon">Select Start Date</span>
+                                        <input type="date" id="sdate" name="sdate" class="form-control" />
+
+                                    </div>
+                                    <br />
+                                    <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                        <span class="input-group-addon">Select End Date</span>
+                                        <input type="date" id="edate" name="edate" class="form-control" />
+
+                                    </div>
+                                </div>
+                                <div class="row-form" style="width: 100%">
+                                    <div class="col-md-9">
+                                        <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit">View</button>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                            
+            }
+
+
+            <table border="1" style="margin-left: 1%; margin-right: 1%; margin-bottom: 30px; width: 95%">
+
+                @foreach (var item in Model)
+                {
+                    Double totalcashexp = item.ReturnCashExp + item.ReturnCashSpot + item.ReturnCashVoucher;
+                    Double totalchequeexp = item.ReturnChequeExp + item.ReturnCashSpot + item.ReturnChequeVoucher;
+                    Double totalBankexp = item.ReturnBankExp + item.ReturnBankSpot + item.ReturnBanVoucher;
+                    if (a == 0)
+                    {
+                    <tr>
+                        <th style="width: 5%; text-align: center;">
+                            <label id="sn"><b>S.N.</b></label>
+                        </th>
+
+                        <th style="width: 10%; text-align: center;">
+                            <label id="name"><b>Operator Id</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="bank"><b>Total Bank Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="cheque"><b>Total Cheque Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="cash"><b>Total Cash Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="bankexpense"><b>Bank Expense Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="chequeexpense"><b>Cheque Expense Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="cashexpense"><b>Cash Expense Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id=""><b>Total Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="introducer"><b>Deposited Amount</b></label>
+                        </th>
+                        <th style="width: 10%; text-align: center;">
+                            <label id="BranchCode"><b>Remaining Amount</b></label>
+                        </th>
+                    </tr>
+                }
+
+                a = a + 1;
+                    <tr style="text-align: center;">
+                        <td>
+                            @a
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.opid)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalBankamount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalChequeamount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalCashamount)
+                        </td>
+                        <td>
+                            @totalBankexp
+                        </td>
+                        <td>
+                            @totalchequeexp
+                        </td>
+                        <td>
+                            @totalcashexp
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Depositedamount)
+                        </td>
+                        <td>
+                            <a href=""  data-target="#@item.Id" role="button" class="btn btn-default btn-primary" data-toggle="modal">@Html.DisplayFor(modelItem => item.total)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.remainingamount)
+                        </td>
+
+                    </tr>
+            }
+            </table>
+
+
+        </div>
+    </div>
+</div>
+ 
+ @foreach (var ii in Model)
+    {
+     Double twothousand=ii.twothousand/2000;
+     Double fivehund = ii.fivehundred / 500;
+     Double twohund = ii.twohundred / 200;
+     Double hund = ii.hundred / 100;
+     Double fifty = ii.fifty / 50;
+     Double twenty = ii.twenty / 20;
+     Double ten = ii.ten / 10;
+     Double five = ii.five / 5;
+     Double two = ii.two / 2;
+     Double one = ii.one / 1;
+<div class="modal fade" id="@ii.Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="background-color:#b2b0b0;">
+                <h4 class="modal-title w-100 font-weight-bold" style="color:#123897;">Note Detail</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="row"style="margin-left:10px;">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">Denomination</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>No of Note</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>Amount</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">2000:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@twothousand</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.twothousand</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">500:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@fivehund</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.fivehundred</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">200:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@twohund</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.twohundred</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">100:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@hund</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.hundred</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">50:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@fifty</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.fifty</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">20:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@twenty</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.twenty</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">10:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@ten</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.ten</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">5:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@five</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.five</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">2:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@two</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.two</label>
+              </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                  <label style="color:#123897;">1:</label>
+                </div>
+                        <div class="col-md-4">
+                 <label>@one</label>
+              </div>
+                        <div class="col-md-4">
+                 <label>@ii.one</label>
+              </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    }

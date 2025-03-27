@@ -1,0 +1,772 @@
+﻿
+@model IEnumerable<ODHDEVELOPERS.Models.AgentDetail>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "SearchBroker";
+    }
+
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#NewAgentId").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteAgentid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+
+
+
+
+
+    <!-- Date Picker Modal -->
+    <div id="dateRangeModal" class="date-range-modal">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="btn date-range-btn" onclick="selectRange('today')">Today</button>
+                <button class="btn date-range-btn" onclick="selectRange('yesterday')">Yesterday</button>
+                <button class="btn date-range-btn" onclick="selectRange('last7')">Last 7 Days</button>
+                <button class="btn date-range-btn" onclick="selectRange('last30')">Last 30 Days</button>
+                <button class="btn date-range-btn" onclick="selectRange('thisMonth')">This Month</button>
+                <button class="btn date-range-btn" onclick="selectRange('lastMonth')">Last Month</button>
+                <button class="btn date-range-btn" onclick="selectRange('custom')">Custom Range</button>
+
+                <div id="customRangeInputs" style="display:none;">
+                    <label for="startDate">From</label>
+                    <input type="date" id="startDate" class="custom-range-input">
+                    <label for="endDate">To</label>
+                    <input type="date" id="endDate" class="custom-range-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-apply" onclick="applyDateRange()">Apply</button>
+                <button class="btn btn-cancel" onclick="closeDatePicker()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Form Below -->
+    <form id="yourForm">
+        <!-- Your form fields here -->
+    </form>
+
+
+    <script>
+        // Set today's date as the default value in the input field
+        window.onload = function () {
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString(); // Format it as 'MM/DD/YYYY'
+            document.getElementById('dateRangeInput').value = `${formattedDate} - ${formattedDate}`;
+        };
+
+        function showDatePicker() {
+            document.getElementById('dateRangeModal').style.display = 'block';
+        }
+
+        function closeDatePicker() {
+            document.getElementById('dateRangeModal').style.display = 'none';
+        }
+
+        function selectRange(range) {
+            const today = new Date();
+            const startDate = new Date(today);
+            const endDate = new Date(today);
+
+            switch (range) {
+                case 'today':
+                    document.getElementById('dateRangeInput').value = `${today.toLocaleDateString()} - ${today.toLocaleDateString()}`;
+                    break;
+                case 'yesterday':
+                    startDate.setDate(today.getDate() - 1);
+                    document.getElementById('dateRangeInput').value = `${startDate.toLocaleDateString()} - ${startDate.toLocaleDateString()}`;
+                    break;
+                case 'last7':
+                    startDate.setDate(today.getDate() - 7);
+                    document.getElementById('dateRangeInput').value = `${startDate.toLocaleDateString()} - ${today.toLocaleDateString()}`;
+                    break;
+                case 'last30':
+                    startDate.setDate(today.getDate() - 30);
+                    document.getElementById('dateRangeInput').value = `${startDate.toLocaleDateString()} - ${today.toLocaleDateString()}`;
+                    break;
+                case 'thisMonth':
+                    startDate.setDate(1);
+                    document.getElementById('dateRangeInput').value = `${startDate.toLocaleDateString()} - ${today.toLocaleDateString()}`;
+                    break;
+                case 'lastMonth':
+                    startDate.setMonth(today.getMonth() - 1);
+                    startDate.setDate(1);
+                    endDate.setMonth(today.getMonth() - 1);
+                    endDate.setDate(0);
+                    document.getElementById('dateRangeInput').value = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+                    break;
+                case 'custom':
+                    document.getElementById('customRangeInputs').style.display = 'block';
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function applyDateRange() {
+            const customStart = document.getElementById('startDate').value;
+            const customEnd = document.getElementById('endDate').value;
+
+            if (customStart && customEnd) {
+                document.getElementById('dateRangeInput').value = `${customStart} - ${customEnd}`;
+            }
+
+            closeDatePicker();
+        }
+    </script>
+
+    <style>
+        .date-range-wrapper {
+            position: relative;
+            display: inline-block;
+            float: right; /* Aligns it to the left */
+            margin-right: 2px; /* Space between the input and other elements */
+        }
+
+        .date-range-input {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 63rem; /* Optional: adds a bit of space from the label */
+            margin-top: -1rem;
+        }
+
+        .date-range-modal {
+            display: none;
+            position: absolute;
+            top: 35px;
+            margin-top: 8rem;
+            margin-right: 2rem;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 220px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            padding: 10px;
+        }
+
+        .date-range-btn {
+            display: block;
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            .date-range-btn:hover {
+                background-color: #0056b3;
+            }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .custom-range-input {
+            width: 100%;
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn-apply, .btn-cancel {
+            padding: 5px 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+        }
+
+        .btn-apply:hover {
+            background-color: #218838;
+        }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+    </style>
+
+
+
+
+
+    <div class="container mt-5">
+        <!-- Title -->
+        <h2 class="text-center create-title">
+            Search @mr.agentname
+        </h2>
+
+
+
+
+        <!-- Form -->
+        @using (@Html.BeginForm())
+        {
+
+            <div id="associateIdForm" class="form-container">
+
+                <!-- Date Range Selector -->
+                <div class="d-flex justify-content-center align-items-center mb-4">
+                    <div class="date-range-wrapper">
+                        @*<label for="dateRange" class="date-range-label">Date Range</label>*@
+                        <input type="text" class="date-range-input" id="dateRangeInput" readonly onclick="showDatePicker()">
+                    </div>
+                </div>
+
+                <!-- Associate Id Input -->
+                <div class="form-group">
+                    <label for="associateId" class="form-label">Enter @mr.agentname Id</label>
+                    <input type="text" class="form-control" id="NewAgentId" name="NewAgentId" placeholder="Enter Associate Id" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn" id="submit" name="command" value="Search">Search</button>
+                </div>
+            </div>
+        }
+
+
+
+
+
+
+    @*<div class="row" style="margin-bottom:30px;">*@
+        @using (Html.BeginForm())
+        {
+            foreach (var item in Model)
+            {
+
+
+
+                @*<div style="width: 100%">
+
+                    <div class="block">*@
+
+
+
+
+                        <div id="associateIdForm" class="form-container" style="margin-top:3rem">
+                            <div class="text-center d-grid gap-2">
+
+                                <button type="submit" name="command" value="PDF" class="btn create-btn" onclick="target='_blank'">Download PDF</button>
+                            </div>
+
+                        </div>
+
+
+                        <p>@ViewBag.msg</p>
+                    @*</div>
+
+                    </div>*@
+            
+               
+                    <div  style="margin-top:50px">
+
+
+                        <!-- Title -->
+                        <h2 class="text-center create-title" style="text-align:center">
+                            Personal Details
+                        </h2>
+
+
+
+                        @*<div class="block">
+                        <div class="block-content">
+                            <h2><strong>Personal Details</strong></h2>
+
+                        </div>*@
+                        <div >
+                            <div id="associateIdForm" class="form-container" >
+                                <div class="row-form">
+
+
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">@mr.agentname Id</label>
+
+                                        <b> <input type="text" class="form-control" id="Broker" required name="formfee" value="@item.NewAgentId" readonly /></b>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="row-form">
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">@mr.branchname Code </label>
+                                        </span>
+                                        <input type="text" class="form-control" id="BranchCode" value="@item.BranchCode" name="BranchCode" readonly="true" />
+                                    </div>
+                                    <input type="hidden" value="@item.NewAgentId" name="brokerid" id="brokerid">
+
+                                </div>
+                                <div class="row-form">
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Form Fee</label>
+                                        </span>
+                                        <input type="text" class="form-control" id="formfee" required name="formfee" value="@item.formfee" readonly="true" />
+                                    </div>
+
+
+
+                                </div>
+                                <div class="row-form">
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Name</label>
+                                        </span>
+                                        <input type="text" class="form-control" id="name" required name="name" value="@item.name" readonly="true" />
+                                    </div>
+
+
+
+                                </div>
+                                <div class="row-form">
+
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Father/Husband's Name</label>
+                                        </span>
+                                        <input type="text" class="form-control" required name="Father" id="Father" value="@item.Father" readonly="true" />
+                                    </div>
+
+
+
+
+
+                                    <div class="col-md-9"></div>
+                                </div>
+                                <div class="row-form">
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Password</label>
+                                        </span>
+                                        <input type="text" class="form-control" id="Mother" name="Mother" value="@item.Password" readonly="true" />
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+                                <div class="row-form">
+
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Mobile No</label>
+                                        </span>
+                                        <input type='tel' title="Invalid mobile format" pattern="[789][0-9]{9}" maxlength="10" name="Mobile" id="Mobile" required class="form-control" value="@item.Mobile" readonly="true" />
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div class="row-form">
+
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Introducer Code</label>
+                                        </span>
+                                        <input type="text" class="form-control" required onmouseover="check(this.id)" id="NewIntroducerId" name="NewIntroducerId" value="@item.NewIntroducerId" readonly="true" />
+                                    </div>
+
+
+
+
+                                </div>
+                                <div class="row-form">
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Introducer Name</label>
+                                        </span>
+                                        <input type="text" class="form-control" required id="IntroName" name="IntroName" value="@item.IntroName" readonly="true" />
+                                    </div>
+
+
+
+
+                                </div>
+
+                                <div class="row-form">
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Nationality</label>
+                                        </span>
+                                        <input type="text" class="form-control" id="Nationality" name="Nationality" readonly="readonly" value="@item.Nationality" />
+                                    </div>
+
+
+                                </div>
+                                <div class="row-form">
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Date Of Joining</label>
+                                        </span>
+                                        <input type="date" name="Doj" id="date" required class="form-control" value="@item.Doj" readonly="true" />
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="row-form">
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">DOB</label>
+                                        </span>
+                                        <input type="date" id="Dob" name="Dob" required class="form-control" value="@item.Dob" readonly="true">
+                                    </div>
+
+
+
+
+                                </div>
+
+
+
+                                <div class="row-form">
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label"> Gender</label>
+                                        </span>
+                                        <input type="text" id="Dob1" name="Dob" required class="form-control" value="@item.Gender" readonly="true">
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row-form">
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">@mr.rankname To be alloted</label>
+                                        </span>
+                                        <input type="text" id="Rank" required name="RankCode" class="form-control" value="@item.RankCode" readonly="true" />
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row-form">
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label"> Blood Group</label>
+                                        </span>
+                                        <input type="text" id="Rank1" required name="RankCode" class="form-control" value="@item.BloodGroup" readonly="true" />
+
+                                    </div>
+
+
+
+                                </div>
+                                <div class="row-form">
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label">Occupation</label>
+                                        </span>
+                                        <input type="text" id="Occupation" name="Occupation" class="form-control" value="@item.Occupation" readonly="true" />
+                                    </div>
+
+
+
+
+
+                                </div>
+                                <div class="row-form">
+
+
+
+                                    <div class="form-group">
+                                        <span class="input-group-addon">
+                                            <label class="form-label"> Qualification</label>
+                                        </span>
+                                        <input type="text" id="Rank2" required name="RankCode" class="form-control" value="@item.Qualification" readonly="true" />
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="margin-top:50px" >
+                            <!-- Title -->
+                            <h2 class="text-center create-title" style="text-align:center">
+                                Bank & Other Details
+                            </h2>
+
+                            <div id="bankDetailsForm" class="form-container">
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">PAN Number</label>
+                                        <input type="text" id="Panno" name="Panno" class="form-control" value="@item.Panno" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Passport Number</label>
+                                        <input type="text" id="Passportno" name="Passportno" class="form-control" value="@item.Passportno" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Driving Licence No.</label>
+                                        <input type="text" id="Drivinglno" name="Drivinglno" class="form-control" value="@item.Drivinglno" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">I-Card Number</label>
+                                        <input type="text" id="Icardno" name="Icardno" class="form-control" value="@item.Icardno" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Issue On</label>
+                                        <input type="date" id="Issueon" required name="Issueon" class="form-control" value="@item.Issueon" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Valid Upto</label>
+                                        <input type="date" id="Validupto" required name="Validupto" class="form-control" value="@item.Validupto" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Bank Name</label>
+                                        <input type="text" name="BankName" id="BankName" class="form-control" value="@item.BankName" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Bank Code</label>
+                                        <input type="text" id="BankCode" name="BankCode" class="form-control" value="@item.BankCode" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Account No.</label>
+                                        <input type="number" id="BankAccountno" name="BankAccountno" class="form-control" value="@item.BankAccountno" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">IFSC Code</label>
+                                        <input type="text" id="IFCCode" name="IFCCode" class="form-control" value="@item.IFCCode" readonly="true" />
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Bank Address</label>
+                                        <input type="text" id="BankAddress" name="BankAddress" class="form-control" value="@item.BankAddress" readonly="true" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div style="margin-top:50px" >
+                        <!-- Title -->
+                        <h2 class="text-center create-title" style="text-align:center">
+                            Personal Details
+                        </h2>
+
+                        <div id="personalDetailsForm" class="form-container" >
+                            <!-- Upload Photo -->
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Upload Photo</label>
+                                    @if (item.Photo == null)
+                                    {
+                                        <img alt="" src="~/Photo/default.jpg" class="img-thumbnail" style="height:200px;width:150px; margin-bottom:10px;" />
+                                    }
+                                    else
+                                    {
+                                        <img alt="" src="@Url.Content(item.Photo)" class="img-thumbnail" style="height:200px;width:150px; margin-bottom:10px;" />
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Address Details -->
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" id="Address" name="Address" class="form-control" value="@item.Address" readonly="true" />
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">District</label>
+                                    <input type="text" id="District" name="District" class="form-control" value="@item.District" readonly="true" />
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">State</label>
+                                    <input type="text" id="State" name="State" class="form-control" value="@item.State" readonly="true" />
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Pin Code</label>
+                                    <input type="number" id="PinCode" name="PinCode" class="form-control" value="@item.PinCode" readonly="true" />
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Land Line No</label>
+                                    <input type="number" id="Landlineno" name="Landlineno" class="form-control" value="@item.Landlineno" readonly="true" />
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" id="Email" name="Email" class="form-control" value="@item.Email" readonly="true" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div sstyle="margin-top:50px;">
+                        <!-- Title -->
+                        <h2 class="text-center create-title" style="text-align:center; ">
+                            Nominee Details
+                        </h2>
+
+                        <div id="nomineeDetailsForm" class="form-container" >
+                            <!-- Nominee Name -->
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Nominee Name</label>
+                                    <input type="text" id="NomineeName" name="NomineeName" class="form-control" value="@item.NomineeName" readonly="true" />
+                                </div>
+                            </div>
+
+                            <!-- Nominee Age -->
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Nominee Age</label>
+                                    <input type="text" id="NomineeAge" name="NomineeAge" class="form-control" value="@item.NomineeAge" readonly="true" />
+                                </div>
+                            </div>
+
+                            <!-- Relationship -->
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Relationship</label>
+                                    <input type="text" id="Relationship" name="Relationship" class="form-control" value="@item.Relationship" readonly="true" />
+                                </div>
+                            </div>
+
+                            <!-- Nominee Address -->
+                            <div class="row-form">
+                                <div class="form-group">
+                                    <label class="form-label">Nominee Address</label>
+                                    <input type="text" id="NomineeAddress" name="NomineeAddress" class="form-control" value="@item.NomineeAddress" readonly="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+           
+                    }
+                    }
+                @*</div>
+            </div>*@
+  

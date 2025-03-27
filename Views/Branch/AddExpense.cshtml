@@ -1,0 +1,272 @@
+﻿@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    var hlist = (from hh in db.HeadTabs select hh).ToList();
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "AddExpense";
+    DateTime dt = DateTime.Now.Date;
+    Formdate fd = new Formdate();
+    var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+    if (count > 0)
+    {
+        fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+        if (fd.status == 2) 
+        {
+            dt = fd.formdate;
+        }
+
+    }
+}
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+@if (fd.status == 0)
+{
+<script>
+    $(function () {
+        $('#date').datepick();
+        
+    });
+</script>
+}
+<script>
+    function detail(chkid) {
+        var amt = $("#exAmount").val()
+        var chk = $("#" + chkid).val();
+        if (chk == "Cheque") {
+            $("#detail").show();
+            $("#dd").hide();
+            $("#trdetail").hide();
+            $("#ChequeAmount").val(amt);
+        }
+        else if (chk == "DD") {
+            $("#dd").show();
+            $("#detail").hide();
+            $("#trdetail").hide();
+            $("#DDamount").val(amt);
+        }
+        else if (chk == "banktransaction") {
+            $("#dd").hide();
+            $("#detail").hide();
+            $("#trdetail").show();
+            $("#tramount").val(amt);
+        }
+        else {
+            $("#detail").hide();
+            $("#dd").hide();
+            $("#trdetail").hide();
+        }
+    }
+</script>
+<style>
+    .daterange-container {
+        display: inline-block; /* Ensures it stays inline and doesn't take up full width */
+        font-size: 14px;
+    }
+
+    .date-range-picker {
+        padding: 8px;
+        cursor: pointer;
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        min-width: 150px; /* Adjust the width as per your need */
+    }
+
+    /* Style for the date range picker dropdown */
+    .daterangepicker {
+        z-index: 9999 !important;
+        min-width: 200px; /* Minimum width for the calendar */
+        width: auto;
+    }
+
+        .daterangepicker .calendar {
+            min-width: 200px; /* Minimum width for the calendar */
+        }
+
+</style>
+
+<div class="container mt-5 FormContainer">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="margin-left:40%;">Add Expense</h2>
+        <div class="daterange-container">
+            <div id="reportrange" class="date-range-picker">
+                <span>Select Date Range: </span>
+            </div>
+        </div>
+    </div>
+   
+    <div id="branchForm" class="border p-4 rounded shadow formtag">
+
+
+        @using (Html.BeginForm("AddExpense", "Branch", FormMethod.Post, new { enctype = "multipart/form-data" }))
+         {
+            <!-- Select section -->
+            <div class="mb-3">
+                <label for="gender" class="form-label formLabel">Select Type:</label>
+                <select class="form-control formInput" id="Expense" name="head" required>
+                    <option selected>Select </option>
+                    @foreach (var h in hlist)
+                    {
+                        <option>@h.head </option>
+
+                    }
+
+
+                </select>
+            </div>
+
+            <!-- Select section -->
+            <div class="mb-3">
+                <label for="gender" class="form-label formLabel">Select Type:</label>
+                <select class="form-control formInput" id="type" name="type" required>
+                    <option value="0" selected>Payment</option>
+                    <option value="1">Receive</option>
+                </select>
+            </div>
+
+            <!-- Booking Amount -->
+            <div class="mb-3">
+                <label for="bookingAmount" class="form-label formLabel">Enter Amount:</label>
+                <input type="number" step="any" class="form-control formInput" name="amount" id="exAmount" required />
+            </div>
+
+            <!-- Payment Mode -->
+            <div class="mb-3">
+                <label class="form-label formLabel">Payment Mode:</label>
+                <div class="d-flex gap-3">
+
+                    <input type="radio" id="paymethod" name="paymethod" value="Cash" checked onclick="detail(this.id)">
+                    Cash&nbsp;&nbsp;
+                    <input type="radio" id="paymethod2" name="paymethod" value="DD" onclick="detail(this.id)">
+                    DD&nbsp;&nbsp;
+                    <input type="radio" id="paymethod3" name="paymethod" value="Cheque" onclick="detail(this.id)">
+                    Cheque&nbsp;&nbsp;
+                    <input type="radio" id="paymethod4" name="paymethod" value="banktransaction" onclick="detail(this.id)">
+                    Bank Transaction
+                </div>
+            </div>
+
+            <!-- DD -->
+
+            <div id="dd" style="display: none;">
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">DD No:</label>
+                    <input type="text" id="ddno" name="ddno" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">DD Amount:</label>
+                    <input type="text" id="DDamount" name="DDamount" class="form-control formInput" readonly="true" />
+                </div>
+            </div>
+            <!-- Check -->
+            <div id="detail" style="display: none;">
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Bank Name:</label>
+                    <input type="text" id="bank" name="bank" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">A/C No:</label>
+                    <input type="text" id="ACNO" name="Account" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Cheque No:</label>
+                    <input type="text" id="chequeno" name="chequeno" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">A/C Holder Name:</label>
+                    <input type="text" id="ACname" name="ACholdername" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Branch Name:</label>
+                    <input type="text" id="barnch" name="Branch" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">IFSC:</label>
+                    <input type="text" id="IFSCcode" name="IFSCCode" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Amount:</label>
+                    <input type="text" id="ChequeAmount" name="ChequeAmount" class="form-control formInput" readonly="true" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Cheque Date:</label>
+                    <input type="text" id="Date" name="Chequedate" value="@dt" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Cheque Image:</label>
+                    <input type="file" id="Chequeimage" name="Chequeimage" class="form-control formInput" />
+                </div>
+            </div>
+
+            <!-- Bank Transfer -->
+
+            <div id="trdetail" style="display: none;">
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Bank Name:</label>
+                    <select id="trbank" name="trbank" class="form-control formInput">
+                        <option>select</option>
+                        @foreach (var blist in db.BankDetail_Tabs.ToList())
+                        {
+
+                            <option value="@blist.bankname">@blist.bankname</option>
+
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Transaction Id:</label>
+                    <input type="text" id="transactionid" name="transactionid" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Transaction Date:</label>
+                    <input type="date" id="transactiondate" name="transactiondate" class="form-control formInput" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Amount:</label>
+                    <input type="text" id="tramount" name="tramount" class="form-control formInput" readonly="true" />
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Pay Method:</label>
+                    <div>
+                        <input type="radio" id="trpmethod1" name="transactiontype" value="NEFT" checked>
+                        NEFT&nbsp;&nbsp;
+                        <input type="radio" id="trpmethod2" name="transactiontype" value="IMPS" />
+                        IMPS&nbsp;&nbsp;
+                        <input type="radio" id="trpmethod3" name="transactiontype" value="RTGS" />
+                        RTGS&nbsp;&nbsp;
+                        <input type="radio" id="trpmethod4" name="transactiontype" value="UPI" />
+                        UPI
+                    </div>                   
+                </div>
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">A/C Holder's A/C No:</label>
+                    <input type="text" id="holderacno" name="holderacno" class="form-control formInput" />
+                </div>              
+            </div>
+
+            <!-- Remark -->
+            <div class="mb-3">
+                <label for="remark" class="form-label formLabel">Remark:</label>
+                <input type="text" class="form-control formInput" name="remarks" id="Remarks" required />
+            </div>
+
+            <!-- date -->
+            <div class="mb-3">
+                <label for="remark" class="form-label formLabel">Select Date:</label>
+                <input type="text" class="form-control formInput date" value="@dt" name="date" id="date" readonly="true" />
+            </div>
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom">Add</button>
+
+            </div>
+            <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+         }
+    </div>
+</div>
+
+
+
+
+

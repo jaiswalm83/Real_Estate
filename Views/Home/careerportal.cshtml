@@ -1,0 +1,90 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "careerportal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    UsersContext db = new UsersContext();
+    var listcount = db.careertable1s.Where(x=>x.status==1).ToList();
+}
+
+<div class="sub-banner" style="background-image: url('../Content/Home/img/lyman-banner-agents.png')">
+    <div class="overlay">
+        <div class="container" style="width:90%;">
+            <h1>JOBS / CAREER</h1>
+            <ol class="breadcrumb">
+                <li class="pull-left">Jobs / Career</li>
+                <li><a href="index.php">Home</a></li>
+                <li class="active">Jobs &amp; Career</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<section class="what-we-do">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="tittle">
+                    <img src="~/Content/Home/img/head-top.png" alt="">
+                    <h3>New Jobs Here</h3>
+                    @if(listcount.Count()!=0)
+                    {
+                        var list=db.careertable1s.Where(x=>x.status==1).ToList();
+                        foreach(var item in list)
+                        {
+                     <hr style="width:100%;"/>
+                   <span style="text-align:left;float:left;color:#0a7dd3;">Publish Date :</span> <p style="text-align:justify;width:100%;">@item.publisdate.ToString("dd/MM/yyyy")</p>
+                   <h4 style="color:#0a7dd3;">Job Title</h4><h5 style="color:#8b1717;">@item.Title</h5><hr style="width:100%;"/>
+                     <div class="row">
+                    <div class="col-md-12 wall">
+                        <table class="table table-responsive" style="width:100%;">
+                            <thead>
+                                <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;"> Job Discription:</span> <p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.jobdiscription</p></th>
+                                </tr>
+                                 <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;"> Experience:</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.experience</p></th>
+                                </tr>
+                                 <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;">  Salary:</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.salary</p></th>
+                                </tr>
+                                 <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;"> Location(s):</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">State:- @item.joblocationstate -City:- @item.city</p></th>
+                                </tr>
+                                 <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;"> Industrie(s):</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.industry</p></th>
+                                </tr>
+                                 <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;">Functional Area(s):</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.functionalarea</p></th>
+                                </tr>
+                                 <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;">Role(s):</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.role</p></th>
+                                </tr>
+                                 <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;">E-mail Address:</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.companyemail</p></th>
+                                 </tr>
+                                <tr style="background-color:#e7f1f5;">
+                                <th><span style="color:#0a7dd3;text-decoration:underline;">Contact No.:</span><p style="text-align:justify;width:100%;font-family:'Times New Roman';">@item.contact</p></th>
+                                 </tr>
+                            </thead>
+                        </table>
+                      <hr style="width:100%;"/>
+                        </div>
+                         </div>
+                        }
+                    }
+                    else
+                    {
+                        <center><label style="color:red;">No Jobs</label></center>
+                    }
+                     </div>
+            
+                
+            </div>
+            <div class="col-md-4">
+                <img src="~/Content/Home/img/about.jpg" class="img-responsive" alt="" />
+            </div>
+        </div>
+    </div>
+</section>
+
+

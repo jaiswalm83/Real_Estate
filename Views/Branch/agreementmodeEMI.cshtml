@@ -1,0 +1,87 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.appltab>
+    @using ODHDEVELOPERS.Models;
+    @{
+        ViewBag.Title = "agreementmodeEMI";
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var a = 0;
+
+    }
+
+    <link rel="stylesheet" href="~/Content/jquery-ui.css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newbondid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteBondId_EMI",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.newbondid };
+                            }))
+
+                        }
+                    })
+                }
+            });
+        })
+    </script>
+
+
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4"> @mr.custname AGREEMENT TO SELL PROPERTY (EMI)</h2>
+        <div id="branchForm" class="border p-4 rounded shadow formtag">
+            @using (@Html.BeginForm())
+            {
+                <!-- Project Year -->
+                <div class="mb-3">
+                    <label for="year" class="form-label formLabel">Enter @mr.custname Id:</label>
+                    <input type="text" class="form-control formInput" id="newbondid" name="customerid" placeholder="Enter Customer Id" required>
+                </div>
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button id="submit" value="Search" class="btn btn-lg formButtom" type="submit">View</button>
+                </div>
+            }
+        </div>
+        <div class="mt-4" id="rd">
+            <table>
+                @if (Model != null)
+                {
+                    <thead>
+                            <div class="header-row">Agreement-List</div>
+                            <tr>
+                                <th id="sn"><b>S.N.</b></th>
+                                <th id="planname"><b>Customer Name</b></th>
+                                <th id="term_plan"><b>Customer Id</b></th>
+                                <th id="mode"><b>Join Date</b></th>
+                                <th id="mode1"><b>Print</b></th>
+                            </tr>                      
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            a = a + 1;
+                            <tr>
+                                <td>@a</td>
+                                <td>@item.name</td>
+                                <td>@item.newbondid</td>
+                                <td>@item.formdate.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a href="@Url.Action("printemiaggreement", "Customer", new {newid= item.newbondid})" target="_blank"><h5 style="color:#0f6db1;">Print Agreement</h5></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+        </div>
+    </div>
+
+
+   

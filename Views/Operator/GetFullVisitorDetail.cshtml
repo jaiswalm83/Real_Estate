@@ -1,0 +1,303 @@
+﻿@*@model IEnumerable<ODHDEVELOPERS.Models.DailyVisitorDetail>*@
+@using ODHDEVELOPERS.Models
+@{
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "GetFullVisitorDetail";
+    Layout = "~/Views/Shared/_LayoutVisitor.cshtml";
+    var visitorid=Convert.ToString(ViewData["fff"]);
+    var username = "";
+    
+}
+
+<style>
+    * {
+      font-weight:bold;
+    }
+</style>
+
+<div class="page-content">
+
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Get Detail & Update</div>
+                <div class="page-toolbar-subtitle">
+                       <span style="color: #808080"><i class="	fa fa-hand-o-right" style="font-size: 17px; color: red;"></i>&nbsp;&nbsp;Here you can <kbd style="font-size: 15px; background-color: #8eb252">&nbsp;get full detail&nbsp;</kbd> and status of any visitor and  <kbd style="font-size: 15px; background-color: #2f9fe0">&nbsp;Update Detail&nbsp;</kbd> of visitor as well ...</span>
+                </div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+        <div class="row">
+            <br /><br />
+        </div>
+        <br />
+        
+
+        <div class="row">
+         <form method="post">
+            <div class="col-md-3 text-right" style="font-weight:bold;font-size:16px;">Enter Visitor Id</div>
+            <div class="col-md-4">
+        
+                 <input type="text" class="form-control" placeholder="Enter The Visitor Id"  name="VisitorId" required/>
+            </div>
+            <div class="col-md-5">
+                <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+                   </form>
+            </div>
+        <br />  
+   @if (visitorid != "")
+   {
+
+            foreach (var dd in  db.DailyVisitorDetails.Where(o => o.VisitorId == visitorid).ToList())
+            {
+                var recepname = dd.ReceptionistId;
+                
+                var count1 = db.DailyVisitors.Where(o => o.UserName == recepname).Count();
+                if (count1 != 0)
+                {
+                    username = db.DailyVisitors.Single(o => o.UserName == recepname).UserName;
+                }
+                
+            <div class="row" style="width: 100%">
+            <div class="col-md-6" style="width: 100%">
+
+                <div class="block" style="width: 100%">
+
+                    <div class="block-content controls">
+                            <div class="row-form">
+
+                                <div class="col-md-3">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Visitor Id</label></span>
+                                        <input type="text" class="form-control "  name="VisitorId" id="visitorid" style="font-weight:bold;color:#CE2008" required value="@dd.VisitorId" readonly="true">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Visitor Name</label></span>
+                                        <input type="text" class="form-control no"  name="visitorname" id="visitorname" style="font-weight:bold;color:#CE2008;padding-left:30px" required value="@dd.VisitorName" readonly="true">
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Mobile Number</label></span>
+                                         <input type="tel" class="form-control no" pattern="[789][0-9]{9}" readonly="true" value="@dd.MobileNo" placeholder="Enter the mobile no..." title="Mobile no is not correct format" maxlength="10" name="MobileNo" id="rmobile" required>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                           
+                         <div class="row-form">
+
+                                <div class="col-md-3">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Visitor Came On</label></span>
+                                        <input type="text" class="form-control" value="@dd.TodaysDate.Date.ToString("dd/MM/yyyy")" readonly="true" name="whom">
+                                    </div>
+                                </div>
+                              <div class="col-md-5">
+
+                                    
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Email Id </label>
+                                        </span>
+                                        <input type="text" class="form-control no" id="e" placeholder="Enter the email..." value="@dd.EmailId" title="Enter Correct Email Id.." readonly="true" name="EmailId">
+                                    </div>
+                                </div>
+
+                             <div class="col-md-4">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Receptionist Name</label></span>
+                                        <input type="text" style="font-weight:bold;color:#CE2008;padding-left:30px" class="form-control" value="@username" readonly="true" name="whom">
+                                    </div>
+                                </div>
+
+                            </div>
+                           
+
+
+                                         
+                            <div class="row-form">
+                                <div class="col-md-4">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Remark Date</label></span>
+                                        <input type="text" class="form-control" placeholder="To whom he/she wants to meet..." readonly="true" value="@dd.TodaysDate.Date.ToString("dd/MM/yyyy")" name="whom">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">FeedBack Date</label></span>
+                                        <input type="text" class="form-control" style="" placeholder="To whom he/she wants to meet..." readonly="true" value="@dd.feedbackDate.Date.ToString("dd/MM/yyyy")" name="whom">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">FeedBack Time</label></span>
+                                        <input type="text" class="form-control" style="font-weight:bold" @*placeholder="To whom he/she wants to meet..."*@  readonly="true" value="@dd.feedbackTime" name="whom">
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+
+
+                            <div class="row-form">
+
+
+                                <div class="col-md-6">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Refference</label>
+                                        </span>
+                                        <textarea class="form-control no" style="color:red;font-weight:bold" name="Refference" id="Refference" readonly="true" Placeholder="" required>@dd.Refference</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">FeedBack</label>
+                                        </span>
+                                        <textarea class="form-control text-success no" name="FeedBack" style="font-weight:bold" id="Feed" readonly="true" placeholder="" required>@dd.feedback</textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                                         
+
+                                         
+                            <div class="row-form">
+
+                                <div class="col-md-9">
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Address</label>
+                                        </span>
+                                        <textarea class="form-control no" name="Address" id="adds" readonly="true" placeholder="" required>@dd.Address</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                                         
+                                               
+                                               
+                                         
+                           
+                            </div>
+
+                            <p style="color: #369B07; margin-left: 30px;"><b>@ViewBag.msg</b></p>
+                                         
+                                         
+                                         
+              
+
+
+                    </div>
+
+               
+               
+                  <div class="page-toolbar-block">
+                                <br />
+                                <div class="row">  
+                                    <div class="col-md-5"> 
+                                        <div class="col-md-4">
+                                      <button type="button" id="Want" style="position:absolute;left:440px;" class="btn btn-primary">Do You Want To Update Visitor ?</button>
+                                            <a href="#" type="button" id="Update" style="position:absolute;left:440px;display:none" class="btn btn-danger btn-lg">Hit To Update</a>
+                                            </div>                                
+                                  
+                                  </div>
+                                </div>
+
+                </div>
+                <script>
+                    $(function () { 
+                    $("#Want").on('click', function () {
+                        $(this).css("display", "none");
+                        $("#Update").css("display", "block");
+                        $(".no").removeAttr('readonly');
+                      
+                    });
+                    $("#Update").on("click", function () {
+                        debugger;
+                        
+                        var v = $("#visitorname").val(), id = $("#visitorid").val();
+
+                        var m = $("#rmobile").val();
+                        var f = $("#Feed").val();
+                        var r = $("#Rrk").val();
+                        var a = $("#adds").val();
+                        var e = $("#e").val();
+                        var url = "/operator/GetFullVisitorDetail?visitorid="+id+"&visitorname="+v+"&mobile=" + m + "&feedback=" + f + "&remark=" + r + "&address=" + a + "&emailid=" + e + "&recogniser=update";
+                        location.href = url;
+                        
+                        $(this).css("display", "none");
+                        $("#Want").css("display", "block");
+                        $(".no").Attr('readonly', true);
+                    });
+                   
+
+                       
+                    });
+                </script>
+
+
+            </div>
+        </div>
+                  
+            
+        }
+   }else{
+        
+           
+            <br />
+            <br />
+            <br />
+        <div class="row">
+      
+            <div class="col-md-3" ></div>
+            <div class="col-md-6">
+                
+                <span><img src="~/Photo/odd.png" style="width:20%;float:left" class="img-responsive"/></span><span style="float:left;margin-top:38px;margin-left:17px;font-size:36px;font-weight:bold">Search</span><span><img src="~/Photo/search.png" style="width:20%;"  class="img-responsive"/></span>
+            </div>
+            <div class="col-md-3">
+                
+                </div>
+                  
+            </div>
+        
+        }
+
+
+        <!----->
+    </div>
+
+</div>

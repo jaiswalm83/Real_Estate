@@ -1,0 +1,127 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Oplist>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "OperatorList";
+        var a = 0;
+    }
+
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+   
+
+    <div id="divid">
+
+
+
+
+        <div class="container mt-5">
+            <h2 class="text-center mb-4 create-title">Collection Point List</h2>
+
+            <div class="index_body">
+                <div class="table-container">
+
+                    <table>
+
+                        @foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                                <thead>
+                                    <tr>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="sn"><b>S.N.</b></label>
+                                        </th>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="OperatorId"><b>Collection Point Id</b></label>
+                                        </th>
+
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="OperatorName"><b>Collection Point Name</b></label>
+                                        </th>
+
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="BranchCode"><b>@mr.branchname Code</b></label>
+                                        </th>
+
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="OperatorMobile"><b>Collection Point Mobile</b></label>
+                                        </th>
+
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="OperatorAddress"><b>Collection Point Address</b></label>
+                                        </th>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="Operator_Mail"><b>Collection Point Mail</b></label>
+                                        </th>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="Cdate"><b>Creation date</b></label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            }
+
+                            a = a + 1;
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OperatorId)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OperatorName)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BranchCode)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OperatorMobile)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OperatorAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Operator_Mail)
+                                    </td>
+                                    <td>
+                                        @Convert.ToDateTime(item.Cdate).ToString("dd/MM/yyyy")
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+
+                    @if (a > 0)
+                    {
+
+                        <div class="text-center d-grid gap-2">
+                            <a href="@Url.Action("PrintOperatorList")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                        </div>
+
+
+                    }
+                </div>
+
+
+
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+

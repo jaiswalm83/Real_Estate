@@ -1,0 +1,54 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "DigitalServices";
+    UsersContext db = new UsersContext();
+    var comp = db.commission_tabs.Where(x => x.Id == 1).ToList();
+    var countachive = db.Acheviers.Where(x => x.status == 1).Count();
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+  <!--======= BANNER =========-->
+ <section class="page-title" style="background-image: url(/assets/images/background/bg-page-title.jpg);">
+    <div class="auto-container">
+        <div class="row clearfix">
+            <!--Title -->
+            <div class="title-column col-md-7 col-sm-6 col-xs-12">
+                <h1>Digital Services</h1>
+            </div>
+            <!--Bread Crumb -->
+            <div class="breadcrumb-column col-md-5 col-sm-6 col-xs-12">
+                <ul class="bread-crumb clearfix">
+                     <li><a href="../Home/Index">Home</a></li>
+                    <li class="active">Digital Services</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+  <br />
+
+<!--======= CONTACT =========-->
+<section class="contact">
+    <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-md-push-1">
+            <div id="section-one" class="mb-50">
+              <h3>WE ARE PROVIDE FOLLOWING DIGITAL PAYMENT SERVICES:</h3>
+              <hr>
+            <p class="mb-20" style="text-align:justify">1).&nbsp;&nbsp;MOBILE RECHARGE ( PREPAID & POSTPAID)
+                <br />2). &nbsp;&nbsp;ELECTRICITY BILLS
+                <br />3). &nbsp;&nbsp;GAS BILLS
+                <br />4). &nbsp;&nbsp;DTH BILLS
+                <br />5). &nbsp;&nbsp;DATA CARD BILLS
+                <br />6). &nbsp;&nbsp;TELEPHONE BILLS
+                </p>
+           
+          </div>
+        </div>
+      </div>
+          </div>
+</section>
+  
+
+  
+ 

@@ -1,0 +1,48 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.CompanyInfos.Single(b => b.Id == 1);
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "AppMenu";
+}
+
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+<link href="~/assets/css1/main css/Registry.css" rel="stylesheet" />
+<!-- Section 1: Final Report -->
+<div class="section">
+   
+
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2">App Seetings</h3>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container mt-5">
+        <!-- First Row (Centered Cards with Responsive Behavior) -->
+        <div class="centered-row">
+            <!-- Card 1 (Plot Registry) -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/SetPaymethod" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/Website_logo/debit-card.png" />
+                        <h6 class="card-title mt-3">Pay Method</h6>
+                    </div>
+                </a>
+            </div>
+            <!-- Card 2 (Pre Surrender) -->
+            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/Updatecertificate" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/Website_logo/password.png" />
+
+                        <h6 class="card-title mt-3">Api Key</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+

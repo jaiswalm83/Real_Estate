@@ -1,0 +1,85 @@
+﻿
+@model ODHDEVELOPERS.Models.HRTab
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "CreateHr";
+}
+
+@*<link href="~/css/main css/BranchForm.css" rel="stylesheet" />*@
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 create-title">Create HR</h2>
+    @using (Html.BeginForm())
+    {
+        <div id="branchForm" class="form-container">
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">HR Name:</label>
+                <input type="text" class="form-control " name="HRName" id="oname" placeholder="Enter Collection Point Name" required>
+            </div>
+            <!-- Collection Point ID -->
+            <div class="form-group">
+                <label for="collectionPointId" class="form-label">HR ID:</label>
+                <input type="text" class="form-control" name="HRId" id="oid" placeholder="Enter Collection Point ID" required>
+            </div>
+            <div class="form-group">
+                <label for="collectionPointId" class="form-label">Branch Code:</label>
+                <input type="text" class="form-control" name="BranchCode" id="oid" placeholder="Enter Collection Point ID" required>
+            </div>
+            <!-- Mobile No -->
+            <div class="form-group">
+                <label for="mobile" class="form-label">Mobile No:</label>
+                <input type="tel" class="form-control" pattern="[789][0-9]{9}" title="Mobile no is not correct format" maxlength="10" name="Mobile" id="omob" placeholder="Enter Mobile Number" required>
+            </div>
+            <!-- Email ID -->
+            <div class="form-group">
+                <label for="email" class="form-label">Email ID:</label>
+                <input type="email" class="form-control" title="EmailId not in correct format" name="emailid" placeholder="Enter Email ID" required>
+            </div>
+            <!-- Address -->
+            <div class="form-group">
+                <label for="address" class="form-label">Address:</label>
+                <textarea class="form-control" name="Address" id="oadd" rows="3" placeholder="Enter Address" required></textarea>
+            </div>
+            <!-- Date -->
+            <div class="form-group">
+                <label for="date" class="form-label">Date Of Joining:</label>
+                <input type="text" class="form-control" name="date" id="date" placeholder="Enter Date" required>
+            </div>
+
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn create-btn">Create</button>
+            </div>
+            <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+        </div>
+    }
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // Initialize Flatpickr
+    flatpickr("#date", {
+        dateFormat: "Y-m-d", // Format stored in the input field (e.g., 2025-01-18)
+        altInput: true,      // Show an alternate date format in the input field
+        altFormat: "F j, Y", // Format shown to the user (e.g., January 18, 2025)
+        allowInput: false,   // Disable manual typing, allowing only calendar selection
+        inline: false        // Show dropdown calendar (not inline)
+    });
+</script>
+
+
+

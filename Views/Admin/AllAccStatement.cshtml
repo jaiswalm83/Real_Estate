@@ -1,0 +1,215 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.AcStatementReport>
+@using ODHDEVELOPERS.Models
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "AllAccStatement";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+    Double sumcredit = 0, sumdebit = 0, sumbalance = 0, prevbalance = 0;
+}
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#sdate').datepick();
+        $('#edate').datepick();
+      
+    });
+</script>
+
+
+<div class="page-content">
+         
+                <div class="container" id="divid1">
+                    <div class="page-toolbar" id="2">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Company A/c Statement Report</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                    </div>
+ 
+  @using (@Html.BeginForm()){
+                   <div class="row" id="hide">
+                        <div class="col-md-6" style="width:98%">
+                            
+                            <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                      
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">Start Date</label></span>
+                    <input type="text" id="sdate" class="form-control" required name="sdate" />
+                         
+                </div>   </div>
+            
+              <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon"><label class="width">End Date</label></span>
+                    <input type="text" id="edate" class="form-control" required name="edate" />
+                         
+                </div>   </div>
+
+
+                   <div class="row-form" style="width:98%">
+      <div class="col-md-9">
+          <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit">View</button>
+     </div>
+              </div>
+
+
+        </div>
+        </div>
+                             </div>
+        </div>
+                    }
+                  
+<table border="1" style="margin-left:1%; margin-right:1px; width:95%; margin-bottom:70px; ">
+    @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                            <tr><th colspan="3" style="text-align:center;"><b>@mr.branchname :@item.branchname</b></th>
+                                <th colspan="2" style="text-align:center;" ><b>A/c Statement Report</b></th>
+                                <th colspan="3" style="text-align:center;" ><b>Duration:@item.sdate.ToString("dd/MM/yyyy")-@item.edate.ToString("dd/MM/yyyy")</b></th>
+                            </tr>
+                          
+        
+    <tr>
+        <th style="width:3%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label ><b>A/C No</b></label>
+        </th>
+         <th style="width:13%;text-align:center;">
+           <label id="option"><b>Transaction Id</b></label>
+        </th>
+        <th style="width:10%;text-align:center;">
+           <label id="planname"><b>Remarks</b></label>
+            </th>
+        
+        <th style="width:9%;text-align:center;">
+           <label id="term_plan"><b>Credit</b></label>
+        </th>
+            
+        <th style="width:8%;text-align:center;">
+           <label id="mode"><b>Debit</b></label>
+        </th>
+            
+        <th style="width:8%;text-align:center;">
+        <label id="latefine" ><b>Balance</b></label>
+        </th>
+          <th style="width:8%;text-align:center;">
+            <label id="amount" ><b>Date</b></label>
+        </th>
+      
+    </tr>
+    }
+                        a = a + 1;
+                        
+
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.accountno)
+        </td>
+          <td>
+             @Html.DisplayFor(modelItem => item.transactionid)
+        </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.remarks)
+        </td>
+        
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.credit)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.debit)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.balance)
+        </td>
+       
+           <td>
+            @item.pdate.ToString("dd/MM/yyyy")
+        </td>             
+        
+        
+
+    </tr>
+                        sumcredit = sumcredit + Convert.ToDouble(item.credit);
+                        sumdebit = sumdebit + Convert.ToDouble(item.debit);
+                        prevbalance = Convert.ToDouble(item.prevbalance);
+
+
+
+
+
+                    }
+                    sumbalance = sumcredit - sumdebit;
+    if(a>0)
+    {
+         <tr style="text-align:center;">
+        
+          
+        <td colspan="4">
+            <b>TOTAL:</b>
+        </td>
+       
+        <td>
+           <b> @sumcredit</b>
+        </td>
+         
+        <td>
+           <b> @sumdebit</b>
+        </td>
+        
+        <td>
+           <b> @sumbalance</b>
+           
+        <td >
+            
+        </td>
+    </tr>
+        <tr>
+
+            <td colspan="6" style="text-align: center;"><b>Previous Balance(RS.)</b></td>
+            <td style="text-align: center;"><b>@prevbalance</b></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="6" style="text-align: center;"><b> AVAILABLE BALANCE:</b></td>
+            <td style="text-align: center;"><b>@(sumcredit - sumdebit + prevbalance)</b></td>
+            <td></td>
+        </tr>
+    }
+                     
+    }
+    
+    
+    
+   
+</table>
+                       @if(a>0)
+        {
+         <a href="@Url.Action("PrintAllAccStatement")" target="_blank">Get Report In PDF</a>
+        }
+             
+                   
+         
+                    </div>
+    </div>
+
+

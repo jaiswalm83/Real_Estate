@@ -1,0 +1,225 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DuplicateTab>
+@using ODHDEVELOPERS.Models
+@{
+    ViewBag.Title = "DuplicatePrintReportBranch";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var a = 0;
+
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(c => c.Id == 1);
+    
+}
+                      <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+                      <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#branch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteBrachcode",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.BranchName, value: item.BranchCode };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+
+<div  id="divid">
+
+
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">Duplicate Print List</h2>
+        @using (Html.BeginForm())
+        {
+
+
+            <div id="branchForm" class="form-container">
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">@mr.branchname Name Or Code</label>
+                    <input type="text" class="form-control" name="branch" id="branch" placeholder="Enter Collection Point Name" required>
+                </div>
+
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">Start Date</label>
+                    <input type="text" class="form-control datepicker" name="sdate" id="sdate" placeholder="Enter Date" required>
+                </div>
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">End Date</label>
+                    <input type="text" class="form-control datepicker" name="edate" id="edate" placeholder="Enter Date" required>
+                </div>
+
+
+
+
+
+
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Type</label>
+                    <select name="type" class="form-control" required>
+                        <option>--Select--</option>
+                        <option value="Bond">@mr.custname</option>
+                        <option value="Receipt">Renewal</option>
+                        <option value="Voucher">Voucher</option>
+                    </select>
+
+                </div>
+       
+
+
+
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn"><i class="fa fa-cog"></i>Search</button>
+                </div>
+
+            </div>
+
+        }
+
+
+
+
+   
+
+    <div class="index_body">
+        <div class="table-container">
+
+            <div style="display:none">&nbsp;<b>@ViewData["Type"]</b></div>
+            <table>
+
+
+                @foreach (var item in Model)
+                {
+                    if (a == 0)
+                    {
+
+                        <thead>
+                            <tr>
+                                <th style="background-color:#ff5722; color:white">
+                                    <label id="sn"><b>S.N.</b></label>
+                                </th>
+                                @if (ViewData["Type"].ToString() == "Voucher")
+                                {
+                                    <th style="background-color:#ff5722; color:white">
+                                        <label><b>@mr.agentname Id</b></label>
+                                    </th>
+                                }
+                                @if (ViewData["Type"].ToString() == "Bond" || ViewData["Type"] == "Receipt")
+                                {
+                                    <th style="background-color:#ff5722; color:white">
+                                        <label><b>@mr.custname Id</b></label>
+                                    </th>
+
+                                }
+
+                                <th style="background-color:#ff5722; color:white">
+                                    <label><b>Amount</b></label>
+                                </th>
+
+                                <th style="background-color:#ff5722; color:white">
+                                    <label id="introducerid"><b>Payment No.</b></label>
+                                </th>
+
+
+                                <th style="background-color:#ff5722; color:white">
+                                    <label><b>Branch</b></label>
+                                </th>
+
+                                <th style="background-color:#ff5722; color:white">
+                                    <label id="email"><b>Date</b></label>
+                                </th>
+
+
+                            </tr>
+
+                            </thead>
+                            }
+
+
+
+                            a = a + 1;
+            <tbody>
+                <tr>
+                    <td>
+                        @a
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.newbondid)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.payamount)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.paymentno)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.opid)
+                    </td>
+
+                    <td>
+                        @Convert.ToDateTime(item.date).ToString("dd/MM/yyyy")
+
+                    </td>
+
+
+
+                </tr>
+            </tbody>
+                            }
+
+                            @if (a > 0)
+                            {
+                                <tr>
+                                    <td colspan="6">
+                                        <a href="@Url.Action("PrintDuplicateBranchReport")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                    </table>
+
+
+        </div>
+    </div>
+</div>
+            </div>
+
+
+
+
+
+
+
+
+
+

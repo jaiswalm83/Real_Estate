@@ -1,0 +1,136 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.SelfdueCollection>
+@using ODHDEVELOPERS.Models;
+@{
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+    ViewBag.Title = "RenewalReceipt";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var a = 0;
+}
+
+  
+
+<div class="page-content">
+
+    <div class="container">
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Self Due Collection</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+
+
+
+        <div class="row" style="width: 100%">
+            <div class="col-md-6" style="width: 100%">
+                <br />
+
+                <div>&nbsp;&nbsp;<a href="@Url.Action("PrintBrokerSelfDueReport")" target="_blank">Get Report In PDF</a></div>
+                <br />
+
+
+                <div class="block">
+
+                    <div class="block-content controls">
+
+
+                        <div id="1">
+                 <div class="table-responsive">
+
+        <table class="table table-striped" border="2">     
+                                @foreach (var item in Model)
+                                {
+                                    if (a == 0)
+                                    {                                                      
+                                    <tr>
+                                        <th style="width: 5%; text-align: center;">
+                                            <label><b>S.N.</b></label>
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <label><b>@mr.custname Id</b></label>
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <label><b>@mr.planname Name</b></label>
+                                        </th>
+                                        <th style="width: 5%; text-align: center;">
+                                            <label><b>Mode</b></label>
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <label><b>Mobile No</b></label>
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <label><b>Expiry Date</b></label>
+                                        </th>
+                                         <th style="width: 5%; text-align: center;">
+                                            <label><b>Due Inst.</b></label>
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <label><b>EMI Amount</b></label>
+                                        </th>
+                                         <th style="width: 5%; text-align: center;">
+                                            <label><b>Latefine</b></label>
+                                        </th>
+                                         <th style="width: 8%; text-align: center;">
+                                            <label><b>Due Amount</b></label>
+                                        </th>
+                                    </tr>
+                                    }
+                                    a = a + 1;
+
+
+                                    <tr style="text-align: center;">
+                                        <td>
+                                            @a
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.newbondid)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.planname)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.mode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.mobileno)
+                                        </td>
+                                        <td>
+                                            @Convert.ToDateTime(item.expirydate).ToString("dd/MM/yyyy")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.installmentno)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.amount)
+                                        </td>
+                                        <td>
+                                            @Math.Round(item.term,0)
+                                        </td>
+                                        <td>
+                                            @(Math.Round(item.term,0) + item.amount)
+                                        </td>
+                                    </tr>
+                   
+                                }
+
+
+                            </table>
+                     </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+</div>

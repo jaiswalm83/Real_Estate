@@ -1,0 +1,87 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.ranList>
+    @using ODHDEVELOPERS.Models
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "RankList";
+        var a = 0;
+    }
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+   
+
+        <div  id="divid">
+
+          
+
+
+            <div class="index_body">
+                <div class="table-container">
+                    <div class="header-row">@mr.rankname List</div>
+                    <table>
+
+                        @foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label id="sn"><b>@mr.rankname No</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="introducerid"><b>@mr.rankname Name</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="Quota"><b>Self Quota</b></label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            }
+
+                            a = a + 1;
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @a
+                                    </td>
+
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.rankname)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.selfquota)
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+                    <!-- Create Button -->
+
+            
+                @if (a > 0)
+                {
+                    <div class="text-center d-grid gap-2">
+                        <a href="@Url.Action("PrintRank")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Report In PDF</a>
+                    </div>
+                        }
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+            </div>
+

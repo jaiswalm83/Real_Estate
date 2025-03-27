@@ -1,0 +1,67 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Branchtabs.Single(b => b.BranchCode == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+ 
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "SearchMenu";
+}
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Welcome @br.BranchName</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                      
+
+                    </div>
+
+                    <div class="widget stacked">
+					
+				<div class="widget-header">
+					<i class="icon-search"></i>
+					<h3>Search</h3>
+				</div> <!-- /widget-header -->
+				
+				<div class="widget-content">
+					
+					<div class="shortcuts">
+						
+
+                        <a href="~/Branch/SearchBroker" class="shortcut">
+							<img alt="" src="~/Images/icon/16.png" />
+							<span class="shortcut-label">@mr.agentname</span>
+						</a>
+						
+						<a href="~/Branch/SearchBond" class="shortcut">
+							<img alt="" src="~/Images/icon/1.png" />
+							<span class="shortcut-label">@mr.custname</span>	
+						</a>
+						<a href="~/Branch/SearchPendingBond" class="shortcut">
+							<img alt="" src="~/Images/icon/1.png" />
+							<span class="shortcut-label">Pending @mr.custname</span>	
+						</a>						
+					</div> <!-- /shortcuts -->	
+				
+				</div> <!-- /widget-content -->
+				
+			</div>
+                     </div>
+
+     </div>

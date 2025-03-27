@@ -1,0 +1,162 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Expense>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "UpdateExpense";
+        int pagesize = 0;
+        pagesize = (from r in db.Expenses select r).Count();
+        if (pagesize == 0)
+        {
+            pagesize = 1;
+        }
+        var grid = new WebGrid(null,
+                 defaultSort: "",
+                 rowsPerPage: pagesize,
+                 selectionFieldName: "SearchString",
+                 ajaxUpdateContainerId: "agrid",
+                 sortFieldName: "SortColumn",
+                 sortDirectionFieldName: "SortOrder");
+        grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+
+    }
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.edit-mode').hide();
+            $('.edit-user, .cancel-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+
+            $('.save-user').on('click', function () {
+                var tr = $(this).parents('tr:first');
+
+                var Id = tr.find("#lblId").html();
+                var amount = tr.find("#amount").val();
+                var Remark = tr.find("#Remark").val();
+                var head = tr.find("#head").val();
+
+
+                tr.find("#lblamount").text(amount);
+                tr.find("#lblRemark").text(Remark);
+                tr.find("#lblhead").text(head);
+
+
+                tr.find('.edit-mode, .display-mode').toggle();
+                var Expense =
+                {
+                    "Id": Id,
+                    "amount": amount,
+                    "Remark": Remark,
+                    "head": head
+
+                };
+                $.ajax({
+                    url: '/Admin/EditExpense/',
+                    data: JSON.stringify(Expense),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+
+                    }
+                });
+
+            });
+        })
+    </script>
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title"> Update Expense</h2>
+        @using (Html.BeginForm())
+        {
+
+            <div id="branchForm" class="form-container">
+
+                <!-- Collection Point Name -->
+                <div class="form-group">
+                    <label for="collectionPointName" class="form-label">Select Date</label>
+                    <input type="text" class="form-control " name="date" id="date" placeholder="Enter Date" required>
+                </div>
+
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn id="search" onclick="showDiv()">Search</button>
+                </div>
+
+            </div>
+
+
+
+        }
+
+        @if (Convert.ToInt32(ViewData["count"]) > 0)
+        {
+            <div id="comm" style="margin-top:20px">
+                <div id="gridContent">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="background-color:#ff5722">SN</th>
+                                <th style="background-color:#ff5722">Amount</th>
+                                <th style="background-color:#ff5722">Remark</th>
+                                <th style="background-color:#ff5722">Head</th>
+                                <th style="background-color:#ff5722">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="display-mode">@item.Id</span>
+                                        <label id="lblId" class="edit-mode">@item.Id</label>
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">@item.amount</span>
+                                        <input type="text" id="amount" value="@item.amount" class="edit-mode" />
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">@item.Remark</span>
+                                        <input type="text" id="Remark" value="@item.Remark" class="edit-mode" />
+                                    </td>
+                                    <td>
+                                        <span class="display-mode">@item.head</span>
+                                        <input type="text" id="head" value="@item.head" class="edit-mode" />
+                                    </td>
+                                    <td>
+                                        <button class="edit-user display-mode btn btn-primary">Edit</button>
+                                        <button class="save-user edit-mode btn btn-success">Save</button>
+                                        <button class="cancel-user edit-mode btn btn-danger">Cancel</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+
+    </div>
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Initialize Flatpickr
+        flatpickr("#date", {
+            dateFormat: "Y-m-d", // Format stored in the input field (e.g., 2025-01-18)
+            altInput: true,      // Show an alternate date format in the input field
+            altFormat: "F j, Y", // Format shown to the user (e.g., January 18, 2025)
+            allowInput: false,   // Disable manual typing, allowing only calendar selection
+            inline: false        // Show dropdown calendar (not inline)
+        });
+    </script>

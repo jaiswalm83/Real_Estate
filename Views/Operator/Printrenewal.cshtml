@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "Printrenewal";
+}
+
+
+
+@using(Html.BeginForm())
+{
+<div class="page-content">
+
+       <div class="container">
+                   <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Print Renewal</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                              <div class="page-toolbar-block pull-right">
+                           
+                        </div>  
+                              
+                        
+                    </div>
+
+
+
+
+
+                                  <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                                <div class="block-content controls">
+
+                                      <div class="row-form">
+                                        <div class="col-md-9">
+                   <h3><span class="label label-primary">Your Renewal is Done Successfully</span></h3>                 
+                                            </div>
+                                          </div>
+                               
+                                <div class="row-form">
+                                        <div class="col-md-9">
+                                            
+                                  <div class="input-group input-group-lg">
+                                <span class="input-group-addon">Payment No. :</span>
+              <input type="text" class="form-control" value="@ViewData["Paymentno"]" name="payment"  readonly="true">
+                            </div>          
+                                           
+
+                                        </div>
+                                    </div>
+                                 
+                                 
+
+                                       <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+                                
+       <a href="@Url.Action("PrintRenewalReport")" class="btn btn-primary"><i class="fa fa-cog"></i>Print </a>                 
+                                                     
+                                
+                            </div>
+                        </div>
+                                   
+                                                                      
+                                                            
+                                    
+                                    
+                                </div>
+                                
+                            </div>
+                            </div>
+
+       </div> 
+           
+                
+           
+
+
+                
+                              </div>
+}

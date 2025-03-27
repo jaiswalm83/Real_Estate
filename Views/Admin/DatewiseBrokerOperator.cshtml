@@ -1,0 +1,240 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.BrokerList>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "DatewiseBrokerOperator";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        var a = 0;
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(c => c.Id == 1);
+
+    }
+
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#opid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteOpId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.OperatorName, value: item.OperatorId };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+
+
+    <script src="~/Scripts/print.js" type="text/javascript"></script>
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="page-toolbar-block pull-right">
+        <div class="widget-info widget-from">
+            <div>
+                <label> @Convert.ToDateTime(DateTime.Now.Date).ToString("dd/MM/yyyy")</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">Datewise @mr.agentname</h2>
+
+
+
+        @using (Html.BeginForm())
+        {
+
+
+
+            <div id="branchForm" class="form-container">
+
+                <!-- Collection Point Name -->
+                <div class="form-group" id="branchForm">
+                    <label for="collectionPointName" class="form-label">Collection Point Id</label>
+                    <input type="text" class="form-control" name="opid" id="opid" placeholder="Enter Collection Point Name" required>
+                </div>
+
+
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">Start Date</label>
+                    <input type="text" class="form-control" name="sdate" id="date" placeholder="Enter Date" required>
+                </div>
+
+
+
+                <!-- Date -->
+                <div class="form-group">
+                    <label for="date" class="form-label">End Date</label>
+                    <input type="text" class="form-control" name="edate" id="date" placeholder="Enter Date" required>
+                </div>
+
+
+
+
+
+                <!-- Create Button -->
+                <div class="text-center d-grid gap-2">
+                    <button type="submit" class="btn create-btn"><i class="fa fa-cog"></i>Search</button>
+                </div>
+
+            </div>
+
+        }
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <table border="1" style="margin-left:1%; margin-right:1%; margin-bottom:60px;width:98%;">
+
+        @foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+                <tr>
+                    <th colspan="2">@mr.branchname Name:@item.branchname</th>
+                    <th colspan="3"><b> Duration:@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy") -@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></th>
+                    <th colspan="2"><b> Datewise @mr.agentname List</b></th>
+
+                </tr>
+                <tr>
+                    <th style="width:5%;text-align:center;">
+                        <label><b>S.N.</b></label>
+                    </th>
+                    <th style="width:25%;text-align:center;">
+                        <label><b>@mr.agentname Id</b></label>
+                    </th>
+
+                    <th style="width:20%;text-align:center;">
+                        <label><b>Name</b></label>
+                    </th>
+
+                    <th style="width:10%;text-align:center;">
+                        <label><b>@mr.rankname</b></label>
+                    </th>
+
+                    <th style="width:20%;text-align:center;">
+                        <label><b>Introducer Id</b></label>
+                    </th>
+
+
+                    <th style="width:10%;text-align:center;">
+                        <label><b>Mobile No</b></label>
+                    </th>
+
+
+                    <th style="width:10%;text-align:center;">
+                        <label id="email"><b>Date of Joining</b></label>
+                    </th>
+
+
+                </tr>
+            }
+
+            a = a + 1;
+            <tr style="text-align:left;">
+                <td>
+                    @a
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.newagentid)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.rankname)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.introducerid)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.mobile)
+                </td>
+
+                <td>
+                    @Convert.ToDateTime(item.doj).ToString("dd/MM/yyyy")
+                </td>
+
+
+
+
+
+            </tr>
+        }
+
+    </table>
+
+    @if (a > 0)
+    {
+        <a href="@Url.Action("PrintDatewiseBrokerOperator")" target="_blank">Get Report In PDF</a>
+    }
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Initialize Flatpickr
+        flatpickr("#date", {
+            dateFormat: "Y-m-d", // Format stored in the input field (e.g., 2025-01-18)
+            altInput: true,      // Show an alternate date format in the input field
+            altFormat: "F j, Y", // Format shown to the user (e.g., January 18, 2025)
+            allowInput: false,   // Disable manual typing, allowing only calendar selection
+            inline: false        // Show dropdown calendar (not inline)
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+

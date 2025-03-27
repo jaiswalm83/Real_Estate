@@ -1,0 +1,312 @@
+﻿@*update again have save changes issue*@
+
+
+@model IEnumerable<ODHDEVELOPERS.Models.Emp_Reg>
+@using ODHDEVELOPERS.Models;
+
+
+    @*old ui*@
+
+
+    @{
+        ViewBag.Title = "UpdateEmployeeReg";
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        var a = 0;
+        var gender = "";
+    }
+
+
+    @{
+        UsersContext db = new UsersContext();
+        var br = db.HRTabs.Single(o => o.HRId == User.Identity.Name);
+
+
+
+        long i = 1;
+        foreach (byte b in Guid.NewGuid().ToByteArray())
+        {
+
+            i *= ((int)b + 1);
+        }
+
+
+        if (i < 0)
+        {
+            i = -i;
+        }
+        string s = i.ToString();
+        var employeid = "EMP" + s.Substring(0, 6);
+
+
+
+
+
+    }
+
+    <script>
+        function show(id) {
+            return document.getElementById(id);
+        }
+        function imgupload(f, i) {
+            debugger;
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                show(i).src = e.target.result;
+            }
+            reader.readAsDataURL(show(f).files[0]);
+        }
+
+
+
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            $("#intro").autocomplete({
+                source: function (request, response) {
+                    debugger;
+                    $.ajax({
+                        url: "/HR/Autoempid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.empid };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            }),
+
+                $("#doj").datepicker();
+            $("#dob").datepicker();
+        })
+    </script>
+
+    <script>
+        function filetypevalidation() {
+            debugger;
+            var value = $("#file2").val();
+            var ext = value.split('.').pop();
+            if (ext == "pdf" || ext == "doc" || ext == "docx") {
+                alert('File format is valid please continue');
+            }
+            else {
+                $("#file2").val('');
+                alert('Please Upload pdf or doc file');
+            }
+
+        }
+
+    </script>
+
+
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4">Update Employee Details</h2>
+        <form action="/HR/UpdateEmployeeReg" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow formtag">
+
+
+            @* Update Employee Details*@
+            <div class="mb-3">
+                <label class="form-label formLabel">Enter Employee Id</label>
+                <input type="text" id="intro" name="emppid" value="@if(TempData["empid"]!=null){@TempData["empid"]}" class="form-control formInput" required>
+            </div>
+
+            @*orange button*@
+            <div class="text-center d-grid gap-2">
+                <button name="command" type="submit" class="btn btn-lg formButtom" value="search">Search</button>
+            </div>
+
+
+
+            @*blue button*@
+            @* <div class="text-center d-grid gap-2">
+            <button type="submit" name="command" class="btn btn-info" value="search" >Search</button>
+        </div>*@
+
+            @foreach (var item in Model)
+            {
+                gender = item.gender;
+
+                <!-- Branch Code (Should Appear Only Once) -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Branch Code</label>
+                    <input type="text" required name="branchcode" value="@br.BranchCode" class="form-control formInput" readonly>
+                </div>
+
+                <!-- Employee ID (Should Appear Only Once) -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Employee ID</label>
+                    <input type="text" required name="empid" value="@item.empid" class="form-control formInput" readonly>
+                </div>
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Full Name</label>
+                    <input type="text" value="@item.name" id="IntroducerCode" required name="name" class="form-control formInput">
+                </div>
+
+                <!-- Father/Husband's Name -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Father/Husband's Name</label>
+                    <input type="text" name="father" id="IntroName" value="@item.father" class="form-control formInput">
+                </div>
+
+                <!-- Date Of Birth -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Date Of Birth</label>
+                    <input type="text" id="dob" value="@item.dob.ToString("MM/dd/yyyy")" name="dob" class="form-control formInput">
+                </div>
+
+                <!-- Gender Dropdown (Fixed Selection) -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Gender</label>
+                    <select class="form-control formInput" id="Select1" name="gender" required>
+                        <option value="" disabled>Select</option>
+                        <option value="Male" @(item.gender == "Male" ? "selected" : "")>Male</option>
+                        <option value="Female" @(item.gender == "Female" ? "selected" : "")>Female</option>
+                    </select>
+                </div>
+
+                <!-- Department -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Department</label>
+                    <input type="text" value="@item.department" name="department" class="form-control formInput" required>
+                </div>
+
+                <!-- Designation -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Designation</label>
+                    <input type="text" value="@item.designation" name="designation" class="form-control formInput" required>
+                </div>
+
+                <!-- Basic Salary -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Basic Salary</label>
+                    <input type="number" value="@item.basicsalary" name="basicsalary" class="form-control formInput" required>
+                </div>
+
+                <!-- Date Of Joining -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Date Of Joining</label>
+                    <input id="doj" type="text" value="@item.doj.ToString("MM/dd/yyyy")" required name="doj" class="form-control formInput">
+                </div>
+
+                <!-- Registration Date -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Registration Date</label>
+                    <input id="registerdate" type="text" value="@item.registerdate.ToString("MM/dd/yyyy")" required name="registerdate" class="form-control formInput">
+                </div>
+
+                <!-- Mobile -->
+                <div class="mb-3">
+                    <label for="remark" class="form-label formLabel">Mobile</label>
+                    <input type="tel" value="@item.mob" title="Invalid mobile format" pattern="[789][0-9]{9}" maxlength="10" required name="mob" class="form-control formInput">
+                </div>
+
+                <!-- Email ID -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">E-Mail ID</label>
+                    <input type="email" value="@item.email" name="email" class="form-control formInput" required>
+                </div>
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Address</label>
+                    <input type="text" value="@item.address" name="address" id="dt" class="form-control formInput" required>
+                </div>
+
+                <!-- State -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">State</label>
+                    <input type="text" value="@item.state" required name="state" class="form-control formInput">
+                </div>
+
+                <!-- District -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">District</label>
+                    <input type="text" name="distict" value="@item.distict" class="form-control formInput" required>
+                </div>
+
+                <!-- Upload Images -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Upload Images</label>
+                    <input type="file" id="file1" name="Photoimg" onchange="imgupload(this.id,'img1')" class="form-control formInput">
+                </div>
+                <img id="img1" src="@item.img" style="height:60px;width:100px" />
+
+                <!-- Upload CV -->
+                <div class="mb-3">
+                    <label class="form-label formLabel">Upload CV</label>
+                    <input type="file" id="file2" name="Photo" onchange="filetypevalidation()" class="form-control formInput">
+                </div>
+            }
+
+
+
+            <!-- Submit Button -->
+            @*<div class="text-center d-grid gap-2">
+                <button name="submitbtn" type="submit" class="btn btn-lg formButtom">Register</button>
+            </div>*@
+
+
+            @if (TempData["empid"] != null)
+            {
+                <div class="text-center d-grid gap-2">
+                    <button name="submitbtn" type="submit" class="btn btn-primary formButtom">Register</button>
+                </div>
+            }
+
+
+            <p>@ViewBag.msg</p>
+
+        </form>
+
+        @*<p>@ViewBag.msg</p>*@
+    </div>
+
+
+
+
+
+    <script>
+        // Set the current date and time as the placeholder and value
+        window.onload = function () {
+            const dateInput = document.getElementById('date');
+            const currentDate = new Date();
+
+            // Format as per local date and time
+            const formattedDate = currentDate.toLocaleString();
+
+            // Set placeholder and value
+            dateInput.placeholder = formattedDate;
+            dateInput.value = formattedDate; // Optionally prefill the value
+        };
+    </script>
+
+
+    @* old code js *@
+    <script type="text/javascript">
+    $(function () {
+        $('img[src^="~"]').each(function () {
+            var c = $(this), s = c.attr('src');
+            c.attr('src', s.replace('~', ''));
+        });
+
+        $("#Select1 option[value='@gender']").attr('selected', 'selected');
+    });
+
+
+
+    </script>
+
+
+
+

@@ -1,0 +1,190 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.MaturityStatus>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);   
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var cc = db.MaturityStatuss.Where(s => s.matstatus == 0 && s.status==0).ToList();
+    ViewBag.Title = "MaturityAppDis";
+    var a = 0;
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#BondId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteBondId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.newbondid };
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+
+<div class="page-content">
+
+                <div class="container">
+
+                    <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Approve/Disapprove Maturity</div>
+                            <div class="page-toolbar-subtitle"> </div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                        
+                    </div>  
+
+                           <div class="row" >
+                               
+                               <div class="col-md-6" style="width:100%">
+                                   
+                                  
+               <table id="rd" border="1" style="margin-left:1%; margin-right:1px; width:98%;">
+    @foreach(var item in cc){
+        if(a==0)
+        {
+         <tr >
+                                <th  colspan="13" style="text-align:center;font-size:large;height:50px;"><b>Customer List</b>
+
+                                </th>
+                            
+                
+                         </tr>
+    
+                   
+
+         <tr style="font-size:medium;height:40px;">
+          <th style="width:10%;text-align:center;">
+           <label id="ii"><b>Sr No.</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="cc"><b>@mr.custname Id</b></label>
+            </th>
+             <th style="width:10%;text-align:center;">
+           <label id="sn"><b>@mr.custname Name</b></label>
+            </th>
+        <th style="width:10%;text-align:center;">
+           <label id="pp "><b>Introducer Id</b></label>
+            </th>
+             <th style="width:5%;text-align:center;">
+           <label id="mm1"><b>Planname</b></label>
+            </th>
+             <th style="width:5%;text-align:center;">
+           <label id="mm2"><b>Mode</b></label>
+            </th>
+             <th style="width:5%;text-align:center;">
+           <label id="mm3"><b>Term</b></label>
+            </th>
+             <th style="width:5%;text-align:center;">
+           <label id="mm4"><b>Total Contribution</b></label>
+            </th>
+             <th style="width:5%;text-align:center;">
+           <label id="mm5"><b>Maturity Amount</b></label>
+            </th>
+        
+            
+             <th style="width:10%;text-align:center;">
+           <label id="ccc7"><b>Expiry Date</b></label>
+            </th>
+
+             <th style="width:10%;text-align:center;">
+           <label id="ccc3"><b>Expected Date</b></label>
+            </th>
+
+       <th style="width:10%;text-align:center;">
+           <label id="action8"><b>Action</b></label>
+            </th>
+            
+        <th style="width:10%;text-align:center;">
+           <label id="action9"><b>Action</b></label>
+            </th>
+        
+ 
+      
+    </tr>
+                    }
+                        a = a + 1;
+         <tr style="text-align:center;">
+         <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.newbondid)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.newintroducerid)
+        </td>
+             <td>
+            @Html.DisplayFor(modelItem => item.planname)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.mode)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.term)
+        </td>
+             <td>
+            @Html.DisplayFor(modelItem => item.totalcon)
+        </td>
+             <td>
+            @Html.DisplayFor(modelItem => item.maturityamount)
+        </td>
+        
+        <td>
+            @Convert.ToDateTime(item.maturitydate).ToString("dd/MM/yyyy")
+        </td>
+         <td>
+            @Convert.ToDateTime(item.exptdate).ToString("dd/MM/yyyy")
+        </td>
+        <td>
+            @Html.ActionLink("Approve", "MaturityAppDis", new { newbondid = item.newbondid, status = 1 }, new { @class = "btn btn-success",onclick = "return confirm('Are you sure to Approve this Maturity?');" })
+        </td>
+        
+        <td>
+            @Html.ActionLink("Disapprove", "MaturityAppDis", new { newbondid = item.newbondid, status = 0 }, new { @class = "btn btn-success",onclick = "return confirm('Are you sure to Disapprove this Maturity?');" })
+        </td>
+        
+    </tr>
+    } 
+                   
+  
+   
+</table> 
+  
+
+<h4>@ViewBag.msg</h4>
+                        </div>          
+                        
+                    </div>
+  
+    </div>
+    </div>
+
+
+

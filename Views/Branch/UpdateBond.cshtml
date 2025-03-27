@@ -1,0 +1,1792 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.appltab>
+    @using ODHDEVELOPERS.Models
+    @{
+        ViewBag.Title = "UpdateBond";
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        UsersContext db = new UsersContext();
+
+
+        var mr = db.Members.Single(m => m.Id == 1);
+        var plist = db.Plans.Where(p => p.status == 1).ToList();
+        //int plotsize = 100;
+        var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+        var a = 0;
+        string todate = DateTime.Now.ToShortDateString();
+        DateTime dt = DateTime.Now.Date;
+        Formdate fd = new Formdate();
+        var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+        if (count > 0)
+        {
+            fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+            if (fd.status == 2)
+            {
+                dt = fd.formdate;
+            }
+        }
+
+        var listappltab = new appltab();
+        var east = "";
+    }
+
+    <script>
+    ///////Select Term Start Here
+    function selectterm(plan_id) {
+        debugger;
+        var term = $("#term");
+        var cpplan = $("#" + plan_id).val();
+
+        var url = '@Url.Action("selectterm", "Branch")';
+        if (cpplan != '') {
+            $.get(url, { cpplan: cpplan }, function data(t) {
+
+                term.html('');
+                //term.append('<option value="">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    term.append('<option value="' + t[i].term + '">' + t[i].term + '</option>');
+
+                }
+                term.removeAttr('disabled');
+
+            });
+        } else {
+            term.attr('disabled', '');
+        }
+        //$('[name="PYN"').click();
+
+        //reset here
+        $('#payment,#totalcon,#bookingamount,#plccost').val(0)//.click();
+        $('#amountinword').val('Zero Rupees Only');
+        $('#blk,#plotno').empty();
+        $('#radio2').prop('checked', true).click();
+        $('#mode,#nolandunit,#term').val('');
+    }
+    </script>
+    <script>
+
+    ///Selecting Project Name Start here ////
+    function selectproject(p_type) {
+        debugger;
+        var PlanName = $("#PlanName");
+        var ptype = $("#" + p_type).val();
+        PlanName.children().remove();
+        var url = '@Url.Action("selectproject", "Branch")';
+
+        $.get(url, { ptype: ptype }, function data(t) {
+
+            PlanName.html('');
+            debugger;
+            PlanName.append('<option value="">Select</option>');
+            for (var i = 0; i < t.length; i++) {
+                PlanName.append('<option value="' + t[i].Plancode + '">' + t[i].Planname + '</option>');
+
+            }
+            //term.removeAttr('disabled');
+
+        });
+
+
+    }
+
+
+    </script>
+
+    <script>
+        ///Selecting PlotSize According to Project type Start here ////
+        function selectplotsize(p_type) {
+            debugger;
+            var nolandunit = $("#nolandunit");
+            var unitno = $("#" + p_type).val();
+            nolandunit.children().remove();
+
+
+            nolandunit.html('');
+            debugger;
+            nolandunit.append('<option value="">Select</option>');
+            if (unitno == 'Residential') {
+                nolandunit.append('<option value="450">450</option>');
+                nolandunit.append('<option value="900">900</option>');
+            }
+            else if (unitno == 'Commercial') {
+                nolandunit.append('<option value="1800">1800</option>');
+            }
+            //term.removeAttr('disabled');
+
+
+        }
+    </script>
+    <style type="text/css">
+        #picset img {
+            height: 90px;
+            width: 160px;
+        }
+
+        [data-id="direction"] label {
+            font-size: 11px;
+        }
+
+        [data-id="direction"] [class*="col-"] {
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+
+        input.form-control[disabled] {
+            color: #555;
+        }
+    </style>
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            {
+                $("#plot").addClass("hide");
+                $("#blok").addClass("hide");
+                $("#phasediv").addClass("hide");
+
+            }
+        });
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#chk').change(function () {
+
+                var adr = $("#addr").val();
+                if (this.checked == true) {
+                    $("#guraddr").val(adr);
+                }
+                else if (this.checked == false) {
+                    $("#guraddr").val('');
+                }
+            });
+        });
+
+    </script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newbond").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteBondId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.newbondid };
+
+
+                            }));
+
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IntroducerCode").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteAgentId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#nomrel").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteRelations",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.relations, value: item.relations };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#gurrel").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompleteRelations",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.relations, value: item.relations };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+
+    <script>
+    function checkid(check_id) {
+
+        var intro = $("#" + check_id).val();
+        var url = '@Url.Action("SelectIntroName", "Branch")';
+        $.get(url, { intro: intro }, function data(name1) {
+            $('#introducername').val(name1)
+        });
+
+
+    }
+    </script>
+
+    <script type="text/javascript">
+    function check(check_id) {
+
+        $("#" + check_id).click(function () {
+            $('.plantype').prop('checked', false);
+        });
+
+    }
+    ///Selecting Plan Name Start here ////
+    function rply_click(clicked_id) {
+
+        var fno = $("#" + clicked_id).val();
+
+
+        var url = '@Url.Action("SelectPlan", "Branch")';
+        $.get(url, { fno: fno }, function data(d) {
+            var select = $("#PlanName");
+
+            select.children().remove();
+            select.append('<option value="Select">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].Plancode + '">' + d[i].Planname + '</option>');
+            }
+        });
+
+    }
+
+
+
+
+    ///Selecting Plan Mode Start here ////
+
+
+
+    $(function () {
+
+        ///Selecting Payment Start here ////
+        $('#mode').on('click', function selectpayment() {
+            var ptype = $('#paymenttype').val();
+            debugger;
+            if (ptype == 'EMI') {
+
+                var mode = $("#mode").val();
+                var term = $("#term").val();
+                var bookingamount = $("#bookingamount").val();
+                var discountper = $("#discountper").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                var plccost = $("#plccost").val();
+                var Devcharge = $("#Devcharge").val();
+
+                var url = '@Url.Action("selectpayment", "Branch")';
+                $.get(url, { term: term, bookingamount: bookingamount, discountper: discountper, projectid: projectid, plotsize: plotsize, mode: mode, plccost: plccost, Devcharge: Devcharge }, function data(t) {
+                    for (var i = 0; i < t.length; i++) {
+
+                        $("#totalcon").val(t[i].totalcon);
+                        $("#maturityamt").val(t[i].maturityamount);
+                        $("#payment").val(t[i].payment);
+                        $("#amountinword").val(t[i].amountinwords);
+                    }
+                });
+            } else {
+                //var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val(), discountper1 = $('#discountper').val();
+                //fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+                //var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+                //$('#totalcon').val(tv1);
+                var v1 = '';
+                if (ptype == 'FULL') { v1 = $("#totalcon").val(); } else { v1 = $("#bookingamount").val(); }
+                //amount in word
+
+
+                if (v1 > 0) {
+                    var url = '@Url.Action("SetAmountinword", "Branch")';
+                        $.get(url, { payment: v1 }, function data(t) {
+                            for (var i = 0; i < t.length; i++) {
+                                $("#amountinword").val(t[i].amountword);
+                            }
+                        });
+
+                    }
+                }
+        });
+
+    });
+
+        $(function () {
+            //discount
+            ///checkig validity of amount Start here ////
+            $('#discountper').on('click',
+            function checkplan() {
+                var c3 = $('#discountper'), ptype = $('#paymenttype').val();
+                var discountper1 = c3.val();
+                if (ptype == 'EMI') {
+                    var term = $("#term").val();
+                    var projectid = $("#PlanName").val();
+                    var plotsize = $("#nolandunit").val();
+                    var plccost = $("#plccost").val();
+
+                    var url = '@Url.Action("checkplan", "Branch")';
+                $.get(url, { projectid: projectid, plotsize: plotsize, term: term, discountper: discountper1, plccost: plccost }, function data(t) {
+                    for (var i = 0; i < t.length; i++) {
+
+                        $("#totalcon").val(t[i].totalcon)//.attr('data-v', t[i].totalcon);
+                        $("#maturityamt").val(t[i].maturityamount);
+                    }
+                });
+            }
+            else {
+                //var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val();
+                //fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+                //var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+                //$('#totalcon').val(tv1);
+            }
+        });
+    });
+
+    </script>
+
+    <script type="text/javascript">
+    $(function () {
+
+        //get block
+
+        $('[name="PYN"]').on('click', function () {
+
+            var c1 = $('[name="PYN"]:checked'), cv = c1.val();
+            if (c1.is(':checked') && cv != "N") {
+                debugger;
+                $("#plot").removeClass("hide");
+                $("#blok").removeClass("hide");
+                $("#phasediv").removeClass("hide");
+
+            }
+
+            else if (c1.is(':checked') && cv == "N") {
+
+                $("#plot").addClass("hide");
+                $("#blok").addClass("hide");
+                $("#phasediv").addClass("hide");
+
+                var block = $('#blk').html('');
+                block.children().remove();
+                block.append('<option value="NA">Select</option>');
+
+                var plot = $('#plotno').html('');
+                plot.children().remove();
+                plot.append('<option value="0">Select</option>');
+            }
+
+        });
+    });
+
+    function getblock(clicked_id) {
+
+        var c = $('[name="PYN"]:checked'), cv = c.val();
+        var plotstatus = cv;
+        var projectid = $("#PlanName").val();
+        var phaseid = $("#phaseid").val();
+        var url = '@Url.Action("GetBlockList", "Branch")';
+        $.get(url, { plotstatus: cv, projectid: projectid, phaseid: phaseid }, function data(d) {
+            debugger;
+            var block = $('#blk').html('');
+            block.children().remove();
+            block.append('<option value="NA">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                debugger;
+                block.append('<option value="' + d[i].block + '">' + d[i].block + '</option>');
+            }
+        });
+    }
+
+    function getplot(clicked_id) {
+        $("#plot").removeClass("hide");
+        var block = $("#" + clicked_id).val();
+        var phaseid = $("#phaseid").val();
+        var projectid = $("#PlanName").val();
+        var introid = $("#IntroducerCode").val();
+        var newbondid = $("#newmemberid").val();
+        var url = '@Url.Action("GetPlotList", "Admin")';
+        $.get(url, { block: block, projectid: projectid, introid: introid, phaseid: phaseid,bondid:newbondid }, function data(d) {
+            var select = $('#plotno').html('');
+            select.children().remove();
+            select.append('<option value="0">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].plotno + '">' + d[i].plotno + '</option>');
+            }
+
+        });
+    }
+
+   @* function getplot(clicked_id) {
+        $("#plot").removeClass("hide");
+        var block = $("#" + clicked_id).val();
+        var phaseid = $("#phaseid").val();
+        var projectid = $("#PlanName").val();
+        var introid = $("#IntroducerCode").val();
+        var url = '@Url.Action("GetPlotList", "Admin")';
+        $.get(url, { block: block, projectid: projectid, introid: introid, phaseid: phaseid }, function data(d) {
+            var select = $('#plotno').html('');
+            select.children().remove();
+            select.append('<option value="0">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].plotno + '">' + d[i].plotno + '</option>');
+            }
+
+        });
+    }*@
+    </script>
+
+
+
+    <script>
+        function detail(chkid) {
+            var chk = $("#" + chkid).val();
+            if (chk == "Cheque") {
+                $("#detail").show();
+                $("#dd").hide();
+                $("#trdetail").hide();
+            }
+            else if (chk == "DD") {
+                $("#dd").show();
+                $("#detail").hide();
+                $("#trdetail").hide();
+            }
+            else if (chk == "banktransaction") {
+                $("#dd").hide();
+                $("#detail").hide();
+                $("#trdetail").show();
+            }
+            else {
+                $("#detail").hide();
+                $("#dd").hide();
+                $("#trdetail").hide();
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+    function selectphase(bid) {
+
+        var phaseid = $("#phaseid");
+        var projectid = $("#" + bid).val();
+
+        var url = '@Url.Action("selectphase", "Branch")';
+        if (projectid > 0) {
+            $.get(url, { projectid: projectid }, function data(t) {
+
+                phaseid.html('');
+                phaseid.append('<option value="">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    phaseid.append('<option value="' + t[i].Id + '">' + t[i].Phase + '</option>');
+                }
+            });
+        }
+
+    }
+    </script>
+
+    <script type="text/javascript">
+
+    //----------------------------------------------
+    function getblock(clicked_id) {
+
+        var c = $('[name="PYN"]:checked'), cv = c.val();
+        var plotstatus = cv;
+        var projectid = $("#PlanName").val();
+        var phaseid = $("#phaseid").val();
+        var url = '@Url.Action("GetBlockList", "Branch")';
+        $.get(url, { plotstatus: cv, projectid: projectid, phaseid: phaseid }, function data(d) {
+            debugger;
+            var block = $('#blk').html('');
+            block.children().remove();
+            block.append('<option value="NA">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                debugger;
+                block.append('<option value="' + d[i].block + '">' + d[i].block + '</option>');
+            }
+        });
+    }
+
+  @*  function getplot(clicked_id) {
+        $("#plot").removeClass("hide");
+        var block = $("#" + clicked_id).val();
+        var phaseid = $("#phaseid").val();
+        var projectid = $("#PlanName").val();
+        var introid = $("#IntroducerCode").val();
+
+        var url = '@Url.Action("GetPlotList", "Branch")';
+        $.get(url, { block: block, projectid: projectid, introid: introid, phaseid: phaseid }, function data(d) {
+            var select = $('#plotno').html('');
+            select.children().remove();
+            select.append('<option value="0">Select</option>');
+            for (var i = 0; i < d.length; i++) {
+                select.append('<option value="' + d[i].plotno + '">' + d[i].plotno + '</option>');
+            }
+
+        });
+    }*@
+
+    </script>
+
+    <script>
+    function selecttotolplot() {
+        var term = $("#term").val();
+        var formdate = $("#formdate").val();
+        var projectid = $("#PlanName").val();
+        var plotsize = $("#nolandunit").val();
+        var plccost = $("#plccost").val();
+        var Devcharge = $("#Devcharge").val();
+        var discountper = $("#discountper").val();
+
+
+        if (term == '') { term = 0; }
+        if (plotsize != '') {
+            var url = '@Url.Action("selectexpiry", "Branch")';
+            $.get(url, { projectid: projectid, plotsize: plotsize, term: term, plccost: plccost, Devcharge: Devcharge, discountper: discountper, formdate: formdate }, function data(t) {
+                debugger;
+                for (var i = 0; i < t.length; i++) {
+
+                    $("#totalcon").val(t[i].totalcon);
+                    $("#fullAmount").val(t[i].totalcon);
+                    $("#maturityamt").val(t[i].maturityamount);
+
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    $('#expirydate').val(parsedDate);
+
+                }
+
+            });
+
+        }
+    }
+    </script>
+    <style type="text/css">
+        .hide {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            var asdd = $("#guraadd").val();
+            $("#guraddr").text(asdd);
+            var sss = $("#propadds").val();
+            $("#ppp").text(sss);
+            $("#plotdespp1").text($("#plotdespp").val());
+        });
+    </script>
+
+
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4">@mr.custname Form</h2>
+
+        <!-- Search Form -->
+        <form method="post" class="border p-4 rounded shadow formtag">
+            <div class="mb-3 controls">
+                <label for="memberid" class="form-label formLabel">Enter Customer id:</label>
+                <input type="text" class="form-control formInput" name="newbond" id="newbond">
+            </div>
+            <div class="text-center d-grid gap-2">
+                <button value="Search" type="submit" name="command" class="btn btn-lg formButtom"><i class="fa fa-search"></i>Search</button>
+            </div>
+            <div style="float: left;">
+                <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+                @if (Convert.ToString(ViewData["paymethod"]) == "Cheque")
+                {
+                    @Html.ActionLink("Print Receipt", "PrintReceipt", new { newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })
+                }
+                else if (Convert.ToString(ViewData["paymethod"]) == "Cash" || Convert.ToString(ViewData["paymethod"]) == "DD")
+                {
+                    @Html.ActionLink("Print " + mr.custname, "PrintBond", new { newbondid = ViewData["newbondid"], discount = ViewData["discount"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })
+                }
+            </div>
+        </form>
+        @if (Model.Count() != 0)
+        {
+            <form enctype="multipart/form-data" method="post" id="_submit" onsubmit="alert('Are you sure update record')" class="mt-3">
+                @foreach (var item in Model)
+                {
+                    var introid = item.introducerid;
+                    var introinfo = db.AgentDetails.Single(x => x.AgencyCode == introid);
+
+                    if (a == 0)
+                    {
+
+                        <div class="row justify-content-between ml-0" style="width:100%;">
+
+                            <!-- Personal Details -->
+                            <div class="column mb-4" style="width:49%;">
+                                <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                    <h4 class="text-center mb-1">Personal Details</h4>
+                                    <!-- Branch Code -->
+                                    <div class="mb-3">
+                                        <label for="BranchCode" class="form-label formLabel">@mr.branchname Code:</label>
+                                        <input type="text" id="branchcode" class="form-control formInput" value="@item.branchcode" name="branchcode" required readonly />
+                                    </div>
+                                    <!-- Form Fee -->
+                                    <div class="mb-3">
+                                        <label for="formfee" class="form-label formLabel">Form Fee:</label>
+                                        <input type="text" class="form-control formInput" id="applicationcharge" required name="applicationcharge" value="@tr.applicationfee" readonly />
+                                    </div>
+                                    <!-- Member Id -->
+                                    <div class="mb-3">
+                                        <label for="newmemberid" class="form-label formLabel">Member Id:</label>
+                                        <input type="text" class="form-control formInput" readonly="true" value=" @Html.DisplayFor(modelItem => item.newbondid)" id="newmemberid" name="newbondid" required />
+                                    </div>
+                                    <!-- Name -->
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label formLabel">Name of Applicant:</label>
+                                        <input type="text" class="form-control formInput" value=" @Html.DisplayFor(modelItem => item.name)" id="name" name="name" required />
+
+                                    </div>
+                                    <!-- Father's Name -->
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label formLabel">Relation:</label>
+                                        <div>
+                                            <select class="form-control formInput" style="background-color: #eee; float: left; width: 20%;" name="Relationof" id="RelationOf">
+                                                @if (item.RelationOf == "S/O")
+                                                {
+                                                    <option value="@Html.DisplayFor(modelItem => item.RelationOf)" selected>@Html.DisplayFor(modelItem => item.RelationOf)</option>
+                                                    <option>D/O</option>
+                                                    <option>W/O</option>
+                                                }
+                                                @if (item.RelationOf == "D/O")
+                                                {
+                                                    <option value="@Html.DisplayFor(modelItem => item.RelationOf)" selected>@Html.DisplayFor(modelItem => item.RelationOf)</option>
+                                                    <option>S/O</option>
+                                                    <option>W/O</option>
+                                                }
+                                                @if (item.RelationOf == "W/O")
+                                                {
+                                                    <option value="@Html.DisplayFor(modelItem => item.RelationOf)" selected>@Html.DisplayFor(modelItem => item.RelationOf)</option>
+                                                    <option>S/O</option>
+                                                    <option>D/O</option>
+
+                                                }
+
+                                            </select>
+                                            <input type="text" value="@Html.DisplayFor(modelItem => item.fathername)" style="width: 80%;" class="form-control formInput" required name="fathername" id="fathername" />
+                                        </div>
+                                    </div>
+                                    <!-- Mother's Name -->
+                                    <div class="mb-3">
+                                        <label for="Mother" class="form-label formLabel">Category:</label>
+                                        <select class="form-control formInput" id="category" name="category">
+                                            @if (item.category == "General")
+                                            {
+                                                <option value="@item.category" selected>@item.category</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.category == "OBC")
+                                            {
+                                                <option value="@item.category" selected>@item.category</option>
+                                                <option value="General">General</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.scategory == "SC")
+                                            {
+                                                <option value="@item.scategory" selected>@item.scategory</option>
+                                                <option value="General">General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="ST">ST</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.category == "ST")
+                                            {
+                                                <option value="@item.category" selected>@item.category</option>
+                                                <option value="General">General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.category == "Other")
+                                            {
+                                                <option value="@item.category" selected>@item.category</option>
+                                                <option value="General">General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                            }
+                                            @if (item.category == null)
+                                            {
+                                                <option value="General" selected>General</option>
+                                                <option value="General" selected>General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <!-- Mobile No -->
+                                    <div class="mb-3">
+                                        <label for="Mobile" class="form-label formLabel">Income Group:</label>
+                                        <select class="form-control formInput" id="incomegroup" name="incomegroup">
+
+                                            @if (item.incomegroup == "Lower Income Group")
+                                            {
+                                                <option value="@item.incomegroup" selected>@item.incomegroup</option>
+                                                <option value="Middle Income Group">Middle Income Group</option>
+                                                <option value="Upper Income Group">Upper Income Group</option>
+
+                                            }
+                                            @if (item.incomegroup == "Middle Income Group")
+                                            {
+                                                <option value="@item.incomegroup" selected>@item.incomegroup</option>
+                                                <option value="Lower Income Group">Lower Income Group</option>
+                                                <option value="Upper Income Group">Upper Income Group</option>
+
+                                            }
+                                            @if (item.incomegroup == "Upper Income Group")
+                                            {
+                                                <option value="@item.incomegroup" selected>@item.incomegroup</option>
+                                                <option value="Middle Income Group">Middle Income Group</option>
+                                                <option value="Lower Income Group">Lower Income Group</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <!-- Emergency No -->
+                                    <div class="mb-3">
+                                        <label for="Mobileno" class="form-label formLabel">Address:</label>
+                                        <textarea type="text" id="addr" value="" name="addr" class="form-control formInput" required> @Html.DisplayFor(modelItem => item.addr)</textarea>
+                                    </div>
+                                    <!-- Introducer Code -->
+                                    <div class="mb-3">
+                                        <label for="NewIntroducerId" class="form-label formLabel">Mobile No :</label>
+                                        <input type="text" id="mobileno" name="mobileno" maxlength="10" value=" @Html.DisplayFor(modelItem => item.mobileno)" class="form-control formInput" required />
+                                    </div>
+                                    <!-- Introducer Name -->
+                                    <div class="mb-3">
+                                        <label for="IntroName" class="form-label formLabel">Email:</label>
+                                        <input type="email" id="email" name="email" value=" @Html.DisplayFor(modelItem => item.email)" class="form-control formInput" />
+                                    </div>
+                                    <style>
+                                        .position-relative {
+                                            position: relative;
+                                        }
+
+                                        .icon-label {
+                                            position: absolute;
+                                            top: 75%;
+                                            right: 10px; /* Adjust based on input padding */
+                                            transform: translateY(-50%);
+                                            cursor: pointer;
+                                            color: #aaa; /* Adjust icon color */
+                                        }
+
+                                            .icon-label .fa-search {
+                                                font-size: 16px; /* Adjust icon size */
+                                            }
+                                    </style>
+                                    <!-- Nationality -->
+                                    <div class="mb-3 position-relative">
+                                        <label for="Nationality" class="form-label formLabel">Introducer Code:</label>
+                                        <input type="text" class="form-control formInput"
+                                               onchange="checkid(this.id)"
+                                               onclick="checkid(this.id)" id="IntroducerCode"
+                                               name="newintroducerid"
+                                               value="@item.newintroducerid" required />
+                                        <label for="IntroducerCode" class="icon-label">
+                                            <span class="fa fa-search"></span>
+                                        </label>
+                                    </div>
+
+                                    <!-- DOB -->
+                                    <div class="mb-3">
+                                        <label for="Dob" class="form-label formLabel">Introducer Name:</label>
+                                        <input type="text" class="form-control formInput" id="introducername" readonly="true" value="@introinfo.name">
+                                    </div>
+                                    <!-- Date of joining -->
+                                    <div class="mb-3">
+                                        <label for="Dob" class="form-label formLabel">Date of Agreement:</label>
+                                        <input type="text" class="form-control date formInput" id="formdate" name="formdate" value="@Html.DisplayFor(modelItem => item.formdate)" required readonly="true">
+
+                                    </div>
+                                    <!-- select genter -->
+                                    <div class="mb-3">
+                                        <label for="Dob" class="form-label formLabel">Date of Birth:</label>
+                                        <input type="text" id="dob" class="form-control date1 formInput" value="@Html.DisplayFor(modelItem => item.dob)" name="dob" required />
+
+                                    </div>
+                                    <!-- Designation -->
+                                    <div class="mb-3">
+                                        <label for="Dob" class="form-label formLabel">Nationality:</label>
+                                        <input type="text" id="nationality" name="nationality" class="form-control formInput" value="@item.nationality" />
+
+                                    </div>
+                                </div>
+                                <!-- secend row of first column -->
+                                <!-- Bank Details -->
+                                <div class="p-4 rounded formtag mb-4" id="secondform" style="height: max-content;">
+                                   
+                                    <h4 class="text-center mb-3">Permanent Address</h4>
+                                    <!-- Address -->
+                                    <div class="mb-3">                                 
+                                        <div class="d-flex justify-content-between">
+                                            <label for="Address" class="form-label formLabel">Permanent Address:</label>
+                                            <h6>
+                                                <input type="checkbox" value="" id="sameasabove" />&nbsp;Same As Above
+                                            </h6>
+                                        </div>
+                                        <input type="text" name="spermanentaddress" class="form-control formInput" value="@item.spermanentaddress" />
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">City:</label>
+                                        <input type="text" name="pcity" class="form-control formInput" value="@item.pcity" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">State:</label>
+                                        <input type="text" name="pstate" class="form-control formInput" value="@item.pstate" />
+                                    </div>
+                                    <!-- Landline No -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Pin Code:</label>
+                                        <input type="text" name="ppincode" class="form-control formInput" value="@item.ppincode" />
+
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label for="Address" class="form-label formLabel">Nationality:</label>
+                                        <input type="text" name="snationality" class="form-control formInput" value="@item.snationality" />
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Educational Qualification:</label>
+                                        <input type="text" name="squalification" class="form-control formInput" value="@item.squalification" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Mobile No:</label>
+                                        <input type="text" name="smobileno" class="form-control formInput" value="@item.smobileno" />
+                                    </div>
+                                    <!-- Landline No -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Alternate Mobile No:</label>
+                                        <input type="text" name="salternatemobileno" class="form-control formInput" value="@item.salternatemobileno" />
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label for="Address" class="form-label formLabel">Pan No:</label>
+                                        <input type="text" name="spanno" class="form-control formInput" value="@item.spanno" />
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Email Id:</label>
+                                        <input type="text" name="semailid" class="form-control formInput" value="@item.semailid" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Date Of Birth:</label>
+                                        <input type="text" name="sdob" class="form-control formInput date1" value="@Html.DisplayFor(modelItem => item.sdob)" />
+                                    </div>
+                                    <!-- Landline No -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Aadhar No:</label>
+                                        <input type="text" name="saadharno" class="form-control formInput" value="@item.saadharno" />
+                                    </div>
+                                    
+                                    <!-- State -->
+                                    <div class="mb-2">
+                                        <label for="State" class="form-label formLabel">Martial Status:&nbsp;&nbsp;</label>
+                                        @if (item.smaritialstatus == "UnMarried")
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="smaritialstatus" style="margin-top:5px;" value="@item.smaritialstatus" checked>&nbsp;UnMarried&nbsp;&nbsp;
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="smaritialstatus" style="margin-top:5px;" value="@item.smaritialstatus">&nbsp;Married
+                                            </label>
+                                        }
+                                        @if (item.smaritialstatus == "Married")
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="smaritialstatus" style="margin-top:5px;" value="@item.smaritialstatus">&nbsp;UnMarried&nbsp;&nbsp;
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="smaritialstatus" style="margin-top:5px;" value="@item.smaritialstatus" checked>&nbsp;Married
+                                            </label>
+                                        }
+                                        @if (item.smaritialstatus == null)
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="smaritialstatus" style="margin-top:5px;" value="UnMarried" checked>&nbsp;UnMarried&nbsp;&nbsp;
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="smaritialstatus" style="margin-top:5px;" value="Married">&nbsp;Married
+                                            </label>
+                                        }
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Anniversary Date:</label>
+                                        <input type="text" name="sanniversarydate" class="form-control date1 formInput" value="@Html.DisplayFor(modelItem => item.sanniversarydate)" />
+                                    </div>
+                                    <!-- Landline No -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Occupation:</label>
+                                        <input type="text" name="soccupation" class="form-control formInput" value="@item.soccupation" />
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Passport No:</label>
+                                        <input type="text" name="spassport" class="form-control formInput" value="@item.spassport" />
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Residential Status:&nbsp;&nbsp;</label>
+                                        @if (item.sresidentialstatus == "Resident")
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="sresidentialstatus" style="margin-top: 5px;" value="Resident" checked> &nbsp;Resident&nbsp;&nbsp;
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="sresidentialstatus" style="margin-top: 5px;" value="Non-Resident">&nbsp;Non-Resident
+                                            </label>
+                                        }
+                                        @if (item.sresidentialstatus == "Non-Resident")
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="sresidentialstatus" style="margin-top: 5px;" value="Resident"> &nbsp;Resident&nbsp;&nbsp;
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="sresidentialstatus" style="margin-top: 5px;" value="Non-Resident" checked> &nbsp;Non-Resident
+                                            </label>
+                                        }
+                                        @if (item.sresidentialstatus == null)
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="sresidentialstatus" style="margin-top: 5px;" value="Resident" checked>&nbsp;Resident&nbsp;&nbsp;
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="sresidentialstatus" style="margin-top: 5px;" value="Non-Resident">&nbsp;Non-Resident
+                                            </label>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- second column -->
+                            <!-- Address and Nominee Details -->
+                            <div class="column mb-4" style="width:49%;">
+                                <!--first row of the second column -->
+                                <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                    <h4 class="text-center mb-1">Bank Details</h4>
+                                    <!-- Address -->
+                                    <div class="mb-3">
+                                        <label for="Address" class="form-label formLabel">PAN No:</label>
+                                        <input type="text" id="panno" name="panno"
+                                               value=" @Html.DisplayFor(modelItem => item.panno)" class="form-control formInput" />
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Bank Name:</label>
+                                        <input type="text" id="bankname" name="bankname"
+                                               value=" @Html.DisplayFor(modelItem => item.bankname)"
+                                               class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Bank A/C No :</label>
+                                        <input type="text" id="accountno" name="accountno"
+                                               value=" @Html.DisplayFor(modelItem => item.accountno)"
+                                               class="form-control formInput" />
+                                    </div>
+                                    <!-- Landline No -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">IFSC Code:</label>
+                                        <input type="text" id="IFSC" value=" @Html.DisplayFor(modelItem => item.IFSC)"
+                                               name="IFSC" class="form-control formInput" />
+                                    </div>
+                                </div>
+                                <!-- secend row of second column
+                                <!-- Guardian Details -->
+                                <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                    <h4 class="text-center mb-1">Guardian Details</h4>
+                                    <!-- Address -->
+                                    <div class="mb-3">
+                                        <label for="Address" class="form-label formLabel">Guardian Name:</label>
+                                        <input type="text" id="guardianname" name="guardianname" class="form-control formInput" value="@item.guardianname" />
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Guardian's Age:</label>
+                                        <input type="text" id="gurage" name="gurage" class="form-control formInput" value="@item.gurage" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Relationship:</label>
+                                        <input type="text" class="form-control formInput" id="gurrel" name="gurrel" value="@item.gurrel" />
+
+                                    </div>
+                                    <!-- Pin Code -->
+                                    <div class="mb-3">
+                                        <h6>
+                                            <input id="chk" type="checkbox" name="chk" />&nbsp;Same As Contributor
+                                        </h6>
+                                    </div>
+                                    <!-- Landline No -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Guardian Address:</label>
+                                        <input type="hidden" value="@item.guraddr" id="guraadd" />
+                                        <textarea id="guraddr" name="guraddr" class="form-control formInput"></textarea>
+
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Upload Image:</label>
+                                        <input class="form-control formInput" id="File1" name="photo" type="file" />
+                                        <img src="@Url.Content(item.photo)" style="height:50px;width:80px;" />
+
+                                    </div>
+                                </div>
+                                <!-- Nominee Details -->
+                                <div class="p-4 rounded formtag mb-4" id="nomineeDiv" style="height: max-content;">
+                                    <h4 class="text-center mb-1">Nominee Details</h4>
+                                    <!-- Nominee name -->
+                                    <div class="mb-3">
+                                        <label for="Address" class="form-label formLabel">Nominee Name:</label>
+                                        <input type="text" id="nomineename" name="nomineename"
+                                               value=" @Html.DisplayFor(modelItem => item.nomineename)"
+                                               class="form-control formInput" />
+
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Nominee Age:</label>
+                                        <input type="text" id="nomage" name="nomage"
+                                               value=" @Html.DisplayFor(modelItem => item.nomage)" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Relationship:</label>
+                                        <input type="text" class="form-control formInput" id="nomrel" name="nomrel"
+                                               value=" @Html.DisplayFor(modelItem => item.nomrel)" />
+                                    </div>
+                                    <!-- Pin Code -->
+                                    <div class="mb-3">
+                                        <label for="PinCode" class="form-label formLabel">Nominee Address:</label>
+                                        <input type="text" id="nomaddr" name="nomaddr"
+                                               value=" @Html.DisplayFor(modelItem => item.nomaddr)" class="form-control formInput" />
+                                    </div>
+                                </div>
+                                <!-- Third row of the second column -->
+                                <!-- Plot Detail -->
+                                <div class="p-4 rounded formtag mb-4" id="plotdetail" style="height: max-content;">
+                                    <h4 class="text-center mb-1">
+                                        Plot Detail
+                                    </h4><!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Plot Description:</label>
+                                        <input type="hidden" value="@item.plotdesp" id="plotdespp" />
+                                        <textarea name="plotdesp" class="form-control formInput" style="resize: vertical;"
+                                                  id="plotdespp1"></textarea>
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3 d-flex" data-id="direction">
+
+                                        @if (item.northeast != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnortheast" id="rnortheast" checked />
+                                                <label for="rnortheast">East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northeast" class="form-control" disabled=""
+                                                       value="@item.northeast" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnortheast" id="rnortheast" />
+                                                <label for="rnortheast">East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northeast" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                        @if (item.northeast != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnortheast" id="rnortheast1" checked />
+                                                <label for="rnortheast1">North-East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northeast" class="form-control" disabled=""
+                                                       value="@item.northeast" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnortheast" id="rnortheast1" />
+                                                <label for="rnortheast1">North-East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northeast" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3 d-flex" data-id="direction">
+                                        @if (item.southeast != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsoutheast" id="rsoutheast" checked />
+                                                <label for="rsoutheast">West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southeast" class="form-control" disabled=""
+                                                       value="@item.southeast" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsoutheast" id="rsoutheast" />
+                                                <label for="rsoutheast">West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southeast" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                        @if (item.southeast != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsoutheast" id="rsoutheast1" checked />
+                                                <label for="rsoutheast1">South-East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southeast" class="form-control" disabled=""
+                                                       value="@item.southeast" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsoutheast" id="rsoutheast1" />
+                                                <label for="rsoutheast1">South-East</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southeast" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3 d-flex" data-id="direction">
+                                        @if (item.northwest != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnorthwest" id="rnorthwest" checked />
+                                                <label for="rnorthwest">North</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northwest" class="form-control" disabled=""
+                                                       value="@item.northwest" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnorthwest" id="rnorthwest" />
+                                                <label for="rnorthwest">North</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northwest" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                        @if (item.northwest != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnorthwest" id="rnorthwest1" checked />
+                                                <label for="rnorthwest1">North-West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northwest" class="form-control" disabled=""
+                                                       value="@item.northwest" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rnorthwest" id="rnorthwest1" />
+                                                <label for="rnorthwest1">North-West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="northwest" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3 d-flex" data-id="direction">
+                                        @if (item.southwest != null)
+                                        {
+
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsouthwest" id="rsouthwest" checked />
+                                                <label for="rsouthwest">South</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southwest" class="form-control" disabled=""
+                                                       value="@item.southwest" />
+                                            </div>
+                                        }
+
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsouthwest" id="rsouthwest" />
+                                                <label for="rsouthwest">South</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southwest" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                        @if (item.southwest != null)
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsouthwest" id="rsouthwest1" checked />
+                                                <label for="rsouthwest1">South-West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southwest" class="form-control" disabled=""
+                                                       value="@item.southwest" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-3">
+                                                <input type="radio" name="rsouthwest" id="rsouthwest1" />
+                                                <label for="rsouthwest1">South-West</label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="southwest" class="form-control" disabled="" value="" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <!-- Payment Details -->
+                                <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                    <h4 class="text-center mb-1">Second Applicant Form</h4>
+                                    <!-- Nominee name -->
+                                    <div class="mb-3">
+                                        <label for="Address" class="form-label formLabel">Applicant Name:</label>
+                                        <input type="text" name="sapplicantname" class="form-control formInput"
+                                               value="@item.sapplicantname" />
+                                    </div>
+                                    <!-- State -->
+                                    <div class="mb-3">
+                                        <label for="State" class="form-label formLabel">Father's/Husband's Name:</label>
+                                        <input type="text" name="sfathername" class="form-control formInput"
+                                               value="@item.sfathername" />
+
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3" id="dd" style="display: none;">
+                                        <label for="District" class="form-label formLabel">Mother's Name:</label>
+                                        <input type="text" name="smothername" class="form-control formInput"
+                                               value="@item.smothername" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Category:</label>
+                                        <select class="form-control formInput" id="scategory" name="scategory">
+                                            @if (item.scategory == "General")
+                                            {
+                                                <option value="@item.scategory" selected>@item.scategory</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.scategory == "OBC")
+                                            {
+                                                <option value="@item.scategory" selected>@item.scategory</option>
+                                                <option value="General">General</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.scategory == "SC")
+                                            {
+                                                <option value="@item.scategory" selected>@item.scategory</option>
+                                                <option value="General">General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="ST">ST</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.scategory == "ST")
+                                            {
+                                                <option value="@item.scategory" selected>@item.scategory</option>
+                                                <option value="General">General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="Other">Other</option>
+                                            }
+                                            @if (item.scategory == "Other")
+                                            {
+                                                <option value="@item.scategory" selected>@item.scategory</option>
+                                                <option value="General">General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Correspondence Address:</label>
+                                        <input type="text" name="scorraddress" class="form-control formInput"
+                                               value="@item.scorraddress" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">City:</label>
+                                        <input type="text" name="scity" class="form-control formInput" value="@item.scity" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">State:</label>
+                                        <input type="text" name="sstate" class="form-control formInput" value="@item.sstate" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Pin Code:</label>
+                                        <input type="text" name="spincode" class="form-control formInput"
+                                               value="@item.spincode" />
+                                    </div>
+                                    <!-- Landline No -->
+                                    <div class="mb-3 d-flex" id="picset">
+                                        <div class="col-md-4">
+                                            <p>Customer Pic</p>
+                                            @if (item.sphoto != null)
+                                            {
+                                                <img src="@Url.Content(item.sphoto)" style="height: 60px; width: 105px;" id="imgsphoto" alt="/Content/reg/img/u.png" />
+                                            }
+                                            else
+                                            {
+                                                <img src="/Content/reg/img/u.png" style="height: 60px; width: 105px;" id="imgsphoto" alt="/Content/reg/img/u.png" />
+                                            }
+                                            <input type="file" name="sphoto" id="sphoto" class="form-control" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p>Aadhar Pic</p>
+                                            @if (item.saadharphoto != null)
+                                            {
+                                                <img src="@Url.Content(item.saadharphoto)" id="imgsaadharphoto"
+                                                     alt="/Content/reg/img/u.png" style="height: 60px; width: 105px;" />
+                                            }
+                                            else
+                                            {
+                                                <img src="/Content/reg/img/adhar.jpg" id="imgsaadharphoto"
+                                                     alt="/Content/reg/img/adhar.jpg" style="height: 60px; width: 105px;" />
+                                            }
+                                            <input type="file" name="saadharphoto" id="saadharphoto" class="form-control" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p>Pan Pic</p>
+                                            @if (item.spanphoto != null)
+                                            {
+                                                <img src="@Url.Content(item.spanphoto)" id="imgspanphoto"
+                                                     alt="/Content/reg/img/u.png" style="height: 60px; width: 105px;" />
+                                            }
+                                            else
+                                            {
+                                                <img src="/Content/reg/img/pan.jpg" id="imgspanphoto"
+                                                     alt="/Content/reg/img/pan.jpg" style="height: 60px; width: 105px;" />
+                                            }
+                                            <input type="file" name="spanphoto" id="spanphoto" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                    <div class="text-center mt-0">
+                        <button id="submit" value="Submit" type="submit" name="command"
+                                class="btn btn-lg formButtom">
+                            Submit
+                        </button>
+                    </div>
+                }
+            </form>
+        }
+
+    </div>
+
+
+
+
+    <script type="text/javascript">
+
+    //$(document).ready(function () {
+
+    //    //debugger;
+    //    var c = $('#paymenttype'), v = c.val();
+    //    if (v != 'EMI') {
+    //        var paymentType = $('#paymenttype').val();
+    //        $("#mode option:nth-child(6)").remove();
+    //        $("#mode option").attr('disabled', '');
+    //        $("#mode").append('<option value="' + paymentType + '" selected="">' + paymentType + '</option>');
+    //        $("#nomineeDiv,#termDiv,#paymentDiv,#expirydateDiv").slideUp();
+
+
+    //        if (paymentType == 'FULL') {
+    //            $('#fullAmount').slideDown().val(0);
+    //            $('#bookingamount').slideUp().val(0);
+    //            $('#bookingamountDiv label.width').text('Full Amount(Rs.)');
+    //        } else {
+    //            $('#bookingamount').slideDown().val(0);
+    //            $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+    //            $('#fullAmount').slideUp().val(0);
+    //        }
+    //        $('#term').removeAttr('required');
+    //        $('#expirydate').val($('#formdate').val());
+    //    } else {
+    //        $("#nomineeDiv,#termDiv,#paymentDiv,#expirydateDiv").slideDown();
+    //        $("#mode option").removeAttr('disabled');
+    //        $("#mode option:nth-child(6)").remove();
+    //        $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+    //        $('#fullAmount').slideUp().val(0);
+    //        $('#bookingamount').slideDown().val(0);
+    //        $('#term').attr('required', '');
+    //        $('#expirydate').val('');
+    //    }
+
+
+    //});
+
+
+
+
+
+    $(function () {
+        //(function () {
+        //    //phase
+        //    for (var i = 1; i <= 10; i++) {
+        //        $('#phase').append('<option value="Phase ' + i + '">Phase ' + i + '</option>');
+        //    }
+        //    //plot size
+        //    /*for (var i = 50; i <= 1000; i += 50) {
+        //        $('#nolandunit').append('<option value="' + i + '">' + i + '</option>');
+        //    }*/
+        //})();
+
+        //$('#lsecondform').click(function () {
+        //    if ($(this).is(':checked')) {
+        //        $('#secondform').slideDown();
+        //    } else {
+        //        if (confirm('Are you sure you want to clear second applicant form..')) {
+        //            //$('#secondform input[type="text"],#secondform select,#secondform input[type="file"]').val('');
+        //            $('#secondform input[type="radio"]').prop('checked', false);
+        //            $('#picset img').each(function () {
+        //                $(this).attr('src', $(this).attr('alt'));
+        //            });
+        //            $('#secondform').slideUp();
+        //        } else {
+        //            return false;
+        //        }
+        //    }
+        //});
+
+        $('#picset input[type="file"]').change(function () {
+            var input = $(this)[0], im = $('#img' + input.id);
+
+            if (input.files && input.files[0]) {
+                if (input.files[0].size <= 972800) {
+                    $('#sb').removeAttr('disabled');
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        im
+                        .attr('src', e.target.result)
+                            .animate({ height: 100 });
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    im.attr('src', im.attr('alt')).height(90);
+                    $(input).val('');
+                    $('#sb').attr('disabled', '');
+                    alert('Please select file less than or equal to 950KB');
+                }
+            } else {
+                im.attr('src', im.attr('alt')).animate({ height: 90 });
+            }
+        });
+
+        $('[id$="date"]:not([readonly])').datepicker();
+
+        $('[class$="date1"]:not([readonly])').datepicker();
+
+        $('[data-id="direction"] input[type="radio"]').click(function () {
+            debugger;
+            var c = $(this), id = c.attr('id'), tid = '[name="' + id.replace('r', '').replace('1', '') + '"]';
+            if (c.is(':checked')) {
+                if (id.indexOf('1') > -1) {
+                    $($(tid)[1]).removeAttr('disabled');
+                    $($(tid)[0]).attr('disabled', '').val('');
+                } else {
+                    $($(tid)[0]).removeAttr('disabled');
+                    $($(tid)[1]).attr('disabled', '').val('');
+                }
+            } else {
+                if (id.indexOf('1') > -1) {
+                    $($(tid)[0]).removeAttr('disabled');
+                    $($(tid)[1]).attr('disabled', '').val('');
+                } else {
+                    $($(tid)[1]).removeAttr('disabled');
+                    $($(tid)[0]).attr('disabled', '').val('');
+                }
+            }
+
+        });
+        //form submission
+        $('#_submit').submit(function (event) {
+            //debugger;
+            $("#totalcon").removeAttr('disabled').attr('readonly', '');
+            $('[name="plccost"]').change();
+            $('#loading').modal('show');
+            $('[data-id="direction"] label[for]').each(function () {
+                var c = $(this), f = c.attr('for'), s = '[name="' + f.replace('r', '').replace('1', '') + '"]';
+
+                if (f.indexOf('1') > -1) {
+                    var t = $($(s)[1]), v = t.val();
+                    t.val(c.text() + '              ' + v);
+                } else {
+                    var t = $($(s)[0]), v = t.val();
+                    t.val(c.text() + '              ' + v);
+                }
+
+            });
+            var ptype = $('#paymenttype').val();
+            if (ptype == 'FULL') {
+                $('#_submit').append('<input type="hidden" id="bookingamountd" name="bookingamount" value="' + $('#totalcon').val() + '" />');
+            } else {
+                $('#bookingamountd').remove();
+            }
+        });
+        ////corner cost
+        //$('#plccost').on('click', function () {
+        //    var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val(), discountper1 = $('#discountper1').val();
+        //    fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+        //    var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+        //    $('#totalcon').val(tv1);
+        //});
+
+
+        $('#propertypreference').on('click', function () {
+            debugger;
+            var m = $('#propertypreference').val();
+            if (m != 'Normal') {
+                $('#plccost').removeAttr('readonly');
+            } else {
+                $('#plccost').val(0).attr('readonly', '');
+            }
+            selecttotolplot();
+        });
+
+        //plot cost
+        $('#nolandunit').on('click',
+            function selectexpiry() {
+                debugger;
+                var term = $("#term").val();
+                var formdate = $("#formdate").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                var plccost = $("#plccost").val();
+                var Devcharge = $("#Devcharge").val();
+                var discountper = $("#discountper").val();
+
+
+                if (term == '') { term = 0; }
+                if (plotsize != '') {
+                    var url = '@Url.Action("selectexpiry", "Branch")';
+                    $.get(url, { projectid: projectid, plotsize: plotsize, term: term, plccost: plccost, Devcharge: Devcharge, discountper: discountper, formdate: formdate }, function data(t) {
+                        debugger;
+                        for (var i = 0; i < t.length; i++) {
+
+                            $("#totalcon").val(t[i].totalcon);
+                            $("#fullAmount").val(t[i].totalcon);
+                            $("#maturityamt").val(t[i].maturityamount);
+
+                            var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                            var day = ('0' + date.getDate()).slice(-2);
+                            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                            var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                            $('#expirydate').val(parsedDate);
+
+                        }
+
+                    });
+
+                }
+            });
+
+        //set paymenttype
+        $('#paymenttype').on('click change', function () {
+            debugger;
+            var c = $(this), v = c.val();
+            if (v != 'EMI') {
+                var paymentType = $('#paymenttype').val();
+                $("#mode option:nth-child(6)").remove();
+                $("#mode option").attr('disabled', '');
+                $("#mode").append('<option value="' + paymentType + '" selected="">' + paymentType + '</option>');
+                $("#nomineeDiv,#termDiv,#paymentDiv,#expirydateDiv").slideUp();
+
+
+                if (paymentType == 'FULL') {
+                    $('#fullAmount').slideDown().val(0);
+                    $('#bookingamount').slideUp().val(0);
+                    $('#bookingamountDiv label.width').text('Full Amount(Rs.)');
+                } else {
+                    $('#bookingamount').slideDown().val(0);
+                    $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+                    $('#fullAmount').slideUp().val(0);
+                }
+                $('#term').removeAttr('required');
+                $('#expirydate').val($('#formdate').val());
+            } else {
+                $("#nomineeDiv,#termDiv,#paymentDiv,#expirydateDiv").slideDown();
+                $("#mode option").removeAttr('disabled');
+                $("#mode option:nth-child(6)").remove();
+                $('#bookingamountDiv label.width').text('Booking Amount(Rs.)');
+                $('#fullAmount').slideUp().val(0);
+                $('#bookingamount').slideDown().val(0);
+                $('#term').attr('required', '');
+                $('#expirydate').val('');
+            }
+        });
+        function gs(name) { return '[name="' + name + '"]'; }
+        //second applicant form address event
+        $('#sameasabove').click(function () {
+            var sa = $('#sameasabove');
+            if (sa.is(':checked')) {
+                $(gs('spermanentaddress')).val($(gs('scorraddress')).val());
+                $(gs('pcity')).val($(gs('scity')).val());
+                $(gs('pstate')).val($(gs('sstate')).val());
+                $(gs('ppincode')).val($(gs('spincode')).val());
+            } else {
+                $(gs('spermanentaddress')).val('');
+                $(gs('pcity')).val('');
+                $(gs('pstate')).val('');
+                $(gs('ppincode')).val('');
+            }
+
+        });
+    });
+
+
+    function amountvalue()
+    {
+
+            var ptype = $('#paymenttype').val();
+            debugger;
+            if (ptype == 'EMI') {
+
+                var mode = $("#mode").val();
+                var term = $("#term").val();
+                var bookingamount = $("#bookingamount").val();
+                var discountper = $("#discountper").val();
+                var projectid = $("#PlanName").val();
+                var plotsize = $("#nolandunit").val();
+                var plccost = $("#plccost").val();
+                var Devcharge = $("#Devcharge").val();
+
+                var url = '@Url.Action("selectpayment", "Admin")';
+                $.get(url, { term: term, bookingamount: bookingamount, discountper: discountper, projectid: projectid, plotsize: plotsize, mode: mode, plccost: plccost, Devcharge: Devcharge }, function data(t) {
+                    for (var i = 0; i < t.length; i++) {
+
+                        $("#totalcon").val(t[i].totalcon);
+                        $("#maturityamt").val(t[i].maturityamount);
+                        $("#payment").val(t[i].payment);
+                        $("#amountinword").val(t[i].amountinwords);
+                    }
+                });
+            } else {
+                //var fv1 = $('#fullAmount').val(), plc1 = $('#plccost').val(), discountper1 = $('#discountper').val();
+                //fv1 = parseFloat(fv1); discountper1 = parseFloat(discountper1); plc1 = parseFloat(plc1);
+                //var tv1 = fv1 - (fv1 * (discountper1 / 100)) + (fv1 * (plc1 / 100));
+                //$('#totalcon').val(tv1);
+                var v1 = '';
+                if (ptype == 'FULL') { v1 = $("#totalcon").val(); } else { v1 = $("#bookingamount").val(); }
+                //amount in word
+
+
+                if (v1 > 0) {
+                    var url = '@Url.Action("SetAmountinword", "Branch")';
+                    $.get(url, { payment: v1 }, function data(t) {
+                        for (var i = 0; i < t.length; i++) {
+                            $("#amountinword").val(t[i].amountword);
+                        }
+                    });
+
+                }
+            }
+
+
+    }
+
+    </script>
+

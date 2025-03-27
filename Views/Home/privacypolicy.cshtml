@@ -1,0 +1,138 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "privacypolicy";
+    UsersContext db = new UsersContext();
+    var comp = db.commission_tabs.Where(x => x.Id == 1).ToList();
+    var countachive = db.Acheviers.Where(x => x.status == 1).Count();
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<!--======= BANNER =========-->
+<section class="page-title" style="background-image: url(/assets/images/background/bg-page-title.jpg);">
+    <div class="auto-container">
+        <div class="row clearfix">
+            <!--Title -->
+            <div class="title-column col-md-7 col-sm-6 col-xs-12">
+                <h1>Privacy policy</h1>
+            </div>
+            <!--Bread Crumb -->
+            <div class="breadcrumb-column col-md-5 col-sm-6 col-xs-12">
+                <ul class="bread-crumb clearfix">
+                    <li><a href="../Home/Index">Home</a></li>
+                    <li class="active">Privacy policy</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<br />
+<!--======= CONTACT =========-->
+<section class="contact">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-10 col-md-push-1" style="">
+                <div id="section-one" class="mb-50">
+                    <hr>
+                    <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">This disclaimer will be applicable to the website. By using or accessing the website www.odhgroups.com you agree with the disclaimer without any qualification or limitation. The company reserves the right to add, alter or delete material from the website at any time and may, at any time, revise these terms without notifying you. You are bound by any such amendments and the company therefore advise that you periodically visit this page to review the current terms. </p>
+                </div>
+
+                <div id="section1" class="mb-50">
+                    <hr>
+                    <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">The websites and all its content are provided with all faults on an "as is" and "as available" basis. No information given under this website creates a warranty or expand the scope of any warranty that cannot be disclaimed under applicable law. Your use of the website is solely at your own risk. This website is for guidance only. It does not constitute part of an offer or contract. Design & specifications are subject to change without prior notice. Computer generated images are the artist's impression and are an indicative of the actual designs. </p>
+                </div>
+                <div id="section2" class="mb-50">
+                    <hr>
+                    <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                        This is not an offer, an invitation to offer and/or commitment of any nature. The images includes artistic impressions and stock images. The Designs, dimensions, cost, facilities, plans, images, specifications, furniture, accessories, paintings, items, electronic goods, additional fittings/fixtures, decorative items, false ceiling including finishing materials, specifications, shades, sizes and colour of the tiles and other details shown in the images are only indicative in nature and are only for the purpose of illustrating/indicating a possible layout and do not form part of the standard specifications/amenities/services to be provided in the unit . Recipients are advised to use their discretion in relying on the information/amenities described/shown therein. All specifications of the unit shall be as per the final agreement between the Parties.
+ 
+                    </p>
+                    <div id="sectio" class="mb-50">
+                        <hr>
+                        <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                            The particulars contained on the mentions details of the projects/developments undertaken by the company including depicting banners/posters of the project.  You are therefore required to verify all the details, including area, amenities, services, terms of sales and payments and other relevant terms independently with the sales team/ company prior to concluding any decision for buying any unit(s) in any of the said projects. Till such time the details are fully updated, the said information will not be construed as an advertisement. To find out more about a project / development, please telephone our sales centre or visit our sales office during opening hours and speak to our sales representative.
+                        </p>
+                    </div>
+                    <div id="section3" class="mb-50">
+                        <hr>
+                        <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                            In no event will the company be liable for claim made by the users including seeking any cancellation for any of the inaccuracies in the information provided in this Website, though all efforts have to be made to ensure accuracy. The company under no circumstance will be liable for any expense, loss or damage including, without limitation, indirect or consequential loss or damage, or any expense, loss or damage whatsoever arising from use, or loss of use, of data, arising out of or in connection with the use of this website.
+                        </p>
+                    </div>
+                    <div id="section-two" class="mb-50">
+                        <h3 style="color: black;">Use of Personal Information</h3>
+                        <hr>
+                        <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                            The Company saves personal information of the User viz. IP Address, Browser cookies and activity on the website. The User is required to fill up registration or contact forms, email id, contact no, password, address and some other personal information. The optional and required fields in every form are indicated.
+                        <br />
+                            (i)&nbsp;&nbsp;The Company takes the privacy of our Users very seriously.
+                        <br />
+                            (ii)&nbsp;&nbsp;The Company uses the information provided by the User on the Website to provide its services.
+                        <br />
+                            (iii)&nbsp;&nbsp;The Company will have a right to use this information for its business purposes by itself or with its business associates.
+                        <br />
+                            (iv)&nbsp;&nbsp;The Company will have a right to use the information to provide personalised advertisements and offers, or to include that information in compilations developed by the Company or to develop derivative works based on that information.
+                      <br />
+                            (v)&nbsp;&nbsp;The Company may use personal information about the User to improve its marketing and promotional efforts, to analyze site usage, improve the Site's content and product offerings and for its business purposes.
+                    <br />
+                            (vi)&nbsp;&nbsp;The Company may be required from time to time to disclose Users' personal information to Governmental or law enforcing agencies or our regulators.
+                    <br />
+                            (vii)&nbsp;&nbsp;The Company may also disclose personal information to enforce their policies, respond to claims that a posting or other content violates other's rights, or protects anyone's rights, property or safety.
+                        
+                        
+                        </p>
+
+                    </div>
+                    <div id="section-three" class="mb-50">
+                        <h3 style="color: black;">Security Information </h3>
+                        <hr>
+                        <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                            The information that the User provides is stored in a secure database on the server, the access to which is password protected. The Company takes reasonable and standard measures to protect the data against unauthorized access. However, the Company does not guarantee the personal data including without limitation details relating to debit card/ credit card transmitted over the Internet may be susceptible to misuse, hacking, theft and/ or fraud and Company have no control over such matters. 
+                         
+                                           <br />
+                            (i)&nbsp;&nbsp;The User hereby acknowledges that the Company is not responsible for any intercepted information sent via the internet, and the User hereby releases the Company from any and all claims arising out of or related to the use of intercepted information in any unauthorized manner.
+                        <br />
+                            (ii)&nbsp;&nbsp;The Company will not be responsible for any loss of data / information resulting due to unauthorized access to Company's Website servers.
+                       
+                        </p>
+
+                    </div>
+                    <div id="section-five" class="mb-50">
+                        <h3 style="color: black;">Links to Third Party Sites</h3>
+                        <hr>
+                        <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                            The Website may contain links to other sites whose information practices may be different than the Company's. The User should consult the other sites' privacy notices as the Company has no control over information that is submitted to, or collected by, these third parties.
+                                    
+                        </p>
+                    </div>
+                     <div id="section-six" class="mb-50">
+                        <h3 style="color: black;">Third Party Advertisements</h3>
+                        <hr>
+                        <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                            The User may encounter third party ads on the web portal of the Company These ads may read cookies and other information from the browser of the User, which will only be accessed by the third party advertiser and the Company does not have any access to this information.
+                            The use of the information by the third party advertiser is subject matter of its own privacy policy and the Company would not be responsible for any such privacy issue.
+      
+                        </p>
+                    </div>
+                      <div id="section-seven" class="mb-50">
+                        <h3 style="color: black;">Information Posted On the Website </h3>
+                        <hr>
+                        <p class="mb-20" style="text-align: justify; font-size: 17px; font-family: Cambria; color: black;">
+                            The User shall not submit, upload or post to the Company's forums any content which 
+                           <br /> (1). Libels, defames, invades privacy of any person, or is obscene, pornographic, abusive, or threatening; 
+                            <br />(2). Infringes any intellectual property or other right of any person or entity, including but not limited to, violating anyone's copyrights or trademarks; 
+                          <br />(3). Falsifies or deletes author attributions, legal notices or other proprietary designations; 
+                            <br />(4). Violates any law; 
+                            <br />(5). Advocates illegal activity; 
+                            <br />(6). Contains viruses, corrupted files, or other materials that may cause damage to another's computer. By posting any content on our forums, the User automatically agree to indemnify the Company from and against any and all third party claims, demands, liabilities, costs or expenses, including reasonable attorneys' fees, resulting from your breach of these posting restrictions.
+                        <br />(i)By posting any content in the Website, the User automatically grants to the Company a perpetual, royalty-free, irrevocable and unrestricted worldwide right and license to use, reproduce, modify, adapt, publish, translate, create derivative works from and distribute the posted content or incorporate the posted content into any form, medium, or technology now known or later developed for any purpose, including advertising and promotion, and the User automatically waives all "moral rights" with respect to the posted content.
+                            <br />(ii) The user/customer(s) acknowledge, agree and undertake to not hold the Company or any of its affiliates liable/responsible for any information.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+<br />

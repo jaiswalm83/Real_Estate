@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "About";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<section class="page-title" style="background-image:url(/assets/images/background/bg-page-title.jpg);">
+    	<div class="auto-container">
+        	<div class="row clearfix">
+            	<!--Title -->
+            	<div class="title-column col-md-7 col-sm-6 col-xs-12">
+                	<h1>Mission and Vision</h1>
+                </div>
+                <!--Bread Crumb -->
+                <div class="breadcrumb-column col-md-5 col-sm-6 col-xs-12">
+                    <ul class="bread-crumb clearfix">
+                        <li><a href="../Home/Index">Home</a></li>
+                        <li class="active">Mission and Vision</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    <!--Property Info Section-->
+    <section class="gallery-section bg-lightgrey">
+    <div class="auto-container">
+
+        <!--Section Title-->
+        <div class="sec-title text-center">
+            <h2><strong>Who We Are</strong></h2>
+            <div class="subtitle-text" style="color:black;">ODH Developers Private Limited is a Big Company in the field of Real estate. It works on Kanpur Currently and provides residencial plots at better price options.</div>
+            
+        </div>
+
+        <!--Sortable Masonry-->
+        <div class="sortable-masonry mixed-gallery-section">
+
+            <!--Filter-->
+            <div class="filters text-center">
+                <ul class="filter-tabs filter-btns clearfix">
+                    <li class="active filter aboutfirst" data-role="button" data-filter=".all" id=""> <span class="txt">What We Do</span></li>
+                    <li class="filter" data-role="button" data-filter=".bedroom" id="bedroom"><span class="txt">Our Mission</span></li>
+                    <li class="filter" data-role="button" data-filter=".livingroom" id="living"><span class="txt">Our Vision</span></li>
+
+                </ul>
+            </div>
+            <div class="items-container clearfix">
+                <!--Default Portfolio Item-->
+                <div class="col-md-12 all" style="color:black;">
+                    <div class="sec-title text-center">
+                        <div class="subtitle-text"><h2><strong>What We Do</strong></h2></div>
+                    </div>
+                    ODH Developers Private Limited is offered you to provide residencial and commercial plot across Kanpur and Uttar Pradesh. We offering plots for a huge investment and can get benifits upto double in few years. Our sites are ready now you can call us and get your plot after paid booking ammount you can booked your plot.
+                </div>
+            </div>
+            <div class="items-container clearfix" style="color:black;">
+                <!--Default Portfolio Item-->
+                <div class="col-md-12 bedroom">
+                   <div class="sec-title text-center">
+                            <div class="subtitle-text"><h2><strong>Our Mission</strong></h2></div>
+                    </div>
+                    Commitment towards Quality, Integrity and Value Creation for all stakeholders / customers.Implement Best Business Practices that goes beyond customer expectations.Deliver high quality Residential and Commercial projects that correlate with Global Developers.Establish new benchmarks for the industry by besting existing standards.To ensure continuous delight for our customers and stakeholders by always staying a step ahead of the curve.Lead the real estate industry with high caliber, efficient manpower and cutting edge technology.
+                </div>
+            </div>
+            <div class="items-container clearfix" style="color:black;">
+                <!--Default Portfolio Item-->
+                <div class="col-md-12 livingroom">
+                      <div class="sec-title text-center">
+                         <div class="subtitle-text"><h2><strong>Our Vision</strong></h2></div>
+                    </div>
+                  Create a progressive organization that can boast of International Standards in Integrity, Ethics, Corporate Social Responsibility and Business Transparency.Create a culture of professionalism, core competence, teamwork, leadership and service excellence.To conceive and deliver quality that conforms to the best practices of Eco – Friendly development.Leverage modern cost effective techniques resulting in quality, durability, wealth creation and value multiplication.
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--End Sortable Masonry-->
+</section>
+<script>
+    $(document).ready(function () {        
+        setTimeout(function () { debugger; $(".aboutfirst").click(); }, 900);     
+        //onload();
+    });
+
+    //function onload() {
+    //    debugger;
+    //    $(".bedroom .livingroom").hide(1000);
+    //}
+</script>

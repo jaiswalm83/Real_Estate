@@ -1,0 +1,255 @@
+﻿
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.AgentDetails.Single(b => b.NewAgentId == User.Identity.Name);
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+    ViewBag.Title = "Index";
+
+    DateTime today1 = DateTime.Now.Date;
+    DateTime yesterday1 = DateTime.Now.AddDays(-1).Date;
+    int month1 = DateTime.Now.Month;
+    int year1 = DateTime.Now.Year;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var plan1 = db.Plans.Single(c => c.Plancode == 1);
+    var plan2 = db.Plans.Single(c => c.Plancode == 2);
+    var plan3 = db.Plans.Single(c => c.Plancode == 3);
+    var plan4 = db.Plans.Single(c => c.Plancode == 4);
+    DateTime PreviousFiveDay = DateTime.Now.AddDays(-5).Date;
+
+                List<AgentCollection> aclist = new List<AgentCollection>();
+                var co = (from dv in db.appltabs where dv.newintroducerid == User.Identity.Name select dv).ToList();
+                foreach (var item in co)
+                {
+                    var todayfdcoll1 = (from df in db.Installmenttabs where df.paymentdate == today1 && df.mode == "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var todayRdcoll1 = (from df in db.Installmenttabs where df.paymentdate == today1 && df.mode != "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var todayNewBondcoll1 = todayfdcoll1 + todayRdcoll1;
+                    var todayRenewalBondcoll1 = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var todayVouchercoll1 = (from df in db.Voucher_Reports where df.date == today1 && df.agentid == item.bondid select df.netamount).DefaultIfEmpty(0).Sum();
+                    var todaycoll1 = todayfdcoll1 + todayRdcoll1 + todayRenewalBondcoll1 - todayVouchercoll1;
+
+                    var PrevFivedayfdcoll1 = (from df in db.Installmenttabs where df.paymentdate == PreviousFiveDay && df.mode == "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var PrevFivedayRdcoll1 = (from df in db.Installmenttabs where df.paymentdate == PreviousFiveDay && df.mode != "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var PrevFivedayNewBondcoll1 = PrevFivedayfdcoll1 + PrevFivedayRdcoll1;
+                    var PrevFivedayRenewalBondcoll1 = (from df in db.Installmenttabs where df.paymentdate == PreviousFiveDay && df.installmentno != 1 && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var PrevFivedayVouchercoll1 = (from df in db.Voucher_Reports where df.date == PreviousFiveDay && df.agentid == item.bondid select df.netamount).DefaultIfEmpty(0).Sum();
+                    var PrevFivedaycoll1 = PrevFivedayfdcoll1 + PrevFivedayRdcoll1 + PrevFivedayRenewalBondcoll1 - PrevFivedayVouchercoll1;
+
+                   // var AfterFivefdcoll1 = (from df in db.Installmenttabs where df.paymentdate == AfterFiveDay && df.paymentdate.Value.Year == year1 && df.mode == "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                  //  var AfterFiverdcoll1 = (from df in db.Installmenttabs where df.paymentdate == AfterFiveDay && df.paymentdate.Value.Year == year1 && df.mode != "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                   // var AfterFivenewbondcoll1 = AfterFivefdcoll1 + AfterFiverdcoll1;
+                   // var AfterFiverenewalbondcoll1 = (from df in db.Installmenttabs where df.paymentdate == AfterFiveDay && df.paymentdate.Value.Year == year1 && df.installmentno != 1 && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                   // var AfterFiveVouchercll1 = (from df in db.Voucher_Reports where df.date == AfterFiveDay && df.date.Year == year1 && df.agentid == item.bondid select df.netamount).DefaultIfEmpty(0).Sum();
+                  //  var AfterFivecoll1 = AfterFivefdcoll1 + AfterFiverdcoll1 + AfterFiverenewalbondcoll1 - AfterFiveVouchercll1;
+
+                    var totalfdcoll1 = (from df in db.Installmenttabs where df.mode == "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var totalRdcoll1 = (from df in db.Installmenttabs where df.mode != "Single" && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var totalNewBondcoll1 = totalfdcoll1 + totalRdcoll1;
+                    var totalRenewalBondcoll1 = (from df in db.Installmenttabs where df.installmentno != 1 && df.bondid == item.bondid select df.payamount).DefaultIfEmpty(0).Sum();
+                    var totalVouchercoll1 = (from df in db.Voucher_Reports where df.agentid == item.bondid select df.netamount).DefaultIfEmpty(0).Sum();
+                    var totalcoll1 = totalfdcoll1 + totalRdcoll1 + totalRenewalBondcoll1 - totalVouchercoll1;
+
+                    aclist.Add(new AgentCollection
+                    {
+                        todayfdcoll1 = todayfdcoll1,
+                        todayRdcoll1 = todayRdcoll1,
+                        todayNewBondcoll1 = todayNewBondcoll1,
+                        todayRenewalBondcoll1 = todayRenewalBondcoll1,
+                        todayVouchercoll1 = todayVouchercoll1,
+                        todaycoll1 = todaycoll1,
+                        PrevFivedayfdcoll1 = PrevFivedayfdcoll1,
+                        PrevFivedayRdcoll1 = PrevFivedayRdcoll1,
+                        PrevFivedayNewBondcoll1 = PrevFivedayNewBondcoll1,
+                        PrevFivedayRenewalBondcoll1 = PrevFivedayRenewalBondcoll1,
+                        PrevFivedayVouchercoll1 = PrevFivedayVouchercoll1,
+                        PrevFivedaycoll1 = PrevFivedaycoll1,
+                       // AfterFivefdcoll1 = AfterFivefdcoll1,
+                       // AfterFiverdcoll1 = AfterFiverdcoll1,
+                       // AfterFivenewbondcoll1 = AfterFivenewbondcoll1,
+                       // AfterFiverenewalbondcoll1 = AfterFiverenewalbondcoll1,
+                      //  AfterFiveVouchercll1 = AfterFiveVouchercll1,
+                      //  AfterFivecoll1 = AfterFivecoll1,
+                        totalfdcoll1 = totalfdcoll1,
+                        totalRdcoll1 = totalRdcoll1,
+                        totalNewBondcoll1 = totalNewBondcoll1,
+                        totalRenewalBondcoll1 = totalRenewalBondcoll1,
+                        totalVouchercoll1 = totalVouchercoll1,
+                        totalcoll1 = totalcoll1
+                    });
+                    
+                }
+
+                var PrevFivedayfdcoll11 = aclist.Sum(r => r.PrevFivedayfdcoll1);
+                var PrevFivedayRdcoll11 = aclist.Sum(r => r.PrevFivedayfdcoll1);
+                var PrevFivedayNewBondcoll11 = aclist.Sum(r => r.PrevFivedayNewBondcoll1);
+                var PrevFivedayRenewalBondcoll11 = aclist.Sum(r => r.PrevFivedayRenewalBondcoll1);
+                var PrevFivedayVouchercoll11 = aclist.Sum(r => r.PrevFivedayVouchercoll1);
+                var PrevFivedaycoll11 = aclist.Sum(r => r.PrevFivedaycoll1);
+                var todayfdcoll11 = aclist.Sum(r => r.todayfdcoll1);
+                var todayRdcoll11 = aclist.Sum(r => r.todayRdcoll1);
+                var todayNewBondcoll11 = aclist.Sum(r => r.todayNewBondcoll1);
+                var todayRenewalBondcoll11 = aclist.Sum(r => r.todayRenewalBondcoll1);
+                var todayVouchercoll11 = aclist.Sum(r => r.todayVouchercoll1);
+                var todaycoll11 = aclist.Sum(r => r.todaycoll1);
+                var AfterFivefdcoll11 = aclist.Sum(r => r.AfterFivefdcoll1);
+                var AfterFiverdcoll11 = aclist.Sum(r => r.AfterFiverdcoll1);
+                var AfterFivenewbondcoll11 = aclist.Sum(r => r.AfterFivenewbondcoll1);
+                var AfterFiverenewalbondcoll11 = aclist.Sum(r => r.AfterFiveVouchercll1);
+                var AfterFiveVouchercll11 = aclist.Sum(r => r.PrevFivedayfdcoll1);
+                var AfterFivecoll11 = aclist.Sum(r => r.AfterFivecoll1);
+                var totalfdcoll11 = aclist.Sum(r => r.totalfdcoll1);
+                var todayrdcoll11 = aclist.Sum(r => r.todayRdcoll1);
+                var totalNewBondcoll11 = aclist.Sum(r => r.totalNewBondcoll1);
+                var totalRenewalBondcoll11 = aclist.Sum(r => r.totalRenewalBondcoll1);
+                var totalVouchercoll11 = aclist.Sum(r => r.totalVouchercoll1);
+                var totalcoll11 = aclist.Sum(r => r.totalcoll1);
+
+  
+                }
+
+
+   
+    <div class="page-content">
+
+                <div class="container">
+                   <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Welcome @br.name</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                            
+                        </div>  
+                              
+                        
+                    </div>
+
+    <div class="widget stacked" >
+					
+				<div class="widget-header" >
+					<i class="icon-home"></i>
+					<h3><b>Home</b></h3>
+				</div> <!-- /widget-header -->
+			
+				<div class="widget-content">
+					
+					<div class="shortcuts">
+                       <div class="widget-header" >
+					
+					<h3><b>Total Collection(@User.Identity.Name)</b></h3>
+				</div>
+                            	
+                        <a href="#" class="shortcut" style="width:210px; padding:0px; margin:0px; text-align:left;">
+							    	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>Type</b></h3>
+				</div>
+                          
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>@plan1.shortcutname </b></h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>@plan2.shortcutname </b></h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>New @mr.custname </b></h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>Renewal </b></h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>Voucher Payment</b></h3>
+				</div> 
+						  	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>Total </b></h3>
+				</div> 	
+						</a>
+						<a href="#" class="shortcut" style="width:115px; padding:0px; margin:0px; ">
+							   	<div class="widget-header" >
+					<h3 style="margin-left:10px;"><b>Before Five Day</b></h3>
+				</div> 
+                           
+                                	<div class="widget-header" >
+					<h3>@PrevFivedayfdcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@PrevFivedayRdcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@PrevFivedayNewBondcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@PrevFivedayRenewalBondcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@PrevFivedayVouchercoll11 </h3>
+				</div> 
+						 	<div class="widget-header" >
+					<h3 style="margin-left:10px;">@PrevFivedaycoll11   </h3>
+				</div> 	
+						</a>
+						 <a href="#" class="shortcut" style="width:115px; padding:0px; margin:0px;">
+							  	<div class="widget-header" >
+					<h3><b> Today's </b> </h3>
+				</div> 
+                            
+                                	<div class="widget-header" >
+					<h3>@todayfdcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@todayRdcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@todayNewBondcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@todayRenewalBondcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@todayVouchercoll11 </h3>
+				</div> 
+                             	<div class="widget-header" >
+					<h3> @todaycoll11   </h3>
+				</div> 
+							
+						</a>
+
+					
+						
+						
+							
+                        
+                        <a href="#" class="shortcut" style="width:115px;padding:0px; margin:0px;">
+								<div class="widget-header" >
+					<h3><b> Total </b></h3>
+				</div>
+                            
+                                	<div class="widget-header" >
+					<h3>@totalfdcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@totalfdcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@totalNewBondcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@totalRenewalBondcoll11 </h3>
+				</div> 
+                                	<div class="widget-header" >
+					<h3>@totalVouchercoll11 </h3>
+				</div> 
+						<div class="widget-header" >
+					<h3> @totalcoll11  </h3>
+				</div> 	
+						</a>	
+					</div> <!-- /shortcuts -->	
+				
+				</div> <!-- /widget-content -->
+       
+			</div>
+
+
+                     </div>
+      
+      
+

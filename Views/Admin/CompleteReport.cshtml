@@ -1,0 +1,630 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var logo = string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    var mr = db.Members.Single(m => m.Id == 1);
+    var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+
+    logo = r.CompanyLogo;
+    companyname = r.CompanyName;
+    incometype = r.IncomeType;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "CompleteReport";
+}
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+<style>
+    .row {
+        padding-top: 30px;
+    }
+</style>
+
+<!-- Main Container -->
+<div class="container mt-5">
+    <!-- Section 1: Final Report -->
+    <div class="section">
+       
+
+        <div class="w-100 card-heading">
+            <h3 class="text-center text-white pt-2 pb-2">Field Report</h3>
+        </div>
+
+        <div class="row g-3">
+            <!-- Repeat 15 cards here (similar to the previous setup) -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/AllBroker" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/person.png" />
+                        <h6 class="card-title mt-3">@mr.agentname List</h6>
+                    </div>
+                </a>
+            </div>
+            <!-- Repeat the above code for other cards as needed -->
+            <!-- Repeat the above code for other cards as needed -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DatewiseBroker" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/calendar (1).png" />
+
+                        <h6 class="card-title mt-3">Datewise @mr.agentname List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerChain" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/network.png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Chain</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerPaymentDetail" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/Complet_logo/payment-method (1).png" />
+                        <h6 class="card-title mt-3">@mr.agentname Payment Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerAccount" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/cooperation.png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Business Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerwiseAccountDetail" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/user.png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Account Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerSelfCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/accounting.png" />
+
+                        <h6 class="card-title mt-3">Datewise @mr.agentname Account Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerSelfCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/self-collect.png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Self Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerChainCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/data-collection.png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Chain Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerSelfDueCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/data-collection (1).png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Self Due Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BrokerChainDueCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/data-collection (2).png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Chain Due Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/Voucher" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/subscription.png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Monthly Payment</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/PromotionList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/promotion.png" />
+
+                        <h6 class="card-title mt-3">@mr.agentname Promotion Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BDCReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/bill.png" />
+
+                        <h6 class="card-title mt-3">TDS Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DWDueCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/due-date.png" />
+
+                        <h6 class="card-title mt-3">Bondwise Due Collection</h6>
+                    </div>
+                </a>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Section 2: Official Report -->
+    <div class="section">
+       
+        <div class="w-100 card-heading">
+            <h3 class="text-center text-white pt-2 pb-2">Official Report</h3>
+        </div>
+        <div class="row g-3">
+            <!-- Repeat 45 cards here (similar to the previous setup) -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BranchlLoginDetail" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/login (1).png" />
+
+                        <h6 class="card-title mt-3">@mr.branchname Login Details</h6>
+                    </div>
+                </a>
+            </div>
+            <!-- Repeat the above code for other cards as needed -->
+            <!-- Repeat the above code for other cards as needed -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/OperatorLoginDetails" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/login (2).png" />
+
+                        <h6 class="card-title mt-3">Collection Point Login Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/HRLoginDetails" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/permission.png" />
+
+                        <h6 class="card-title mt-3">Hr Login Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BranchList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/list-items.png" />
+
+                        <h6 class="card-title mt-3">@mr.branchname List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/OperatorList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/map.png" />
+
+                        <h6 class="card-title mt-3">Collection Point List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/HRList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/skills.png" />
+
+                        <h6 class="card-title mt-3">Hr List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/AllCustomer" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/contact-list.png" />
+
+                        <h6 class="card-title mt-3">@mr.custname List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DatewiseCustomer" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/shortlist.png" />
+
+                        <h6 class="card-title mt-3">Datewise @mr.custname List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/FilterCustomer" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/acquisition.png" />
+
+                        <h6 class="card-title mt-3">Filter @mr.custname</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/AssignPlotCustomer" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/graph.png" />
+
+                        <h6 class="card-title mt-3">Assign Plot @mr.custname List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DatewiseCustomerLedger" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/ledger.png" />
+
+                        <h6 class="card-title mt-3">Datewise @mr.custname Ledger</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DateWiseMember" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/ProntingLogo/agent (1).png" />
+
+                        <h6 class="card-title mt-3">Datewise Member List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/MemberWiseAccountDetail" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/contact-list.png" />
+
+                        <h6 class="card-title mt-3">All Member List</h6>
+                    </div>
+                </a>
+            </div>
+
+            @if (@mr.type == "New")
+            {
+
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/RdPlanList" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="imageSize" src="~/Create_logos/accountant.png" />
+
+                            <h6 class="card-title mt-3">@plan1.Planname List</h6>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Admin/FdPlanList" class="custom-card text-center h-100">
+                        <div class="card-body">
+
+                            <img class="imageSize" src="~/images/logo/cpreport_logo/printer.png" />
+                            <h6 class="card-title mt-3">@plan2.Planname List</h6>
+                        </div>
+                    </a>
+                </div>
+
+            }
+
+
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/RankList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/performance.png" />
+
+                        <h6 class="card-title mt-3">@mr.rankname List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/CustumerInstallmentReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/ledger.png" />
+
+                        <h6 class="card-title mt-3">@mr.custname Ledger-Details</h6>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Repeat the above code for other cards as needed -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DailyExpense" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/accounting.png" />
+
+                        <h6 class="card-title mt-3">Datewise Expense Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/HeadWiseExpense" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/accountant.png" />
+
+                        <h6 class="card-title mt-3">Headwise Expense Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/AllDailyCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/commission.png" />
+
+                        <h6 class="card-title mt-3">Daily Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DateWiseChequeCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Setting_logo/cheque (1).png" />
+
+                        <h6 class="card-title mt-3">Datewise Cheque Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DateWiseChequeClearCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Setting_logo/coupon.png" />
+
+                        <h6 class="card-title mt-3">Clear Cheque Collection</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/CompleteDailyCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/ProntingLogo/money.png" />
+
+                        <h6 class="card-title mt-3">Datewise Collection Details</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DateWiseCollection" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/ProntingLogo/business-aggrement.png" />
+
+                        <h6 class="card-title mt-3">Datewise Business</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/FundMobilisation" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/emergency.png" />
+                        <h6 class="card-title mt-3">Fund Mobilisation</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/AllClosingBalance" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/address.png" />
+                        <h6 class="card-title mt-3">RP Statement Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DuplicatePrintReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/printer.png" />
+                        <h6 class="card-title mt-3">Dublicate Print</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/CancelReceiptReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/receipt.png" />
+                        <h6 class="card-title mt-3">Cancel Recipt List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/PaidVoucher" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/voucher.png" />
+                        <h6 class="card-title mt-3">Paid Voucher</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/Unpaidvoucher" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/paper-money.png" />
+                        <h6 class="card-title mt-3">Unpaid Voucher</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DatewiseSVoucherList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/ProntingLogo/commission.png" />
+
+                        <h6 class="card-title mt-3">Datewise Spot Commission List</h6>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Repeat the above code for other cards as needed -->
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DatewiseVoucherList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/cpreport_logo/voucher.png" />
+
+                        <h6 class="card-title mt-3">Datewise Voucher List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/RenewalList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/ProntingLogo/report.png" />
+
+                        <h6 class="card-title mt-3">Monthly Renewal Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/LiabalityReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/report.png" />
+
+                        <h6 class="card-title mt-3">Laiblity Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/PlotRegistryReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/property.png" />
+
+                        <h6 class="card-title mt-3">Plot Registry</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/DailyHolding" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/browsing.png" />
+                        <h6 class="card-title mt-3">Daily Plot Holding</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/Advancepaymentreport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/transaction-history.png" />
+
+                        <h6 class="card-title mt-3">Advance Payment Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/RevivalCustomerList" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/checklist.png" />
+
+                        <h6 class="card-title mt-3">Revival List</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/RevivalReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/seo-report.png" />
+
+                        <h6 class="card-title mt-3">Plot Unrelease Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/VisitorReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/visitor.png" />
+
+                        <h6 class="card-title mt-3">Visitors Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/BondApproval" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/bond.png" />
+
+                        <h6 class="card-title mt-3">Bond Approval</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/ApproveRenewal" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/renewal.png" />
+
+                        <h6 class="card-title mt-3">Renewal Approval</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/PreSurrenderReport" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/Create_logos/browsing.png" />
+                        <h6 class="card-title mt-3">Pre Surrender Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/RejectedCheque" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/cheque (2).png" />
+
+                        <h6 class="card-title mt-3">Rejected Cheque Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/Plotholding" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/hold.png" />
+
+                        <h6 class="card-title mt-3">Plot Holding</h6>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/AgentBankDetail" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/bank-statement.png" />
+
+                        <h6 class="card-title mt-3">Agent Bank Detail Report</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                <a href="~/Admin/ApproveDailyClosing" class="custom-card text-center h-100">
+                    <div class="card-body">
+                        <img class="imageSize" src="~/images/logo/Complet_logo/cross.png" />
+
+                        <h6 class="card-title mt-3">Approve Closing</h6>
+                    </div>
+                </a>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

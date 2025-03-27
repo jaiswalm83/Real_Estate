@@ -1,0 +1,179 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.SavingAccountInfo>
+@using ODHDEVELOPERS.Models
+
+@{
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    UsersContext db = new UsersContext();
+    ViewBag.Title = "AllSavingaccount";
+    var a = 0;
+     var mr = db.Members.Single(m => m.Id == 1);
+}
+
+<div class="page-content">
+      
+                <div class="container">
+                    <div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Account List</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                            
+                        </div>           
+                        
+                    </div>
+
+                     <div class="row" id="hide">
+                        <div class="col-md-6" style="width:100%">
+
+                    @*        @using(Html.BeginForm())
+                            {
+                     <div class="block" >
+                               
+                                <div class="block-content controls" >
+                                     <div class="row-form">
+           <div class="input-group" style="margin-left:1%;margin-right:1%;">
+                        <span class="input-group-addon">Select Report Type</span>
+                  <select name="option" required class="form-control" >
+                      <option selected disabled="disabled" >--Select--</option>
+                     <option value="RD">RDP</option>
+                      <option value="FD">FDP</option>
+                      
+                      <option value="Both">All</option>
+                  </select>
+                         
+                </div>   </div>
+                   <div class="row-form" style="width:100%">
+      <div class="col-md-9">
+          <button id="submit" value="Search" class="btn btn-primary pull-Left" type="submit" >View</button>
+     </div>
+              </div>
+
+
+
+        </div>
+        </div>
+
+                            }*@
+
+  
+                                          
+<table border="1" style="margin-left:1%; margin-right:1px; margin-bottom:30px;width:98%;">
+    @using (Html.BeginForm())
+                {
+                    foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                              <tr><th colspan="3" ></th>
+                                <th colspan="4" ><center><h3><b>Account List</b></h3></center></th>
+                                <th colspan="3" ><center><h3><b>@DateTime.Now.ToString("dd/MM/yyyy")</b></h3></center></th>
+                            </tr>
+    <tr>
+        <th style="width:5%;text-align:center;">
+           <label id="sn"><b>S.N.</b></label>
+            </th>
+        <th style="width:20%;text-align:center;">
+           <label id="newid"><b>Account No.</b></label>
+            </th>
+        
+        <th style="width:20%;text-align:center;">
+           <label id="introducerid"><b>Name</b></label>
+        </th>
+            
+        <th style="width:15%;text-align:center;">
+           <label id="spilid"><b>A/C Type</b></label>
+        </th>
+           
+        <th style="width:10%;text-align:center;">
+           <label id="position"><b>Address</b></label>
+        </th>
+             
+       
+         <th style="width:10%;text-align:center;">
+           <label id="pay"><b>Mobile No. </b></label>
+        </th>
+
+         <th style="width:10%;text-align:center;">
+        <label id="email"><b>Nom. Name</b></label>
+        </th>
+
+         <th style="width:10%;text-align:center;">
+           <label id="nage"><b>Nom. Age </b></label>
+        </th>
+
+        <th style="width:10%;text-align:center;">
+           <label id="nrel"><b>Relation </b></label>
+        </th>
+
+        <th style="width:10%;text-align:center;">
+           <label id="dt"><b>Date </b></label>
+        </th>
+      
+    </tr>
+    }
+                        a = a + 1;
+
+
+    <tr style="text-align:center;">
+        <td>
+            @a
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.accountno)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.acholdername)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.actype)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.address)
+        </td>
+
+          <td>
+            @Html.DisplayFor(modelItem => item.mobileno)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.nomineename)
+        </td>
+
+         <td>
+            @Html.DisplayFor(modelItem => item.nomage)
+        </td>
+
+           <td>
+            @Html.DisplayFor(modelItem => item.nomrel)
+        </td>
+
+         <td>
+             @Convert.ToDateTime(item.Doj).ToString("dd/MM/yyyy")
+           
+        </td>
+       
+             
+    </tr>
+                   
+    }
+
+    }
+    
+    
+   
+</table>
+                            @if(a>0)
+                            {
+                                <a href="@Url.Action("Printallsavingaccount")" target="_blank">Get Report In PDF</a>
+                            }
+           </div>
+                         </div>
+                     
+                    </div>
+    </div>

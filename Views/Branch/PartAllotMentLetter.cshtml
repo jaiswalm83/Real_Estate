@@ -1,0 +1,71 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "PartAllotMentLetter";
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#newbond").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Branch/AutoCompleteBondId",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.name, value: item.newbondid };
+
+
+                        }));
+
+                    }
+                });
+            }
+        });
+    })
+</script>
+
+@using(Html.BeginForm())
+{
+    <div class="page-content">
+        <div class="container">
+            <div class="page-toolbar">
+                <div class="page-toolbar-block">
+                    <div class="page-toolbar-title">@mr.custname Full Payment Allotment Letter</div>
+                    <div class="page-toolbar-subtitle"></div>
+                </div>
+                <div class="page-toolbar-block pull-right">
+                </div>
+            </div>
+            <div class="row" style="width: 100%">
+                <div class="col-md-6" style="width: 100%">
+                    <div class="block" style="width: 100%">
+                        <div class="block-content controls">
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-addon">@mr.custname Id & Name :</span>
+                                        <input type="text" class="form-control" id="newbond" name="newbondid" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page-toolbar-block pull-right">
+                                <div class="widget-info widget-from">
+                                    <button type="submit" class="btn btn-primary" onclick="target='_blank'"><i class="fa fa-cog"></i> Get Allotment Letter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+

@@ -1,0 +1,151 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.CustomerDeactiveList>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "DeactiveList";
+    var a = 0;
+}
+
+
+     
+    <div  id="divid">
+
+  
+
+
+
+        <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+        <div class="index_body">
+            <div class="table-container">
+                <div class="header-row">@mr.custname Deactive List</div>
+
+                <table>
+
+                    @foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                            <thead>
+                                <tr>
+                                    <th >
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th >
+                                        <label id="newid"><b>@mr.custname Id</b></label>
+                                    </th>
+
+                                    <th >
+                                        <label id="introducerid"><b>@mr.custname Name</b></label>
+                                    </th>
+
+                                    <th >
+                                        <label id="spilid"><b>Introducer Id</b></label>
+                                    </th>
+
+
+
+                                    <th >
+                                        <label id="position"><b>@mr.planname Name</b></label>
+                                    </th>
+                                    <th >
+                                        <label id="mode"><b>Mode</b></label>
+                                    </th>
+
+                                    <th >
+                                        <label id="Payment"><b>Installment Amount </b></label>
+                                    </th>
+                                    <th >
+                                        <label><b>Late Fine</b></label>
+                                    </th>
+
+                                    <th >
+                                        <label><b>Total Amount </b></label>
+                                    </th>
+                                    <th >
+                                        <label id="email"><b>Mobile No</b></label>
+                                    </th>
+
+                                    <th >
+                                        <label id="doj"><b>Date of Joining</b></label>
+                                    </th>
+
+                                    <th >
+                                        <label id="Action"><b>Action</b></label>
+                                    </th>
+                                </tr>
+                            </thead>
+                        }
+
+                        a = a + 1;
+                <tbody>
+                    <tr>
+                        <td>
+                            @a
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.newbondid)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.newintroducerid)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.planname)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.mode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.payment)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.latefine)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.totalsum)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.mobileno)
+                        </td>
+                        <td>
+                            @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+                        </td>
+
+                        @if (item.status == 0)
+                        {
+                            <td>
+                                @Html.ActionLink("Active", "DeactiveList", new { newbondid = item.newbondid, status = 0 }, new { onclick = "return confirm('Are you sure to Active this " + mr.custname + ": " + item.newbondid + " ?');" })
+                            </td>
+                        }
+                        @if (item.status == 1)
+                        {
+                            <td>
+                                <button type="button" class="btn btn-danger" disabled="disabled">Expired</button>
+                            </td>
+
+                        }
+
+                    </tr>
+                </tbody>
+                    }
+
+                </table>
+                @if (a > 0)
+                {
+                    <a href="@Url.Action("PrintDeactiveList")" target="_blank">Get List In PDF</a>
+                }
+            </div>
+
+
+        </div>
+
+        </div>

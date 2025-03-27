@@ -1,0 +1,120 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DailyVisitor>
+
+@{
+    ViewBag.Title = "Receptionlist";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+}
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<div class="page-content">
+    <div class="container">
+        <div class="page-toolbar">
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Receptionist List</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+            </div>
+<form method="post" action="../Branch/Receptionlist" enctype="multipart/form-data">
+                                          
+      
+            <div class="row" style="width: 100%">
+
+                <div class="row" style="width: 100%">
+                    <div class="col-md-6" style="width: 100%">
+
+                        <div class="block" style="width: 100%">
+
+                            <div class="block-content controls">
+
+        
+<table class="table table-responsive table-bordered">
+    <tr>
+        <th>
+            Id      </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Mobile
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmailId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+           Register Date
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.CreaderBy)
+        </th>*@
+        <th>
+           BranchCode
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceptionistId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceptionistName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MobileNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.CreaderBy)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.OfficeCode)
+        </td>
+     @*   <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+      @*  <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>*@
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>*@
+    </tr>
+}
+</table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          
+</form></div>
+        </div>
+   

@@ -1,0 +1,183 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DWMemberList>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "DateWiseMember";
+        var a = 0;
+
+    }
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <script>
+        $(function () {
+            $('#sdate').datepick();
+            $('#edate').datepick();
+
+        });
+    </script>
+
+
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4 create-title">DateWise Member List</h2>
+        @using (Html.BeginForm())
+        {
+            <div id="hide">
+
+
+
+                <div class="block">
+
+                    <div class="block-content controls">
+
+
+
+                        <div id="branchForm" class="form-container">
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">Start Date</label>
+                                <input type="text" class="form-control" id="sdate" name="sdate" placeholder="Enter Date" required>
+                            </div>
+
+                            <!-- Date -->
+                            <div class="form-group">
+                                <label for="date" class="form-label">End Date</label>
+                                <input type="text" class="form-control" id="edate" name="edate" placeholder="Enter Date" required>
+                            </div>
+
+
+
+                            <!-- Create Button -->
+                            <div class="text-center d-grid gap-2">
+                                <button type="submit" class="btn create-btn" id="submit" value="Search">View</button>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        }
+
+
+        <div class="index_body">
+            <div class="table-container">
+
+                <table>
+
+                    @using (Html.BeginForm())
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" style="background-color: #ff5722; color: white">@User.Identity.Name</th>
+                                        <th colspan="3" style="background-color: #ff5722; color: white"><b>Member List</b></th>
+                                        <th colspan="3" style="background-color: #ff5722; color: white"><b>Duration:@Convert.ToDateTime(item.sdate).ToString("dd/MM/yyyy")-@Convert.ToDateTime(item.edate).ToString("dd/MM/yyyy")</b></th>
+                                    </tr>
+                                </thead>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label id="sn"><b>S.N.</b></label>
+                                        </th>
+                                        <th>
+                                            <label id="newid"><b>Member Id</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="introducerid"><b>Member Name</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="spilid"><b>Date of Birth</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="position"><b>Father Name</b></label>
+                                        </th>
+
+
+
+                                        <th>
+                                            <label id="email"><b>Mobile No</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="dojh"><b> Date of Joining</b></label>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                            }
+                            a = a + 1;
+
+                            <tbody>
+                                <tr style="text-align:left;">
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.newmemberid)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dob)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fathername)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Mobileno)
+                                    </td>
+                                    <td>
+                                        @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+
+                        }
+
+                    }
+
+
+
+                </table>
+
+                @if (a > 0)
+                {
+                    <div class="text-center d-grid gap-2">
+                        <a href="@Url.Action("PrintDateWiseMember")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                    </div>
+                }
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+

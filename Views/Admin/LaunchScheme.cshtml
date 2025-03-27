@@ -1,0 +1,154 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "LaunchScheme";
+}
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h2 class="text-center create-title">Launch Schema</h2>
+
+
+    @using (Html.BeginForm())
+    {
+
+
+        <div id="launchForm" class="form-container">
+            <!-- Checkbox Group: Select Category -->
+            <div class="mb-3">
+                <label class="form-label">Select Category</label><br>
+                <div class="form-check form-check-inline">
+                    <input id="Checkbox1" class="form-check-input" type="checkbox" name="chk1" value="For Broker">
+                    <label class="form-check-label" for="associateCheck">For @mr.agentname</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input id="Checkbox2" class="form-check-input" type="checkbox" name="chk2" value="For Customer">
+                    <label class="form-check-label" for="customerCheck">For @mr.custname</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input id="Checkbox3" class="form-check-input" type="checkbox" name="chk3" value="For Employee">
+                    <label class="form-check-label" for="employeeCheck">For Employee</label>
+                </div>
+            </div>
+
+            <!-- Radio Group: Select Message Language -->
+            <div class="mb-3">
+                <label class="form-label">Select Message Language</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="rdb1" name="msgtype" value="English">
+                    <label class="form-check-label" for="englishRadio">English</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="language" id="hindiRadio" value="Hindi">
+                    <label class="form-check-label" for="hindiRadio" id="rdb2" type="radio" name="msgtype" value="Hindi">Hindi</label>
+                </div>
+            </div>
+
+
+
+            <br />
+            <br />
+
+            <div id="blk-English" class="toHide" style="display:none">
+
+
+                <br />
+                <br />
+
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <span class="input-group-addon"><label class="width">Enter Message</label> </span>
+                        <textarea class="form-control" rows="5" maxlength="160" name="message" id="message" required></textarea>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+
+
+            <div id="blk-Hindi" class="toHide" style="display:none">
+
+
+                <br />
+
+                <div class="col-md-9">
+                    `   <div class="input-group">
+                        <span class="input-group-addon"><label class="width">Enter Message</label> </span>
+                        <textarea class="form-control" rows="5" maxlength="160" name="message1" id="transliterateTextarea" required></textarea>
+                    </div>
+                </div>
+
+
+            </div>
+            <br />
+            <br />
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button  formnovalidate="formnovalidate" type="submit" class="btn create-btn">Submit</button>
+            </div>
+        </div>
+        <p style="color:maroon; margin-left:15px;"><b> @ViewBag.msg</b></p>
+
+
+    }
+</div>
+    <script type="text/javascript" src="https://www.google.com/jsapi">
+    </script>
+    <script type="text/javascript">
+
+        // Load the Google Transliterate API
+        google.load("elements", "1", {
+            packages: "transliteration"
+        });
+
+        function onLoad() {
+            var options = {
+                sourceLanguage:
+                    google.elements.transliteration.LanguageCode.ENGLISH,
+                destinationLanguage:
+                    [google.elements.transliteration.LanguageCode.HINDI],
+                transliterationEnabled: true
+            };
+
+            // Create an instance on TransliterationControl with the required
+            // options.
+            var control =
+                new google.elements.transliteration.TransliterationControl(options);
+
+            // Enable transliteration in the textbox with id
+            // 'transliterateTextarea'.
+            control.makeTransliteratable(['transliterateTextarea']);
+        }
+        google.setOnLoadCallback(onLoad);
+    </script>
+
+    <script>
+        $(function () {
+            // Set 'Select All' to checked if all other boxes are already checked
+            $('#selectAll').prop('checked', $('.check').length == $('.check:checked').length);
+
+            // Add click function to 'Select All' to select all other boxes
+            $('#selectAll').click(function () {
+                $('.check').prop('checked', this.checked);
+            });
+
+            // Add click function to each child checkbox
+            $('.check').click(function () {
+                $('#selectAll').prop('checked', $('.check').length == $('.check:checked').length);
+            });
+        })
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $("[name=msgtype]").click(function () {
+                $('.toHide').hide();
+                $("#blk-" + $(this).val()).show('slow');
+            });
+        });
+    </script>
+

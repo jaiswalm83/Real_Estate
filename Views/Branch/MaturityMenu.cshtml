@@ -1,0 +1,81 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Branchtabs.Single(b => b.BranchCode == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+ 
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+     
+    ViewBag.Title = "MaturityMenu";
+}
+
+
+
+<div class="container shado mt-5">
+    @*Heading*@
+
+    <div class="w-100  card-heading">
+        <h3 class="text-center  text-white pt-1 pb-1">Maturity</h3>
+    </div>
+
+
+    @*Cards Section*@
+    <div class="row cardStyle g-3 justify-content-center">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/MaturityPaidDetails" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/paid.png" class="imageSize img-fluid" alt="Maturity Paid Details" />
+                    <h6 class="card-title mt-1 mb-0 ">Maturity Paid Details</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DischargeForm" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/list.png" class="imageSize img-fluid" alt="Issue Discharge Form" />
+                    <h6 class="card-title mt-1 mb-0">Issue Discharge Form</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/FullMaturity" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/payment-method.png" class="imageSize img-fluid" alt="Full" />
+                    <h6 class="card-title mt-1 mb-0">Full</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/LapsMaturity" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/money (1).png" class="imageSize img-fluid" alt="Laps" />
+                    <h6 class="card-title mt-1 mb-0">Laps</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/InompleteMaturity" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/salary.png" class="imageSize img-fluid" alt="Pre" />
+                    <h6 class="card-title mt-1 mb-0">Pre</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+            <a href="~/Branch/DuplicateMaturity" class="card custom-card text-center h-100">
+                <div class="card-body">
+                    <img src="~/ManagerAssets/images/logo/filling-form.png" class="imageSize img-fluid" alt="Maturity Form" />
+                    <h6 class="card-title mt-1 mb-0">Maturity Form</h6>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+

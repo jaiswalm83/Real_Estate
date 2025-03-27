@@ -1,0 +1,133 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var br = db.Operators.Single(b => b.OperatorId == User.Identity.Name);
+    var mr = db.Members.Single(m => m.Id == 1);
+
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+
+    Layout = "~/Views/Shared/_OperatorLayout.cshtml";
+    ViewBag.Title = "Fieldmenu";
+}
+
+<link href="~/assets/css1/main css/Pages.css" rel="stylesheet" />
+
+<!-- Section 1: Final Report -->
+<div class="section">
+
+    <div class="w-100 card-heading">
+        <h3 class="text-center text-white pt-2 pb-2">FIELD REPORTS</h3>
+    </div>
+
+
+ 
+        <div class="container mt-5">
+            <!-- Cards Row -->
+            <div class="row d-flex justify-content-center g-3">
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/Broker" class="custom-card text-center d-flex flex-column align-items-center h-100 text-decoration-none">
+                        <div class="card-body p-3">
+                            <img class="create_logo_img mb-3" src="~/Create_logos/location-pin.png" alt="Location Pin" style="width: 50px; height: auto;" />
+                            <h6 class="card-title mt-2" style="font-size: 16px; font-weight: bold; color: #333;">@mr.agentname List</h6>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/DatewiseBroker" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/map.png" />
+                            <h6 class="card-title mt-3">Datewise @mr.agentname List</h6>
+                        </div>
+                    </a>
+                </div>
+
+
+
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerChain" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/hr.png" />
+                            <h6 class="card-title mt-3">@mr.agentname Chain</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerPaymentDetail" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/clipboard.png" />
+                            <h6 class="card-title mt-3">@mr.agentname Payment Details</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/Selfbusiness" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/new-project.png" />
+                            <h6 class="card-title mt-3">@mr.agentname Business Details</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerAccount" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/moon.png" />
+                            <h6 class="card-title mt-3">@mr.agentname Account Details</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerwiseAccountDetail" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/cubes.png" />
+                            <h6 class="card-title mt-3">Datewise @mr.agentname Account Details</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerSelfCollection" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/next-level.png" />
+                            <h6 class="card-title mt-3">@mr.agentname Self Collection</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerChainCollection" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/commission.png" />
+                            <h6 class="card-title mt-3">@mr.agentname Chain Collection</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerSelfDueCollection" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/commission (1).png" />
+                            <h6 class="card-title mt-3">@mr.agentname Self Due Collection</h6>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-2 mb-3">
+                    <a href="~/Operator/BrokerChainDueCollection" class="custom-card text-center h-100">
+                        <div class="card-body">
+                            <img class="create_logo_img" src="~/Create_logos/accountant.png" />
+                            <h6 class="card-title mt-3">@mr.agentname Chain Due Collection</h6>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+  
+ 

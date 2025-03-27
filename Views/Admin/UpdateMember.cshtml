@@ -1,0 +1,540 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Member_tab>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "UpdateMember";
+    var a = 0;
+}
+                      <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#memberid").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompletememberid",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.MemberName, value: item.NewMemberId };
+
+
+                        }))
+
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#State").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteState",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.state, value: item.state };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#BranchCode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompleteBrachcode",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.BranchName, value: item.BranchCode };
+
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+<script>
+    function checkdistrict(check_id) {
+
+        $("#" + check_id).mouseout(function () {
+
+            var state = $("#State").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+        });
+
+    }
+</script>
+
+
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 create-title">Update Member Form</h2>
+
+    @using (Html.BeginForm("UpdateMember", "Admin"))
+    {
+
+        <div id="branchForm" class="form-container">
+
+            <!-- Collection Point Name -->
+            <div class="form-group">
+                <label for="collectionPointName" class="form-label">Enter Member Id</label>
+                <input type="text" class="form-control " name="newmemberid" id="memberid" placeholder="Enter Member Id" required>
+            </div>
+
+
+            <!-- Create Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" value="Search" name="command" class="btn create-btn"><i class="fa fa-search"></i>Search</button>
+            </div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+    }
+    @using (Html.BeginForm())
+    {
+        foreach (var item in Model)
+        {
+            if (a == 0)
+            {
+
+
+
+
+
+
+                <div style="margin-top:50px">
+
+
+                    <!-- Title -->
+                    <h2 class="text-center create-title" style="text-align:center">
+                        Personal Details
+                    </h2>
+
+                </div>
+
+
+                <div id="associateIdForm" class="form-container">
+                    <div class="row-form">
+
+                        <div class="form-group">
+                            <label class="form-label">Member Id</label>
+
+                            <input type="text" class="form-control" id="BranchCode" value="@Html.DisplayFor(modelItem => item.BranchCode)" name="BranchCode" required />
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Member Id</label>
+
+                            <input type="text" class="form-control" id="NewMemberId" value="@Html.DisplayFor(modelItem => item.NewMemberId)" required name="NewMemberId" readonly="true" />
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">No. of Share</label>
+
+                            <input type="number" class="form-control" id="Share" value="@Html.DisplayFor(modelItem => item.Share)" required name="Share" />
+
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Name</label>
+
+                            <input type="text" class="form-control" id="MemberName" value="@Html.DisplayFor(modelItem => item.MemberName)" required name="MemberName" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Current Rel.</label>
+
+
+                            <input id="fff" type="text" class="form-control" value="@Html.DisplayFor(modelItem => item.Relationof)" name="Relationof" readonly="true" required />
+
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">Father/Husband Name </label>
+
+
+                            <select class="form-control" id="RelationOf" name="RelationOf">
+                                <option selected>S/O </option>
+                                <option>D/O </option>
+                                <option>W/O </option>
+
+                            </select>
+
+
+
+                            <input type="text" class="form-control" id="Father" name="Father" value="@Html.DisplayFor(modelItem => item.Father)" required />
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">Mother's Name</label>
+
+                        <input type="text" class="form-control" id="Mother" value="@Html.DisplayFor(modelItem => item.Mother)" name="Mother" />
+                    </div>
+
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">Mobile No</label>
+
+                        <input type='tel' title="Invalid mobile format" pattern="[789][0-9]{9}" maxlength="10" name="Mobile" id="Mobile" value="@Html.DisplayFor(modelItem => item.Mobile)" required class="form-control" />
+                    </div>
+
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">Category</label>
+
+                        <select class="form-control" id="category" name="category" data-v="@Html.DisplayFor(modelItem => item.category)">
+                            <option value="General">General</option>
+                            <option value="OBC">OBC</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">Date Of Joining</label>
+
+                        <input type="text" name="Cdate" id="date" required class="form-control datepicker" value="@Html.DisplayFor(modelItem => item.Cdate)" />
+                    </div>
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">Date of Birth</label>
+
+                        <input type="text" id="Dob" name="DOB" value="@Html.DisplayFor(modelItem => item.DOB)" required class="form-control datepicker">
+                    </div>
+
+
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">Select Gender</label>
+
+                        <select name="Gender" id="Gender" class="form-control" required>
+
+                            <option selected>Male</option>
+                            <option>Female</option>
+                        </select>
+
+                    </div>
+
+
+
+
+                    <div class="form-group">
+
+                        <label class="form-label">Current Gender</label>
+
+
+                        <input id="gg" type="text" class="form-control" value="@Html.DisplayFor(modelItem => item.Gender)" name="Gender" readonly="true" required />
+
+                    </div>
+
+                </div>
+
+
+                <div style="margin-top:50px">
+
+
+                    <!-- Title -->
+                    <h2 class="text-center create-title" style="text-align:center">
+                        Bank Details
+                    </h2>
+
+                </div>
+
+
+                <div id="associateIdForm" class="form-container">
+                    <div class="row-form">
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">PAN No </label>
+
+                            <input type="text" id="panno" value="@item.panno" name="panno" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Bank Name </label>
+
+                            <input type="text" id="bankname" value="@item.bankname" name="bankname" class="form-control" />
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Bank A/C No </label>
+
+                            <input type="text" id="accountno" name="accountno" value="@item.accountno" class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">IFSC Code </label>
+
+                            <input type="text" id="IFSC" value=" @Html.DisplayFor(modelItem => item.IFSC)" name="IFSC" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div style="margin-top:50px">
+
+
+                    <!-- Title -->
+                    <h2 class="text-center create-title" style="text-align:center">
+                        Address Details
+                    </h2>
+
+                </div>
+
+
+                <div id="associateIdForm" class="form-container">
+                    <div class="row-form">
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Address</label>
+
+                            <input type="text" id="Address" name="Address" value="@Html.DisplayFor(modelItem => item.Address)" required class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">District</label>
+
+                            <input type="text" name="District" value="@Html.DisplayFor(modelItem => item.District)" required class="form-control" />
+                        </div>
+
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">State</label>
+
+                            <input type="text" id="state" name="state" value="@Html.DisplayFor(modelItem => item.state)" required class="form-control" />
+
+
+
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Pin Code</label>
+
+                            <input type="number" name="Pin" value="@Html.DisplayFor(modelItem => item.Pin)" class="form-control" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div style="margin-top:50px">
+
+
+                    <!-- Title -->
+                    <h2 class="text-center create-title" style="text-align:center">
+                        Nominee Details
+                    </h2>
+
+                </div>
+
+
+                <div id="associateIdForm" class="form-container">
+                    <div class="row-form">
+
+
+
+
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Nominee Name</label>
+
+                            <input type="text" id="NomineeName" name="NomineeName" value="@Html.DisplayFor(modelItem => item.NomineeName)" required class="form-control" />
+
+
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Nominee Age</label>
+
+                            <input type="number" id="NomineeAge" name="NomineeAge" value="@Html.DisplayFor(modelItem => item.NomineeAge)" required class="form-control" />
+
+
+
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Relationship</label>
+
+                            <input type="text" id="nomrel" name="NomineeRel" value="@Html.DisplayFor(modelItem => item.NomineeRel)" required class="form-control" />
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+
+                            <label class="form-label">Address</label>
+
+                            <input type="text" id="Nomineeaddr" name="Nomineeaddr" value="@Html.DisplayFor(modelItem => item.Nomineeaddr)" class="form-control" />
+                        </div>
+
+                    </div>
+                    <!-- Create Button -->
+                    <div class="text-center d-grid gap-2">
+                        <button value="Update" type="submit" name="command" class="btn create-btn" onclick="return confirm('Are you sure to update Member?')">Update</button>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+                    <p>@ViewBag.msg</p>
+
+                    }
+                    }
+                    }
+
+                </div>
+
+
+
+
+                <script type="text/javascript">
+                    $(function () {
+                        (function () {
+                            var v = $('#category').attr('data-v');
+                            $('#category option').each(function () {
+                                var c = $(this), cv = c.val();
+                                if (cv == v) {
+                                    c.attr('selected', '');
+                                    return false;
+                                }
+                            });
+                        })();
+                    });
+                </script>

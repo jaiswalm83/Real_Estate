@@ -1,0 +1,218 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Fixed_Tab>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var fdplan = db.NewPlans.Where(c => c.Type=="FD");
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "UpdateFDPlanAmount";
+    var pagesize = (from r in db.Fixed_Tabs select r).Count();
+    var grid = new WebGrid(null,
+             defaultSort: "",
+             rowsPerPage: pagesize,
+             selectionFieldName: "SearchString",
+             ajaxUpdateContainerId: "agrid",
+             sortFieldName: "SortColumn",
+             sortDirectionFieldName: "SortOrder");
+    grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+    var a = 0;
+}
+<link rel="stylesheet" href="~/Content/jquery-ui.css" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#plancode").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/AutoCompletenEditfplan",
+                    type: "POST",
+                    dataType: "json",
+                    data: { term: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Planname, value: item.Plancode };
+
+                        }))
+
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+
+
+<script type="text/javascript" >
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+
+            var Id = tr.find("#lblId").html();
+            var Plancode = $("#pcode").val();
+            var term = $("#term").val();
+            var Plananme = tr.find("#lblPlanname").html();
+            var Plotsize = tr.find("#Plotsize").val();
+            var Amount = tr.find("#Amount").val();
+            var EstimatedValue = tr.find("#EstimatedValue").val();
+            var Accidental = tr.find("#Accidental").val();
+           
+            tr.find("#lblPlotsize").text(Plotsize);
+            tr.find("#lblAmount").text(Amount);
+            tr.find("#lblEstimatedValue").text(EstimatedValue);
+            tr.find("#lblAccidental").text(Accidental);
+
+            
+            tr.find('.edit-mode, .display-mode').toggle();
+            var Fixed_Tab =
+            {
+                "Id": Id,
+                "Term":term,
+                "Plananme": Plananme,
+                "Plancode": Plancode,
+                "Plotsize": Plotsize,
+                "Amount": Amount,
+                "EstimatedValue": EstimatedValue,
+                "Accidental": Accidental
+               
+            };
+            $.ajax({
+                url: '/Admin/EditFDPlanAmount/',
+                data: JSON.stringify(Fixed_Tab),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+
+        });
+    })
+</script>  
+
+<style type="text/css">
+    .dd {
+        height:50px;
+        width:70%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+    .d {
+        height:50px;
+        width:30%;
+        float:left;
+        font-family:'Arial Rounded MT';
+        font-size:20px;
+    }
+
+</style>
+
+<div class="page-content">
+
+                <div class="container">
+
+<div class="page-toolbar">
+                        
+                        <div class="page-toolbar-block">
+                            <div class="page-toolbar-title">Edit @plan2.Planname Amount</div>
+                            <div class="page-toolbar-subtitle"></div>
+                        </div>
+                        
+                        <div class="page-toolbar-block pull-right">
+                          
+                        </div>           
+                        
+                    </div> 
+
+                    <div class="row" style="width:100%">
+                        <div class="col-md-6" style="width:100%">
+                            
+                            <div class="block" style="width:100%">
+                               <div class="block-content controls">  
+     @using (Html.BeginForm())
+     {
+    
+
+                                    
+                   <div class="row-form">  
+                                         
+    <div class="col-md-9">
+        <div class="input-group">
+       <span class="input-group-addon">Select @mr.planname Code or Name </span>  
+        <select name="plancode" id="plancode" class="form-control" >
+                @foreach(var r in fdplan)
+                {
+                <option value="@r.Plancode">@r.Planname</option>
+                }
+
+            </select>
+
+
+        </div>
+                                   
+   </div>
+                        
+         </div>
+         
+         
+                 <div class="page-toolbar-block pull-right">
+                            <div class="widget-info widget-from">
+         <button  type="submit" class="btn btn-primary pull-right" id="search" onclick="showDiv()"> Search</button>   
+                                </div>
+                                             </div>
+         
+     <input type="hidden"  id="term" value="@ViewData["term"]" />
+     <input type="hidden"  id="pcode" value="@ViewData["plancode"]" />
+     
+     }
+                                   
+                 @if (Convert.ToInt32(ViewData["count"]) >0)
+                 {
+                    
+                     <div id="comm">
+                         
+                           <div  id="gridContent" style="padding:20px;" >  
+@grid.GetHtml(
+        tableStyle: "webgrid-table",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "webgrid-row-style",
+        mode: WebGridPagerModes.All,
+        columns:
+             grid.Columns(
+             grid.Column("SN", format: @<text> <span  class="display-mode" style="width:20px;">@item.Id </span> <label id="lblId" class="edit-mode" style="width:20px;">@item.Id</label> </text>, style: "col2Width"),
+             grid.Column( mr.planname+" Name", format: @<text> <span  class="display-mode" style="width:100px;">@item.Planname</span> <label id="lblPlanname" class="edit-mode" style="width:50px;">@item.Planname</label>    </text>, style: "col2Width"),
+             grid.Column("Amount", "Amount", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblAmount">@item.Amount</label> </span>  <input type="text" id="Amount" value="@item.Amount" class="edit-mode" style="width:50px;" /> </text>, style: "col2Width"),
+             grid.Column("Plotsize", "Plotsize", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblPlotsize">@item.Plotsize</label> </span>  <input type="text" id="Plotsize" value="@item.Plotsize" class="edit-mode" style="width:50px;" /> </text>, style: "col2Width"),
+             grid.Column("EstimatedValue", "Maturity Amt", format: @<text> <span  class="display-mode" style="width:20px;"> <label id="lblEstimatedValue">@item.EstimatedValue</label> </span>  <input type="text" id="EstimatedValue" value="@item.EstimatedValue" class="edit-mode" style="width:50px;" /> </text>, style: "col2Width"),
+             
+
+             grid.Column("Action", format: @<text>  
+                                <button class="edit-user display-mode" >Edit</button>  
+                                <button class="save-user edit-mode"  >Save</button>  
+                                <button class="cancel-user edit-mode" >Cancel</button>  
+                            </text>, style: "col3Width", canSort: false)
+           ))  
+
+                                    
+                                </div>
+                                </div>
+                 }
+                                             
+                                    </div>
+                            </div>
+                                        
+                   </div> </div> </div>
+    </div>

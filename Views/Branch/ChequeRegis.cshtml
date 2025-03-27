@@ -1,0 +1,158 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseCustomerList>
+    @using ODHDEVELOPERS.Models;
+    @{
+        ViewBag.Title = "ChequeRegis";
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        int a = 0;
+        DateTime dt = DateTime.Now.Date;
+    }
+    <script type='text/javascript'>
+        $(document).ready(function () {
+
+            $('#datepicker').datepicker({
+                dateFormat: "yy-mm-dd",
+                maxDate: '+0d'
+            });
+
+        });
+    </script>
+
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4">Cheque Register Report</h2>
+        <!-- Form for Cheque Register Report -->
+        <form id="chequeRegisterForm" class="border p-4 rounded shadow formtag">
+
+            <!-- Start Date Field -->
+            <div class="mb-3">
+                <label for="startDate" class="form-label formLabel">Enter Start Date:</label>
+                <input type="date" class="form-control formInput" id="startDate" name="startDate" placeholder="Enter Start Date" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center d-grid gap-2">
+                <button type="submit" class="btn btn-lg formButtom">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="page-content">
+
+        <div class="container">
+            <div class="page-toolbar">
+
+                <div class="page-toolbar-block">
+                    <div class="page-toolbar-title">Cheque Register Report</div>
+                    <div class="page-toolbar-subtitle"></div>
+                </div>
+
+                <div class="page-toolbar-block pull-right">
+                </div>
+
+            </div>
+
+            @using (Html.BeginForm())
+            {
+                <div class="row">
+                    <div class="col-md-6" style="width: 98%">
+
+                        <div class="block">
+
+                            <div class="block-content controls">
+                                <div class="row-form">
+                                    <div class="input-group" style="margin-left: 1%; margin-right: 1%;">
+                                        <span class="input-group-addon">
+                                            <label class="width">Start Date</label>
+                                        </span>
+                                        <input type="text" id="datepicker" class="form-control" required name="sdate" />
+
+                                    </div>
+                                </div>
+
+                                <div class="row-form" style="width: 98%">
+                                    <div class="col-md-9">
+                                        <button id="submit" value="Search" class="btn btn-primary pull-right" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col-md-6" style="width: 98%">
+
+                    <table border="1" style="margin-left: 1%; margin-right: 1px; margin-bottom: 30px; width: 100%;">
+                        @using (Html.BeginForm())
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (a == 0)
+                                {
+                                    <tr>
+
+                                        <th colspan="4"><b> <a href="@Url.Action("PrintChequeRegis")" target="_blank">Get Report In PDF</a></b></th>
+
+                                        <th colspan="4"><b>Dated: @DateTime.Now.Date.ToString("dd/MM/yyyy")</b></th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 5%; text-align: center;">
+                                            <label id="sn"><b>S.N.</b></label>
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <label id="newid"><b>Account Holder Name</b></label>
+                                        </th>
+
+                                        <th style="width: 10%; text-align: center;">
+                                            <label id="introducerid"><b>Cheque No</b></label>
+                                        </th>
+
+                                        <th style="width: 10%; text-align: center;">
+                                            <label id="spilid"><b>Amount</b></label>
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <label id="doj"><b>Bank</b></label>
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <label id="pay"><b>Cheque Date </b></label>
+                                        </th>
+
+                                    </tr>
+                                }
+                                a = a + 1;
+
+
+                                <tr style="text-align: center;">
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.newbondid)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.payment)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.newintroducerid)
+                                    </td>
+                                    <td>
+                                        @Convert.ToDateTime(item.formdate).ToString("dd/MM/yyyy")
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        }
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>

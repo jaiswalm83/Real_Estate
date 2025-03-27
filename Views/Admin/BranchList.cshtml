@@ -1,0 +1,114 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Branchlist>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "BranchList";
+        var a = 0;
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+   
+
+    <div id="divid">
+
+
+        <div class="container mt-5">
+            <h2 class="text-center mb-4 create-title">@mr.branchname List</h2>
+
+            <div class="index_body">
+                <div class="table-container">
+
+                    <table>
+
+                        @foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+                                <thead>
+                                    <tr>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="sn"><b>S.N.</b></label>
+                                        </th>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="BranchCode"><b>@mr.branchname Code</b></label>
+                                        </th>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="BranchCode1"><b>@mr.branchname Password</b></label>
+                                        </th>
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="BranchName"><b>@mr.branchname Name</b></label>
+                                        </th>
+
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="BranchDistrict"><b>District</b></label>
+                                        </th>
+
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="branchaddress"><b>Address</b></label>
+                                        </th>
+
+
+                                        <th style="background-color: #ff5722; color: white">
+                                            <label id="mobile"><b>Mobile</b></label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            }
+
+                            a = a + 1;
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BranchCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.password)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BranchName)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BranchDistrict)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.branchaddress)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.mobile)
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+                    @if (a > 0)
+                    {
+
+                        <div class="text-center d-grid gap-2">
+                            <a href="@Url.Action("PrintBranchList")" target="_blank" class="btn create-btn">Get Report In PDF</a>
+                        </div>
+
+
+                    }
+                </div>
+
+
+
+
+            </div>
+
+
+        </div>
+
+    </div>

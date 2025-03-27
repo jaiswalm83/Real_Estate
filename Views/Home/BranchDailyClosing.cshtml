@@ -1,0 +1,1978 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "DailyClosing";
+    UsersContext db = new UsersContext();
+    Layout = "~/Views/Shared/_newlayout.cshtml";
+    var user = ViewData["username"];
+    var item = db.Branchtabs.Single(a => a.BranchCode == user);
+    DateTime dt = (from a in db.DailyDepositTabs where a.opid == user && a.status == 0 select a.date).DefaultIfEmpty().Max();
+    int trid = (from a in db.DailyDepositTabs where a.opid == user && a.status == 0 && a.date == dt select a.trid).DefaultIfEmpty().Max();
+    var detail = db.DailyDepositTabs.Single(d => d.status == 0 && d.opid == user && d.date == dt && d.trid == trid );
+   
+    //double openingbal = (from a in db.DailyDepositTabs where a.opid == User.Identity.Name && a.date  select a).DefaultIfEmpty(0).Sum();
+    Double balance = (from a in db.ClosingAmount_Tabs where a.opid == User.Identity.Name && a.status == 0 && a.date != dt select a.remaininamount).DefaultIfEmpty(0).Sum();
+    DateTime today1 = dt;
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var plan5 = db.Plans.Single(p4 => p4.Plancode == 5);
+    //var plan6 = db.Plans.Single(p4 => p4.Plancode == 6);
+    //var plan7 = db.Plans.Single(p4 => p4.Plancode == 7);
+    var plan8 = db.Plans.Single(p4 => p4.Plancode == 8);
+
+    var tbd = (from an in db.appltabs where an.status == 1 select an.bondid);
+    //------------planwise Cashcollection booking Amount----------------------
+    Double todayCashp1booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan1.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp2booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan2.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp3booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan3.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp4booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan4.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp5booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan5.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayCashp6booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan6.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayCashp7booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan7.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp8booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan8.shortcutname && ag.paymethod == "Cash" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Chequecollection booking Amount----------------------
+    Double todayChequep1booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan1.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep2booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan2.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep3booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan3.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep4booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan4.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep5booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan5.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayChequep6booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan6.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayChequep7booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan7.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep8booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan8.shortcutname && ag.paymethod == "Cheque" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Bankcollection booking Amount----------------------
+    Double todayBankp1booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan1.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp2booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan2.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp3booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan3.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp4booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan4.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp5booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan5.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayBankp6booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan6.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayBankp7booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan7.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp8booking = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) && ag.planname == plan8.shortcutname && ag.paymethod == "banktransaction" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Cashcollection Renewal Amount----------------------
+    Double todayCashp1Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan1.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp2Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan2.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp3Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan3.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp4Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan4.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp5Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan5.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayCashp6Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan6.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayCashp7Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan7.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayCashp8Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cash" && df.planname == plan8.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Chequecollection Renewal Amount----------------------
+    Double todayChequep1Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan1.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep2Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan2.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep3Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan3.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep4Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan4.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep5Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan5.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayChequep6Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan6.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayChequep7Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan7.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayChequep8Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "Cheque" && df.planname == plan8.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Bankcollection Renewal Amount----------------------
+    Double todayBankp1Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan1.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp2Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan2.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp3Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan3.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp4Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan4.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp5Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan5.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayBankp6Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan6.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayBankp7Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan7.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayBankp8Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch== item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.paymethod == "banktransaction" && df.planname == plan8.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Pending NEFTcollection booking Amount----------------------
+    Double todayNeftp1pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp2pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp3pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp4pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp5pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayNeftp6pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayNeftp7pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp8pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Pending IMPScollection booking Amount----------------------
+    Double todayIMPSp1pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp2pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp3pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp4pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp5pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayIMPSp6pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayIMPSp7pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp8pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Pending RTGScollection booking Amount----------------------
+    Double todayRTGSp1pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp2pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp3pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp4pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp5pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayRTGSp6pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayRTGSp7pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp8pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise UPIcollection booking Amount----------------------
+    Double todayUPIp1pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp2pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp3pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp4pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp5pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayUPIp6pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayUPIp7pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp8pendingbooking = (from ag in db.tempappltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Pending NEFTcollection Renewal Amount----------------------
+    Double todayNEFTp1pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan1.shortcutname && df.status==1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayNEFTp2pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan2.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayNEFTp3pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan3.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayNEFTp4pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan4.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayNEFTp5pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan5.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayNEFTp6pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan6.shortcutname && df.status == 1  select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayNEFTp7pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan7.shortcutname && df.status == 1  select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayNEFTp8pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan8.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Pending IMPScollection Renewal Amount----------------------
+    Double todayIMPSp1pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan1.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp2pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan2.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp3pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan3.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp4pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan4.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp5pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan5.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayIMPSp6pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan6.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayIMPSp7pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan7.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp8pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan8.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Pending RTGScollection Renewal Amount----------------------
+    Double todayRTGSp1pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan1.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp2pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan2.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp3pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan3.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp4pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan4.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp5pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan5.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayRTGSp6pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan6.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayRTGSp7pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan7.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp8pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan8.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Pending UPIcollection Renewal Amount----------------------
+    Double todayUPIp1pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan1.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp2pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan2.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp3pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan3.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp4pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan4.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp5pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan5.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayUPIp6pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan6.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayUPIp7pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan7.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp8pendingRenewal = (from df in db.TempInstallmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan8.shortcutname && df.status == 1 select df.payamount).DefaultIfEmpty(0).Sum();
+
+
+    //------------planwise Approve NEFTcollection booking Amount----------------------
+    Double todayNeftp1Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp2Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp3Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp4Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp5Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayNeftp6Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayNeftp7Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayNeftp8Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "NEFT" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Approve IMPScollection booking Amount----------------------
+    Double todayIMPSp1Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp2Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp3Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp4Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp5Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayIMPSp6Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayIMPSp7Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayIMPSp8Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "IMPS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Approve RTGScollection booking Amount----------------------
+    Double todayRTGSp1Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp2Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp3Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp4Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp5Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayRTGSp6Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayRTGSp7Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayRTGSp8Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "RTGS" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Approve UPIcollection booking Amount----------------------
+    Double todayUPIp1Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan1.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp2Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan2.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp3Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan3.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp4Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan4.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp5Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan5.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayUPIp6Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan6.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    //Double todayUPIp7Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan7.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+    Double todayUPIp8Appbooking = (from ag in db.appltabs where ag.formdate == today1 && ag.opid == item.BranchCode && ag.status == 1 && ag.planname == plan8.shortcutname && ag.transactiontype == "UPI" select ag.bookingamount).DefaultIfEmpty(0).Sum();
+
+
+    //------------planwise Approve NEFTcollection Renewal Amount----------------------
+    Double todayAppNEFTp1Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan1.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppNEFTp2Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan2.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppNEFTp3Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan3.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppNEFTp4Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan4.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppNEFTp5Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan5.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppNEFTp6Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan6.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppNEFTp7Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan7.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppNEFTp8Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "NEFT" && df.planname == plan8.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Approve IMPScollection Renewal Amount----------------------
+    Double todayAppIMPSp1Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan1.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppIMPSp2Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan2.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppIMPSp3Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan3.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppIMPSp4Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan4.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppIMPSp5Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan5.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppIMPSp6Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan6.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppIMPSp7Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan7.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppIMPSp8Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "IMPS" && df.planname == plan8.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Approve RTGScollection Renewal Amount----------------------
+    Double todayAppRTGSp1Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan1.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppRTGSp2Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan2.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppRTGSp3Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan3.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppRTGSp4Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan4.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppRTGSp5Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan5.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppRTGSp6Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan6.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppRTGSp7Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan7.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppRTGSp8Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "RTGS" && df.planname == plan8.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //------------planwise Approve UPIcollection Renewal Amount----------------------
+    Double todayAppUPIp1Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan1.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppUPIp2Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan2.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppUPIp3Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan3.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppUPIp4Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan4.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppUPIp5Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan5.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppUPIp6Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan6.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    //Double todayAppUPIp7Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan7.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+    Double todayAppUPIp8Renewal = (from df in db.Installmenttabs where df.paymentdate == today1 && df.installmentno != 1 && df.branch == item.BranchCode && df.type != "Adjustment" && tbd.Contains(df.bondid) && df.transactiontype == "UPI" && df.planname == plan8.shortcutname select df.payamount).DefaultIfEmpty(0).Sum();
+
+
+    //------------Cashcollection Recieve Amount----------------------
+    Double todayCashmemberfee = (from ag in db.Member_tabs where ag.Cdate == today1 && ag.BranchCode == item.BranchCode select ag.Fee).DefaultIfEmpty(0).Sum();
+    Double todayCashagfee = (from ag in db.AgentDetails where ag.Doj == today1 && ag.BranchCode == item.BranchCode select ag.formfee).DefaultIfEmpty(0).Sum();
+    Double todayCashcustfee = (from ag in db.appltabs where ag.formdate == today1 && ag.branchcode == item.BranchCode && tbd.Contains(ag.bondid) select ag.applicationcharge).DefaultIfEmpty(0).Sum();
+    Double todayCashlatefee = (from ag in db.Installmenttabs where ag.paymentdate == today1 && ag.branch == item.BranchCode select ag.latefine).DefaultIfEmpty(0).Sum();
+    //------------Cash Return Amount----------------------
+    Double todayCashSpot = (from ag in db.SpotCommTabs where ag.date == today1 && ag.opid == item.BranchCode && ag.paymethod == "Cash" select ag.commission).DefaultIfEmpty(0).Sum();
+    Double todayCashVoucher = (from ag in db.Voucher_Reports where ag.date == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "Cash" select ag.netamount).DefaultIfEmpty(0).Sum();
+    Double todayCashExpense = (from ag in db.Expenses where ag.date_time == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "Cash" && ag.type == 0 select ag.amount).DefaultIfEmpty(0).Sum();
+    Double todayCashrelief = (from ag in db.Installmenttabs where ag.paymentdate == today1 && ag.branch == item.BranchCode select ag.reliefrs).DefaultIfEmpty(0).Sum();
+    Double totalcashreturn = todayCashVoucher + todayCashExpense + todayCashrelief + todayCashSpot;
+    //------------DD Return Amount----------------------
+    Double todayDDSpot = (from ag in db.SpotCommTabs where ag.date == today1 && ag.opid == item.BranchCode && ag.paymethod == "DD" select ag.commission).DefaultIfEmpty(0).Sum();
+    Double todayDDVoucher = (from ag in db.Voucher_Reports where ag.date == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "DD" select ag.netamount).DefaultIfEmpty(0).Sum();
+    Double todayDDExpense = (from ag in db.Expenses where ag.date_time == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "DD" && ag.type == 0 select ag.amount).DefaultIfEmpty(0).Sum();
+    Double totalDDreturn = todayDDVoucher + todayDDExpense + todayDDSpot;
+    //------------Cheque Return Amount----------------------
+    Double todayChequeSpot = (from ag in db.SpotCommTabs where ag.date == today1 && ag.opid == item.BranchCode && ag.paymethod == "Cheque" select ag.commission).DefaultIfEmpty(0).Sum();
+    Double todayChequeVoucher = (from ag in db.Voucher_Reports where ag.date == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "Cheque" select ag.netamount).DefaultIfEmpty(0).Sum();
+    Double todayChequeExpense = (from ag in db.Expenses where ag.date_time == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "Cheque" && ag.type == 0 select ag.amount).DefaultIfEmpty(0).Sum();
+    Double totalChequereturn = todayChequeVoucher + todayChequeExpense + todayChequeSpot;
+    //------------Bank Return Amount----------------------
+    Double todayBankSpot = (from ag in db.SpotCommTabs where ag.date == today1 && ag.opid == item.BranchCode && ag.paymethod == "banktransaction" select ag.commission).DefaultIfEmpty(0).Sum();
+    Double todayBankVoucher = (from ag in db.Voucher_Reports where ag.date == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "banktransaction" select ag.netamount).DefaultIfEmpty(0).Sum();
+    Double todayBankExpense = (from ag in db.Expenses where ag.date_time == today1 && ag.branchcode == item.BranchCode && ag.paymethod == "banktransaction" && ag.type == 0 select ag.amount).DefaultIfEmpty(0).Sum();
+    Double totalBankreturn = todayBankVoucher + todayBankExpense + todayBankSpot;
+    //-----------TotalCash---------------------------
+    Double totalcashbooking = todayCashp1booking + todayCashp2booking + todayCashp3booking + todayCashp4booking + todayCashp5booking  + todayCashp8booking;
+    Double totalcashrenewal = todayCashp1Renewal + todayCashp2Renewal + todayCashp3Renewal + todayCashp4Renewal + todayCashp5Renewal  + todayCashp8Renewal;
+    Double totalchequebooking = todayChequep1booking + todayChequep2booking + todayChequep3booking + todayChequep4booking + todayChequep5booking  + todayChequep8booking;
+    Double totalchequeRenewal = todayChequep1Renewal + todayChequep2Renewal + todayChequep3Renewal + todayChequep4Renewal + todayChequep5Renewal  + todayChequep8Renewal;
+    Double totalBankbooking = todayBankp1booking + todayBankp2booking + todayBankp3booking + todayBankp4booking + todayBankp5booking  + todayBankp8booking;
+    Double totalBankRenewal = todayBankp1Renewal + todayBankp2Renewal + todayBankp3Renewal + todayBankp4Renewal + todayBankp5Renewal  + todayBankp8Renewal;
+    Double totalcashamount = totalcashbooking + totalcashrenewal;
+    Double totalchequeamount = totalchequebooking + totalchequeRenewal;
+    Double totalbankamount = totalBankbooking + totalBankRenewal;
+    
+    Double totalbankpendingbookingp1 = todayNeftp1pendingbooking + todayUPIp1pendingbooking + todayRTGSp1pendingbooking + todayIMPSp1pendingbooking;
+    Double totalbankpendingrenewalp1 = todayNEFTp1pendingRenewal + todayUPIp1pendingRenewal + todayRTGSp1pendingRenewal + todayIMPSp1pendingRenewal;
+    Double totalbankpendingbookingp2 = todayNeftp2pendingbooking + todayUPIp2pendingbooking + todayRTGSp2pendingbooking + todayIMPSp2pendingbooking;
+    Double totalbankpendingrenewalp2 = todayNEFTp2pendingRenewal + todayUPIp2pendingRenewal + todayRTGSp2pendingRenewal + todayIMPSp2pendingRenewal;
+    Double totalbankpendingbookingp3 = todayNeftp3pendingbooking + todayUPIp3pendingbooking + todayRTGSp3pendingbooking + todayIMPSp3pendingbooking;
+    Double totalbankpendingrenewalp3 = todayNEFTp3pendingRenewal + todayUPIp3pendingRenewal + todayRTGSp3pendingRenewal + todayIMPSp3pendingRenewal;
+    Double totalbankpendingbookingp4 = todayNeftp4pendingbooking + todayUPIp4pendingbooking + todayRTGSp4pendingbooking + todayIMPSp4pendingbooking;
+    Double totalbankpendingrenewalp4 = todayNEFTp4pendingRenewal + todayUPIp4pendingRenewal + todayRTGSp4pendingRenewal + todayIMPSp4pendingRenewal;
+    Double totalbankpendingbookingp5 = todayNeftp5pendingbooking + todayUPIp5pendingbooking + todayRTGSp5pendingbooking + todayIMPSp5pendingbooking;
+    Double totalbankpendingrenewalp5 = todayNEFTp5pendingRenewal + todayUPIp5pendingRenewal + todayRTGSp5pendingRenewal + todayIMPSp5pendingRenewal;
+   
+    Double totalbankpendingbookingp8 = todayNeftp8pendingbooking + todayUPIp8pendingbooking + todayRTGSp8pendingbooking + todayIMPSp8pendingbooking;
+    Double totalbankpendingrenewalp8 = todayNEFTp8pendingRenewal + todayUPIp8pendingRenewal + todayRTGSp8pendingRenewal + todayIMPSp8pendingRenewal;
+
+    Double totalpendingbankbook = totalbankpendingbookingp1 + totalbankpendingbookingp2 + totalbankpendingbookingp3 + totalbankpendingbookingp4 + totalbankpendingbookingp5 + totalbankpendingbookingp8;
+    Double totalpendingbankRen = totalbankpendingrenewalp1 + totalbankpendingrenewalp2 + totalbankpendingrenewalp3 + totalbankpendingrenewalp4 + totalbankpendingrenewalp5 + totalbankpendingrenewalp8;
+
+    Double totalbankAppBookingp1 = todayNeftp1Appbooking + todayIMPSp1Appbooking + todayRTGSp1Appbooking + todayUPIp1Appbooking;
+    Double totalbankAppRenewalp1 = todayAppNEFTp1Renewal + todayAppIMPSp1Renewal + todayAppRTGSp1Renewal + todayAppUPIp1Renewal;
+
+    Double totalbankAppBookingp2 = todayNeftp2Appbooking + todayIMPSp2Appbooking + todayRTGSp2Appbooking + todayUPIp2Appbooking;
+    Double totalbankAppRenewalp2 = todayAppNEFTp2Renewal + todayAppIMPSp2Renewal + todayAppRTGSp2Renewal + todayAppUPIp2Renewal;
+
+    Double totalbankAppBookingp3 = todayNeftp3Appbooking + todayIMPSp3Appbooking + todayRTGSp3Appbooking + todayUPIp3Appbooking;
+    Double totalbankAppRenewalp3 = todayAppNEFTp3Renewal + todayAppIMPSp3Renewal + todayAppRTGSp3Renewal + todayAppUPIp3Renewal;
+
+    Double totalbankAppBookingp4 = todayNeftp4Appbooking + todayIMPSp4Appbooking + todayRTGSp4Appbooking + todayUPIp4Appbooking;
+    Double totalbankAppRenewalp4 = todayAppNEFTp4Renewal + todayAppIMPSp4Renewal + todayAppRTGSp4Renewal + todayAppUPIp4Renewal;
+
+    Double totalbankAppBookingp5 = todayNeftp5Appbooking + todayIMPSp5Appbooking + todayRTGSp5Appbooking + todayUPIp5Appbooking;
+    Double totalbankAppRenewalp5 = todayAppNEFTp5Renewal + todayAppIMPSp5Renewal + todayAppRTGSp5Renewal + todayAppUPIp5Renewal;
+
+    //Double totalbankAppBookingp6 = todayNeftp6Appbooking + todayIMPSp6Appbooking + todayRTGSp6Appbooking + todayUPIp6Appbooking;
+    //Double totalbankAppRenewalp6 = todayAppNEFTp6Renewal + todayAppIMPSp6Renewal + todayAppRTGSp6Renewal + todayAppUPIp6Renewal;
+
+
+    //Double totalbankAppBookingp7 = todayNeftp7Appbooking + todayIMPSp7Appbooking + todayRTGSp7Appbooking + todayUPIp7Appbooking;
+    //Double totalbankAppRenewalp7 = todayAppNEFTp7Renewal + todayAppIMPSp7Renewal + todayAppRTGSp7Renewal + todayAppUPIp7Renewal;
+   
+    Double totalbankAppBookingp8 = todayNeftp8Appbooking + todayIMPSp8Appbooking + todayRTGSp8Appbooking + todayUPIp8Appbooking;
+    Double totalbankAppRenewalp8 = todayAppNEFTp8Renewal + todayAppIMPSp8Renewal + todayAppRTGSp8Renewal + todayAppUPIp8Renewal;
+
+    Double totalAppBankbooking = Math.Round((totalbankAppBookingp1 + totalbankAppBookingp2 + totalbankAppBookingp3 + totalbankAppBookingp4 + totalbankAppBookingp5  + totalbankAppBookingp8), 0);
+    Double totalAppBankRenewal = Math.Round((totalbankAppRenewalp1 + totalbankAppRenewalp2 + totalbankAppRenewalp3 + totalbankAppRenewalp4 + totalbankAppRenewalp5 + totalbankAppRenewalp8), 0);
+    Double gtotcash = Math.Round(((todayCashmemberfee) + (todayCashagfee) + (todayCashcustfee) + (todayCashlatefee) + totalcashamount), 0);
+    Double cash = Math.Round((gtotcash - totalcashreturn), 0);
+    Double total = Math.Round((cash + balance), 0);
+    Double totcash = Math.Round(((todayCashmemberfee) + (todayCashagfee) + (todayCashcustfee) + (todayCashlatefee)), 0);
+    double closingbal = Math.Round((balance + cash), 0);
+    
+    };
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet" />
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    function transferdivdetail() {
+        $("#transferdiv").show();
+    }
+</script>
+<style>
+    .pricingTable {
+        padding-bottom: 20px;
+        border: 1px solid #9ed3cf;
+        text-align: center;
+    }
+
+        .pricingTable .pricingTable-header {
+            padding: 75px 0 5px 0;
+            background: #DCF3ED;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pricingTable .title {
+            width: 100%;
+            padding: 40px 0 5px 35px;
+            margin: 0;
+            background: linear-gradient(to right, #67B1B2, #C5E6E4);
+            font-size: 20px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: left;
+            position: absolute;
+            top: -43px;
+            left: -20px;
+            transform: rotate(-11deg);
+        }
+
+        .pricingTable .price-value {
+            padding: 30px 48px;
+            position: absolute;
+            right: -20px;
+            top: -15px;
+        }
+
+            .pricingTable .price-value:before {
+                content: "";
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to right, #67B1B2, #C5E6E4);
+                position: absolute;
+                right: -3px;
+                top: 0;
+                transform: rotate(18deg);
+            }
+
+            .pricingTable .price-value:after {
+                content: "";
+                border-top: 15px solid #67B1B2;
+                border-left: 69px solid rgba(0, 0, 0, 0);
+                border-right: 69px solid rgba(0, 0, 0, 0);
+                position: absolute;
+                bottom: -8px;
+                left: -10px;
+                transform: rotate(18deg);
+            }
+
+        .pricingTable .amount {
+            font-size: 15px;
+            color: #444;
+            font-weight: bold;
+            position: relative;
+            left: -5px;
+        }
+
+        .pricingTable .currency {
+            font-size: 7px;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            left: -10px;
+        }
+
+        .pricingTable .month {
+            font-size: 10px;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            position: absolute;
+            bottom: -15px;
+            right: 5px;
+        }
+
+        .pricingTable .description {
+            font-size: 14px;
+            color: #444;
+            padding-left: 20px;
+            text-align: left;
+        }
+
+        .pricingTable .pricing-content {
+            padding: 0; 
+            margin: 0;
+            list-style: none;
+        }
+
+           .pricingTable .pricing-content li{
+    /*display: block;*/
+    /*padding: -5px 0;*/
+    /*font-size: 2px;*/
+    color: #444;
+    /*text-align: left;*/
+    /*border-bottom: solid #DCF3ED;*/
+}
+
+                .pricingTable .pricing-content li:last-child {
+                    border-bottom: none;
+                }
+
+                .pricingTable .pricing-content li:nth-child(even) {
+                    background: #DCF3ED;
+                }
+
+        .pricingTable .pricingTable-signup {
+            display: inline-block;
+            margin-top: 9px;
+            z-index: 1;
+            position: relative;
+        }
+
+            .pricingTable .pricingTable-signup:before,
+            .pricingTable .pricingTable-signup:after {
+                content: "";
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: #fff;
+                border: 6px solid #ddd;
+                position: absolute;
+                top: 0;
+                transform: rotate(45deg);
+                z-index: -1;
+                transition: all 0.3s ease 0s;
+            }
+
+            .pricingTable .pricingTable-signup:before {
+                left: -28px;
+                border-top-color: #e67e22;
+                border-right-color: #e67e22;
+            }
+
+            .pricingTable .pricingTable-signup:after {
+                right: -28px;
+                border-bottom-color: #e67e22;
+                border-left-color: #e67e22;
+            }
+
+        .pricingTable:hover .pricingTable-signup:before,
+        .pricingTable:hover .pricingTable-signup:after {
+            transform: rotate(225deg);
+        }
+
+        .pricingTable .pricingTable-signup span {
+            display: inline-block;
+            padding: 12px 16px;
+            background: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+            text-transform: uppercase;
+            border-bottom: 6px solid #e67e22;
+            border-top: 6px solid #e67e22;
+        }
+
+    
+
+    .pricingTable .price-value:after {
+        border-left: 71px solid rgba(0, 0, 0, 0);
+        border-right: 71px solid rgba(0, 0, 0, 0);
+    }
+
+</style>
+<style>
+    .ui-widget-header {
+        background-color: #33414E;
+        background-image: none;
+        color: white;
+    }
+</style>
+<script>
+    $(function () {
+        $('#date').datepick();
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    function JavascriptFunction() {
+        var url = '@Url.Action("PostMethod", "Branch")';
+        $("#divLoading").show();
+        $.post(url, null,
+                function (data) {
+                    $("#PID")[0].innerHTML = data;
+                    $("#divLoading").hide();
+                });
+    }
+</script>
+<script>
+
+    function fetchtotal(qty_id) {
+
+        //debugger;
+        var grandtotal = 0;
+        var quantity = $('#' + qty_id).val();
+        var arr = [];
+        arr = qty_id.split('-')
+        var aa = arr[1];
+
+        var deno = $('#deno' + aa).val();
+        var total = deno * quantity;
+
+        $('#t-' + aa).val(total.toFixed(0));
+
+        for (var i = 1; i <= 10; i++) {
+
+            grandtotal += parseFloat($('#t-' + i).val());
+        }
+
+        $('#total').val(grandtotal.toFixed(0));
+        var balanceamount = $('#bal').val();
+
+        //if (grandtotal == balanceamount) {
+        //    $(':input[type="submit"]').prop('disabled', false);
+        //    $(':input[type="button"]').prop('disabled', false);
+        //}
+        //else {
+        //    $(':input[type="submit"]').prop('disabled', true);
+        //    $(':input[type="button"]').prop('disabled', true);
+        //}
+
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#dialog1").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "jQuery Dialog",
+            width: 500,
+            height: 300,
+
+        });
+        $("#dialog2").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "jQuery Dialog",
+            width: 500,
+            height: 300,
+
+        });
+        $("#dialog3").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "jQuery Dialog",
+            width: 500,
+            height: 300,
+
+        });
+        $("#dialog4").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "jQuery Dialog",
+            width: 500,
+            height: 300,
+
+        });
+        $("#dialog5").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "jQuery Dialog",
+            width: 500,
+            height: 300,
+
+        });
+        $("#dialog6").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "jQuery Dialog",
+            width: 500,
+            height: 300,
+
+        });
+        $("#dialog7").dialog({
+            modal: true,
+            autoOpen: false,
+            title: "jQuery Dialog",
+            width: 500,
+            height: 300,
+
+        });
+        $("#btnShow1").click(function () {
+            debugger;
+            $('#dialog1').dialog('open');
+        });
+        $("#btnShow2").click(function () {
+            debugger;
+            $('#dialog2').dialog('open');
+        });
+        $("#btnShow3").click(function () {
+            debugger;
+            $('#dialog3').dialog('open');
+        });
+        $("#btnShow4").click(function () {
+            debugger;
+            $('#dialog4').dialog('open');
+        });
+        $("#btnShow5").click(function () {
+            debugger;
+            $('#dialog5').dialog('open');
+        });
+        $("#btnShow6").click(function () {
+            debugger;
+            $('#dialog6').dialog('open');
+        });
+        $("#btnShow7").click(function () {
+            debugger;
+            $('#dialog7').dialog('open');
+        });
+    });
+</script>
+<script type="text/javascript">
+    function transfertypefn() {
+        debugger;
+        var ttype = $("#transfer").val();
+        if (ttype == "Bank") {
+            $("#banktransfer").show();
+            $("#cashtransfer").hide();
+        }
+        else if (ttype == "Cash") {
+            $("#banktransfer").hide();
+            $("#cashtransfer").show();
+        }
+        else {
+            $("#banktransfer").hide();
+            $("#cashtransfer").hide();
+        }
+    }
+</script>
+<script>
+    function matchamt() {
+        debugger;
+        var bal = $("#bal").val();
+        var trtype = $("#transfer").val();
+        var tramt1 = $("#transferamount1").val();
+        var tramt2 = $("#transferamount2").val();
+        if (trtype == "Bank") {
+            if (parseFloat(bal) < parseFloat(tramt1)) {
+                alert("Amount should be less the or equals to closing amount")
+                $("#transferamount1").val('');
+            }
+
+        }
+        else if (trtype == "Cash") {
+            if (parseFloat(bal) < parseFloat(tramt2)) {
+                alert("Amount should be less the or equals to closing amount")
+                $("#transferamount2").val('');
+            }
+        }
+    }
+</script>
+<div class="page-content" style="margin-left: -10px;">
+
+    <div class="container" style="margin-left: -10px;">
+        <div class="page-toolbar">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="col-md-4">Daily Closing</div>
+                </div>
+                <div class="col-md-12" style="background-color: #ddd;">
+                    <label style="color: red; font-size: 20px; margin-right: 10%">Opening Balance</label>
+                    <label style="color: blue; font-size: 20px; margin-right: 10%">@balance</label>
+                </div>
+                <div class="col-md-12" style="background-color: #f1b6c4;">
+                    <label style="color: red; font-size: 20px; margin-right: 10%">Closing Balance</label><label style="color: blue; font-size: 20px; margin-right: 10%">@closingbal</label>
+                </div>
+            </div>
+        </div>
+        @using (Html.BeginForm())
+        {
+
+            if (detail.transfertype == "Cash")
+            {
+                total = detail.transferamount;
+            }
+            else if (detail.transfertype == "Bank")
+            {
+                if (detail.bankapp == 1)
+                {
+                    total = detail.transferamount;
+                }
+                else
+                {
+                    total = detail.total;
+                }
+
+            }
+                             
+                            
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div class="col-md-6">
+                                <label style="text-align: left;">Cash Total</label>
+                            </div>
+                            <div class="col-md-6">
+                                <label style="text-align: right;">@cash</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="col-md-6">
+                                <label style="text-align: left;">Cheque Total</label>
+                            </div>
+                            <div class="col-md-6">
+                                <label style="text-align: right;">@totalchequeamount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="col-md-6">
+                                <label style="text-align: left;">Bank Total</label>
+                            </div>
+                            <div class="col-md-6">
+                                <label style="text-align: right;">@totalbankamount</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="hidden" value="@totalcashbooking" name="RecieveCashBookingApp"/>
+                    <input type="hidden" value="@totalchequebooking" name="RecieveChequeBookingApp"/>
+                    <input type="hidden" value="@totalBankbooking" name="RecieveBankBookingApp"/>
+
+                    <input type="hidden" value="@totalcashrenewal" name="RecieveCashRenApp"/>
+                    <input type="hidden" value="@totalchequeRenewal" name="RecieveChequeRenApp"/>
+                    <input type="hidden" value="@totalBankRenewal" name="RecieveBankRenApp"/>
+
+                    <input type="hidden" value="@totalpendingbankbook" name="RecieveBankBookingPending"/>
+                    <input type="hidden" value="@totalpendingbankRen" name="RecieveBankRenPending"/>
+
+                    <input type="hidden" value="@todayCashmemberfee" name="memberfee"/>
+                    <input type="hidden" value="@todayCashagfee" name="agentfee"/>
+                    <input type="hidden" value="@todayCashcustfee" name="custfee"/>
+                    <input type="hidden" value="@todayCashlatefee" name="Latefine"/>
+                    <input type="hidden" value="@todayCashrelief" name="Relief"/>
+                    <input type="hidden" value="@totalcashreturn" name="totalcashreturn"/>
+
+                    <input type="hidden" value="@todayCashExpense" name="ReturnCashExp"/>
+                    <input type="hidden" value="@todayChequeExpense" name="ReturnChequeExp"/>
+                    <input type="hidden" value="@todayBankExpense" name="ReturnBankExp"/>
+                    <input type="hidden" value="@todayCashSpot" name="ReturnCashSpot"/>
+                    <input type="hidden" value="@todayChequeSpot" name="ReturnChequeSpot"/>
+                    <input type="hidden" value="@todayBankSpot" name="ReturnBankSpot"/>
+                    <input type="hidden" value="@todayCashVoucher" name="ReturnCashVoucher"/>
+                    <input type="hidden" value="@todayChequeVoucher" name="ReturnChequeVoucher"/>
+                    <input type="hidden" value="@todayBankVoucher" name="ReturnBanVoucher"/>
+
+                    <input type="hidden" value="@totalcashamount" name="TotalCashamount"/>
+                    <input type="hidden" value="@totalchequeamount" name="TotalChequeamount" />
+                    <input type="hidden" value="@totalbankamount" name="TotalBankamount"/>
+                    <input type="hidden" value="@gtotcash" name="Grandtotalcash"/>
+                    <input type="hidden" value="@detail.trid" name="trid"/>
+                    <input type="hidden" value="@detail.opid" name="user"/>
+                    <input type="hidden" value="@detail.Id" name="id"/>
+                    <input type="hidden" value="@balance" name="OpeningBalance"/>
+                    <input type="hidden" value="@closingbal" name="ClosingBalance"/>
+                    <div class="col-md-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="pricingTable">
+                                        <div class="pricingTable-header">
+                                            <h3 class="title">Cash</h3>
+                                            <div class="price-value">
+                                                <span class="amount">
+                                                    <span class="currency"></span>
+                                                    Recieve
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12  pricingTable">
+                                            <div class="col-md-4">
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Type</b></li>
+                                                    <li style="margin-left: 5px;">@plan1.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan2.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan3.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan4.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan5.shortcutname</li>
+                                                    @* <li style="margin-left:5px;">@plan6.shortcutname</li>
+                     <li style="margin-left:5px;">@plan7.shortcutname</li>*@
+                                                    <li style="margin-left: 5px;">@plan8.shortcutname</li>
+                                                    <li style="margin-left: 5px;"><b>Total</b></li>
+                                                </ul>
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Other</b></li>
+                                                    <li style="margin-left: 5px;">Member Fee</li>
+                                                    <li style="margin-left: 5px;">Agent Fee</li>
+                                                    <li style="margin-left: 5px;">Customer Fee</li>
+                                                    <li style="margin-left: 5px;">Late Fee</li>
+                                                    <li style="margin-left: 5px;"><b>Total</b></li>
+                                                    <li style="margin-left: 5px;"><b>Grand Total</b></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Booking Amt</b></li>
+                                                    <li style="margin-left: 5px;">@todayCashp1booking</li>
+                                                    <li style="margin-left: 5px;">@todayCashp2booking</li>
+                                                    <li style="margin-left: 5px;">@todayCashp3booking</li>
+                                                    <li style="margin-left: 5px;">@todayCashp4booking</li>
+                                                    <li style="margin-left: 5px;">@todayCashp5booking</li>
+                                                    @*<li  style="margin-left:5px;">@todayCashp6booking</li>
+                                                      <li  style="margin-left:5px;">@todayCashp7booking</li>*@
+                                                    <li style="margin-left: 5px;">@todayCashp8booking</li>
+                                                    <li style="margin-left: 5px;"><b>@totalcashbooking</b></li>
+                                                </ul>
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>&nbsp;</b></li>
+                                                    <li style="margin-left: 5px;">&nbsp;</li>
+                                                    <li style="margin-left: 5px;">&nbsp;</li>
+                                                    <li style="margin-left: 5px;">&nbsp;</li>
+                                                    <li style="margin-left: 5px;">&nbsp;</li>
+                                                    <li style="margin-left: 5px;"><b></b></li>
+
+                                                </ul>
+
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                                    <li style="margin-left: 5px;">@todayCashp1Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayCashp2Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayCashp3Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayCashp4Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayCashp5Renewal</li>
+                                                    @* <li  style="margin-left:5px;">@todayCashp6Renewal</li>
+                                                       <li  style="margin-left:5px;">@todayCashp7Renewal</li>*@
+                                                    <li style="margin-left: 5px;">@todayCashp8Renewal</li>
+                                                    <li style="margin-left: 5px;"><b>@totalcashrenewal</b></li>
+                                                </ul>
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>&nbsp;</b></li>
+                                                    <li style="margin-left: 5px;">@todayCashmemberfee</li>
+                                                    <li style="margin-left: 5px;">@todayCashagfee</li>
+                                                    <li style="margin-left: 5px;">@todayCashcustfee</li>
+                                                    <li style="margin-left: 5px;">@todayCashlatefee</li>
+                                                    <li style="margin-left: 5px;"><b>@totcash</b></li>
+                                                    <li style="margin-left: 5px;"><b>@gtotcash</b></li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="pricingTable">
+                                        <div class="pricingTable-header">
+                                            <h3 class="title">Cheque</h3>
+                                            <div class="price-value">
+                                                <span class="amount">
+                                                    <span class="currency"></span>
+                                                    Recieve
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12  pricingTable">
+                                            <div class="col-md-4">
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Type</b></li>
+                                                    <li style="margin-left: 5px;">@plan1.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan2.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan3.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan4.shortcutname</li>
+                                                    <li style="margin-left: 5px;">@plan5.shortcutname</li>
+                                                    @* <li style="margin-left:5px;">@plan6.shortcutname</li>
+                     <li style="margin-left:5px;">@plan7.shortcutname</li>*@
+                                                    <li style="margin-left: 5px;">@plan8.shortcutname</li>
+                                                    <li style="margin-left: 5px;"><b>Total</b></li>
+                                                </ul>
+
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Booking Amt</b></li>
+                                                    <li style="margin-left: 5px;">@todayChequep1booking</li>
+                                                    <li style="margin-left: 5px;">@todayChequep2booking</li>
+                                                    <li style="margin-left: 5px;">@todayChequep3booking</li>
+                                                    <li style="margin-left: 5px;">@todayChequep4booking</li>
+                                                    <li style="margin-left: 5px;">@todayChequep5booking</li>
+                                                    @*  <li  style="margin-left:5px;">@todayChequep6booking</li>
+                         <li  style="margin-left:5px;">@todayChequep7booking</li>*@
+                                                    <li style="margin-left: 5px;">@todayChequep8booking</li>
+                                                    <li style="margin-left: 5px;"><b>@totalchequebooking</b></li>
+                                                </ul>
+
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                                    <li style="margin-left: 5px;">@todayChequep1Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayChequep2Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayChequep3Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayChequep4Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayChequep5Renewal</li>
+                                                    @*<li  style="margin-left:5px;">@todayChequep6Renewal</li>
+                         <li  style="margin-left:5px;">@todayChequep7Renewal</li>*@
+                                                    <li style="margin-left: 5px;">@todayChequep8Renewal</li>
+                                                    <li style="margin-left: 5px;"><b>@totalchequeRenewal</b></li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="pricingTable">
+                                        <div class="pricingTable-header">
+                                            <h3 class="title">Bank</h3>
+                                            <div class="price-value">
+                                                <span class="amount">
+                                                    <span class="currency"></span>
+                                                    Recieve
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12  pricingTable">
+                                            <div class="col-md-4">
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Type</b></li>
+                                                    <li style="margin-left: 5px;" id="btnShow1">@plan1.shortcutname</li>
+                                                    <li style="margin-left: 5px;" id="btnShow2">@plan2.shortcutname</li>
+                                                    <li style="margin-left: 5px;" id="btnShow3">@plan3.shortcutname</li>
+                                                    <li style="margin-left: 5px;" id="btnShow4">@plan4.shortcutname</li>
+                                                    <li style="margin-left: 5px;" id="btnShow5">@plan5.shortcutname</li>
+                                                    @* <li style="margin-left:5px;" id="btnShow6">@plan6.shortcutname</li>
+                     <li style="margin-left:5px;" id="btnShow7">@plan7.shortcutname</li>*@
+                                                    <li style="margin-left: 5px;" id="btnShow8">@plan8.shortcutname</li>
+                                                    <li style="margin-left: 5px;"><b>Total</b></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Booking Amt</b></li>
+                                                    <li style="margin-left: 5px;">@todayBankp1booking</li>
+                                                    <li style="margin-left: 5px;">@todayBankp2booking</li>
+                                                    <li style="margin-left: 5px;">@todayBankp3booking</li>
+                                                    <li style="margin-left: 5px;">@todayBankp4booking</li>
+                                                    <li style="margin-left: 5px;">@todayBankp5booking</li>
+                                                    @*<li  style="margin-left:5px;">@todayBankp6booking</li>
+                         <li  style="margin-left:5px;">@todayBankp7booking</li>*@
+                                                    <li style="margin-left: 5px;">@todayBankp8booking</li>
+                                                    <li style="margin-left: 5px;"><b>@totalBankbooking</b></li>
+                                                </ul>
+
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                                    <li style="margin-left: 5px;">@todayBankp1Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayBankp2Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayBankp3Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayBankp4Renewal</li>
+                                                    <li style="margin-left: 5px;">@todayBankp5Renewal</li>
+                                                    @*<li  style="margin-left:5px;">@todayBankp6Renewal</li>
+                         <li  style="margin-left:5px;">@todayBankp7Renewal</li>*@
+                                                    <li style="margin-left: 5px;">@todayBankp8Renewal</li>
+                                                    <li style="margin-left: 5px;"><b>@totalBankRenewal</b></li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="pricingTable">
+                                        <div class="pricingTable-header">
+                                            <h3 class="title">Cash</h3>
+                                            <div class="price-value">
+                                                <span class="amount">
+                                                    <span class="currency"></span>
+                                                    Return
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12  pricingTable">
+                                            <div class="col-md-6">
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Type</b></li>
+                                                    <li style="margin-left: 5px;">Voucher</li>
+                                                    <li style="margin-left: 5px;">Spot Commission</li>
+                                                    <li style="margin-left: 5px;">Expense</li>
+                                                    <li style="margin-left: 5px;">Relief</li>
+                                                    <li style="margin-left: 5px;"><b>Total</b></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Amount</b></li>
+                                                    <li style="margin-left: 5px;">@todayCashVoucher</li>
+                                                    <li style="margin-left: 5px;">@todayCashSpot</li>
+                                                    <li style="margin-left: 5px;">@todayCashExpense</li>
+                                                    <li style="margin-left: 5px;">@todayCashrelief</li>
+                                                    <li style="margin-left: 5px;"><b>@totalcashreturn</b></li>
+                                                </ul>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="pricingTable">
+                                        <div class="pricingTable-header">
+                                            <h3 class="title">Cheque</h3>
+                                            <div class="price-value">
+                                                <span class="amount">
+                                                    <span class="currency"></span>
+                                                    Return
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12  pricingTable">
+                                            <div class="col-md-6">
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Type</b></li>
+                                                    <li style="margin-left: 5px;">Voucher</li>
+                                                    <li style="margin-left: 5px;">Spot Commission</li>
+                                                    <li style="margin-left: 5px;">Expense</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Amount</b></li>
+                                                    <li style="margin-left: 5px;">@todayChequeVoucher</li>
+                                                    <li style="margin-left: 5px;">@todayChequeSpot</li>
+                                                    <li style="margin-left: 5px;">@todayChequeExpense</li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="pricingTable">
+                                        <div class="pricingTable-header">
+                                            <h3 class="title">Bank</h3>
+                                            <div class="price-value">
+                                                <span class="amount">
+                                                    <span class="currency"></span>
+                                                    Return
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-12  pricingTable">
+                                            <div class="col-md-6">
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Type</b></li>
+                                                    <li style="margin-left: 5px;">Voucher</li>
+                                                    <li style="margin-left: 5px;">Spot Commission</li>
+                                                    <li style="margin-left: 5px;">Expense</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <ul class="pricing-content">
+                                                    <li style="margin-left: 5px;"><b>Amount</b></li>
+                                                    <li style="margin-left: 5px;">@todayBankVoucher</li>
+                                                    <li style="margin-left: 5px;">@todayBankSpot</li>
+                                                    <li style="margin-left: 5px;">@todayBankExpense</li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7" style="background-color: #9ed3cf">
+
+                        <b>Total Collection</b>
+                        <div class="block" style="width: 100%; background-color: #dcf3ed;">
+
+                            <div class="block-content controls">
+
+
+                                <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+                                    <p style="position: absolute; top: 30%; left: 45%; color: White;">
+                                        Loading, please wait...<img src="../../Content/img/ajax-loading.gif">
+                                    </p>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-12">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <label style="text-align: left;">Denomination(Rs.)</label>
+                                        </div>
+                                        <div class="col-lg-1"></div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <label style="margin-right: 40px; text-align: center">Pieces</label>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <label style="text-align: center">Rs.</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="2000" name="deno1" id="deno1" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q1" id="q-1" onkeyup="fetchtotal(this.id)" value="0" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="twothousand" id="t-1" value="@detail.twothousand" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="500" name="deno3" id="deno3" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q3" id="q-3" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="fivehundred" id="t-3" value="@detail.fivehundred" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="200" name="deno2" id="deno2" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q2" id="q-2" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="twohundred" id="t-2" value="@detail.twohundred" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="100" name="deno4" id="deno4" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q4" id="q-4" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="hundred" id="t-4" value="@detail.hundred" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="50" name="deno5" id="deno5" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q5" id="q-5" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="fifty" id="t-5" value="@detail.fifty" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="20" name="deno6" id="deno6" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q6" id="q-6" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="twenty" id="t-6" value="@detail.twenty" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="10" name="deno7" id="deno7" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q7" id="q-7" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="ten" id="t-7" value="@detail.ten" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="5" name="deno8" id="deno8" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q8" id="q-8" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="five" id="t-8" value="@detail.five" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="2" name="deno9" id="deno9" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q9" id="q-9" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="two" id="t-9" value="@detail.two" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 10px;">
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="1" name="deno10" id="deno10" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-1">
+                                            <b>X</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="number" class="form-control" name="q10" id="q-10" value="0" onkeyup="fetchtotal(this.id)" required />
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" name="one" id="t-10" value="@detail.one" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 20px;">
+                                        <div style="float: left;" class="col-lg-7">
+                                            <label style="text-align: center">TOTAL</label>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="@detail.total" name="total" id="total" required />
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-lg-12" style="margin-top: 25px;">
+                                        <div style="float: left;" class="col-lg-7">
+                                            <label style="margin-right: 40px; text-align: center">PAYMENT DATE</label>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" value="@dt.ToString("dd/MM/yyyy")" name="date"  readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="margin-top: 25px;">
+                                        <div style="float: left;" class="col-lg-7">
+                                            <label style="margin-right: 40px; text-align: center">Today COLLECTION:</label>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="@cash" name="cash" id="cash" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="margin-top: 25px;">
+                                        <div style="float: left;" class="col-lg-7">
+                                            <label style="margin-right: 40px; text-align: center">Balance Amount:</label>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="@balance" name="remain" id="remain" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" style="margin-top: 25px;">
+                                        <div style="float: left;" class="col-lg-7">
+                                            <label style="margin-right: 40px; text-align: center">Total:</label>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-2">
+                                            <b>=</b>
+                                        </div>
+                                        <div style="float: left;" class="col-lg-3">
+                                            <input type="text" class="form-control" readonly="true" value="@total" name="bal" id="bal" required>
+                                        </div>
+                                    </div>
+                                    @if (detail.transfertype == "Bank" && detail.bankapp == 0)
+                                    {
+                                        <div class="page-toolbar-block pull-right">
+                                            <div class="widget-info widget-from">
+                                                <button type="button" name="command" value="Proceed" class="btn btn-primary pull-right" onclick="transferdivdetail()" style="background-color: #71B7B7; color: black;">Proceed</button>
+
+                                            </div>
+                                        </div>   
+                                    }
+                                </div>
+                                @if (detail.transfertype == "Bank" && detail.bankapp == 0)
+                                {
+                                      
+                                    <div class="row" style="border: 1px solid black; border-radius: 5px; width: 98%; margin-left: 3px; display: none;" id="transferdiv">
+                                        <div class="col-lg-12" style="margin-top: 25px;">
+                                            <div style="float: left;" class="col-lg-7">
+                                                <label style="margin-right: 40px; text-align: center">Transfer To:</label>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-2">
+                                                <b>=</b>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <select name="transfertype" id="transfer" onchange="transfertypefn()">
+                                                    <option value="select">Select</option>
+                                                    <option value="Bank">Bank</option>
+                                                    <option value="Cash">Cash</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12" style="margin-top: 25px; display: none;" id="banktransfer">
+
+                                            <div style="float: left;" class="col-lg-3">
+                                                <label style="margin-right: 40px; text-align: center">Bank :</label>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <select name="bankname">
+                                                    @foreach (var f in db.BankDetail_Tabs.ToList())
+                                                    {
+                                                        <option value="@f.bankname">@f.bankname</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <label style="margin-right: 40px; text-align: center">Amount :</label>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <input type="text" class="form-control" name="transferamount1" id="transferamount1" onblur="matchamt()" value="0" />
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <label style="margin-right: 40px; text-align: center">Remark :</label>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-9">
+                                                <textarea cols="25" rows="3" name="remark1"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12" style="margin-top: 25px; display: none;" id="cashtransfer">
+                                            <div style="float: left;" class="col-lg-3">
+                                                <label style="margin-right: 40px; text-align: center">Amount :</label>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <input type="text" class="form-control" name="transferamount2" id="transferamount2" onblur="matchamt()" value="0" required />
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <label style="margin-right: 40px; text-align: center">Remark :</label>
+                                            </div>
+                                            <div style="float: left;" class="col-lg-3">
+                                                <textarea cols="12" rows="2" name="remark2"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="page-toolbar-block pull-right">
+                                            <div class="widget-info widget-from">
+                                                <button type="submit" name="command" value="Submit" class="btn btn-primary pull-right" style="background-color: #71B7B7; color: black;">Save Record</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @if ((detail.transfertype == "Cash") || (detail.transfertype == "Bank" && detail.bankapp == 1))
+                                {
+                                    <div class="page-toolbar-block pull-right">
+                                        <div class="widget-info widget-from">
+                                            <button type="submit" name="command" value="Submit" class="btn btn-primary pull-right" style="background-color: #71B7B7; color: black;">Save Record</button>
+
+                                        </div>
+                                    </div>}
+
+                                <p style="color: maroon;"><b>@ViewBag.msg</b></p>
+
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+@*--------------Modal------------------*@
+
+<div id="dialog1" style="display: none;" align="center" class="ui-dialog-titlebar ui-widget-header container">
+    <div class="row">
+        <div class="col-md-12  pricingTable">
+            <div class="col-md-2">
+                <div class="col-md-12">
+                    <ul class="pricing-content">
+                        <li style="margin-left: 5px;"><b>&nbsp;</b></li>
+                        <li style="margin-left: 5px;"><b>Type</b></li>
+                        <li style="margin-left: 5px;">NEFT</li>
+                        <li style="margin-left: 5px;">IMPS</li>
+                        <li style="margin-left: 5px;">RTGS</li>
+                        <li style="margin-left: 5px;">UPI</li>
+                        <li style="margin-left: 5px;">Total</li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label style="color: black; text-align: center;"><b>Pending</b></label></div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <label style="color: black;"><b>Approved</b></label></div>
+                </div>
+                <div class="row">
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp1pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp1pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp1pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp1pendingbooking</li>
+                                <li style="margin-left: 5px;">@totalbankpendingbookingp1</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayNEFTp1pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayIMPSp1pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayRTGSp1pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayUPIp1pendingRenewal</li>
+                                <li style="margin-left: 5px;">@totalbankpendingrenewalp1</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp1Appbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp1Appbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp1Appbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp1Appbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppBookingp1</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayAppNEFTp1Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppIMPSp1Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppRTGSp1Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppUPIp1Renewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppRenewalp1</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog2" style="display: none;" align="center" class="ui-dialog-titlebar ui-widget-header container">
+    <div class="row">
+        <div class="col-md-12  pricingTable">
+            <div class="col-md-2">
+                <div class="col-md-12">
+                    <ul class="pricing-content">
+                        <li style="margin-left: 5px;"><b>&nbsp;</b></li>
+                        <li style="margin-left: 5px;"><b>Type</b></li>
+                        <li style="margin-left: 5px;">NEFT</li>
+                        <li style="margin-left: 5px;">IMPS</li>
+                        <li style="margin-left: 5px;">RTGS</li>
+                        <li style="margin-left: 5px;">UPI</li>
+                        <li style="margin-left: 5px;"><b>Total</b></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label style="color: black; text-align: center;"><b>Pending</b></label></div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <label style="color: black;"><b>Approved</b></label></div>
+                </div>
+                <div class="row">
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp2pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp2pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp2pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp2pendingbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingbookingp2</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayNEFTp2pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayIMPSp2pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayRTGSp2pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayUPIp2pendingRenewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingrenewalp2</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp2Appbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp2Appbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp2Appbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp2Appbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppBookingp2</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayAppNEFTp2Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppIMPSp2Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppRTGSp2Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppUPIp2Renewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppRenewalp2</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog3" style="display: none;" align="center" class="ui-dialog-titlebar ui-widget-header container">
+    <div class="row">
+        <div class="col-md-12  pricingTable">
+            <div class="col-md-2">
+                <div class="col-md-12">
+                    <ul class="pricing-content">
+                        <li style="margin-left: 5px;"><b>&nbsp;</b></li>
+                        <li style="margin-left: 5px;"><b>Type</b></li>
+                        <li style="margin-left: 5px;">NEFT</li>
+                        <li style="margin-left: 5px;">IMPS</li>
+                        <li style="margin-left: 5px;">RTGS</li>
+                        <li style="margin-left: 5px;">UPI</li>
+                        <li style="margin-left: 5px;"><b>Total</b></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label style="color: black; text-align: center;"><b>Pending</b></label></div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <label style="color: black;"><b>Approved</b></label></div>
+                </div>
+                <div class="row">
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp3pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp3pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp3pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp3pendingbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingbookingp3</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayNEFTp3pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayIMPSp3pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayRTGSp3pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayUPIp3pendingRenewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingrenewalp3</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp3Appbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp3Appbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp3Appbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp3Appbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppBookingp3</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayAppNEFTp3Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppIMPSp3Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppRTGSp3Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppUPIp3Renewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppRenewalp3</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog4" style="display: none;" align="center" class="ui-dialog-titlebar ui-widget-header container">
+    <div class="row">
+        <div class="col-md-12  pricingTable">
+            <div class="col-md-2">
+                <div class="col-md-12">
+                    <ul class="pricing-content">
+                        <li style="margin-left: 5px;"><b>&nbsp;</b></li>
+                        <li style="margin-left: 5px;"><b>Type</b></li>
+                        <li style="margin-left: 5px;">NEFT</li>
+                        <li style="margin-left: 5px;">IMPS</li>
+                        <li style="margin-left: 5px;">RTGS</li>
+                        <li style="margin-left: 5px;">UPI</li>
+                        <li style="margin-left: 5px;"><b>Total</b></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label style="color: black; text-align: center;"><b>Pending</b></label></div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <label style="color: black;"><b>Approved</b></label></div>
+                </div>
+                <div class="row">
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp4pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp4pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp4pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp4pendingbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingbookingp4</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayNEFTp4pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayIMPSp4pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayRTGSp4pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayUPIp4pendingRenewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingrenewalp4</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp4Appbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp4Appbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp4Appbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp4Appbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppBookingp4</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayAppNEFTp4Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppIMPSp4Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppRTGSp4Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppUPIp4Renewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppRenewalp4</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog5" style="display: none;" align="center" class="ui-dialog-titlebar ui-widget-header container">
+    <div class="row">
+        <div class="col-md-12  pricingTable">
+            <div class="col-md-2">
+                <div class="col-md-12">
+                    <ul class="pricing-content">
+                        <li style="margin-left: 5px;"><b>&nbsp;</b></li>
+                        <li style="margin-left: 5px;"><b>Type</b></li>
+                        <li style="margin-left: 5px;">NEFT</li>
+                        <li style="margin-left: 5px;">IMPS</li>
+                        <li style="margin-left: 5px;">RTGS</li>
+                        <li style="margin-left: 5px;">UPI</li>
+                        <li style="margin-left: 5px;"><b>Total</b></li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label style="color: black; text-align: center;"><b>Pending</b></label></div>
+                    <div class="col-md-6" style="text-align: center;">
+                        <label style="color: black;"><b>Approved</b></label></div>
+                </div>
+                <div class="row">
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp5pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp5pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp5pendingbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp5pendingbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingbookingp5</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayNEFTp5pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayIMPSp5pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayRTGSp5pendingRenewal</li>
+                                <li style="margin-left: 5px;">@todayUPIp5pendingRenewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankpendingrenewalp5</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricingTable col-md-6">
+
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Booking</b></li>
+                                <li style="margin-left: 5px;">@todayNeftp5Appbooking</li>
+                                <li style="margin-left: 5px;">@todayIMPSp5Appbooking</li>
+                                <li style="margin-left: 5px;">@todayRTGSp5Appbooking</li>
+                                <li style="margin-left: 5px;">@todayUPIp5Appbooking</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppBookingp5</b></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+
+                            <ul class="pricing-content">
+                                <li style="margin-left: 5px;"><b>Renewal</b></li>
+                                <li style="margin-left: 5px;">@todayAppNEFTp5Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppIMPSp5Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppRTGSp5Renewal</li>
+                                <li style="margin-left: 5px;">@todayAppUPIp5Renewal</li>
+                                <li style="margin-left: 5px;"><b>@totalbankAppRenewalp5</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dialog8" style="display: none;" align = "center" class="ui-dialog-titlebar ui-widget-header container">
+    <div class="row">
+                <div class="col-md-12  pricingTable">
+                    <div class="col-md-2">
+                      <div class="col-md-12">
+                <ul class="pricing-content">
+                      <li  style="margin-left:5px;"><b>&nbsp;</b></li>
+                    <li  style="margin-left:5px;"><b>Type</b></li>
+                    <li  style="margin-left:5px;">NEFT</li>
+                    <li  style="margin-left:5px;">IMPS</li>
+                    <li  style="margin-left:5px;" >RTGS</li>
+                    <li style="margin-left:5px;" >UPI</li>
+                    <li  style="margin-left:5px;"><b>Total</b></li>
+                </ul>
+                       
+                          </div>
+                        </div>
+                     <div class="col-md-10">
+                         <div class="row">
+                             <div class="col-md-6"><label style="color:black;text-align:center;"><b>Pending</b></label></div>
+                             <div class="col-md-6" style="text-align:center;"><label style="color:black;"><b>Approved</b></label></div>
+                         </div>
+                         <div class="row">
+                         <div class="pricingTable col-md-6">
+                            
+                          <div class="col-md-6">
+                        
+                <ul class="pricing-content">
+                    <li  style="margin-left:5px;"><b>Booking</b></li>
+                   <li  style="margin-left:5px;">@todayNeftp8pendingbooking</li>
+                       <li  style="margin-left:5px;">@todayIMPSp8pendingbooking</li>
+                        <li  style="margin-left:5px;">@todayRTGSp8pendingbooking</li>
+                        <li  style="margin-left:5px;">@todayUPIp8pendingbooking</li>
+                       <li  style="margin-left:5px;"><b>@totalbankpendingbookingp8</b></li>
+                </ul>
+                        </div>
+                    <div class="col-md-6">
+                      
+                <ul class="pricing-content">
+                    <li  style="margin-left:5px;"><b>Renewal</b></li>
+                        <li  style="margin-left:5px;">@todayNEFTp8pendingRenewal</li>
+                       <li  style="margin-left:5px;">@todayIMPSp8pendingRenewal</li>
+                        <li  style="margin-left:5px;">@todayRTGSp8pendingRenewal</li>
+                        <li  style="margin-left:5px;">@todayUPIp8pendingRenewal</li>
+                          <li  style="margin-left:5px;"><b>@totalbankpendingrenewalp8</b></li>
+                </ul>
+                        </div>
+                             </div>
+                         <div class="pricingTable col-md-6">
+                            
+                         <div class="col-md-6">
+                        
+                 <ul class="pricing-content">
+                    <li  style="margin-left:5px;"><b>Booking</b></li>
+                   <li  style="margin-left:5px;">@todayNeftp8Appbooking</li>
+                       <li  style="margin-left:5px;">@todayIMPSp8Appbooking</li>
+                        <li  style="margin-left:5px;">@todayRTGSp8Appbooking</li>
+                        <li  style="margin-left:5px;">@todayUPIp8Appbooking</li>
+                      <li  style="margin-left:5px;"><b>@totalbankAppBookingp8</b></li>
+                </ul>
+                        </div>
+                         <div class="col-md-6">
+                        
+                <ul class="pricing-content">
+                    <li  style="margin-left:5px;"><b>Renewal</b></li>
+                        <li  style="margin-left:5px;">@todayAppNEFTp8Renewal</li>
+                       <li  style="margin-left:5px;">@todayAppIMPSp8Renewal</li>
+                        <li  style="margin-left:5px;">@todayAppRTGSp8Renewal</li>
+                        <li  style="margin-left:5px;">@todayAppUPIp8Renewal</li>
+                </ul>
+                        </div>
+                             </div>
+                             </div>
+                         </div>
+                    </div>
+                    </div>
+</div>

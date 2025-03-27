@@ -1,0 +1,116 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    ViewBag.Title = "SetFormdate";
+    var dd = db.Operators.Where(c => c.BranchCode == User.Identity.Name && c.Status == 1).ToList();
+}
+<script type="text/javascript">
+    function ShowHideDiv() {
+        var chkYes = document.getElementById("chkYes");
+        var dvPassport = document.getElementById("dvPassport");
+        dvPassport.style.display = chkYes.checked ? "block" : "none";
+    }
+</script>
+
+
+<div class="page-content">
+    <div class="container">
+        <div class="page-toolbar">
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Set Business Date</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+
+            <div class="page-toolbar-block pull-right">
+            </div>
+
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            <div class="row" style="width: 100%">
+                <div class="col-md-6" style="width: 100%">
+
+                    <div class="block" style="width: 100%">
+                        <div class="block-content controls">
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Action</label>
+                                        </span>
+                                        <input type="radio" id="chkYes" name="command" value="Activate" onclick="ShowHideDiv()" />
+                                        Active
+                                     <input type="radio" id="chkNo" name="command" value="Deactivate" onclick="ShowHideDiv()" />Deactive
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-form">
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <label class="width">Operator Id</label></span>
+                                        <select id="Select1" class="form-control validate[required]" name="opid">
+                                            <option value="">Select</option>
+                                            @foreach (var item in dd)
+                                            {
+                                                <option value="@item.OperatorId">@item.OperatorName ( @item.OperatorId )</option>
+                                            }
+                                            <option value="All">All</option>
+                                        </select>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div id="dvPassport" style="display: none">
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Date Type</label></span>
+                                            <select class="form-control validate[required]" name="type">
+                                                <option value="">Select</option>
+                                                <option value="1">Back Date</option>
+                                                <option value="2">Fix Date</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Set Date</label></span>
+                                            <input type="text" name="date"  class="form-control validate[required]"  placeholder="DD/MM/YYYY" value="@DateTime.Now.ToString("dd/MM/yyyy")" >
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page-toolbar-block pull-right">
+                                <div class="widget-info widget-from">
+                                    <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure to change option? ');">Submit</button>
+
+                                </div>
+                            </div>
+                            <div>
+                                <p style="color: maroon;">
+                                    <b>@ViewBag.msg
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>  
+                      
+        }
+
+    </div>
+</div>

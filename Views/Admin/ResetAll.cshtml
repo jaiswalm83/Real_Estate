@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "ResetAll";
+}
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Reset All Password</h2>
+
+    @using (Html.BeginForm())
+    {
+        
+
+
+
+
+               
+
+
+                <div id="launchForm" class="form-container">
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn create-btn"><i class="fa fa-cog"></i>Reset Password</button>
+                    </div>
+                </div>
+
+
+         
+
+                            <div style="margin-left:10px;color:maroon;">&nbsp;@ViewBag.msg</div>
+
+                       
+
+
+
+
+             
+    }
+
+</div>
+
+

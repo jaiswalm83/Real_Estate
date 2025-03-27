@@ -1,0 +1,100 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DatewiseCustomerList>
+@using ODHDEVELOPERS.Models
+@{
+    ViewBag.Title = "DatewiseCustomerLedger";
+    Layout = "~/Views/Shared/_BranchLayout.cshtml";
+    var a = 0;
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(c => c.Id == 1);
+    var planlist = (from p in db.Plans where p.status == 1 select p).ToList();
+}
+
+<link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+<script src="~/Content/datepicker/jquery.plugin.js"></script>
+<script src="~/Content/datepicker/jquery.datepick.js"></script>
+<script>
+    $(function () {
+        $('#popupDatepicker').datepick();
+        $('#popupDatepicker1').datepick();
+        $('#inlineDatepicker').datepick({ onSelect: showDate });
+    });
+
+    function showDate(date) {
+        alert('The date chosen is ' + date);
+    }
+</script>
+
+
+
+<div class="page-content">
+
+    <div class="container" id="divid">
+
+        <div class="page-toolbar">
+
+            <div class="page-toolbar-block">
+                <div class="page-toolbar-title">Datewise @mr.custname</div>
+                <div class="page-toolbar-subtitle"></div>
+            </div>
+            
+
+            <div class="row" style="width: 100%">
+                <div class="col-md-6" style="width: 100%">
+
+                    <div class="block" style="width: 100%">
+                        <div class="block-content controls">
+                            @using (Html.BeginForm())
+                            {
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">Start Date</label></span>
+                                            <input type="text" class="form-control" id="popupDatepicker" name="sdate" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                   
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <label class="width">End Date</label></span>
+                                            <input type="text" class="form-control" id="popupDatepicker1" name="edate" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-form">
+                                    <div class="col-md-9">
+                                    <div class="input-group" >
+                                        <span class="input-group-addon">
+                                           <label class="width">Select @mr.planname Type</label></span>
+                                        <select name="planname" class="form-control">
+                                            <option selected value="">--Select--</option>
+                                            @foreach (var plan in planlist)
+                                            {
+                                                <option value="@plan.shortcutname">@plan.shortcutname</option>
+                                            }
+                                        </select>
+                                    </div>
+                                        </div>
+                                </div>
+                                <div class="page-toolbar-block pull-right">
+                                    <div class="widget-info widget-from">
+
+                                        <button class="btn btn-primary" onclick="target='_blank'"><i class="fa fa-cog"></i>Search</button>
+
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

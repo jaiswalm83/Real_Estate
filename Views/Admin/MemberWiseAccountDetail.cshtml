@@ -1,0 +1,140 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.DWMemberList>
+    @using ODHDEVELOPERS.Models;
+    @{
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "MemberWiseAccountDetail";
+        var a = 0;
+
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">All Member List</div>
+
+            <div id="1">
+                <table>
+                    @using (Html.BeginForm())
+                    {
+                        foreach (var item in Model)
+                        {
+                            if (a == 0)
+                            {
+
+                                <thead>
+                                    <tr>
+                                        <th colspan="4" style="text-align:center;">@User.Identity.Name</th>
+                                        <th colspan="4" style="text-align:center;"><b>All Member List</b></th>
+                                    </tr>
+                                </thead>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label id="sn"><b>S.N.</b></label>
+                                        </th>
+                                        <th>
+                                            <label id="newid"><b>Member Id</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="introducerid"><b>Member Name</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="spilid"><b>Date of Birth</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="position"><b>Father Name</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="email"><b>Mobile No</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="dojh"><b> Date of Joining</b></label>
+                                        </th>
+
+                                        <th>
+                                            <label id="View"><b>Action</b></label>
+                                        </th>
+
+
+
+
+                                    </tr>
+                                </thead>
+                            }
+                            a = a + 1;
+
+                            <tbody>
+                                <tr s>
+                                    <td>
+                                        @a
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.newmemberid)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.dob)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.fathername)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Mobileno)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.formdate)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("View Account", "MemberAccountDetail", new { newmemberid = item.newmemberid }, new { onclick = "return confirm('Are you sure to View Account?');" })
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+
+                        }
+
+                    }
+
+
+
+                </table>
+
+
+             
+         
+
+            @if (a > 0)
+            {
+                <div class="text-center d-grid gap-2">
+                    <a href="@Url.Action("PrintMemberList")" target="_blank" class="btn create-btn" style="margin-top:10px">Get Voucher In PDF</a>
+                </div>
+                    }
+
+
+                </div>
+            </div>
+
+    </div>
+
+
+
+
+
+
+
+

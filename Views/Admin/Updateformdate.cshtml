@@ -1,0 +1,120 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Updateformdate";
+    var dd = db.Branchtabs.Where(c => c.status == 1).ToList();
+    var op = db.Operators.Where(c => c.Status == 1).ToList();
+}
+<script type="text/javascript">
+    function ShowHideDiv() {
+        var chkYes = document.getElementById("chkYes");
+        var dvPassport = document.getElementById("dvPassport");
+        dvPassport.style.display = chkYes.checked ? "block" : "none";
+    }
+</script>
+
+
+
+
+
+
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <!-- Title -->
+    <h2 class="text-center create-title">Set Business Date</h2>
+
+    @using (Html.BeginForm())
+
+    {
+
+
+
+   
+
+
+        <!-- Form -->
+<div id="setEmiDateForm" class="form-container">
+
+    <!-- Action Radio Buttons -->
+    <div class="form-group">
+        <label class="form-label">Action</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="chkYes" name="command" value="Activate" onclick="ShowHideDiv()" required>
+            <label class="form-check-label" for="active">Active</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="chkNo" name="command" value="Deactivate" onclick="ShowHideDiv()" required>
+            <label class="form-check-label" for="deactive">Deactive</label>
+        </div>
+    </div>
+
+    <!-- Branch Code Dropdown -->
+    <div class="form-group">
+        <label for="branchCode" class="form-label">Branch Code</label>
+        <select class="form-control" id="Select1" name="opid" required>
+            <option value="">Select</option>
+            @foreach (var item in dd)
+            {
+                <option value="@item.BranchCode">@item.BranchName  ( @item.BranchCode (@item.type))</option>
+            }
+            @foreach (var a in op)
+            {
+                <option value="@a.OperatorId">@a.OperatorName (@a.Type)</option>
+            }
+            <option value="All">All</option>
+        </select>
+    </div>
+
+    <div id="dvPassport" style="display: none">
+        <div class="form-group">
+            <label for="branchCode" class="form-label">Date Type</label>
+            <select class="form-control" name="type" required>
+
+                <option value="">Select</option>
+                <option value="1">Back Date</option>
+                <option value="2">Fix Date</option>
+
+
+            </select>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="branchCode" class="form-label"> Set Date</label>
+
+            <input type="date" name="date" class="form-control validate[required]" value="@DateTime.Now.ToString("dd/MM/yyyy")">
+        </div>
+
+</div>
+
+
+
+
+
+    </div>
+    <!-- Submit Button -->
+    <div class="text-center">
+        <button type="submit" class="btn create-btn" onclick="return confirm('Are you sure to change option? ');">Submit</button>
+    </div>
+
+    <p style="color:maroon;">
+        <b>
+            @ViewBag.msg
+        </b>
+    </p>
+    }
+</div>
+
+
+
+
+
+
+
+
+
+

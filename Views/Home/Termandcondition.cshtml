@@ -1,0 +1,75 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Termandcondition";
+    UsersContext db = new UsersContext();
+    var comp = db.commission_tabs.Where(x => x.Id == 1).ToList();
+    var countachive = db.Acheviers.Where(x => x.status == 1).Count();
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+  <!--======= BANNER =========-->
+ <section class="page-title" style="background-image: url(/assets/images/background/bg-page-title.jpg);">
+    <div class="auto-container">
+        <div class="row clearfix">
+            <!--Title -->
+            <div class="title-column col-md-7 col-sm-6 col-xs-12">
+                <h1>Term and Condition</h1>
+            </div>
+            <!--Bread Crumb -->
+            <div class="breadcrumb-column col-md-5 col-sm-6 col-xs-12">
+                <ul class="bread-crumb clearfix">
+                     <li><a href="../Home/Index">Home</a></li>
+                    <li class="active">Term and Condition</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+  <br />
+  
+<!--======= CONTACT =========-->
+<section class="contact">
+    <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-md-push-1">
+            <div id="section-one" class="mb-50">
+              <h3 style="color:black; font-family: Cambria;">The following are the Terms and Conditions for online Payments. Please go through the same carefully. By accessing this site, you agree to be bound by the following terms and conditions.</h3>
+              <hr>
+            <p class="mb-20" style="text-align:justify; font-size:17px; font-family: Cambria; color:black;">1). The Company/Payment Service Provider will take all reasonable steps to ensure the accuracy of the payment details, however, the Company/ Payment Service Provider will not liable for any error. The User will not hold the Company/ Payment Service Provider responsible for any loss, damages, etc. that may be incurred/suffered by the User by using the payment gateway. 
+                <br />2). The User will not hold the Company/ Payment Service Provider responsible for rejecting the payment amount because of incorrect or incomplete entries. The User agrees that the debit/credit card details provided by him/ her for use of the aforesaid Service(s) must be correct and accurate and that the User shall not use a debit/ credit card, that is not lawfully owned by him/ her or the use of which is not authorized by the lawful owner thereof. The User further agrees and undertakes to provide correct and valid debit/credit card details.
+                <br />3). The Company/ Payment Service Provider shall not be liable for any inaccuracy, error or delay in, or omission of (a) any data, information or message, or (b) the transmission or delivery of any such data, information or message; or (c) any loss or damage arising from or occasioned by any such inaccuracy, error, delay or omission, non-performance or interruption in any such data, information or message.
+                <br />4). The User agrees that the record of the instructions given and transaction done shall be conclusive proof and binding for all purposes and can be used as evidence in any proceeding.
+                <br />5). The User agrees that the services will be at the sole discretion of the Company and the Company will be at liberty to vary the same from time to time, without giving any notice.
+              
+                <br />6). The Company may use and retain any information or data supplied by the User and will be at liberty to share the information and data with any other associate company or as may be required by any law or regulation.
+                <br />7). The User agrees to receive all sales or service calls from the Company’s employees/partner/alliances not withstanding your registration for DND registry.
+                <br />8). In the event the User wishes to cancel any of the services under this portal , it shall write to the customer support of the Company not later than 7 days of placing the order. The cancellation will be effective only after due confirmation from the Company and a notification to this effect will be sent to the User. The amount paid by the User will be refunded within 90 days of effective cancellation after deduction of processing charges at the rate 30% of transaction made subject to the condition that services have not been rendered by the Company. No claims for refund/ charge back shall be made by any User if such cancellation request is made beyond the time specified above.
+                <br />9). The User agrees that the Company is at liberty to withdraw at anytime the Online Payment facility, or any services provided there under, in respect of any or all the account(s) without assigning any reason whatsoever, without giving me/us any notice.
+                <br />10). In case the Website or Payment Service webpage, that is linked to the Website, is experiencing any server related issues like ‘slow down’ or ‘failure’ or ‘session timeout’, the User shall, before initiating the second payment, check whether his/her Bank Account has been debited or not and accordingly resort to one of the following options.
+                <br />11). In case the Bank Account appears to be debited, ensure that he/ she does not make the payment twice and immediately thereafter.
+                <br />12). In case the Bank Account is not debited, the User may initiate a fresh transaction to make payment.
+                <br />13).  The Company/ Payment Service Provider assumes no liability whatsoever for any monetary or other damage suffered by the User on account of:
+                <br />&nbsp;&nbsp; &nbsp;<span style="text-align:justify">(i) the delay, failure, interruption, or corruption of any data or other information transmitted in connection with use of the 
+                    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Payment Gateway or Services in connection thereto; and/ or</span>
+                <br />&nbsp;&nbsp; &nbsp;(ii) Any interruption or errors in the operation of the Payment Gateway.
+
+                <br />14).  The User agrees, understands and confirms that his/ her personal data including without limitation details relating to debit card/ credit card transmitted over the Internet may be susceptible to misuse, hacking, theft and/ or fraud and Company have no control over such matters.
+                <br />15). Payment Gateway Disclaimer - The Service is provided in order to facilitate access to avail pay the services offered online. The Company does not make any representation of any kind, express or implied, as to the operation of the Payment Gateway other than what is specified in the Website for this purpose. By accepting/ agreeing to these Terms and Conditions, the User expressly agrees that his/ her use of the aforesaid online payment Service is entirely at own risk and responsibility of the User
+
+                @*;There is no refund policy for Plot purchase in the ODH Developers pvt. ltd..
+                <br />17). &nbsp;&nbsp; In the form of De-active Plot, only those people come to your Plot who are invited by you. because you are not able to receive any other person payments.
+                <br />18). &nbsp;&nbsp; As soon as your Plot is completed by 6 people, then if you invite more friends an automatic de-Active Plot is created by ODH Developers pvt. ltd..
+                <br />19). &nbsp;&nbsp; There is no time limit to complete the Plot, if you  want to quickly complete your Plot so you can invite your friend faster than fast.
+                <br />20). &nbsp;&nbsp; A maximum of 6 people will come in a Plot, these six people will give you 50% amount of the Plot purchase amount.
+                <br />21). &nbsp;&nbsp; You can buy the multiple Plots at once time.*@
+            </p>
+           
+          </div>
+        </div>
+      </div>
+          </div>
+</section>
+  
+
+  
+ 

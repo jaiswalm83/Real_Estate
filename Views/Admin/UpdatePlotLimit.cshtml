@@ -1,0 +1,126 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.PlotLimit>
+    @using ODHDEVELOPERS.Models;
+    @{
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "UpdatePlotLimit";
+        var pagesize = (from r in db.PlotLimits select r).Count();
+        var grid = new WebGrid(null,
+                 defaultSort: "",
+                 rowsPerPage: pagesize,
+                 selectionFieldName: "SearchString",
+                 ajaxUpdateContainerId: "agrid",
+                 sortFieldName: "SortColumn",
+                 sortDirectionFieldName: "SortOrder");
+        grid.Bind(Model, autoSortAndPage: true, rowCount: pagesize);
+        var a = 0;
+    }
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function () {
+            // Initially hide the edit fields
+            $('.edit-mode').hide();
+
+            // Toggle between display and edit mode when Edit or Cancel buttons are clicked
+            $('.edit-user, .cancel-user').on('click', function () {
+                var tr = $(this).closest('tr'); // Find the row
+                tr.find('.edit-mode, .display-mode').toggle(); // Toggle edit and display mode
+            });
+
+            // Handle Save button click
+            $('.save-user').on('click', function () {
+                var tr = $(this).closest('tr');
+                var projectid = tr.find("#projectid").text();
+                var minvalue = tr.find("#minvalue").val();
+                var maxvalue = tr.find("#maxvalue").val();
+
+                // Update the labels with the new values
+                tr.find("#lblminvalue").text(minvalue);
+                tr.find("#lblmaxvalue").text(maxvalue);
+
+                // Toggle between edit and display mode
+                tr.find('.edit-mode, .display-mode').toggle();
+
+                // Create the data object to send in the AJAX request
+                var Plan = {
+                    "projectid": projectid,
+                    "minvalue": minvalue,
+                    "maxvalue": maxvalue,
+                };
+
+                // Send AJAX request to update the data
+                $.ajax({
+                    url: '/Admin/EditPlotLimit/',
+                    data: JSON.stringify(Plan),
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Edit Block Limit</div>
+
+            @if (a == 0)
+            {
+                <div id="comm">
+                    <div id="gridContent">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Project Name</th>
+                                    <th>Min Value</th>
+                                    <th>Max Value</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Row 1 -->
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="display-mode">@item.projectid</span>
+                                            <label id="projectid" class="edit-mode">@item.projectid</label>
+                                        </td>
+                                        <td>
+                                            <span class="display-mode">@item.projectname</span>
+                                            <label id="projectname" class="edit-mode">@item.projectname</label>
+                                        </td>
+                                        <td>
+                                            <span class="display-mode">
+                                                <label id="lblminvalue">@item.minvalue</label>
+                                            </span>
+                                            <input type="text" id="minvalue" value="@item.minvalue" class="edit-mode" />
+                                        </td>
+                                        <td>
+                                            <span class="display-mode">
+                                                <label id="lblmaxvalue">@item.maxvalue</label>
+                                            </span>
+                                            <input type="text" id="maxvalue" value="@item.maxvalue" class="edit-mode" />
+                                        </td>
+                                        <td>
+                                            <button class="edit-user display-mode btn btn-primary">Edit</button>
+                                            <button class="save-user edit-mode btn btn-success">Save</button>
+                                            <button class="cancel-user edit-mode btn btn-danger">Cancel</button>
+                                        </td>
+                                    </tr>
+                                }
+                                <!-- Repeat the above rows for other items -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+                </div>
+            
+

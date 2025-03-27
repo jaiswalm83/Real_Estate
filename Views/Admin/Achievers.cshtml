@@ -1,0 +1,257 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+    ViewBag.Title = "Achievers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    UsersContext db = new UsersContext();
+    var countachivers = db.Acheviers.ToList().Count();
+    int a = 1;
+}
+<link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+<script>
+    function readURL3(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#sasa')
+                    .attr('src', e.target.result)
+                    .width(200)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+
+        }
+    }
+    $(document).ready(function () {
+        $("#sasa").click(function () {
+            $("#pic").click();
+        });
+    });
+</script>
+
+<script>
+    function showmodel(chechid) {
+        debugger;
+        var _newid = chechid;
+        event.preventDefault();
+        if (confirm('Are you sure update achiver?')) {
+            $.ajax({
+                url: "/admin/getachiverlist/", type: "get", data: { newid: _newid },
+                success: function (d) {
+                    for (var i = 0; i < d.length; i++) {
+                        $("#imgachiver").attr("src", d[i].Slide1.replace('~', ''));
+                        $("#Slide2").val(d[i].Slide2);
+                        $("#Slide3").val(d[i].Slide3);
+                        $("#Slide4").val(d[i].Slide4);
+                        $("#newid").val(d[i].Id);
+                    }
+                }
+            });
+        }
+        setTimeout(function () {
+            debugger;
+            $('[data-toggle="mypopover"]').attr("data-placement", "left").popover({ "trigger": "hover" });
+        }, 2000);
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgachiver')
+                    .attr('src', e.target.result)
+                    .width(102)
+                    .height(80);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<link href="~/assets/css1/main css/Forms.css" rel="stylesheet" />
+@if (TempData["msg"] != null)
+{
+    <script>
+        alert('@TempData["msg"]');
+    </script>
+
+}
+
+<div class="container mt-5">
+    <!-- Title -->
+    @using (Html.BeginForm("Achievers", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <h2 class="text-center create-title">Add Achiever</h2>
+
+        <!-- Form -->
+        <div id="achieverForm" class="form-container" onsubmit="return handleSubmit(event)">
+
+            <!-- Achiever Image Upload -->
+            <div class="form-group">
+                <label for="achieverImage" class="form-label">Achiever Image</label>
+                <input type="file" class="form-control" name="slide1" onchange="readURL3(this)" id="pic" accept="image/*">
+                <small style="color:red">File size should be between 500kb–3000kb. Please Upload  1080 pixels Width 1024pix and Heigh 720pix. Image dimensions do not matter.</small>
+                <p id="imageError" style="color: red; display: none;">Please upload a valid image within the specified size.</p>
+            </div>
+
+            <!-- Achiever Name -->
+            <div class="form-group">
+                <label for="achieverName" class="form-label">Achiever Name</label>
+                <input type="text" class="form-control" id="achieverName" name="Slide2" placeholder="Enter Achiever Name" required>
+            </div>
+
+            <!-- Achiever Prize -->
+            <div class="form-group">
+                <label for="achieverPrize" class="form-label">Achiever Prize</label>
+                <input type="text" class="form-control" id="achieverPrize" name="Slide3" placeholder="Enter Achiever Prize" required>
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="form-group">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="tel" class="form-control" name="Slide4" id="mobile" placeholder="Enter Mobile Number" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" name="Upload" value="Upload" class="btn create-btn">Upload</button>
+            </div>
+
+        </div>
+    }
+    <p style="color:maroon;"><b> @ViewBag.msg</b></p>
+    <!-- Display Uploaded Data -->
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Uploaded Achiever Details</div>
+
+            @if (countachivers != 0)
+            {
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Image</th>
+                            <th>Achiever Name</th>
+                            <th>Achieve Prize</th>
+                            <th>Mobile</th>
+                            <th>Upload Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in db.Acheviers.Where(x => x.Id >= 1).ToList())
+                        {
+                            a = a + 1;
+                            <tr>
+                                <td>@a</td>
+                                <td><img src="@Url.Content(item.Slide1)" style="height:100px;width:100px" class="img-responsive" /></td>
+                                <td>@item.Slide2</td>
+                                <td>@item.Slide3</td>
+                                <td>@item.Slide4</td>
+                                <td>@item.Cdate</td>
+                                <td>
+
+                                    @if (item.status == 1)
+                                    {
+                                        <span style="color:red"><a href="@Url.Action("statuschange2", "Admin", new { s = item.Id, m = item.status })" class="btn btn-primary"> Block</a></span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:green"><a href="@Url.Action("statuschange2", "Admin", new { s = item.Id, m = item.status })" class="btn btn-primary"> Active</a></span>
+                                    }
+
+                                </td>
+                                @if (item.status != 0)
+                                {
+                                    <td style="color:green;">Active</td>
+                                }
+                                else
+                                {
+                                    <td style="color:red;">Inactive</td>
+                                }
+                                <td>
+
+                                    <a href="#myModal" role="button" class="btn" data-toggle="modal" id="@item.Id" onclick="showmodel(this.id)">Update</a>
+                                </td>
+                            </tr>
+
+
+
+                        }
+
+                    </tbody>
+                </table>
+            }
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header text-center" style="background-color: #1e293b; color: white; width: 100%; padding: 15px; border-bottom: 3px solid #0d6efd;">
+                        <h4 class="modal-title w-100 font-weight-bold">Update Achiever</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; font-size: 24px;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body" style="padding: 20px;">
+                        <div class="row">
+                            @using (Html.BeginForm("Achievers", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                <input type="hidden" id="newid" name="newid" />
+
+                                <div style="overflow-x: auto;">
+
+                                    <table class="table table-striped" style="width:100%; max-width:488px; min-width:488px">
+                                        <tbody>
+                                            <tr>
+                                                <td style="font-weight: 600; width: 30%;">Achiever Image</td>
+                                                <td>
+                                                    <img src="" style="height: 80px; width: 102px; border-radius: 5px; object-fit: cover; border: 1px solid #ddd; padding: 5px;" id="imgachiver" />
+                                                    <input type="file" onchange="readURL(this)" name="Slide1" class="form-control mt-2" style="border-radius: 5px; padding: 8px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: 600;">Achiever Name</td>
+                                                <td><input name="Slide2" id="Slide2" type="text" class="form-control" style="border-radius: 5px; padding: 8px;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: 600;">Designation</td>
+                                                <td><input name="Slide3" id="Slide3" type="text" class="form-control" style="border-radius: 5px; padding: 8px;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: 600;">Mobile</td>
+                                                <td><input name="Slide4" id="Slide4" type="text" class="form-control" maxlength="10" style="border-radius: 5px; padding: 8px;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td class="text-right">
+                                                    <button type="submit" class="btn btn-primary" name="command" value="Update" style="padding: 10px 20px; border-radius: 5px; font-weight: 600;">Update</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

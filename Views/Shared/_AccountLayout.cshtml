@@ -1,0 +1,171 @@
+﻿@using ODHDEVELOPERS.Models;
+@{
+   
+    var logo=string.Empty;
+    var companyname = string.Empty;
+    var incometype = string.Empty;
+    UsersContext db=new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    var br = db.CreateAccounts.Single(b => b.code == User.Identity.Name);
+    var r = db.CompanyInfos.Single(ci => ci.Id == 1);
+    var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+    var plan2 = db.Plans.Single(p2 => p2.Plancode== 2);
+    var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+    var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+    var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+    var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+    var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+    var nlr = db.NewLogins.Single(n => n.UserName == User.Identity.Name);
+         logo = r.CompanyLogo;
+         companyname = r.CompanyName;
+         incometype = r.IncomeType;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@companyname-@nlr.type Panel</title>
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="~/Content/css/operatorstyle.css" rel="stylesheet" />
+    <link href="~/Content/css/styles.css" rel="stylesheet" type="text/css" id="theme" />
+    <link rel="stylesheet" href="~/Content/width.css" />
+    <link href="~/Content/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="~/Content/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/css/ui-lightness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet">
+    <link href="~/Content/css/base-admin-3.css" rel="stylesheet">
+    <link href="~/Content/css/base-admin-3-responsive.css" rel="stylesheet">
+    <link href="~/Content/css/pages/dashboard.css" rel="stylesheet">
+    <link href="~/Content/css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/fancybox/jquery.fancybox.pack.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/d3.v3.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/rickshaw/rickshaw.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/flot/jquery.flot.js"></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/excanvas.min.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.stack.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.pie.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/flot/jquery.flot.resize.js'></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/knob/jquery.knob.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+    <script type='text/javascript' src='~/Scripts/js/plugins/jvectormap/jquery-jvectormap-europe-mill-en.js'></script>
+
+    <script type="text/javascript" src="~/Scripts/js/plugins.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/demo.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/maps.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/charts.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/actions.js"></script>
+</head>
+
+<body>
+    <div class="page-container">
+
+        <header>
+            <div class="page-head" style="background-color: #740b0b;">
+
+                <ul class="page-head-elements">
+                    <li><a href="#" class="page-navigation-toggle"><span class="fa fa-bars"></span></a></li>
+                    <li class="search">
+                        <input type="text" class="form-control" placeholder="Search..." />
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown" style="font-size: 30px; margin-left: 100px;">@companyname<span></span></a>
+                    </li>
+                </ul>
+
+                <ul class="page-head-elements pull-right">
+
+                    <li><a href="#" class="page-sidebar-toggle"><span class="fa fa-tasks"></span></a></li>
+                </ul>
+
+            </div>
+
+            <div class="page-navigation" style="background-color: #740b0b;">
+
+                <div class="page-navigation-info" style="background-color: #740b0b;">
+                    <div style="float: left; margin-top: 0px;">
+                        <img id="imgid" src="@Url.Content(logo) "  style="height:70px; width:100px;" /></div>
+                    @*<div style="float:left;"><a href="~/Admin/Index"><h5 style="color:white;"><b>@companyname</b></h5> </a></div>*@
+                </div>
+
+                <div class="profile">
+                    <div class="profile-info">
+                        <div class="profile-title" style="text-transform: uppercase; margin-left: 5px; float: left; font-size: small;">
+                            <h6>Hello , @User.Identity.Name</h6>
+                        </div>
+                        <div class="profile-buttons">
+                            <div class="btn-group">
+                                <a class="but dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li role="presentation" class="dropdown-header">Profile</li>
+                                    <li class="divider"></li>
+                                    <li><a href="~/Account/ChangePassword">Change Password</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="~/Admin/Logout">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="navigation">
+
+                    <li><a href="~/Account/Index"><i class="fa fa-home"></i>Home</a></li>
+                    <li><a href="~/Account/CompleteReport"><i class="glyphicon glyphicon-list-alt"></i>Complete Reports</a>
+
+
+                    </li>
+
+                    <li><a href="~/Account/BranchReport"><i class="glyphicon glyphicon-list-alt"></i>Branch Wise Reports</a>
+
+
+
+                    </li>
+
+
+                    <li><a href="~/Account/OperatorReport"><i class="glyphicon glyphicon-list-alt"></i>Operator Wise Reports</a>
+
+
+                    </li>
+
+
+
+                </ul>
+
+            </div>
+        </header>
+
+
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+
+
+
+    </div>
+
+
+</body>
+</html>

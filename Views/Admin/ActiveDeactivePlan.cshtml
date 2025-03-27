@@ -1,0 +1,111 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.NewPlan>
+@using ODHDEVELOPERS.Models;
+@{
+    UsersContext db = new UsersContext();
+    var mr = db.Members.Single(m => m.Id == 1);
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "ActiveDeactivePlan";
+    var a = 0;
+}
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+
+
+
+        <div class="index_body">
+            <div class="table-container">
+                <div class="header-row">Active-Deactive @mr.planname</div>
+
+                <table>
+
+                    @foreach (var item in Model)
+                    {
+                        if (a == 0)
+                        {
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <label id="sn"><b>S.N.</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="BranchCode"><b>@mr.planname Name</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="BranchName"><b>Term</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="BranchDistrict"><b>Monthly</b></label>
+                                    </th>
+
+                                    <th>
+                                        <label id="branchaddress"><b>Quarterly</b></label>
+                                    </th>
+
+
+                                    <th>
+                                        <label id="mobile"><b>Half-Yearly</b></label>
+                                    </th>
+                                    <th>
+                                        <label><b>Yearly</b></label>
+                                    </th>
+                                    <th>
+                                        <label id="Action"><b>Action</b></label>
+                                    </th>
+                                </tr>
+                            </thead>
+                        }
+
+                        a = a + 1;
+                <tbody>
+                    <tr>
+                        <td>
+                            @a
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Planname)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Term)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.mlyinstall)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.qlyinstall)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.hlyinstall)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ylyinstall)
+                        </td>
+                        @if (item.status == 1)
+                        {
+                            <td>
+
+                                @Html.ActionLink("Deactive", "ActiveDeactivePlan", new { Plancode = item.Plancode, status = 1 }, new { onclick = "return confirm('Are you sure to Deactivate this " + mr.planname + "?');" })
+                            </td>
+                        }
+                        @if (item.status == 0)
+                        {
+                            <td>
+                                @Html.ActionLink("Active", "ActiveDeactivePlan", new { Plancode = item.Plancode, status = 0 }, new { onclick = "return confirm('Are you sure to Activate this " + mr.planname + "?');" })
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+                    }
+
+                </table>
+
+            </div>
+
+
+        </div>
+

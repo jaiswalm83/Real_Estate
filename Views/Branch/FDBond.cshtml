@@ -1,0 +1,989 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Member_tab>
+    @using ODHDEVELOPERS.Models
+    @{
+        Layout = "~/Views/Shared/_BranchLayout.cshtml";
+        ViewBag.Title = "Bond";
+
+        UsersContext db = new UsersContext();
+        var mr = db.Members.Single(m => m.Id == 1);
+        var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+        var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+        var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+        var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+        var ptlist = db.Plans.Where(p => p.shortcutname == "FD").ToList();
+        var tr = db.TDSLF_tabs.Single(f => f.Id == 1);
+        var a = 0;
+        DateTime dt = DateTime.Now.Date;
+        Formdate fd = new Formdate();
+        var count = db.Formdates.Where(o => o.opid == User.Identity.Name).Count();
+        if (count > 0)
+        {
+            fd = db.Formdates.Single(o => o.opid == User.Identity.Name);
+            if (fd.status == 2)
+            {
+                dt = fd.formdate;
+            }
+
+        }
+
+        //var subcss = 0;
+        //var token = 0;
+        //var br = db.Branchtabs.Single(c => c.BranchCode == User.Identity.Name);
+        //var sbccount = db.Csstabs.Where(c => c.cssdate == dt && c.Branch == User.Identity.Name && c.Type == 1).Count();
+
+        //if (sbccount == 0)
+        //{
+        //    subcss = 1;
+        //    token = 1;
+        //}
+        //else
+        //{
+
+        //    var cctn = (from o in db.Csstabs where o.cssdate == dt && o.Branch == User.Identity.Name && o.Type == 1 select o.Token).DefaultIfEmpty(1).Max();
+        //    var ccsn = (from o in db.Csstabs where o.cssdate == dt && o.Token == cctn && o.Branch == User.Identity.Name && o.Type == 1 select o.Subcss).DefaultIfEmpty(1).Max() + 1;
+
+        //    subcss = ccsn;
+        //    token = cctn;
+        //}
+
+    }
+
+
+    <link href="~/Content/datepicker/jquery.datepick.css" rel="stylesheet">
+
+    <script src="~/Content/datepicker/jquery.plugin.js"></script>
+    <script src="~/Content/datepicker/jquery.datepick.js"></script>
+    <style type="text/css">
+        .text-center {
+            text-align: center;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        function setLoadFun() {
+            $('#Chequedate').datepick();
+        }
+        function checkAnotherFun() {
+            alert('Check now...!');
+        }
+        function checkAnotherFun2() {
+            alert('Check now...2!');
+        }
+        window.addEventListener('load', setLoadFun);
+        //window.addEventListener('load', checkAnotherFun);
+        //window.addEventListener('load', checkAnotherFun2);
+
+    </script>
+
+    <script type="text/javascript">
+        function detail(chkid) {
+            var chk = $("#" + chkid).val();
+            if (chk == "Cheque") {
+                $("#detail").show();
+                $("#dd").hide();
+                $("#trdetail").hide();
+            }
+            else if (chk == "DD") {
+                $("#dd").show();
+                $("#detail").hide();
+                $("#trdetail").hide();
+            }
+            else if (chk == "banktransaction") {
+                $("#dd").hide();
+                $("#detail").hide();
+                $("#trdetail").show();
+            }
+            else {
+                $("#detail").hide();
+                $("#dd").hide();
+                $("#trdetail").hide();
+            }
+        }
+    </script>
+
+    @if (@fd.status == 0)
+    {
+        <script>
+            $(function () {
+                $('#formdate').datepick();
+                $('#pdate').datepick();
+
+            });
+
+
+        </script>
+
+    }
+    <script>
+    function changesubcss(token_id) {
+        var token = $("#" + token_id).val();
+        var dd = $('#pdate').val();
+        var url = '@Url.Action("Setsubcss", "Branch")';
+        $.get(url, { token: token, dd: dd }, function data(d) {
+            for (var i = 0; i <= d.length ; i++) {
+                var aa = parseInt(d[i].token)
+                if (d[i].status == 1) {
+                    $("#subcss").val(d[i].subcss);
+                    $("#token").val(d[i].token);
+                }
+                else {
+                    $("#subcss").val(1);
+                }
+            }
+
+        });
+    }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            var aa = $("#scssnocopy").val();
+            $("#subcss").val(aa);
+            var cc = $("#tokencopy").val();
+            $("#token").val(cc);
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#state").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteState",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.state, value: item.state };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+        })
+    </script>
+    <script>
+
+    function checkdistrict(check_id) {
+        $("#" + check_id).click(function () {
+
+            var state = $("#state").val();
+            var url = '@Url.Action("selectdistrict", "Branch")';
+            var select = $("#District");
+            $.get(url, { state: state }, function data(d) {
+
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].city + '">' + d[i].city + '</option>');
+                }
+
+            });
+        });
+
+    }
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $('#chk').change(function () {
+
+                var adr = $("#addr").val();
+                if (this.checked == true) {
+                    $("#guraddr").val(adr);
+                }
+                else if (this.checked == false) {
+                    $("#guraddr").val('');
+                }
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#memberid").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Branch/AutoCompletememberid",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.MemberName, value: item.NewMemberId };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#IntroducerCode").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteAgentId",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.name, value: item.NewAgentId };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#nomrel").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteRelations",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.relations, value: item.relations };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#gurrel").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/AutoCompleteRelations",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.relations, value: item.relations };
+
+
+                            }))
+
+                        }
+                    })
+                }
+            });
+
+
+        })
+    </script>
+    <script>
+    function checkid(check_id) {
+
+        $("#" + check_id).click(function () {
+            var intro = $("#" + check_id).val();
+            var url = '@Url.Action("SelectIntroName", "Branch")';
+            $.get(url, { intro: intro }, function data(name1) {
+                $('#introducername').val(name1)
+            });
+        });
+
+    }
+    </script>
+    <script type="text/javascript">
+    function check(check_id) {
+
+        $("#" + check_id).click(function () {
+            $('.plantype').prop('checked', false);
+        });
+
+    }
+    ///Selecting Plan Name Start here ////
+    function rply_click(clicked_id) {
+       // $("#" + clicked_id).click(function () {
+
+            var fno = $("#" + clicked_id).val();
+            if (fno == "MIS") {
+                $("#pb").show();
+                $("#pay2").show();
+                $("#payment").hide();
+                $("#pay").hide();
+                $("#tc").hide();
+
+            }
+            else {
+                $("#pb").hide()
+                $("#pay2").hide();
+                $("#payment").show();
+                $("#pay").show();
+                $("#tc").show();
+            }
+            var url = '@Url.Action("SelectPlan2", "Branch")';
+            $.get(url, { fno: fno }, function data(d) {
+
+                var select = $("#PlanName");
+                select.children().remove();
+                select.append('<option value="Select">Select</option>');
+                for (var i = 0; i < d.length; i++) {
+                    select.append('<option value="' + d[i].Id + '">' + d[i].projectname + '</option>');
+
+                }
+            });
+       // });
+            $('#plantype02').val($("#" + clicked_id).attr('data-val'));
+    }
+
+    ///Selecting Plan Mode Start here ////
+
+    function selectplan(plan_id) {
+
+       // $("#" + plan_id).click(function () {
+
+            var plan = $("#" + plan_id).val();
+            var formdate = $("#formdate").val();
+
+            var url = '@Url.Action("selectmode2", "Branch")';
+            $.get(url, { plan: plan, formdate: formdate }, function data(t) {
+
+                var mode = $("#mode");
+
+                mode.children().remove();
+                mode.append('<option value="Select">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    mode.append('<option value="' + t[i].mode + '">' + t[i].mode + '</option>');
+
+                    $("#term").val(t[i].term);
+
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    $('#expirydate').val(parsedDate);
+
+                }
+
+
+            });
+        //  });
+
+            $('#projectid').val(plan);
+            $('#planname02').val($("#" + plan_id + ' option:selected').text());
+    }
+
+
+    ///Selecting Payment Start here ////
+
+    function selectpayment(mode_id) {
+
+        $("#" + mode_id).click(function () {
+            var plan = $("#PlanName").val();
+            var mode = $("#" + mode_id).val();
+
+            var url = '@Url.Action("selectpayment2", "Branch")';
+            $.get(url, { plan: plan, mode: mode }, function data(t) {
+
+                var payment = $("#payment");
+                var misp = $("#bal");
+                payment.children().remove();
+                payment.append('<option value="Select">Select</option>');
+                for (var i = 0; i < t.length; i++) {
+                    payment.append('<option value="' + t[i].payment + '">' + t[i].payment + '</option>');
+                    misp.append('<option value="' + t[i].payment + '">' + t[i].payment + '</option>');
+
+                }
+
+
+            });
+        });
+    }
+
+    ///Reset Term Start here ////
+    function checkterm(payment_id) {
+
+        $("#" + payment_id).mouseover(function () {
+            var plan = $("#PlanName").val();
+            var planmode = $('#mode').val();
+            var term = $('#term').val();
+            var formdate = $("#formdate").val();
+            var amount = $("#payment").val();
+
+            var url = '@Url.Action("selectplotsize2", "Branch")';
+            $.get(url, { plan: plan, planmode: planmode, amount: amount, term: term, formdate: formdate }, function data(t) {
+                for (var i = 0; i < t.length; i++) {
+
+                    $("#Totalamount").val(t[i].totalconsideration);
+                    $("#maturityamt").val(t[i].maturityamount);
+                    $("#amountinword").val(t[i].amountinwords);
+                    $("#nolandunit").val(t[i].plotsize);
+
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    $('#expirydate').val(parsedDate);
+
+
+                }
+            });
+
+        });
+    }
+
+    ///checkig validity of amount Start here ////
+    function checkplan(payment_id) {
+
+        $("#" + payment_id).click(function () {
+            var plan = $("#PlanName").val();
+            var planmode = $('#mode').val();
+            var term = $('#term').val();
+            var formdate = $("#formdate").val();
+            var amount = $("#" + payment_id).val();
+
+            var url = '@Url.Action("selectplotsize2", "Branch")';
+            $.get(url, { plan: plan, planmode: planmode, amount: amount, term: term, formdate: formdate }, function data(t) {
+                for (var i = 0; i < t.length; i++) {
+
+                    $("#Totalamount").val(t[i].totalconsideration);
+                    $("#maturityamt").val(t[i].maturityamount);
+                    $("#amountinword").val(t[i].amountinwords);
+                    $("#nolandunit").val(t[i].plotsize);
+
+                    var date = new Date(parseInt(t[i].expirydate.replace("/Date(", "").replace(")/", ""), 10));
+                    var day = ('0' + date.getDate()).slice(-2);
+                    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    var parsedDate = (month) + "/" + (day) + "/" + date.getFullYear();
+                    $('#expirydate').val(parsedDate);
+
+
+                }
+            });
+
+        });
+
+    }
+    </script>
+    <script>
+    function planamount() {
+        debugger;
+        var plan = $("#PlanName").val();
+        var term = $('#term').val();
+        var amount = $("#bal").val();
+        var planmode = $('#mode').val();
+        var url = '@Url.Action("MisAmount", "Branch")';
+        $.get(url, { plan: plan, term: term, amount: amount, planmode: planmode }, function data(d) {
+            debugger;
+            $("#payment2").val(d[0].totalconsideration);
+            $("#maturityamt").val(d[0].maturityamount);
+            $("#nolandunit").val(d[0].plotsize);
+            $("#amountinword").val(d[0].amountinwords);
+            //alert(aa);
+        })
+    }
+    </script>
+
+
+    <div class="container mt-4 FormContainer">
+        <h2 class="text-center mb-4">Deposit Form</h2>
+
+        <!-- Search Form -->
+        <form method="post" class="border p-4 rounded shadow formtag">
+            <div class="mb-3 controls">
+                <label for="memberid" class="form-label formLabel">Enter Member Id:</label>
+                <input type="text" class="form-control formInput" placeholder="Enter Member Id" name="memberid" id="memberid">
+            </div>
+            <div class="text-center d-grid gap-2">
+                <button value="Search" type="submit" name="command" class="btn btn-lg formButtom">
+                    <i class="fa fa-search"></i> Search
+                </button>
+            </div>
+            <div style="float:left;">
+                <p style="color:maroon;"><b>@ViewData["newbondid"] @ViewBag.msg</b></p>
+                @if (ViewBag.msg == mr.custname + " Created Successfully....")
+                {
+                    @Html.ActionLink("Print " + mr.custname, "PrintFDBond", new { newbondid = ViewData["newbondid"] }, new { onclick = "return confirm('Are you sure to Print?'),target='_blank'" })
+                }
+            </div>
+        </form>
+        <form enctype="multipart/form-data" method="post" id="_submit" class="mt-3">
+            @foreach (var item in Model)
+            {
+                if (a == 0)
+                {
+
+                    var kyc = db.Member_tabs.Single(aa => aa.NewMemberId == item.NewMemberId);
+
+                    <div class="row justify-content-between ml-0" style="width:100%;">
+
+                        <!-- Personal Details -->
+                        <div class="column mb-4" style="width:49%;">
+                            <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                <h4 class="text-center mb-1">Personal Details</h4>
+                                <!-- Branch Code -->
+                                <div class="mb-3">
+                                    <label for="BranchCode" class="form-label formLabel">@mr.branchname Code:</label>
+                                    <input type="text" id="branchcode" class="form-control formInput" readonly
+                                           value="@User.Identity.Name" name="branchcode" required />
+                                </div>
+                                <!-- Form Fee -->
+                                <div class="mb-3">
+                                    <label for="formfee" class="form-label formLabel">Form Fee:</label>
+                                    <input type="text" class="form-control formInput" id="applicationcharge" required
+                                           name="applicationcharge" value="@tr.applicationfee" readonly="true" />
+                                </div>
+                                <!-- Member Id -->
+                                <div class="mb-3">
+                                    <label for="newmemberid" class="form-label formLabel">Deposit Form No: </label>
+                                    <input type="text" class="form-control formInput" id="drawno" name="drawno" />
+                                </div>
+                                <!-- Name -->
+                                <div class="mb-3">
+                                    <label for="name" class="form-label formLabel">Member Id:</label>
+                                    <input type="text" class="form-control formInput" readonly="true"
+                                           value=" @Html.DisplayFor(modelItem => item.NewMemberId)" id="newmemberid"
+                                           name="newmemberid" required />
+                                </div>
+                                <!-- Father's Name -->
+                                <div class="mb-3">
+                                    <label for="name" class="form-label formLabel">Name of Applicant:</label>
+                                    <input type="text" class="form-control formInput" readonly="true"
+                                           value=" @Html.DisplayFor(modelItem => item.MemberName)" id="name"
+                                           name="name" required />
+                                </div>
+                                <!-- Mother's Name -->
+                                <div class="mb-3">
+                                    <label for="Mother" class="form-label formLabel">DOB:</label>
+                                    <input type="text" id="dob" readonly="true"
+                                           value=" @Html.DisplayFor(modelItem => item.DOB)" name="dob"
+                                           class="form-control formInput" required />
+                                </div>
+                                <!-- Father's Name -->
+                                <div class="mb-3">
+                                    <label for="name" class="form-label formLabel">Relation:</label>
+                                    <div>
+                                        <input type="text" style="background-color: #eee; float: left; width: 20%;" readonly="true"
+                                               value="@Html.DisplayFor(modelItem => item.Relationof)"
+                                               class="form-control formInput" required name="RelationOf" id="RelationOf" />
+
+                                        <input type="text" value="@Html.DisplayFor(modelItem => item.Father)"
+                                               readonly="true" class="form-control formInput" required name="fathername"
+                                               id="fathername" style="width: 80%; float: left" />
+                                    </div>
+                                </div>
+                                <!-- Introducer Code -->
+                                <div class="mb-3">
+                                    <label for="NewIntroducerId" class="form-label formLabel">Mobile No:</label>
+                                    <input type="text" id="mobileno" name="mobileno" maxlength="10" readonly="true"
+                                           value=" @Html.DisplayFor(modelItem => item.Mobile)" class="form-control formInput"
+                                           required />
+                                </div>
+                                <!-- Nationality -->
+                                <div class="mb-3 position-relative">
+                                    <label for="Nationality" class="form-label formLabel">Introducer Code:</label>
+                                    <input type="text" class="form-control formInput" onclick="checkid(this.id)"
+                                           id="IntroducerCode" name="newintroducerid" required />
+                                </div>
+                                <!-- DOB -->
+                                <div class="mb-3">
+                                    <label for="Dob" class="form-label formLabel">Introducer Name:</label>
+                                    <input type="text" class="form-control formInput" id="introducername" readonly="true">
+
+                                </div>
+                                <!-- Date of joining -->
+                                <div class="mb-3">
+                                    <label for="Dob" class="form-label formLabel">Date of Agreement:</label>
+                                    <input type="text" class="form-control formInput date" id="formdate" name="formdate"
+                                           value="@dt" readonly="true" required>
+
+                                </div>
+                                <!-- Designation -->
+                                <div class="mb-3">
+                                    <label for="Dob" class="form-label formLabel">Nationality:</label>
+                                    <input type="text" id="nationality" name="nationality" readonly="true"
+                                           value=" @Html.DisplayFor(modelItem => item.Nationality)"
+                                           class="form-control formInput" />
+                                </div>
+                                <!-- Email -->
+                                <div class="mb-3">
+                                    <label for="PinCode" class="form-label formLabel">Upload Image:</label>
+                                    <input class="form-control formInput" id="File1" name="photo" type="file" />
+
+                                </div>
+
+                            </div>
+                            <!-- Guardian Details -->
+                            <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                <h4 class="text-center mb-1">Address Details</h4>
+                                <!-- Address -->
+                                <div class="mb-3">
+                                    <label for="Address" class="form-label formLabel">Address:</label>
+                                    <textarea id="addr" readonly="" name="addr" class="form-control formInput" required=""
+                                              rows="3">@Html.Raw(item.Address)</textarea>
+                                </div>
+                                <!-- State -->
+                                <div class="mb-3">
+                                    <label for="State" class="form-label formLabel">State:</label>
+                                    <input type="text" id="state" name="State"
+                                           value=" @Html.DisplayFor(modelItem => item.state)" class="form-control formInput"
+                                           readonly="true" required />
+                                </div>
+                                <!-- District -->
+                                <div class="mb-3">
+                                    <label for="District" class="form-label formLabel">District:</label>
+                                    <input type="text" id="District" name="District"
+                                           value=" @Html.DisplayFor(modelItem => item.District)" class="form-control formInput"
+                                           readonly="true" required />
+                                </div>
+                               
+                            </div>
+                            <!-- Bank Details -->
+                            <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                <h4 class="text-center mb-1">Bank Details</h4>
+                                <!-- Address -->
+                                <div class="mb-3">
+                                    <label for="Address" class="form-label formLabel">PAN No:</label>
+                                    <input type="text" id="panno" name="panno"
+                                           value=" @Html.DisplayFor(modelItem => item.panno)" class="form-control formInput" />
+                                </div>
+                                <!-- State -->
+                                <div class="mb-3">
+                                    <label for="State" class="form-label formLabel">Bank Name:</label>
+                                    <input type="text" id="bankname" name="bankname"
+                                           value=" @Html.DisplayFor(modelItem => item.bankname)"
+                                           class="form-control formInput" />
+                                </div>
+                                <!-- District -->
+                                <div class="mb-3">
+                                    <label for="District" class="form-label formLabel">Bank A/C No :</label>
+                                    <input type="text" id="accountno" name="accountno"
+                                           value=" @Html.DisplayFor(modelItem => item.accountno)"
+                                           class="form-control formInput" />
+                                </div>
+                                <!-- Landline No -->
+                                <div class="mb-3">
+                                    <label for="PinCode" class="form-label formLabel">IFSC Code:</label>
+                                    <input type="text" id="IFSC" value=" @Html.DisplayFor(modelItem => item.IFSC)"
+                                           name="IFSC" class="form-control formInput" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- second column -->
+                        <!-- Address and Nominee Details -->
+                        <div class="column mb-4" style="width:49%;">
+                            <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                <h4 class="text-center mb-1">@mr.planname Details</h4>
+                                <!-- Address -->
+                                <div class="mb-3">
+                                    <label for="Address" class="form-label formLabel"> @mr.planname Category:</label>
+                                    @foreach (var pt in ptlist)
+                                    {
+                                        a++;
+                                        <input type="radio" name="plantype02" class="plantype" value="@pt.Plancode"
+                                               id="shortcutname-@a" data-val="@pt.shortcutname"
+                                               onclick="rply_click(this.id)" />@pt.shortcutname
+                                     }
+                                    <input type="hidden" name="plantype" id="plantype02" value="NA" />
+                                </div>
+                                <!-- District -->
+                                <div class="mb-3">
+                                    <label for="District" class="form-label formLabel">@mr.planname Name:</label>
+                                    <select class="form-control formInput" onchange="selectplan(this.id)" id="PlanName"
+                                            name="PlanName02" required>
+                                        <option>Select </option>
+
+                                    </select>
+                                    <input type="hidden" name="planname" value="NA" id="planname02" />
+                                    <input type="hidden" name="projectid" value="0" id="projectid" />
+                                </div>
+                                <!-- Pin Code -->
+                                <div class="mb-3" id="termDiv">
+                                    <label for="PinCode" class="form-label formLabel">Term(Yr.):</label>
+                                    <input type="text" class="form-control formInput" name="Term" id="term"
+                                           onmouseover="checkterm(this.id)" required readonly="" />
+                                </div>
+                                <!-- Landline No -->
+                                <div class="mb-3">
+
+                                    <label for="PinCode" class="form-label formLabel">@mr.planname Mode:</label>
+                                    <select class="form-control formInput" id="mode" name="mode"
+                                            onclick="selectpayment(this.id)" required>
+                                        <option value="Select">Select</option>
+                                        <option value="Single">Single</option>
+                                    </select>
+
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3" id="pb" style="display:none;">
+                                    <label for="PinCode" class="form-label formLabel">Total Consideration(Rs.):</label>
+                                    <select class="form-control formInput" id="bal" name="totalcon2" onchange="planamount()"
+                                            required>
+                                        <option>Select </option>
+                                    </select>
+                                </div>
+                                <!-- Landline No -->
+                                <div class="mb-3" id="phasediv">
+                                    <label for="PinCode" class="form-label formLabel">Payment(Rs.):</label>
+                                    <select class="form-control formInput" id="payment" name="payment1"
+                                            onchange="checkplan(this.id)" required>
+                                        <option>Select </option>
+                                    </select>
+                                </div>
+                                <!-- Landline No -->
+                                <div class="mb-3" id="pay2" style="display:none;">
+                                    <label for="PinCode" class="form-label formLabel">Payment(Rs.):</label>
+                                    <input type="text" class="form-control formInput" id="payment2" name="payment2"
+                                           readonly="true" />
+                                </div>
+                                <!-- Landline No -->
+                                <div class="mb-3" id="tc">
+                                    <label for="PinCode" class="form-label formLabel">Total Consideration(Rs.):</label>
+                                    <input type="text" class="form-control formInput" id="Totalamount" name="totalcon"
+                                           readonly="true" required />
+                                </div>
+                                <!-- Landline No -->
+                                <div class="mb-3" >
+                                    <label for="PinCode" class="form-label formLabel">Maturity Amount(Rs.):</label>
+                                    <input type="text" class="form-control formInput" id="maturityamt"
+                                           name="expectedraisablevalue" readonly="true" required />
+                                </div>
+                                <!-- Landline No -->
+                                <div class="mb-3">
+                                    <label for="PinCode" class="form-label formLabel">Expiry Date:</label>
+                                    <input type="text" class="form-control formInput" id="expirydate" name="expirydate"
+                                           readonly="true" required />
+                                </div>
+                            </div>
+                            <!-- Nominee Details -->
+                            <div class="p-4 rounded formtag mb-4" id="nomineeDiv" style="height: max-content;">
+                                <h4 class="text-center mb-1">Nominee Details</h4>
+                                <!-- Nominee name -->
+                                <div class="mb-3">
+                                    <label for="Address" class="form-label formLabel">Nominee Name:</label>
+                                    <input type="text" id="nomineename" name="nomineename"
+                                           value=" @Html.DisplayFor(modelItem => item.NomineeName)"
+                                           class="form-control formInput" readonly="true" />
+                                </div>
+                                <!-- State -->
+                                <div class="mb-3">
+                                    <label for="State" class="form-label formLabel">Nominee Age:</label>
+                                    <input type="text" id="nomage" name="nomage"
+                                           value=" @Html.DisplayFor(modelItem => item.NomineeAge)" class="form-control formInput"
+                                           readonly="true" />
+                                </div>
+                                <!-- District -->
+                                <div class="mb-3">
+                                    <label for="District" class="form-label formLabel">Relationship:</label>
+                                    <input type="text" class="form-control formInput" id="nomrel" name="nomrel"
+                                           value="@Html.DisplayFor(modelItem => item.NomineeRel)" readonly="true" />
+                                </div>
+                                <!-- Pin Code -->
+                                <div class="mb-3">
+                                    <label for="PinCode" class="form-label formLabel">Nominee Address:</label>
+                                    <textarea id="nomaddr" name="nomaddr" class="form-control formInput" readonly=""
+                                              rows="3">@Html.Raw(item.Nomineeaddr)</textarea>
+                                </div>
+                            </div>
+                            <!-- Payment Details -->
+                            <div class="p-4 rounded formtag mb-4" style="height: max-content;">
+                                <h4 class="text-center mb-1">Payment Details</h4>
+                                <!-- Nominee name -->
+                                <div class="mb-3">
+                                    <label for="Address" class="form-label formLabel">Payment Mode:</label>
+                                    <div class="d-flex">
+                                        <input type="radio" id="paymethod" name="paymethod" value="Cash" checked
+                                               onclick="detail(this.id)">
+                                        Cash&nbsp;&nbsp;
+                                        <input type="radio" id="paymethod2" name="paymethod" value="DD"
+                                               onclick="detail(this.id)">
+                                        DD&nbsp;&nbsp;
+                                        <input type="radio" id="paymethod3" name="paymethod" value="Cheque"
+                                               onclick="detail(this.id)">
+                                        Cheque&nbsp;&nbsp;
+                                        <input type="radio" id="paymethod4" name="paymethod" value="banktransaction"
+                                               onclick="detail(this.id)">
+                                        Bank Transaction
+                                    </div>
+                                </div>
+                                <!-- State -->
+                                <div class="mb-3">
+                                    <label for="State" class="form-label formLabel">Payment Date:</label>
+                                    <input type="text" id="pdate" name="pdate" class="form-control formInput"
+                                           value="@dt.ToString(" MM/dd/yyyy")" readonly="true" required />
+                                </div>
+                                <!-- District -->
+                                <div id="dd" style="display: none;">
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">DD No:</label>
+                                        <input type="text" id="checkorddno" name="checkorddno"
+                                               class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Draw No:</label>
+                                        <input type="text" id="drawno" name="drawno" class="form-control formInput" />
+                                    </div>
+                                </div>
+                                <!-- District -->
+                                <div id="detail" style="display: none;">
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Bank Name:</label>
+                                        <input type="text" id="bank" name="bank" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">A/C No:</label>
+                                        <input type="text" id="ACNO" name="Account" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Cheque No:</label>
+                                        <input type="text" id="chequeno" name="chequeno" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">A/C Holder Name:</label>
+                                        <input type="text" id="ACname" name="ACholdername" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Branch Name:</label>
+                                        <input type="text" id="barnch" name="Branch" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">IFSC:</label>
+                                        <input type="text" id="IFSCcode" name="IFSCCode" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Amount:</label>
+                                        <input type="text" id="Amount" name="ChequeAmount" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Cheque Date:</label>
+                                        <input type="text" id="Chequedate" name="Chequedate" value="@dt" readonly=""
+                                               class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Cheque Image:</label>
+                                        <input type="file" id="Chequeimage" name="Chequeimage"
+                                               class="form-control formInput" />
+                                    </div>
+                                </div>
+                                <div id="trdetail" style="display: none;">
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Bank Name:</label>
+                                        <select id="trbank" name="trbank" class="form-control formInput">
+                                            <option>select</option>
+                                            @foreach (var blist in db.BankDetail_Tabs.ToList())
+                                            {
+
+                                                <option value="@blist.bankname">@blist.bankname</option>
+
+                                            }
+                                        </select>
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Transaction Id:</label>
+                                        <input type="text" id="transactionid" name="transactionid"
+                                               class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Transaction Date:</label>
+                                        <input type="date" id="transactiondate" name="transactiondate"
+                                               class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Amount:</label>
+                                        <input type="text" id="tramount" name="tramount" class="form-control formInput" />
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">Pay Method:</label>
+                                        <div>
+                                            <input type="radio" id="trpmethod1" name="transactiontype" value="NEFT"
+                                                   checked>
+                                            NEFT&nbsp;
+                                            <input type="radio" id="trpmethod2" name="transactiontype" value="IMPS" />
+                                            IMPS&nbsp;
+                                            <input type="radio" id="trpmethod3" name="transactiontype" value="RTGS" />
+                                            RTGS&nbsp;
+                                            <input type="radio" id="trpmethod4" name="transactiontype" value="UPI" />
+                                            UPI&nbsp;
+                                            <input type="radio" id="trpmethod5" name="transactiontype" value="NACH" />
+                                            NACH
+                                        </div>
+                                    </div>
+                                    <!-- District -->
+                                    <div class="mb-3">
+                                        <label for="District" class="form-label formLabel">A/C Holder's A/C No:</label>
+                                        <input type="text" id="holderacno" name="holderacno" class="form-control formInput" />
+                                    </div>
+                                </div>
+                                <!-- District -->
+                                <div class="mb-3">
+                                    <label for="District" class="form-label formLabel">Branch Payable At:</label>
+                                    <input type="text" id="branchpay" name="branchpay" class="form-control formInput" />
+                                </div>
+                                <!-- District -->
+                                <div class="mb-3">
+                                    <label for="District" class="form-label formLabel">Amount In Words:</label>
+                                    <input type="text" name="amountword" class="form-control formInput" id="amountinword"
+                                           readonly="true" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-0">
+                          <button id="submit" value="Submit" type="submit" name="command"
+                                  class="btn btn-lg formButtom"
+                                  onclick="return confirm('Are you sure to create @mr.custname?')"
+                                  style="display:block;margin-left:auto;margin-right:auto;"><i
+                                  class="fa fa-cog"></i> Submit</button>
+                    </div>
+                }
+            }
+        </form>
+
+    </div>
+
+
+
+   
+
+
+
+

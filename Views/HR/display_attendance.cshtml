@@ -1,0 +1,187 @@
+﻿    @model IEnumerable<ODHDEVELOPERS.Models.temp_empatten>
+    @using ODHDEVELOPERS.Models;
+    @{
+        ViewBag.Title = "display_attendance";
+        Layout = "~/Views/Shared/_HRLayout.cshtml";
+        UsersContext db = new UsersContext();
+        var a = 0;
+        var gender = "";
+        DateTime firstofmonth = Convert.ToDateTime(ViewData["sdate"]);
+        DateTime lastofmonth = Convert.ToDateTime(ViewData["edate"]);
+        String atten = Convert.ToString(ViewData["idd"]);
+        Int32 status = Convert.ToInt32(ViewData["ad"]);
+    }
+    <script>
+        function showatten(_empid) {
+            var firstmonth = $("#firstofmonth").val();
+            var lastmonth = $("#lastofmonth").val();
+            $("#mytable tbody").empty();
+            $.ajax({
+                url: "/HR/getemployeelist",
+                type: "POST",
+                dataType: "json",
+                data: { empid: _empid, sdate: firstmonth, edate: lastmonth },
+                success: function (d) {
+                    debugger;
+                    for (var i = 0; i <= d.length; i++) {
+                        var date = new Date(parseInt(d[i].Attendencedate.replace("/Date(", "").replace(")/", ""), 10));
+                        var day = ('0' + date.getDate()).slice(-2);
+                        var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                        var parsedDate = (day) + "/" + (month) + "/" + date.getFullYear();
+
+                        $("#mytable tbody").append('<tr><td>' + d[i].empid + '</td><td>' + d[i].name + '</td><td>' + d[i].timingfrom + '</td><td>' + d[i].timingto + '</td><td>' + d[i].atten + '</td><td>' + parsedDate + '</td></tr>')
+                    }
+
+                }
+            })
+        }
+    </script>
+
+    <div class="container mt-5 FormContainer">
+        <h2 class="text-center mb-4">Monthly Attendence Details</h2>
+
+
+
+
+
+
+        <div class="mb-3" id="2">
+
+
+            <label class="form-label formLabel">Pay Salary System</label>
+
+
+
+
+        </div>
+        <form class="border p-4 rounded shadow formtag">
+
+            <div class="mb-3">
+                <span class="form-label formLabel"><label class="width">Month</label></span>
+                <select name="month" class="form-control formInput">
+                    <option value="1">January</option>
+                    <option value="2">Febrary</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+
+
+
+
+            <div class="text-center d-grid gap-2">
+
+                <button type="submit" name="command" class="btn btn-lg formButtom">Search</button>
+            </div>
+
+
+
+
+        </form>
+
+        @if (Model != null)
+        {
+
+            <div class="index_body mt-5">
+                <div class="table-container">
+                    <div class="header-row">Total Holiday Leave</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee Id</th>
+                                <th>Employee Name</th>
+                                <th>View Attendance</th>
+                                <th>Remaining_Leaves</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model)
+                        {
+                            var empname = db.Emp_Regs.Single(x => x.empid == item.empid).name;
+                            <tbody>
+                                <tr>
+                                    <td>@item.empid</td>
+                                    <td>@empname</td>
+                                    <td><a href="showattendence?empid=@item.empid&firstofmonth=@firstofmonth&lastofmonth=@lastofmonth"><button type="button" class="btn btn-primary" @*data-toggle="modal"*@ @*data-target="#exampleModal"*@ id="@item.empid" onclick="showatten(this.id)">View Attendence</button></a></td>
+                                    <td><a href="Totalleave?empid=@item.empid&atten=@atten&status=@status&firstofmonth=@firstofmonth&lastofmonth=@lastofmonth"><button type="button" class="btn btn-primary" @*data-toggle="modal"*@ @*data-target="#exampleModal"*@ id="@item.empid" onclick="showatten(this.id)">Remaining_Leaves</button></a></td>
+                                </tr>
+                            </tbody>
+                        }
+                    </table>
+                </div>
+            </div>
+        }
+
+
+    </div>
+
+
+
+
+    <div class="index_body mt-5" id="exampleModal">
+        <div class="table-container">
+            <div class="header-row">
+                Attendence From: @firstofmonth.ToString("dd/MM/yyyy") - To @lastofmonth.ToString("dd/MM/yyyy")
+            </div>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Employee Id</th>
+                        <th>Employee Name</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Status</th>
+                        <th>Attendance Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically generated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Close Button with Fixed Styling -->
+        <div class="text-center mt-3">
+            <button type="button" class="btn formButtom btn-lg px-4" data-dismiss="modal">
+                Close
+            </button>
+        </div>
+    </div>
+
+
+
+    @*<div class="index_body mt-5" id="exampleModal">
+            <div class="table-container">
+                <div class="header-row">Attendence From : @firstofmonth.ToString("dd/MM/yyyy") - To @lastofmonth.ToString("dd/MM/yyyy")</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee Id</th>
+                            <th>Employee Name</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Status</th>
+                            <th>Attendence Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    </tbody>
+
+                </table>
+
+            </div>
+            <div class="text-center d-grid gap-2">
+
+                <button type="button" class="btn btn-lg formButtom" data-dismiss="modal">Close</button>
+            </div>
+        </div>*@
+
+

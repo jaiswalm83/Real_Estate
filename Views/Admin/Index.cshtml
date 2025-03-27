@@ -1,0 +1,276 @@
+﻿@model IEnumerable<ODHDEVELOPERS.Models.Branchtab>
+    @using ODHDEVELOPERS.Models;
+    @using System.Globalization;
+    @using System;
+    @{
+        UsersContext db = new UsersContext();
+        var br = db.CompanyInfos.Single(b => b.AdminId == User.Identity.Name);
+
+        var logo = string.Empty;
+        var companyname = string.Empty;
+        var incometype = string.Empty;
+        var mr = db.Members.Single(m => m.Id == 1);
+        var r = db.CompanyInfos.Single(ci => ci.AdminId == User.Identity.Name);
+        var plan1 = db.Plans.Single(p1 => p1.Plancode == 1);
+        var plan2 = db.Plans.Single(p2 => p2.Plancode == 2);
+        var plan3 = db.Plans.Single(p3 => p3.Plancode == 3);
+        var plan4 = db.Plans.Single(p4 => p4.Plancode == 4);
+        var f1 = db.VFormatTabs.Single(f => f.Id == 1);
+        var f2 = db.VFormatTabs.Single(f => f.Id == 2);
+        var f3 = db.VFormatTabs.Single(f => f.Id == 3);
+        logo = r.CompanyLogo;
+        companyname = r.CompanyName;
+        incometype = r.IncomeType;
+
+        var fromyear = 0;
+        int month = DateTime.Now.Month;
+        int year = DateTime.Now.Year;
+        DateTime today = DateTime.Now.Date;
+
+        if (month <= 3)
+        {
+            fromyear = DateTime.Now.Year - 1;
+        }
+        else
+        {
+            fromyear = DateTime.Now.Year;
+        }
+        var frommonth = 4;
+        var days = 01;
+        DateTime from2 = Convert.ToDateTime(frommonth + "-" + days + "-" + fromyear);
+        var toyear = fromyear + 1;
+        var tomonth = 03;
+        var daysto = 31;
+        string dd = daysto + "-" + tomonth + "-" + toyear;
+        //string format = "dd-MM-yyyy";
+        //DateTime date = DateTime.ParseExact(dd, format, CultureInfo.InvariantCulture);
+        DateTime date = DateTime.ParseExact(dd, "d-M-yyyy", CultureInfo.InvariantCulture);
+
+        var finyear = fromyear + "-" + toyear;
+        DateTime yesterday = DateTime.Now.AddDays(-1).Date;
+        var tbd = (from ap in db.appltabs where ap.status == 1 select ap.bondid);
+        var cr = db.Database.SqlQuery<Dashboard>("exec Dashboard '" + User.Identity.Name + "'").Single();
+
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+        ViewBag.Title = "Index";
+
+    }
+
+
+
+    <link href="~/assets/css1/main css/index.css" rel="stylesheet" />
+
+    <div class="index_body">
+        <div class="table-container">
+            <div class="header-row">Total Collection</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Today's</th>
+                        <th>Yesterday's</th>
+                        <th>Current Month (@DateTime.Now.Date.ToString("MMMM"))</th>
+                        <th>Financial Year (@finyear)</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr>
+                        <td>Booking Amount</td>
+                        <td>@cr.todaybooking</td>
+                        <td>@cr.yesterdaybooking</td>
+                        <td>@cr.monthlybooking</td>
+                        <td>@cr.totalbooking</td>
+                    </tr>
+                    <tr>
+                        <td>Renewal</td>
+                        <td>@cr.todayRenewalcoll</td>
+                        <td>@cr.yesterdayRenewalcoll</td>
+                        <td>@cr.monthlyRenewalcoll</td>
+                        <td>@cr.totalRenewalcoll</td>
+                    </tr>
+                    <tr>
+                        <td>Advance Amount</td>
+                        <td>@cr.todayadvance</td>
+                        <td>@cr.yesterdayadvance</td>
+                        <td>@cr.monthlyadvance</td>
+                        <td>@cr.totaladvance</td>
+                    </tr>
+                    <tr>
+                        <td>@mr.custname Fees</td>
+                        <td>@cr.todayappfee</td>
+                        <td>@cr.yesterdayappfee</td>
+                        <td>@cr.monthlyappfee</td>
+                        <td>@cr.totalappfee</td>
+                    </tr>
+                    <tr>
+                        <td>@mr.agentname Fees</td>
+                        <td>@cr.todayagfee</td>
+                        <td>@cr.yesterdayagfee</td>
+                        <td>@cr.monthlyagfee</td>
+                        <td>@cr.totalagfee</td>
+                    </tr>
+                    <tr>
+                        <td>Member Fees</td>
+                        <td>@cr.todaymemberfee</td>
+                        <td>@cr.yesterdaymemberfee</td>
+                        <td>@cr.monthlymemberfee</td>
+                        <td>@cr.totalmemberfee</td>
+                    </tr>
+                    <tr>
+                        <td>Late Fees</td>
+                        <td>@cr.TodayLateFee</td>
+                        <td>@cr.yesterdayLateFee</td>
+                        <td>@cr.monthlyLateFee</td>
+                        <td>@cr.totalLateFee</td>
+                    </tr>
+                    <tr>
+                        <td>Relief</td>
+                        <td>@cr.TodayReleaf</td>
+                        <td>@cr.yesterdayReleaf</td>
+                        <td>@cr.monthlyReleaf</td>
+                        <td>@cr.totalReleaf</td>
+                    </tr>
+                    <tr>
+                        <td>Spot</td>
+                        <td>@cr.todayspot</td>
+                        <td>@cr.yesterdayspot</td>
+                        <td>@cr.monthlyspot</td>
+                        <td>@cr.totalspot</td>
+                    </tr>
+                    <tr>
+                        <td>Voucher</td>
+                        <td>@cr.todayvoucher</td>
+                        <td>@cr.yesterdayvoucher</td>
+                        <td>@cr.monthlyvoucher</td>
+                        <td>@cr.totalvoucher</td>
+                    </tr>
+                    <tr>
+                        <td>Expense</td>
+                        <td>@cr.todayexpense</td>
+                        <td>@cr.yesterdayexpense</td>
+                        <td>@cr.monthlyexpense</td>
+                        <td>@cr.totalexpense</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td>@cr.todaybalance</td>
+                        <td>@cr.yesterdaybalance</td>
+                        <td>@cr.monthlybalance</td>
+                        <td>@cr.totalbalance</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    @foreach (var item in Model)
+    {
+        var bcr = db.Database.SqlQuery<Dashboard>("exec Dashboard '" + item.BranchCode + "'").Single();
+        <div class="index_body">
+            <div class="table-container">
+                <div class="widget-content">
+                    <div class="header-row">Total Collection (@item.BranchName)</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Today's</th>
+                                <th>Yesterday's</th>
+                                <th>@DateTime.Now.Date.ToString("MMMM")</th>
+                                <th>@finyear</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Booking Amount</td>
+                                <td>@bcr.todaybooking</td>
+                                <td>@bcr.yesterdaybooking</td>
+                                <td>@bcr.monthlybooking</td>
+                                <td>@bcr.totalbooking</td>
+                            </tr>
+                            <tr>
+                                <td>Renewal</td>
+                                <td>@bcr.todayRenewalcoll</td>
+                                <td>@bcr.yesterdayRenewalcoll</td>
+                                <td>@bcr.monthlyRenewalcoll</td>
+                                <td>@bcr.totalRenewalcoll</td>
+                            </tr>
+                            <tr>
+                                <td>Advance Amount</td>
+                                <td>@bcr.todayadvance</td>
+                                <td>@bcr.yesterdayadvance</td>
+                                <td>@bcr.monthlyadvance</td>
+                                <td>@bcr.totaladvance</td>
+                            </tr>
+                            <tr>
+                                <td>@mr.custname Fees</td>
+                                <td>@bcr.todayappfee</td>
+                                <td>@bcr.yesterdayappfee</td>
+                                <td>@bcr.monthlyappfee</td>
+                                <td>@bcr.totalappfee</td>
+                            </tr>
+                            <tr>
+                                <td>@mr.agentname Fees</td>
+                                <td>@bcr.todayagfee</td>
+                                <td>@bcr.yesterdayagfee</td>
+                                <td>@bcr.monthlyagfee</td>
+                                <td>@bcr.totalagfee</td>
+                            </tr>
+                            <tr>
+                                <td>Member Fees</td>
+                                <td>@bcr.todaymemberfee</td>
+                                <td>@bcr.yesterdaymemberfee</td>
+                                <td>@bcr.monthlymemberfee</td>
+                                <td>@bcr.totalmemberfee</td>
+                            </tr>
+                            <tr>
+                                <td>Late Fees</td>
+                                <td>@bcr.TodayLateFee</td>
+                                <td>@bcr.yesterdayLateFee</td>
+                                <td>@bcr.monthlyLateFee</td>
+                                <td>@bcr.totalLateFee</td>
+                            </tr>
+                            <tr>
+                                <td>Relief</td>
+                                <td>@bcr.TodayReleaf</td>
+                                <td>@bcr.yesterdayReleaf</td>
+                                <td>@bcr.monthlyReleaf</td>
+                                <td>@bcr.totalReleaf</td>
+                            </tr>
+                            <tr>
+                                <td>Spot</td>
+                                <td>@bcr.todayspot</td>
+                                <td>@bcr.yesterdayspot</td>
+                                <td>@bcr.monthlyspot</td>
+                                <td>@bcr.totalspot</td>
+                            </tr>
+                            <tr>
+                                <td>Voucher</td>
+                                <td>@bcr.todayvoucher</td>
+                                <td>@bcr.yesterdayvoucher</td>
+                                <td>@bcr.monthlyvoucher</td>
+                                <td>@bcr.totalvoucher</td>
+                            </tr>
+                            <tr>
+                                <td>Expense</td>
+                                <td>@bcr.todayexpense</td>
+                                <td>@bcr.yesterdayexpense</td>
+                                <td>@bcr.monthlyexpense</td>
+                                <td>@bcr.totalexpense</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>@bcr.todaybalance</td>
+                                <td>@bcr.yesterdaybalance</td>
+                                <td>@bcr.monthlybalance</td>
+                                <td>@bcr.totalbalance</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
